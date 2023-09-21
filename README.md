@@ -1,13 +1,13 @@
 # lbaw2351
 
-G51:LBAW2351
-Theme: 2 - Social Network
+Group 51  
+Theme 2: Social Network
 
 ## Group Members
-Domingos Santos, up201906680@fe.up.pt
-Duarte Gonçalves, up202108772@fe.up.pt
-Félix Martins, up202108837@fe.up.pt
-Marco Vilas Boas, up202108774@fe.up.pt
+Domingos Santos, up201906680@fe.up.pt  
+Duarte Gonçalves, up202108772@fe.up.pt  
+Félix Martins, up202108837@fe.up.pt  
+Marco Vilas Boas, up202108774@fe.up.pt  
 
 ## Getting started
 
