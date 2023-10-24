@@ -1,8 +1,8 @@
 -- Use this code to drop and create a schema.
 --
-DROP SCHEMA IF EXISTS lbaw2351 CASCADE;
-CREATE SCHEMA lbaw2351;
-SET search_path TO lbaw2351;
+DROP SCHEMA IF EXISTS lbaw232451 CASCADE;
+CREATE SCHEMA lbaw232451;
+SET search_path TO lbaw232451;
 
 -- Drop tables: do not need to drop if the schema is dropped (see above)
 -- DROP TABLE IF EXISTS liked;
