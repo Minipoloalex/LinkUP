@@ -42,7 +42,12 @@ CREATE TABLE users (
     is_private BOOLEAN DEFAULT true NOT NULL,
     id_blocked_by INTEGER REFERENCES admin(id) ON DELETE SET NULL
 );
-
+CREATE TABLE follows (
+    id_user INTEGER REFERENCES users(id),
+    id_followed INTEGER REFERENCES users(id),
+    since DATE DEFAULT CURRENT_DATE NOT NULL,
+    PRIMARY KEY (id_user, id_followed)
+);
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -56,6 +61,16 @@ CREATE TABLE group_member (
     id_user INTEGER REFERENCES users(id) ON DELETE CASCADE,
     id_group INTEGER REFERENCES groups(id) ON DELETE CASCADE,
     PRIMARY KEY (id_user, id_group)
+);
+CREATE TABLE theme (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE group_theme (
+    id_group INTEGER REFERENCES groups(id) ON DELETE CASCADE,
+    id_theme INTEGER REFERENCES theme(id) ON DELETE CASCADE,
+    PRIMARY KEY (id_group, id_theme)
 );
 
 CREATE TABLE post (
@@ -77,39 +92,39 @@ CREATE TABLE liked (
 CREATE TABLE follow_request (
     id SERIAL PRIMARY KEY,
     timestamp DATE DEFAULT CURRENT_DATE NOT NULL,
-    id_user_to INTEGER REFERENCES users(id) NOT NULL ON DELETE CASCADE,
-    id_user_from INTEGER REFERENCES users(id) NOT NULL ON DELETE CASCADE,
+    id_user_to INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    id_user_from INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     UNIQUE (id_user_to, id_user_from)
 );
 
 CREATE TABLE like_notification (
     id SERIAL PRIMARY KEY,
     timestamp DATE DEFAULT CURRENT_DATE NOT NULL,
-    id_post INTEGER REFERENCES post(id) NOT NULL ON DELETE CASCADE,
-    id_user INTEGER REFERENCES users(id) NOT NULL ON DELETE CASCADE,
+    id_post INTEGER REFERENCES post(id) ON DELETE CASCADE NOT NULL,
+    id_user INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     UNIQUE (id_post, id_user)
 );
 
 CREATE TABLE comment_notification (
     id SERIAL PRIMARY KEY,
     timestamp DATE DEFAULT CURRENT_DATE NOT NULL,
-    id_comment INTEGER REFERENCES post(id) UNIQUE ON DELETE CASCADE NOT NULL
+    id_comment INTEGER REFERENCES post(id) ON DELETE CASCADE UNIQUE NOT NULL
 );
 
 CREATE TABLE group_notification (
     id SERIAL PRIMARY KEY,
     timestamp DATE DEFAULT CURRENT_DATE NOT NULL,
     type group_notification_type NOT NULL,
-    id_user INTEGER REFERENCES users(id) NOT NULL ON DELETE CASCADE,
-    id_group INTEGER REFERENCES groups(id) NOT NULL ON DELETE CASCADE,
+    id_user INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    id_group INTEGER REFERENCES groups(id) ON DELETE CASCADE NOT NULL,
     UNIQUE (id_user, id_group, type)
 );
 
 CREATE TABLE tag_notification (
     id SERIAL PRIMARY KEY,
     timestamp DATE DEFAULT CURRENT_DATE NOT NULL,
-    id_user INTEGER REFERENCES users(id) NOT NULL ON DELETE CASCADE,
-    id_post INTEGER REFERENCES post(id) NOT NULL ON DELETE CASCADE,
+    id_user INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    id_post INTEGER REFERENCES post(id) ON DELETE CASCADE NOT NULL,
     UNIQUE (id_user, id_post)
 );
 
