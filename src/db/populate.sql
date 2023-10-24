@@ -218,4 +218,11 @@ VALUES
   ('Request', 2, 3),
   ('Invitation', 1, 4),
   ('Invitation', 9, 1);
- 
+
+INSERT INTO follow_request (timestamp, id_user_to, id_user_from)
+VALUES
+  ('2023-12-01', 1, 8),
+  ('2023-12-02', 2, 7),
+  ('2023-12-03', 3, 15),
+  ('2023-12-04', 4, 9),
+  ('2023-12-05', 5, 10);

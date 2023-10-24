@@ -20,7 +20,7 @@ SET search_path TO lbaw2351;
 -- DROP TABLE IF EXISTS users;
 -- DROP TABLE IF EXISTS admin;
 
-DROP TYPE IF EXISTS group_notification_type;
+-- DROP TYPE IF EXISTS group_notification_type;
 CREATE TYPE group_notification_type AS ENUM('Request', 'Invitation');
 
 CREATE TABLE admin (
@@ -120,11 +120,9 @@ CREATE TABLE tag_notification (
 CREATE INDEX post_created_at_btree_index
 ON post USING BTREE(created_at);
 
-CREATE INDEX users_username_hash_index
-ON users USING HASH(username);
-
-CREATE INDEX follow_request_timestamp_index
-ON follow_request USING BTREE(timestamp);
+CREATE INDEX group_member_id_user_index
+ON group_member USING HASH(id_user);
+-- e.g. SELECT id_group FROM group_member where id_user = 1;
 
 ------------------------------------------------
 ---------- Full text search indices ------------
