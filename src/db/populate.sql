@@ -1,32 +1,32 @@
 
 INSERT INTO users (username, email, password, name, description, photo, is_private)
 VALUES
-  ('alice94', 'alice.johnson@gmail.com', 'not_a_valid_password', 'Alice Johnson', 'Travel enthusiast and photographer.', 'alice_profile.jpg', false),
-  ('bob1987', 'bob.smith@yahoo.com', 'not_a_valid_password', 'Bob Smith', 'Music lover and guitar player.', 'bob_profile.jpg', false),
-  ('carol2000', 'carol.adams@hotmail.com', 'not_a_valid_password', 'Carol Adams', 'Foodie and recipe collector.', 'carol_profile.jpg', false),
-  ('dave85', 'dave.wilson@outlook.com', 'not_a_valid_password', 'Dave Wilson', 'Fitness guru and adventure seeker.', 'dave_profile.jpg', false),
-  ('elena75', 'elena.martinez@aol.com', 'not_a_valid_password', 'Elena Martinez', 'Fashionista and makeup artist.', 'elena_profile.jpg', false),
-  ('alexsmith3', 'alex.smith@hotmail.com', 'not_a_valid_password', 'Alex Smith', 'Student and artist.', 'alex_smith.jpg', false),
-  ('emilyjones4', 'emily.jones@outlook.com', 'not_a_valid_password', 'Emily Jones', 'Cooking enthusiast and food lover.', 'emily_jones.jpg', false),
-  ('chriswilson5', 'chris.wilson@aol.com', 'not_a_valid_password', 'Chris Wilson', 'Tech geek and gamer.', 'chris_wilson.jpg', false),
-  ('sarahbrown6', 'sarah.brown@gmail.com', 'not_a_valid_password', 'Sarah Brown', 'Bookworm and book club organizer.', 'sarah_brown.jpg', false),
-  ('michaellee7', 'michael.lee@yahoo.com', 'not_a_valid_password', 'Michael Lee', 'Fitness trainer and health enthusiast.', 'michael_lee.jpg', true),
-  ('oliviajackson8', 'olivia.jackson@hotmail.com', 'not_a_valid_password', 'Olivia Jackson', 'Art and fashion lover.', 'olivia_jackson.jpg', false),
-  ('andrewmoore9', 'andrew.moore@outlook.com', 'not_a_valid_password', 'Andrew Moore', 'Photography hobbyist and traveler.', 'andrew_moore.jpg', false),
-  ('gracewilson10', 'grace.wilson@aol.com', 'not_a_valid_password', 'Grace Wilson', 'Nature explorer and wildlife enthusiast.', 'grace_wilson.jpg', true),
-  ('williamdavis11', 'william.davis@gmail.com', 'not_a_valid_password', 'William Davis', 'Musician and songwriter.', 'william_davis.jpg', false),
-  ('ameliajames12', 'amelia.james@yahoo.com', 'not_a_valid_password', 'Amelia James', 'Coffee addict and coffee shop hopper.', 'amelia_james.jpg', false),
-  ('danielthomas13', 'daniel.thomas@hotmail.com', 'not_a_valid_password', 'Daniel Thomas', 'Tech enthusiast and software developer.', 'daniel_thomas.jpg', false),
-  ('miajohnson14', 'mia.johnson@outlook.com', 'not_a_valid_password', 'Mia Johnson', 'Yoga lover and instructor.', 'mia_johnson.jpg', false),
-  ('ethanhall15', 'ethan.hall@aol.com', 'not_a_valid_password', 'Ethan Hall', 'Adventurer and thrill-seeker.', 'ethan_hall.jpg', true),
-  ('lilyharris16', 'lily.harris@gmail.com', 'not_a_valid_password', 'Lily Harris', 'Fashion blogger and designer.', 'lily_harris.jpg', false);
+  ('alice94', 'alice.johnson@gmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Alice Johnson', 'Travel enthusiast and photographer.', 'alice_profile.jpg', false),
+  ('bob1987', 'bob.smith@yahoo.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Bob Smith', 'Music lover and guitar player.', 'bob_profile.jpg', false),
+  ('carol2000', 'carol.adams@hotmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Carol Adams', 'Foodie and recipe collector.', 'carol_profile.jpg', false),
+  ('dave85', 'dave.wilson@outlook.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Dave Wilson', 'Fitness guru and adventure seeker.', 'dave_profile.jpg', false),
+  ('elena75', 'elena.martinez@aol.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Elena Martinez', 'Fashionista and makeup artist.', 'elena_profile.jpg', false),
+  ('alexsmith3', 'alex.smith@hotmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Alex Smith', 'Student and artist.', 'alex_smith.jpg', false),
+  ('emilyjones4', 'emily.jones@outlook.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Emily Jones', 'Cooking enthusiast and food lover.', 'emily_jones.jpg', false),
+  ('chriswilson5', 'chris.wilson@aol.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Chris Wilson', 'Tech geek and gamer.', 'chris_wilson.jpg', false),
+  ('sarahbrown6', 'sarah.brown@gmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Sarah Brown', 'Bookworm and book club organizer.', 'sarah_brown.jpg', false),
+  ('michaellee7', 'michael.lee@yahoo.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Michael Lee', 'Fitness trainer and health enthusiast.', 'michael_lee.jpg', true),
+  ('oliviajackson8', 'olivia.jackson@hotmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Olivia Jackson', 'Art and fashion lover.', 'olivia_jackson.jpg', false),
+  ('andrewmoore9', 'andrew.moore@outlook.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Andrew Moore', 'Photography hobbyist and traveler.', 'andrew_moore.jpg', false),
+  ('gracewilson10', 'grace.wilson@aol.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Grace Wilson', 'Nature explorer and wildlife enthusiast.', 'grace_wilson.jpg', true),
+  ('williamdavis11', 'william.davis@gmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'William Davis', 'Musician and songwriter.', 'william_davis.jpg', false),
+  ('ameliajames12', 'amelia.james@yahoo.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Amelia James', 'Coffee addict and coffee shop hopper.', 'amelia_james.jpg', false),
+  ('danielthomas13', 'daniel.thomas@hotmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Daniel Thomas', 'Tech enthusiast and software developer.', 'daniel_thomas.jpg', false),
+  ('miajohnson14', 'mia.johnson@outlook.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Mia Johnson', 'Yoga lover and instructor.', 'mia_johnson.jpg', false),
+  ('ethanhall15', 'ethan.hall@aol.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Ethan Hall', 'Adventurer and thrill-seeker.', 'ethan_hall.jpg', true),
+  ('lilyharris16', 'lily.harris@gmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Lily Harris', 'Fashion blogger and designer.', 'lily_harris.jpg', false);
 
 INSERT INTO admin (email, name, password, id_created_by)
 VALUES
-  ('johnsmith@gmail.com', 'John Smith', 'not_a_valid_password', NULL),
-  ('emmawilliams@yahoo.com', 'Emma williams', 'not_a_valid_password', 1),
-  ('marysmith@hotmail.com', 'Mary Smith', 'not_a_valid_password', 2),
-  ('michaelbrown@gmail.com', 'Michael Brown', 'not_a_valid_password', 2);
+  ('johnsmith@gmail.com', 'John Smith', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', NULL),
+  ('emmawilliams@yahoo.com', 'Emma williams', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 1),
+  ('marysmith@hotmail.com', 'Mary Smith', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 2),
+  ('michaelbrown@gmail.com', 'Michael Brown', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 2);
 
 
 INSERT INTO follows (id_user, id_followed, since) VALUES
