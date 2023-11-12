@@ -23,26 +23,50 @@ class PostController extends Controller
     {
         
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
+    
+    public function storePost(Request $request) {
         $request->validate([
-            'content' => 'required|max:255'
+            'content' => 'required|max:255',
+            // 'id_group' => 'nullable|exists:groups,id'
+            'is_private' => 'nullable|boolean'
         ]);
         $post = new Post();
-        $this->authorize('create', $post);
-
+        $this->authorize('createPost', $post);
+        
         $post->content = $request->input('content');
         $post->is_private = $request->input('is_private');
         $post->id_created_by = Auth::user()->id;
-
-        // id_parent and id_group not yet handled (will be NULL)
-
         $post->save();
         return response()->json($post);
+    }
+
+    /**
+     * Store a newly created comment in the DB.
+     */
+    public function storeComment(Request $request)
+    {
+        $request->validate([
+            'content' => 'required|max:255',
+            'id_parent' => 'required|exists:post,id',
+            // 'id_group' => 'nullable|exists:groups,id'
+        ]);
+
+        $post = Post::find($request->input('id_parent'));
+        $this->authorize('createComment', $post);
+
+        $comment = new Post();
+
+        $comment->content = $request->input('content');
+        $comment->is_private = $post->is_private;
+        $comment->id_created_by = Auth::user()->id;
+
+        $comment->id_parent = $request->input('id_parent');
+
+        $comment->save();
+
+        // Retrieve the comment and the user who created it using eager loading
+        // $postUserLikesComments = Post::with('createdBy', 'comments:id,post_id', 'likes:id,post_id')->find($postId);
+        return response()->json($comment);
     }
 
     /**

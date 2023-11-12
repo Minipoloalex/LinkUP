@@ -24,15 +24,14 @@
             $comments = $post->comments;
         @endphp
         @if ($comments->count() > 0)
-            <ul class='comments'>
-                <!-- or just pass to partials.post again -->
+            <div class='comments-container'>
                 @each('partials.comment', $comments, 'comment', ['displayComments' => false])
-            </ul>
+            </div>
         @else
             <p>No comments yet</p>
         @endif
     @endif
     <form class="new_comment">
-        <input type="text" name="description" placeholder="Add a comment">
+        <input type="text" name="content" placeholder="Add a comment">
     </form>
 </article>

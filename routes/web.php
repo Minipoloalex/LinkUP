@@ -59,4 +59,5 @@ Route::controller(RegisterController::class)->group(function () {
 Route::controller(PostController::class)->group(function () {
     // Route::get('/posts', 'list')->name('posts');
     Route::get('/posts/{id}', 'show');
+    Route::post('/comments', 'storeComment');
 });

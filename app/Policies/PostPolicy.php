@@ -28,11 +28,20 @@ class PostPolicy
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can create posts.
      */
-    public function create(User $user): bool
+    public function createPost(User $user): bool
     {
         return Auth::check();
+    }
+    /**
+     * Determine whether the user can create posts.
+     */
+    public function createComment(User $user, Post $post): bool
+    {
+        // if post is in a group, need to check group
+        // if post is private, need to check follower
+        return Auth::check() && ($post->is_private === false || $user->id === $post->id_created_by);
     }
 
     /**
