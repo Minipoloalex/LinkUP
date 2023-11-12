@@ -20,7 +20,7 @@ class Post extends Model
     }
     public function comments()
     {
-        return $this->hasMany(Post::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(Post::class, 'id_parent')->orderBy('created_at', 'desc');
     }
     public function parent()
     {

@@ -17,22 +17,11 @@ class PostController extends Controller
     }
 
     /**
-     * Creates a new post
+     * Displays the form for creating a new resource.
      */
     public function create(Request $request)
     {
-        $post = new Post();
-        $this->authorize('create', $post);
-
-        $post->content = $request->input('content');
-        $post->is_private = $request->input('is_private');
-        $post->id_created_by = Auth::user()->id;
-
-        // id_parent and id_group not yet handled (will be NULL)
-
-        $post->save();
-        return response()->json($post);
-        // return redirect()->route('home');    // maybe redirect to the post
+        
     }
 
     /**
@@ -40,6 +29,9 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'content' => 'required|max:255'
+        ]);
         $post = new Post();
         $this->authorize('create', $post);
 
@@ -61,10 +53,10 @@ class PostController extends Controller
         // Get the post.
         $post = Post::findOrFail($id);
 
-        // Check if the current user can see (show) the card.
-        $this->authorize('show', $post);  
-
-        // Use the pages.card template to display the card.
+        // Check if the current user can see (show) the post.
+        $this->authorize('view', $post);  
+        
+        // Use the pages.post template to display the post.
         return view('pages.post', [
             'post' => $post
         ]);
@@ -96,7 +88,7 @@ class PostController extends Controller
     /**
      * Delete a post.
      */
-    public function delete(Request $request, $id)
+    public function delete(Request $request, string $id)
     {
         // Find the post.
         $post = Post::find($id);
