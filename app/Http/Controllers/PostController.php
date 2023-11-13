@@ -65,8 +65,8 @@ class PostController extends Controller
         $comment->save();
 
         // Retrieve the comment and the user who created it using eager loading
-        // $postUserLikesComments = Post::with('createdBy', 'comments:id,post_id', 'likes:id,post_id')->find($postId);
-        return response()->json($comment);
+        $postUserLikesComments = Post::with('createdBy', 'comments', 'likes')->find($comment->id);
+        return response()->json($postUserLikesComments);
     }
 
     /**
@@ -95,11 +95,20 @@ class PostController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified post in storage.
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+            'content' => 'nullable|max:255',
+            'is_private' => 'nullable|boolean'
+        ]);
+        $this->authorize('update', $post);
+        $post->content = $request->input('content') ?? $post->content;
+        $post->is_private = $request->input('is_private') ?? $post->is_private;
+        
+        $post->save();
+        return response()->json($post);
     }
 
     /**
@@ -119,9 +128,10 @@ class PostController extends Controller
 
         // Check if the current user is authorized to delete this post.
         $this->authorize('delete', $post);
-
+        
         // Delete the post and return it as JSON.
         $post->delete();
         return response()->json($post);
+        // need to redirect in case of post page
     }
 }

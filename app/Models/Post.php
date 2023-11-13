@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Post extends Model
 {
@@ -20,7 +21,7 @@ class Post extends Model
     }
     public function comments()
     {
-        return $this->hasMany(Post::class, 'id_parent')->orderBy('created_at', 'desc');
+        return $this->hasMany(Post::class, 'id_parent')->orderBy('created_at', 'asc');
     }
     public function parent()
     {
@@ -29,6 +30,10 @@ class Post extends Model
     public function likes()
     {
         return $this->belongsToMany(User::class, 'liked', 'id_post', 'id_user');
+    }
+    public function isCreatedByCurrentUser() {
+        // Check if the current authenticated user is the creator of the post
+        return Auth::check() && $this->id_created_by === Auth::user()->id;
     }
     // public function group()
     // {

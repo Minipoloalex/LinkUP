@@ -5,18 +5,14 @@
     </form>
 </article>
 */
-console.log('add_comment.js loaded');
 const commentForm = document.querySelector('.new_comment');
 if (commentForm != null) {
-    console.log('commentForm found');
     commentForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const commentContent = commentForm.querySelector('input[type=text]').value;
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const post = event.currentTarget.closest('.post');
-        
-        console.log(post.dataset.id);
-        console.log(commentContent);
+
         const response = await fetch('/comments', {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
