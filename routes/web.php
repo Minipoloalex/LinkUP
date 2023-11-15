@@ -57,12 +57,11 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::controller(PostController::class)->group(function () {
-    // Route::get('/posts', 'list')->name('posts');
-    Route::get('/posts/{id}', 'show');
-    Route::post('/posts', 'storePost');
+    Route::get('/post/{id}', 'show');
+    Route::post('/post', 'storePost');
     
-    Route::post('/comments', 'storeComment');
-    Route::delete('/comments/{id}', 'delete');
+    Route::post('/comment', 'storeComment');
+    Route::delete('/comment/{id}', 'delete');
 
     Route::post('/post/edit/{id}', 'update');
 

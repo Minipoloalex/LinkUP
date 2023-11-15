@@ -20,7 +20,7 @@ async function deletePost(event) {
     event.preventDefault();
     const article = event.target.closest('article');
     const id = article.dataset.id;
-    const response = await fetch(`/posts/${id}`, {
+    const response = await fetch(`/post/${id}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -36,7 +36,7 @@ async function deleteComment(event) {
     event.preventDefault();
     const article = event.target.closest('article');
     const id = article.dataset.id;
-    const response = await fetch(`/comments/${id}`, {
+    const response = await fetch(`/comment/${id}`, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')

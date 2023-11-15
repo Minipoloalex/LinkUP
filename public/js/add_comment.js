@@ -13,7 +13,7 @@ if (commentForm != null) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const post = event.currentTarget.closest('.post');
 
-        const response = await fetch('/comments', {
+        const response = await fetch('/comment', {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-CSRF-TOKEN': csrfToken

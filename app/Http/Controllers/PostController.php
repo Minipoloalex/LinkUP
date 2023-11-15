@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Policies\PostPolicy;
 class PostController extends Controller
 {
     /**
@@ -86,16 +86,16 @@ class PostController extends Controller
     }
     public function search(string $search)
     {
-        // use this index CREATE INDEX user_search_idx ON users USING GIN (tsvectors);
-        // SELECT * FROM users WHERE tsvectors @@ to_tsquery('search');
-        // Search the posts using Full-text search
         $posts = Post::search($search);
+        error_log($posts->toJson());
         $filteredPosts = $posts->filter(function ($post) {
-            return optional(Auth::user())->can('view', $post);
+            return policy(Post::class)->view(Auth::user(), $post);
         });
+        error_log($filteredPosts->toJson());
         $filteredPosts->each(function ($post) {
             $post->load('createdBy', 'comments', 'likes');            
         });
+        error_log($filteredPosts->toJson());
         return response()->json($filteredPosts);
     }
 
@@ -117,6 +117,7 @@ class PostController extends Controller
             'is_private' => 'nullable|boolean'
         ]);
         $this->authorize('update', $post);
+
         $post->content = $request->input('content') ?? $post->content;
         $post->is_private = $request->input('is_private') ?? $post->is_private;
         

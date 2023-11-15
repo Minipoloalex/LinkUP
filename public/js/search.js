@@ -8,13 +8,11 @@ if (search) {
 }
 async function updateSearchResults(event) {
     event.preventDefault();
-    console.log('updateSearchResults');
     const response = await sendAjaxRequest('get', `/api/post/search/${search.value}`, null);
-    console.log(response);
     if (response.ok) {
-        console.log('Search results fetched');
         const data = await response.json();
         resultsContainer.innerHTML = '';
+
         console.log(data);
         // data.forEach(element => {
         //     addPost(element, resultsContainer);
