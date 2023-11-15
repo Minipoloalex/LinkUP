@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Post extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
     protected $table = 'post';
     protected $fillable = [
@@ -31,9 +33,19 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'liked', 'id_post', 'id_user');
     }
-    public function isCreatedByCurrentUser() {
+    public function isCreatedByCurrentUser()
+    {
         // Check if the current authenticated user is the creator of the post
         return Auth::check() && $this->id_created_by === Auth::user()->id;
+    }
+    public static function search(string $search)
+    {
+        // Full-text search
+        $posts = DB::select("SELECT * FROM post
+            WHERE tsvectors @@ to_tsquery('english', ?)
+            ORDER BY ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$search, $search]);
+        $posts = Post::hydrate($posts);
+        return $posts;
     }
     // public function group()
     // {

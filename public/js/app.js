@@ -31,14 +31,22 @@ function addEventListeners() {
     }).join('&');
   }
   
-  function sendAjaxRequest(method, url, data, handler) {
-    let request = new XMLHttpRequest();
+  async function sendAjaxRequest(method, url, data) { // handler?
+    return await fetch(url, {
+        method: method,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: encodeForAjax(data)
+    });
   
-    request.open(method, url, true);
-    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.addEventListener('load', handler);
-    request.send(encodeForAjax(data));
+    // let request = new XMLHttpRequest();
+    // request.open(method, url, true);
+    // request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+    // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    // request.addEventListener('load', handler);
+    // request.send(encodeForAjax(data));
   }
   
   function sendItemUpdateRequest() {

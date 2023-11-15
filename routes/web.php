@@ -63,4 +63,12 @@ Route::controller(PostController::class)->group(function () {
     
     Route::post('/comments', 'storeComment');
     Route::delete('/comments/{id}', 'delete');
+
+    Route::post('/post/edit/{id}', 'update');
+
+    Route::get('/api/post/search/{search}', 'search');
 });
+
+Route::get('/search', function() {
+    return view('pages.search');
+})->name('search');

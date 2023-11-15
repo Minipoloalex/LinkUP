@@ -64,9 +64,8 @@ class PostController extends Controller
 
         $comment->save();
 
-        // Retrieve the comment and the user who created it using eager loading
-        $postUserLikesComments = Post::with('createdBy', 'comments', 'likes')->find($comment->id);
-        return response()->json($postUserLikesComments);
+        $comment->load('createdBy', 'comments', 'likes');
+        return response()->json($comment);
     }
 
     /**
@@ -84,6 +83,20 @@ class PostController extends Controller
         return view('pages.post', [
             'post' => $post
         ]);
+    }
+    public function search(string $search)
+    {
+        // use this index CREATE INDEX user_search_idx ON users USING GIN (tsvectors);
+        // SELECT * FROM users WHERE tsvectors @@ to_tsquery('search');
+        // Search the posts using Full-text search
+        $posts = Post::search($search);
+        $filteredPosts = $posts->filter(function ($post) {
+            return optional(Auth::user())->can('view', $post);
+        });
+        $filteredPosts->each(function ($post) {
+            $post->load('createdBy', 'comments', 'likes');            
+        });
+        return response()->json($filteredPosts);
     }
 
     /**
