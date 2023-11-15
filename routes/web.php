@@ -63,7 +63,7 @@ Route::controller(PostController::class)->group(function () {
     Route::post('/comment', 'storeComment');
     Route::delete('/comment/{id}', 'delete');
 
-    Route::post('/post/edit/{id}', 'update');
+    Route::put('/post/edit/{id}', 'update');
 
     Route::get('/api/post/search/{search}', 'search');
 });

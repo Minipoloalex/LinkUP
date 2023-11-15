@@ -8,12 +8,14 @@
         <span class="date">{{ $post->created_at }}</span>
     </h3>
     @if ($post->isCreatedByCurrentUser())
-        <a href="#" class="edit">&#9998;</a>
+        <a href="#" class="edit edit-post">&#9998;</a>
+        <form class="edit-content hidden">
+            <input class='textfield' type="text" name="content" value="{{ $post->content }}">
+        </form>
         <a href="#" class="delete">&#10761;</a>
     @endif
-
 </header>
-<p>{{ $post->content }}</p>
+<p class='post-content'>{{ $post->content }}</p>
 <h4>
     <span class="nr-comments">{{ $post->comments->count() }}</span>
 </h4>

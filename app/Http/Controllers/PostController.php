@@ -112,8 +112,10 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        error_log('hello');
+        error_log($request->toJson());
         $request->validate([
-            'content' => 'nullable|max:255',
+            'content' => 'max:255',
             'is_private' => 'nullable|boolean'
         ]);
         $this->authorize('update', $post);
