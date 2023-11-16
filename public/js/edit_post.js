@@ -1,26 +1,25 @@
 const editPostButtons = document.querySelectorAll('.edit-post');
 editPostButtons.forEach(button => {
-    button.addEventListener('click', toggleEdit);
+    button.addEventListener('click', toggleEditEvent);
 });
 const editPostFields = document.querySelectorAll('edit-content');
 editPostFields.forEach(field => {
     field.addEventListener('submit', submitEditPost);
 });
 
-function toggleEdit(event) {
+function toggleEditEvent(event) {
     event.preventDefault();
     const post = event.currentTarget.closest('article');
-    
+
     const content = post.querySelector('.post-content');
     const editForm = post.querySelector('form.edit-content');
     const textField = editForm.querySelector('.textfield');
     
-    
+    toggleEdit(content, editForm, textField);
+}
+function toggleEdit(content, editForm, textField) {
     content.classList.toggle('hidden');
     editForm.classList.toggle('hidden');
-    
-    console.log(content);
-    console.log(editForm);
 
     if (!editForm.classList.contains('hidden')) {
         textField.focus();
@@ -34,22 +33,16 @@ async function submitEditPost(event) {  // submitted the form
     const post = form.closest('article');
     const postId = post.dataset.id;
 
-    const textField = form.querySelector('input');
+    const textField = form.querySelector('input.textfield');
     const newContent = textField.value;
 
     const response = await sendAjaxRequest('put', `/post/edit/${postId}`, {content: newContent});
     if (response.ok) {
-        const data = response.json();
-        if (data.success) {
-            const postContentElement = post.querySelector('.post-content');
+        // const data = response.json();    // don't need the data
+        const postContentElement = post.querySelector('.post-content');
 
-            postContentElement.textContent = newContent;
-            toggleEdit(event);
-        }
-        else {
-            console.log('Error:', data.error);
-            // show error message to user
-        }
+        postContentElement.textContent = newContent;
+        toggleEdit(postContentElement, form, textField);
     }
     else {
         console.log('Error: ', response.status);

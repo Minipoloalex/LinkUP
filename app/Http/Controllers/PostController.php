@@ -110,16 +110,15 @@ class PostController extends Controller
     /**
      * Update the specified post in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, string $id)
     {
-        error_log('hello');
-        error_log($request->toJson());
+        $post = Post::find($id);
         $request->validate([
-            'content' => 'max:255',
+            'content' => 'nullable|max:255',
             'is_private' => 'nullable|boolean'
         ]);
         $this->authorize('update', $post);
-
+        
         $post->content = $request->input('content') ?? $post->content;
         $post->is_private = $request->input('is_private') ?? $post->is_private;
         
