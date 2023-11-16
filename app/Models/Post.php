@@ -15,7 +15,11 @@ class Post extends Model
     protected $table = 'post';
     protected $fillable = [
         'content',
-        'is_private'
+        'is_private',
+        'id_parent',
+        'id_created_by',
+        'media',
+        'id_group'
     ];
     public function createdBy()
     {

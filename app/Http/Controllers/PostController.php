@@ -16,6 +16,17 @@ class PostController extends Controller
         //
     }
 
+    // public function getPosts() {
+    //     $posts = Post::all();
+    //     $filteredPosts = $posts->filter(function ($post) {
+    //         return policy(Post::class)->view(Auth::user(), $post);
+    //     });
+    //     $filteredPosts->each(function ($post) {
+    //         $post->load('createdBy', 'comments', 'likes');            
+    //     });
+    //     return response()->json($filteredPosts);
+    // }
+
     /**
      * Displays the form for creating a new resource.
      */
@@ -23,20 +34,22 @@ class PostController extends Controller
     {
         
     }
-    
     public function storePost(Request $request) {
         $request->validate([
             'content' => 'required|max:255',
             // 'id_group' => 'nullable|exists:groups,id'
             'is_private' => 'nullable|boolean'
         ]);
+        $this->authorize('createPost', Post::class);  // user must be logged in
         $post = new Post();
-        $this->authorize('createPost', $post);
-        
+
         $post->content = $request->input('content');
-        $post->is_private = $request->input('is_private');
+        if ($request->has('is_private')) $post->is_private = $request->input('is_private');
         $post->id_created_by = Auth::user()->id;
+
         $post->save();
+        
+        $post->load('createdBy');   // comments and likes are empty
         return response()->json($post);
     }
 
@@ -87,15 +100,12 @@ class PostController extends Controller
     public function search(string $search)
     {
         $posts = Post::search($search);
-        error_log($posts->toJson());
         $filteredPosts = $posts->filter(function ($post) {
             return policy(Post::class)->view(Auth::user(), $post);
         });
-        error_log($filteredPosts->toJson());
         $filteredPosts->each(function ($post) {
             $post->load('createdBy', 'comments', 'likes');            
         });
-        error_log($filteredPosts->toJson());
         return response()->json($filteredPosts);
     }
 

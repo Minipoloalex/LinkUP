@@ -22,6 +22,7 @@
         <script type="text/javascript" src={{ url('js/delete_post.js') }} defer></script>
         <script type="text/javascript" src={{ url('js/search.js') }} defer></script>
         <script type="text/javascript" src={{ url('js/edit_post.js') }} defer></script>
+        <script type="text/javascript" src={{ url('js/add_post.js') }} defer></script>
     </head>
     <body>
         <main>

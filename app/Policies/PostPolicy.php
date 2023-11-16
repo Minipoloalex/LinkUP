@@ -30,7 +30,7 @@ class PostPolicy
     /**
      * Determine whether the user can create posts.
      */
-    public function createPost(User $user): bool
+    public function createPost(?User $user): bool
     {
         return Auth::check();
     }
