@@ -19,6 +19,7 @@
         </script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
         </script>
+        @vite('resources/css/app.css')
     </head>
     <body>
         <main>
