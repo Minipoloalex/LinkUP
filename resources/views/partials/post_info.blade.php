@@ -12,7 +12,7 @@
         <form class="edit-content hidden">
             <input class='textfield' type="text" name="content" value="{{ $post->content }}">
         </form>
-        <a href="#" class="delete">&#10761;</a>
+        <a href="{{ url()->previous() }}" class="delete">&#10761;</a>
     @endif
 </header>
 <p class='post-content'>{{ $post->content }}</p>

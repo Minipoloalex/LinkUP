@@ -1,50 +1,28 @@
 // To delete a post or a comment
-
+console.log(window.location.href);
 const deletePostButtons = document.querySelectorAll('.delete');
 deletePostButtons.forEach(button => {
     button.addEventListener('click', deletePostOrComment);
 })
 
 async function deletePostOrComment(event) {
-    if (event.target.classList.contains('delete')) {
-        if (event.target.closest('article').classList.contains('post')) {
-            deletePost(event);
-        }
-        else {
-            deleteComment(event);
+    if (confirm('Are you sure you want to delete this post?')) {
+        const post = event.target.closest('article');
+        const postId = post.dataset.id;
+        deletePost(postId);
+        if (!window.location.href.includes(`/post/${postId}`)) {    // post page must redirect
+            event.preventDefault();
         }
     }
+    else {
+        event.preventDefault();
+    }   
 }
 
-async function deletePost(event) {
-    event.preventDefault();
-    const article = event.target.closest('article');
-    const id = article.dataset.id;
-    const response = await fetch(`/post/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    });
+async function deletePost(postId) {
+    const response = await sendAjaxRequest('DELETE', `/post/${postId}`);
     console.log(response);
     if (response.ok) {
         article.remove();
     }
 }
-
-async function deleteComment(event) {
-    event.preventDefault();
-    const article = event.target.closest('article');
-    const id = article.dataset.id;
-    const response = await fetch(`/comment/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    })
-    console.log(response);
-    if (response.ok) {
-        article.remove();
-    }
-}
-
