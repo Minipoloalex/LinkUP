@@ -28,7 +28,8 @@ CREATE TABLE admin (
     email VARCHAR(200) UNIQUE NOT NULL,
     name VARCHAR(200),
     password TEXT NOT NULL,
-    id_created_by INTEGER REFERENCES admin(id) ON DELETE SET NULL
+    id_created_by INTEGER REFERENCES admin(id) ON DELETE SET NULL,
+    remember_token VARCHAR
 );
 
 CREATE TABLE users (
@@ -40,7 +41,8 @@ CREATE TABLE users (
     description TEXT,
     photo TEXT DEFAULT 'def.jpg',
     is_private BOOLEAN DEFAULT true NOT NULL,
-    id_blocked_by INTEGER REFERENCES admin(id) ON DELETE SET NULL
+    id_blocked_by INTEGER REFERENCES admin(id) ON DELETE SET NULL,
+    remember_token VARCHAR
 );
 CREATE TABLE follows (
     id_user INTEGER REFERENCES users(id),
