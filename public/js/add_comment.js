@@ -5,60 +5,47 @@
     </form>
 </article>
 */
-const commentForm = document.querySelector('.new_comment');
+const commentForm = document.querySelector('form.add-comment');
 if (commentForm != null) {
-    commentForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const commentContent = commentForm.querySelector('input[type=text]').value;
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        const post = event.currentTarget.closest('.post');
+    commentForm.addEventListener('submit', submitAddComment);
+}
 
-        const response = await fetch('/comment', {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            method: 'POST',
-            body: encodeForAjax({
-                'content': commentContent,
-                'id_parent': post.dataset.id,
-            })
-        });
-        if (response.ok) {
-            const data = await response.json();
-            console.log(data);
-            const commentsContainer = post.querySelector('.comments-container');
-            // addCommentToDOM(commentsContainer, data);
-            commentForm.reset();
-        }
-        else {
-            console.log('response not ok');
-            // display error message to user
-        }
+async function submitAddComment(event) {
+    event.preventDefault();
+    const commentContent = commentForm.querySelector('input[type=text]').value;
+    const post = event.currentTarget.closest('.post');
+
+    const response = await sendAjaxRequest('post', '/comment', {
+        content: commentContent,
+        id_parent: post.dataset.id,
+        media: commentForm.querySelector('input[type=file]').files[0]
     });
+    // const response = await fetch('/comment', {
+    //     headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //         'X-CSRF-TOKEN': csrfToken
+    //     },
+    //     method: 'POST',
+    //     body: encodeForAjax({
+    //         'content': commentContent,
+    //         'id_parent': post.dataset.id,
+    //     })
+    // });
+    if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        const commentsContainer = post.querySelector('.comments-container');
+        // addCommentToDOM(commentsContainer, data);
+        incrementCommentCount(post);
+        commentForm.reset();
+    }
+    else {
+        console.log('response not ok');
+        // display error message to user
+    }
 }
 
 function addCommentToDOM(container, commentJson) {
-    /*
-    <article class="comment" data-id="{{ $comment->id }}">
-        <header>
-    <h2><a href="/users/{{ $post->id_created_by }}">{{ $post->createdBy->username }}</a></h2>
-    <h3>
-        <a href="#" class="like">&#10084;</a>
-            <span class="likes">{{ $post->likes->count() }}</span>
-    </h3>
-    <h3>
-        <span class="date">{{ $post->created_at }}</span>
-    </h3>
-    <a href="#" class="delete">&#10761;</a>
-</header>
-<p>{{ $post->content }}</p>
-<h4>
-    <span class="nr-comments">{{ $post->comments->count() }}</span>
-</h4>
-
-    </article>
-    */
     const comment = document.createElement('article');
     comment.classList.add('comment');
     comment.dataset.id = commentJson.id;
@@ -91,4 +78,9 @@ function addCommentToDOM(container, commentJson) {
     p.textContent = commentJson.content;
     comment.appendChild(p);
     container.appendChild(comment);
+}
+
+function incrementCommentCount(post) {
+    const nrComments = post.querySelector('.nr-comments');
+    nrComments.textContent = parseInt(nrComments.textContent) + 1;
 }

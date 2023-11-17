@@ -37,8 +37,9 @@ class PostController extends Controller
     public function storePost(Request $request) {
         $request->validate([
             'content' => 'required|max:255',
-            // 'id_group' => 'nullable|exists:groups,id'
-            'is_private' => 'nullable|boolean'
+            // 'id_group' => 'nullable|exists:groups,id',
+            'is_private' => 'nullable|boolean',
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
         ]);
         $this->authorize('createPost', Post::class);  // user must be logged in
         $post = new Post();
@@ -46,7 +47,16 @@ class PostController extends Controller
         $post->content = $request->input('content');
         if ($request->has('is_private')) $post->is_private = $request->input('is_private');
         $post->id_created_by = Auth::user()->id;
-
+        
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $fileName = 'media_post_' . \Str::random(20) . '.' . $request->media->extension();
+            ImageController::store($request->media, $fileName);
+            $post->media = $fileName;
+        }
+        else {
+            // send message to user specifying that the file was invalid
+        }
+        
         $post->save();
         
         $post->load('createdBy');   // comments and likes are empty
@@ -157,6 +167,17 @@ class PostController extends Controller
         // Delete the post and return it as JSON.
         $post->delete();
         return response()->json($post);
-        // need to redirect in case of post page
+    }
+    public function viewImage(string $id)
+    {
+        $post = Post::findOrFail($id);
+        $this->authorize('view', $post);
+
+        $fileName = $post->media;
+        $path = ImageController::imagesPath() . $fileName;
+        if (!ImageController::existsPath($path)) {
+            abort(404);
+        }
+        return ImageController::getFile($path);
     }
 }

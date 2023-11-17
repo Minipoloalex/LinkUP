@@ -12,7 +12,5 @@
             <p>No comments yet</p>
         @endif
     @endif
-    <form class="new_comment">
-        <input type="text" name="content" placeholder="Add a comment">
-    </form>
+    @include('partials.create_post_form', ['type' => 'comment'])
 </article>

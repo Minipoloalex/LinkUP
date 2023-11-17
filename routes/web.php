@@ -58,6 +58,7 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(PostController::class)->group(function () {
     Route::get('/post/{id}', 'show')->name('post');
+    Route::get('/post/{id}/image', 'viewImage')->name('post.image');
 
     Route::post('/post', 'storePost');
     Route::post('/comment', 'storeComment');
@@ -67,7 +68,9 @@ Route::controller(PostController::class)->group(function () {
 
     Route::put('/post/edit/{id}', 'update');
 
+    
     Route::get('/api/post/search/{search}', 'search');
+    
 });
 
 Route::get('/search', function() {

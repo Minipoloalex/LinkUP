@@ -3,9 +3,7 @@
 @section('title', 'Post')
 
 @section('content')
-    @include('partials.post', ['post' => $post, 'displayComments' => false])
+    @include('partials.post', ['post' => $post, 'displayComments' => true])
     <button class="toggle-add-post">Add Post</button>
-    <form class="add-post">
-        <input type="text" name="content" placeholder="Add a post" value="">
-    </form>
+    @include('partials.create_post_form', ['type' => 'post'])
 @endsection
