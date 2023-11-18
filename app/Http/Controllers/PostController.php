@@ -132,12 +132,13 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
         $request->validate([
             'content' => 'nullable|max:255',
             'is_private' => 'nullable|boolean',
             'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
         ]);
+        // media -> can change, add or maintain (null) (cannot delete)
         $this->authorize('update', $post);
 
         $post->content = $request->input('content') ?? $post->content;
@@ -145,12 +146,17 @@ class PostController extends Controller
 
         $post->save();
 
-        if ($request->has('media') && $request->file('media')->isValid())
+        $hasNewMedia = false;
+        \Log::info($request->all());
+        if ($request->has('media') && $request->file('media')->isValid()) {
             $this->deleteFile($post->media);
-        $this->setFileName($request, $post);
+            $this->setFileName($request, $post);
+            $hasNewMedia = true;
+        }
 
-        \Log::info("updated post $post->toJson()");
-        return response()->json($post);
+        \Log::info("updated post " . $post->toJson());
+
+        return response()->json(compact('post', 'hasNewMedia'));
     }
 
     /**

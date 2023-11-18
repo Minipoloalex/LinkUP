@@ -12,5 +12,5 @@
             <p>No comments yet</p>
         @endif
     @endif
-    @include('partials.create_post_form', ['type' => 'comment'])
+    @include('partials.create_post_form', ['formClass' => 'add-comment', 'textPlaceholder' => 'Add a new comment', 'buttonText' => 'Create Comment', 'contentValue' => ''])
 </article>

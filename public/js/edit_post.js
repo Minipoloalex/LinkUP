@@ -7,6 +7,10 @@ editPostFields.forEach(field => {
     field.addEventListener('submit', submitEditPost);
 });
 
+function getTextField(form) {
+    return form.querySelector('input[type="text"]');
+}
+
 function toggleEditEvent(event) {
     event.preventDefault();
     const post = event.currentTarget.closest('article');
@@ -36,13 +40,21 @@ async function submitEditPost(event) {  // submitted the form
     const textField = getTextField(form);
     const newContent = textField.value;
 
-    const response = await sendAjaxRequest('put', `/post/edit/${postId}`, {content: newContent});
+    const response = await submitEditPostOrComment(form, {'content': newContent}, postId);
     if (response.ok) {
-        // const data = response.json();    // don't need the data
+        const data = await response.json();
+        console.log(data);
+    
         const postContentElement = post.querySelector('.post-content');
-
         postContentElement.textContent = newContent;
         toggleEdit(postContentElement, form, textField);
+        
+        if (data['hasNewMedia']) {
+
+            removeImageContainer(post);
+            addImageContainer(postContentElement, postId);
+        }
+        
     }
     else {
         console.log('Error: ', response.status);
@@ -50,12 +62,10 @@ async function submitEditPost(event) {  // submitted the form
     }
 }
 
-
 const deleteImageButtons = document.querySelectorAll('.delete-image');
 deleteImageButtons.forEach(button => {
     button.addEventListener('click', deleteImage);
 });
-
 async function deleteImage(event) {
     event.preventDefault();
     if (confirm('Are you sure you want to delete this image?')) {
@@ -73,6 +83,29 @@ async function deleteImage(event) {
     }
 }
 
-function getTextField(form) {
-    return form.querySelector('input[type="text"]');
+function removeImageContainer(post) {
+    const imageContainer = post.querySelector('.image-container');
+    if (imageContainer) {
+        imageContainer.remove();
+    }
+}
+function addImageContainer(postContentElement, postId) {
+    // check partials.post_info
+    const imageContainer = document.createElement('div');
+    imageContainer.classList.add('image-container');
+
+    const img = document.createElement('img');
+    img.src = `/post/${postId}/image`;      // THIS IS BEING CACHED AND WE DO NOT WANT THAT
+    img.alt = 'A post image';
+    imageContainer.appendChild(img);
+
+    const deleteButton = document.createElement('a');
+    deleteButton.href = '#';
+    deleteButton.classList.add('delete', 'delete-image');
+    deleteButton.dataset.id = postId;
+    deleteButton.innerHTML = '&#10761;';
+    deleteButton.addEventListener('click', deleteImage);
+    imageContainer.appendChild(deleteButton);
+
+    postContentElement.after(imageContainer);
 }

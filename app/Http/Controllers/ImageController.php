@@ -11,7 +11,6 @@ class ImageController extends Controller
     public static function store($media, string $fileName)
     {
         if (self::existsFile($fileName)) {
-            \Log::error("file not exists $fileName");
             abort(400);
         }
         \Log::info("Storing file: $fileName in " . self::$path);
@@ -42,9 +41,7 @@ class ImageController extends Controller
         if (!self::existsFile($fileName)) {
             abort(404);
         }
-        $filePath = self::getFilePath($fileName);
-        
-        \Log::info("File exists success: $fileName");
+        $filePath = self::getFilePath($fileName);        
         return Storage::response($filePath);
     }
 }

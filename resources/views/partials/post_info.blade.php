@@ -13,11 +13,13 @@
         @endphp
         @if ($editable)
             <a href="#" class="edit edit-post">&#9998;</a>
-            @include('partials.create_post_form', ['textPlaceholder' => 'Edit post', 'contentValue' => $post->content, 'buttonText' => 'Update Post', 'formClass' => 'edit-post-info hidden'])
             <a href="{{ url()->previous() }}" class="delete delete-post">&#10761;</a>
         @endif
     </header>
     <div class='post-body'>
+        @if ($editable)
+            @include('partials.create_post_form', ['formClass' => 'edit-post-info hidden', 'textPlaceholder' => 'Edit post', 'contentValue' => $post->content, 'buttonText' => 'Update Post'])
+        @endif
         <p class='post-content'>{{ $post->content }}</p>
         @if ($post->media != null)
             <div class="image-container">

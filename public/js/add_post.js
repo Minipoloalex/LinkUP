@@ -23,20 +23,31 @@ async function submitAddPost(event) {
     }
 }
 async function submitAddPostOrComment(form, data, type) {  // type = 'post' or 'comment'
+    return await submitDataPostOrComment(form, data, `/${type}`, 'post');
+}
+
+async function submitEditPostOrComment(form, data, postId) {
+    // Explains the use of _method https://laravel.com/docs/10.x/routing#form-method-spoofing
+    data._method = 'put';
+    return await submitDataPostOrComment(form, data, `/post/${postId}`, 'post');
+}
+
+async function submitDataPostOrComment(form, data, url, method) {
+    // includes the file
     const file = form.querySelector('input[type=file]').files;
     if (file.length > 0) {
         const formData = new FormData();
         for (const key in data) {
-            formData.append(key, data[key]);    // e.g. formData.append('content', content);
+            formData.append(key, data[key]);
         }
         formData.append('media', file[0]);
-        return await fetch(`/${type}`, {
-            method: 'post',
+        return await fetch(url, {
+            method: method,
             headers: {
-                'X-CSRF-TOKEN': getCsrfToken()
+                'X-CSRF-TOKEN': getCsrfToken(),
             },
             body: formData
         });
     }
-    return await sendAjaxRequest('post', `/${type}`, data);
+    return await sendAjaxRequest(method, url, data);
 }
