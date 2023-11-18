@@ -14,12 +14,15 @@ async function submitAddComment(event) {
     event.preventDefault();
     const commentContent = commentForm.querySelector('input[type=text]').value;
     const post = event.currentTarget.closest('.post');
-
-    const response = await sendAjaxRequest('post', '/comment', {
-        content: commentContent,
-        id_parent: post.dataset.id,
-        media: commentForm.querySelector('input[type=file]').files[0]
-    });
+    const response = await submitAddPostOrComment(
+        commentForm, 
+        {content: commentContent, id_parent: post.dataset.id},
+        'comment');
+    // const response = await sendAjaxRequest('post', '/comment', {
+    //     content: commentContent,
+    //     id_parent: post.dataset.id,
+    //     media: commentForm.querySelector('input[type=file]').files[0]
+    // });
     // const response = await fetch('/comment', {
     //     headers: {
     //         'Content-Type': 'application/x-www-form-urlencoded',
@@ -44,7 +47,16 @@ async function submitAddComment(event) {
         // display error message to user
     }
 }
-
+function incrementCommentCount(post) {
+    changeCommentCount(post, 1);
+}
+function decrementCommentCount(post) {
+    changeCommentCount(post, -1);
+}
+function changeCommentCount(post, value) {
+    const nrComments = post.querySelector('.nr-comments');
+    nrComments.textContent = parseInt(nrComments.textContent) + value;
+}
 function addCommentToDOM(container, commentJson) {
     const comment = document.createElement('article');
     comment.classList.add('comment');
@@ -78,9 +90,4 @@ function addCommentToDOM(container, commentJson) {
     p.textContent = commentJson.content;
     comment.appendChild(p);
     container.appendChild(comment);
-}
-
-function incrementCommentCount(post) {
-    const nrComments = post.querySelector('.nr-comments');
-    nrComments.textContent = parseInt(nrComments.textContent) + 1;
 }

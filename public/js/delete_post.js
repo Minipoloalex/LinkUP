@@ -7,9 +7,10 @@ deletePostButtons.forEach(button => {
 
 async function deletePostOrComment(event) {
     if (confirm('Are you sure you want to delete this post?')) {
-        const post = event.target.closest('article');
+        console.log('deleting post')
+        const post = event.currentTarget.closest('article');
         const postId = post.dataset.id;
-        deletePost(postId);
+        deletePost(post, postId);
         if (!window.location.href.includes(`/post/${postId}`)) {    // post page must redirect
             event.preventDefault();
         }
@@ -19,10 +20,10 @@ async function deletePostOrComment(event) {
     }   
 }
 
-async function deletePost(postId) {
+async function deletePost(post, postId) {
     const response = await sendAjaxRequest('DELETE', `/post/${postId}`);
     console.log(response);
     if (response.ok) {
-        article.remove();
+        post.remove();
     }
 }

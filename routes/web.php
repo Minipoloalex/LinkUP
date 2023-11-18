@@ -63,8 +63,8 @@ Route::controller(PostController::class)->group(function () {
     Route::post('/post', 'storePost');
     Route::post('/comment', 'storeComment');
 
-    Route::delete('/comment/{id}', 'delete');
-    // Route::delete('/post/{id}', 'delete');
+    // Route::delete('/comment/{id}', 'delete');
+    Route::delete('/post/{id}', 'delete');
 
     Route::put('/post/edit/{id}', 'update');
 

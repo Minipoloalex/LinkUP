@@ -10,25 +10,41 @@ class ImageController extends Controller
     static protected $path = "images/";
     public static function store($media, string $fileName)
     {
-        $media->storeAs(ImageController::$path, $fileName);
-    }
-    public static function imagesPath()
-    {
-        return storage_path('/app/' . ImageController::$path);
+        if (self::existsFile($fileName)) {
+            \Log::error("file not exists $fileName");
+            abort(400);
+        }
+        \Log::info("Storing file: $fileName in " . self::$path);
+        Storage::putFileAs(self::$path, $media, $fileName);
     }
     public static function delete(string $fileName)
     {
-        Storage::delete(storage_path(ImageController::$path . $fileName));
+        $filePath = self::getFilePath($fileName);
+        if (self::existsFile($fileName)) {
+            $deleted = Storage::delete($filePath);
+            if ($deleted) {
+                \Log::info("File deleted: $filePath");
+            }
+            else {
+                \Log::info("File not found: $filePath");
+            }
+        }
     }
-    public static function existsPath(string $filePath) : bool
-    {
-        return file_exists($filePath);
+    private static function getFilePath(string $fileName) {
+        return self::$path . $fileName;
     }
-    public static function getFile(string $filePath)
+    public static function existsFile(string $fileName) : bool
     {
-        if (!ImageController::existsPath($filePath)) {
+        return Storage::exists(self::getFilePath($fileName));
+    }
+    public static function getFile(string $fileName)
+    {
+        if (!self::existsFile($fileName)) {
             abort(404);
         }
-        return response()->file($filePath);
+        $filePath = self::getFilePath($fileName);
+        
+        \Log::info("File exists success: $fileName");
+        return Storage::response($filePath);
     }
 }

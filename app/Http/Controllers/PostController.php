@@ -47,18 +47,12 @@ class PostController extends Controller
         $post->content = $request->input('content');
         if ($request->has('is_private')) $post->is_private = $request->input('is_private');
         $post->id_created_by = Auth::user()->id;
+
+        $post->save();  // get the post id to make file name unique
         
-        if ($request->hasFile('media') && $request->file('media')->isValid()) {
-            $fileName = 'media_post_' . \Str::random(20) . '.' . $request->media->extension();
-            ImageController::store($request->media, $fileName);
-            $post->media = $fileName;
-        }
-        else {
-            // send message to user specifying that the file was invalid
-        }
-        
-        $post->save();
-        
+        $this->setFileName($request, $post);
+
+        \Log::info("created post $post->toJson()");    // check if post is updated from setFileName
         $post->load('createdBy');   // comments and likes are empty
         return response()->json($post);
     }
@@ -71,6 +65,7 @@ class PostController extends Controller
         $request->validate([
             'content' => 'required|max:255',
             'id_parent' => 'required|exists:post,id',
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
             // 'id_group' => 'nullable|exists:groups,id'
         ]);
 
@@ -87,8 +82,20 @@ class PostController extends Controller
 
         $comment->save();
 
+        $this->setFileName($request, $comment);
+        \Log::info("created comment $comment->toJson()");
+
         $comment->load('createdBy', 'comments', 'likes');
         return response()->json($comment);
+    }
+
+    private function setFileName(Request $request, Post $post) {
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
+            ImageController::store($request->media, $fileName);
+            $post->media = $fileName;
+            $post->save();
+        }
     }
 
     /**
@@ -164,6 +171,7 @@ class PostController extends Controller
         // Check if the current user is authorized to delete this post.
         $this->authorize('delete', $post);
         
+        ImageController::delete($post->media);
         // Delete the post and return it as JSON.
         $post->delete();
         return response()->json($post);
@@ -174,10 +182,9 @@ class PostController extends Controller
         $this->authorize('view', $post);
 
         $fileName = $post->media;
-        $path = ImageController::imagesPath() . $fileName;
-        if (!ImageController::existsPath($path)) {
+        if (!ImageController::existsFile($fileName)) {
             abort(404);
         }
-        return ImageController::getFile($path);
+        return ImageController::getFile($fileName);
     }
 }
