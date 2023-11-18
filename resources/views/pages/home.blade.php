@@ -3,5 +3,7 @@
 @section('title', 'Home')
 
 @section('content')
-<h1> Welcome to the home page! </h1>
+<section id="timeline">
+    <!-- Javascript will render posts here -->
+</section>
 @endsection
