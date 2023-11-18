@@ -1,162 +1,241 @@
 body {
-    background-color: #ffffff;
-    color: #9b4dca;
-  }
+  /* create a color variable */
+
+
+  --column-color : rgb(56, 56, 56);
+
+  --feup-color: #780404;
+
+  display: flex;
+  flex-direction: column;
+}
   main > header {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
+    
+    display: flex;
     align-items: center;
-    background-color: #d2afe7;
-    padding: 1em;
-    margin: 1em;
-  }
-  main > header h1 {
-    margin: 0;
-  }
+    justify-content: space-between;
+    background-color: transparent;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem; /* Add margin to separate the header from the content */
+    /* i want the header to have more margin on all sides */
+    margin-left: 5rem;
+    margin-right: 5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+}
+
   main > header a.button {
     margin: 1em;
     justify-self: center;
   }
-  main > header span {
-    margin: 1em;
-    justify-self: center;
-  }
-  #cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  #cards article.card {
-    display: flex;
-    flex-direction: column;
-    background-color: #d3edc3;
-    padding: 1em;
-    margin: 1em;
-  }
-  #cards article.card header {
+
+
+
+  .search-bar {
     display: flex;
     align-items: center;
+    width: 100%;
+    max-width: 300px;
+    margin-right: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 3rem;
+    background-color: #ccc;
   }
-  #cards article.card header h2 {
-    flex-grow: 1;
+  
+  #searchIcon {
+    position: absolute;
+    right: 1rem;
+    margin-left: 2rem;
+    color: #2196F3;
+    transition: opacity 0.2s ease-in-out;
+    opacity: 1;
+    border: none;
   }
-  #cards article.card header a.delete {
-    display: none;
-    font-size: 2.6rem;
-    margin-top: .5rem;
-    margin-bottom: 2.5rem;
-    line-height: 1.25;
+  
+  .search-bar input {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    position: relative;
   }
-  #cards article.card header:hover a.delete {
-    display: inline;
+  
+  .search-bar input:focus {
+    border: 1px solid grey;
   }
-  #cards article.card li {
-    list-style-type: none;
+  
+  /* Hide the search icon when text is entered */
+  .search-bar input:not(:empty) ~ #searchIcon {
+    opacity: 0;
   }
-  #cards article.card li label {
-    display: flex;
-    align-items: baseline;
-  }
-  #cards article.card li label span {
-    margin-left: .5em;
-    flex-grow: 1;
-  }
-  #cards article.card li label a {
-    display: none;
-  }
-  #cards article.card li label:hover a {
-    display: inline;
-  }
-  #cards article.card input:checked + span {
-    text-decoration: var(--primary-color) solid line-through;
-  }
-  #cards article.card ul {
-    margin: 0;
-  }
-  #cards article.card form {
-    margin: 0;
-  }
-  #cards article.card input[type=text] {
-    background-color: white;
-    margin: 0;
-  }
-  #content label {
-    font-weight: normal;
-  }
-  #content > form {
-    margin: 0 auto;
-    padding: 1em;
-    max-width: 20em;
-    border: 1px solid #d2afe7;
-  }
-  #content > form .error {
-    font-weight: bold;
-    color: #ff3333;
-  }
-  #content > form .success {
-    font-weight: bold;
-    color: #106af1;
-  }
+
+.search-bar input:focus, .search-button:focus {
+  outline: none;
+  border: none;
+}
+
+.search-button {
+  color: white;
+  border: none;
+  margin-left: 0.5rem;
+  background-color: transparent;
+}
+
+.search-button:hover{
+  background-color: transparent;
+}
+
+.search-button:clicked{
+  background-color: transparent;
+}
+  
+.search-button:not(:active) {
+  background-color: transparent;
+}
+
+
+
   #content > form input {
     background-color: white;
   }
-  @media (max-width: 70em) {
-    #cards {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    main > header {
-      display: grid;
-      grid-template-columns: 1fr auto;
-    }
-    main > header h1 {
-      grid-row-end: span 2;
-    }
+
+
+
+  .columns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-radius: 0.5rem;
   }
-  @media (max-width: 40em) {
-    #cards {
-      grid-template-columns: 1fr;
-    }
+
+  
+  
+  .column-1 {
+    background-color: var(--column-color);
+    border-radius: 3rem;
+    font-size: 2rem;
+    width: 20%;
+    padding: 1rem;
+    overflow: auto;
+    margin: 2rem;
   }
-  @media (max-width: 25em) {
-    body {
-      margin: 0;
-    }
-    main > header {
-      margin: 0;
-      padding: 0.5em;
-    }
-    main > header span {
-      margin: 0;
-    }
-    #content form {
-      margin: 0;
-      max-width: 25em;
-    }
-    article.card {
-      margin: 0;
-      border-bottom: 1px solid rgba(96, 108, 118, 0.4);
-    }
+
+
+.column-1 ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.column-1 li {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin: 2rem;
+}
+
+.column-1 li:hover {
+  color: white;
+  font-weight: bold;
+}
+  
+.column-2 {
+  border-radius: 3rem;
+  font-size: 2rem;
+  width: 60%;
+  padding: 1rem;
+  overflow: auto;
+  margin: 2rem;
+
+  display: flex;
+  
+}
+
+  /* column 2 first div */
+  .column-2 div:first-child {
+    /* put div first element in center and middle */
+ 
   }
-  /**
-   * Override milligram colors
-   * Some styles might be missing
-   **/
-  button {
-    background-color: #9b4dca;
-    border-color: #9b4dca;
-  }
-  a.button {
-    background-color: #9b4dca;
-    border-color: #9b4dca;
-  }
-  a.button.button-outline {
-    color: #9b4dca;
-  }
-  a {
-    color: #9b4dca;
-  }
-  input[type=text]:focus,
-  input[type=email]:focus,
-  input[type=password]:focus {
-    border-color: #9b4dca;
+
+  .edit-button {
+    /* put content in center and right of div */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: right;
+    margin-right: 2rem;
+  
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
   }
   
+  .edit-button i {
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .edit-button:hover {
+    background-color: transparent;
+  }
+
+  .edit-button i:hover {
+
+    color: var(--feup-color);
+  }
+  
+
+  .column-2 div {
+    background-color: rgb(56, 56, 56);
+    border-radius: 3rem;
+    font-size: 2rem;
+    
+    border-right: 1px solid #ccc;
+    padding: 1rem;
+    overflow: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .column-3 {
+    background-color: var(--column-color);
+    border-radius: 3rem;
+    font-size: 2rem;
+    width: 20%;
+    border-right: 1px solid #ccc;
+    padding: 1rem;
+    overflow: auto;
+    margin: 2rem;
+    
+  }
+  
+  .column-3 div {
+    padding: 1rem;
+  }
+  
+  
+
+/* Responsive styles for the header */
+@media (max-width: 768px) {
+  main > header {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Responsive styles for the search bar */
+@media (max-width: 768px) {
+  .search-bar {
+    max-width: 200px;
+    border-radius: 0.25rem;
+  }
+
+  #searchIcon {
+    margin-left: 1rem;
+  }
+}
