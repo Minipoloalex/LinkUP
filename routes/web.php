@@ -65,9 +65,9 @@ Route::controller(PostController::class)->group(function () {
 
     // Route::delete('/comment/{id}', 'delete');
     Route::delete('/post/{id}', 'delete');
+    Route::delete('/post/{id}/image', 'deleteImage');
 
     Route::put('/post/edit/{id}', 'update');
-
     
     Route::get('/api/post/search/{search}', 'search');
     

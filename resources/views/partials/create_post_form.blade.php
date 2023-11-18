@@ -1,6 +1,10 @@
-<form class="add-{{ $type }}">
-    <input type="text" name="content" required placeholder="Add a new {{ $type }}">
-    <button type="submit">Add a new {{ $type }}</button>    <!-- MUST BE FIRST ON THE HTML -->
+{{-- 
+['formClass' => string, 'type' => string, 'textPlaceholder' => string, 'buttonText' => string, 'contentValue' => string]
+--}}
+
+<form class="{{$formClass}}">
+    <input type="text" name="content" required placeholder="{{ $textPlaceholder }}" value="{{ $contentValue }}">
+    <button type="submit">{{ $buttonText }}</button>    <!-- MUST BE FIRST ON THE HTML -->
     <div class="file-input-wrapper">
         <button class="upload-file">Upload image</button>
         <input type="file" accept=".jpg, .jpeg, .png, .gif, .mp4" class="hidden" name="media">

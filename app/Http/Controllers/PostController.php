@@ -188,6 +188,14 @@ class PostController extends Controller
         }
         return ImageController::getFile($fileName);
     }
+    public function deleteImage(string $id) {
+        $post = Post::findOrFail($id);
+        $this->authorize('delete', $post);
+        
+        $this->deleteFile($post->media);
+        $post->media = null;
+        $post->save();
+    }
     private function setFileName(Request $request, Post $post)
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {

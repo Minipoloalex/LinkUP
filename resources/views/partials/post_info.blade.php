@@ -8,18 +8,24 @@
         <h3>
             <span class="date">{{ $post->created_at }}</span>
         </h3>
-        @if ($post->isCreatedByCurrentUser())
+        @php
+            $editable = $post->isCreatedByCurrentUser();
+        @endphp
+        @if ($editable)
             <a href="#" class="edit edit-post">&#9998;</a>
-            <form class="edit-content hidden">
-                <input class='textfield' type="text" name="content" value="{{ $post->content }}">
-            </form>
-            <a href="{{ url()->previous() }}" class="delete">&#10761;</a>
+            @include('partials.create_post_form', ['textPlaceholder' => 'Edit post', 'contentValue' => $post->content, 'buttonText' => 'Update Post', 'formClass' => 'edit-post-info hidden'])
+            <a href="{{ url()->previous() }}" class="delete delete-post">&#10761;</a>
         @endif
     </header>
     <div class='post-body'>
         <p class='post-content'>{{ $post->content }}</p>
         @if ($post->media != null)
-            <img src="{{ route('post.image', ['id' => $post->id]) }}" alt="A post image">
+            <div class="image-container">
+                <img src="{{ route('post.image', ['id' => $post->id]) }}" alt="A post image">
+                @if ($editable)
+                    <a href="#" class="delete delete-image" data-id="{{ $post->id }}">&#10761;</a>
+                @endif
+            </div>
         @endif
     </div>
     <h4>
