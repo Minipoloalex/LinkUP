@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Policies\PostPolicy;
+
 class PostController extends Controller
 {
     /**
@@ -32,9 +33,10 @@ class PostController extends Controller
      */
     public function create(Request $request)
     {
-        
+
     }
-    public function storePost(Request $request) {
+    public function storePost(Request $request)
+    {
         $request->validate([
             'content' => 'required|max:255',
             // 'id_group' => 'nullable|exists:groups,id',
@@ -45,11 +47,12 @@ class PostController extends Controller
         $post = new Post();
 
         $post->content = $request->input('content');
-        if ($request->has('is_private')) $post->is_private = $request->input('is_private');
+        if ($request->has('is_private'))
+            $post->is_private = $request->input('is_private');
         $post->id_created_by = Auth::user()->id;
 
         $post->save();  // get the post id to make file name unique
-        
+
         $this->setFileName($request, $post);
 
         \Log::info("created post $post->toJson()");    // check if post is updated from setFileName
@@ -88,16 +91,6 @@ class PostController extends Controller
         $comment->load('createdBy', 'comments', 'likes');
         return response()->json($comment);
     }
-
-    private function setFileName(Request $request, Post $post) {
-        if ($request->hasFile('media') && $request->file('media')->isValid()) {
-            $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
-            ImageController::store($request->media, $fileName);
-            $post->media = $fileName;
-            $post->save();
-        }
-    }
-
     /**
      * Display the specified resource.
      */
@@ -107,8 +100,8 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         // Check if the current user can see (show) the post.
-        $this->authorize('view', $post);  
-        
+        $this->authorize('view', $post);
+
         // Use the pages.post template to display the post.
         return view('pages.post', [
             'post' => $post
@@ -121,7 +114,7 @@ class PostController extends Controller
             return policy(Post::class)->view(Auth::user(), $post);
         });
         $filteredPosts->each(function ($post) {
-            $post->load('createdBy', 'comments', 'likes');            
+            $post->load('createdBy', 'comments', 'likes');
         });
         return response()->json($filteredPosts);
     }
@@ -142,14 +135,21 @@ class PostController extends Controller
         $post = Post::find($id);
         $request->validate([
             'content' => 'nullable|max:255',
-            'is_private' => 'nullable|boolean'
+            'is_private' => 'nullable|boolean',
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
         ]);
         $this->authorize('update', $post);
-        
+
         $post->content = $request->input('content') ?? $post->content;
         $post->is_private = $request->input('is_private') ?? $post->is_private;
-        
+
         $post->save();
+
+        if ($request->has('media') && $request->file('media')->isValid())
+            $this->deleteFile($post->media);
+        $this->setFileName($request, $post);
+
+        \Log::info("updated post $post->toJson()");
         return response()->json($post);
     }
 
@@ -170,8 +170,9 @@ class PostController extends Controller
 
         // Check if the current user is authorized to delete this post.
         $this->authorize('delete', $post);
-        
-        ImageController::delete($post->media);
+
+        $this->deleteFile($post->media);
+
         // Delete the post and return it as JSON.
         $post->delete();
         return response()->json($post);
@@ -186,5 +187,20 @@ class PostController extends Controller
             abort(404);
         }
         return ImageController::getFile($fileName);
+    }
+    private function setFileName(Request $request, Post $post)
+    {
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
+            ImageController::store($request->media, $fileName);
+            $post->media = $fileName;
+            $post->save();
+        }
+    }
+    private function deleteFile(?string $fileName)
+    {
+        if ($fileName != null) {
+            ImageController::delete($fileName);
+        }
     }
 }

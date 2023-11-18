@@ -1,10 +1,3 @@
-/*
-<article class="post" data-id="{{ $post->id }}">
-    <form class="new_comment">
-        <input type="text" name="content" placeholder="Add a comment">
-    </form>
-</article>
-*/
 const commentForm = document.querySelector('form.add-comment');
 if (commentForm != null) {
     commentForm.addEventListener('submit', submitAddComment);
@@ -14,30 +7,15 @@ async function submitAddComment(event) {
     event.preventDefault();
     const commentContent = commentForm.querySelector('input[type=text]').value;
     const post = event.currentTarget.closest('.post');
-    const response = await submitAddPostOrComment(
-        commentForm, 
-        {content: commentContent, id_parent: post.dataset.id},
-        'comment');
-    // const response = await sendAjaxRequest('post', '/comment', {
-    //     content: commentContent,
-    //     id_parent: post.dataset.id,
-    //     media: commentForm.querySelector('input[type=file]').files[0]
-    // });
-    // const response = await fetch('/comment', {
-    //     headers: {
-    //         'Content-Type': 'application/x-www-form-urlencoded',
-    //         'X-CSRF-TOKEN': csrfToken
-    //     },
-    //     method: 'POST',
-    //     body: encodeForAjax({
-    //         'content': commentContent,
-    //         'id_parent': post.dataset.id,
-    //     })
-    // });
+    const response = await submitAddPostOrComment(commentForm, {
+        content: commentContent,
+        id_parent: post.dataset.id
+    }, 'comment');
+
     if (response.ok) {
         const data = await response.json();
         console.log(data);
-        const commentsContainer = post.querySelector('.comments-container');
+        // const commentsContainer = post.querySelector('.comments-container');
         // addCommentToDOM(commentsContainer, data);
         incrementCommentCount(post);
         commentForm.reset();
