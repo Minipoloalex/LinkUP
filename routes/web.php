@@ -2,9 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\ItemController;
-
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
@@ -24,7 +21,7 @@ Route::redirect('/', '/login');
 
 // Home
 Route::get('/home', function () {
-    return view('/pages/home');
+    return view('pages/home');
 })->middleware('auth');
 
 // Authentication
