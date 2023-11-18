@@ -160,3 +160,52 @@ body {
     border-color: #9b4dca;
   }
   
+  /**
+    * Initial styles to build prototype
+    **/
+
+    div, section, nav {
+        border: 1px solid #9b4dca;
+    }
+
+.top-nav {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+}
+
+.top-nav a {
+    color: #9b4dca;
+    text-decoration: none;
+}
+
+.search-container form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    height: 100vh;
+}
+
+main {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 3fr 1fr;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+}
+
+#left-tab, #right-tab, #content, .top-nav * {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
