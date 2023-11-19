@@ -3,7 +3,7 @@
 @section('title', 'Home')
 
 @section('content')
-<section id="timeline">
+<section id="timeline" class="flex flex-col flex-grow w-max">
     <!-- Javascript will render posts here -->
     <div id="fetcher" class="loader">
         <div class="spinner-border text-primary" role="status">
