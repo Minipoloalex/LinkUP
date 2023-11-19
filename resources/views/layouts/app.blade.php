@@ -58,18 +58,44 @@
                 </ul>
             </div>
             <div class="column-2">
-                <div>
-                    <button type="button" class="edit-button">
-                        <i class="fas fa-edit"></i>
-                    </button>
+                <div class= "profile">
+                    <div class="edit-profile">
+                        <button type="button" class="edit-button">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </div>
                     <img src="https://i.pinimg.com/originals/9b/47/a0/9b47a023caf29f113237d61170f34ad9.jpg" alt="Profile Photo">
+                    <div class="name-username">
+                        <p>John Doe</p>
+                        <p>@johndoe</p>
+                    </div>
+                    <div class="profile-numbers">
+                        <div>
+                            <p>Followers</p>
+                            <p>3</p>
+                        </div>
+                        <div>
+                            <p>Following</p>
+                            <p>3</p>
+                        </div>
+                        <div>
+                            <p>Groups</p>
+                            <p>3</p>
+                        </div>
+
+                    
+                    </div>
+                    <div class ="bio">
+                        <p>
+                            <!-- generate a random bio -->
+                            Lorem ipsum dolem ipsum dolem ipsum dolem ipsum dolem ipsum dolem ipsum dolem ipsum dolem ipsum dolem ipsum dolem ipsum dolor sit amet, consectetur adipiscing elit.
+                        </p>
+                    </div>
                 </div>
-                <div>
+                <div class = "post">
                     Content 2
                 </div>
-                <div>
-                    Content 3
-                </div>
+                
             </div>
             <div class="column-3">
                 <div>
