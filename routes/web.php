@@ -58,8 +58,3 @@ Route::controller(RegisterController::class)->group(function () {
 
 // profile page
 Route::get('/profile/{email}', [UserController::class, 'show'])->name('profile');
-
-// Feed page
-Route::get('/feed', function () {
-    return view('pages.feed');
-});
