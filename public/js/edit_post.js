@@ -62,6 +62,13 @@ async function submitEditPost(event) {  // submitted the form
     }
 }
 
+async function submitEditPostOrComment(form, data, postId) {
+    // Explains the use of _method https://laravel.com/docs/10.x/routing#form-method-spoofing
+    data._method = 'put';
+    return await submitDataPostOrComment(form, data, `/post/${postId}`, 'post');
+}
+
+
 const deleteImageButtons = document.querySelectorAll('.delete-image');
 deleteImageButtons.forEach(button => {
     button.addEventListener('click', deleteImage);
@@ -81,31 +88,4 @@ async function deleteImage(event) {
             console.log('Error: ', response.status);
         }
     }
-}
-
-function removeImageContainer(post) {
-    const imageContainer = post.querySelector('.image-container');
-    if (imageContainer) {
-        imageContainer.remove();
-    }
-}
-function addImageContainer(postContentElement, postId) {
-    // check partials.post_info
-    const imageContainer = document.createElement('div');
-    imageContainer.classList.add('image-container');
-
-    const img = document.createElement('img');
-    img.src = `/post/${postId}/image`;      // THIS IS BEING CACHED AND WE DO NOT WANT THAT
-    img.alt = 'A post image';
-    imageContainer.appendChild(img);
-
-    const deleteButton = document.createElement('a');
-    deleteButton.href = '#';
-    deleteButton.classList.add('delete', 'delete-image');
-    deleteButton.dataset.id = postId;
-    deleteButton.innerHTML = '&#10761;';
-    deleteButton.addEventListener('click', deleteImage);
-    imageContainer.appendChild(deleteButton);
-
-    postContentElement.after(imageContainer);
 }

@@ -1,5 +1,4 @@
 // To delete a post or a comment
-console.log(window.location.href);
 const deletePostButtons = document.querySelectorAll('.delete-post');
 deletePostButtons.forEach(button => {
     button.addEventListener('click', deletePostOrComment);
@@ -17,7 +16,7 @@ async function deletePostOrComment(event) {
     }
     else {
         event.preventDefault();
-    }   
+    }
 }
 
 async function deletePost(post, postId) {

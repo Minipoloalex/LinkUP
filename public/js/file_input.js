@@ -32,6 +32,5 @@ function handlerFileInput(fileInputWrapper) {
         fileInput.click();
     });
 }
-
 const fileInputWrappers = document.querySelectorAll('.file-input-wrapper');
 fileInputWrappers.forEach(handlerFileInput);
