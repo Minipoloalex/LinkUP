@@ -20,15 +20,17 @@
         @if ($editable)
             @include('partials.create_post_form', ['formClass' => 'edit-post-info hidden', 'textPlaceholder' => 'Edit post', 'contentValue' => $post->content, 'buttonText' => 'Update Post'])
         @endif
-        <p class='post-content'>{{ $post->content }}</p>
-        @if ($post->media != null)
-            <div class="image-container">
-                <img src="{{ route('post.image', ['id' => $post->id]) }}" alt="A post image">
-                @if ($editable)
-                    <a href="#" class="delete delete-image" data-id="{{ $post->id }}">&#10761;</a>
-                @endif
-            </div>
-        @endif
+        <a href="/post/{{ $post->id }}">
+            <p class='post-content'>{{ $post->content }}</p>
+            @if ($post->media != null)
+                <div class="image-container">
+                    <img src="{{ route('post.image', ['id' => $post->id]) }}" alt="A post image">
+                    @if ($editable)
+                        <a href="#" class="delete delete-image" data-id="{{ $post->id }}">&#10761;</a>
+                    @endif
+                </div>
+            @endif
+        </a>
     </div>
     <h4>
         <span class="nr-comments">{{ $post->comments->count() }}</span>
