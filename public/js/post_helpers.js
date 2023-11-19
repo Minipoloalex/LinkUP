@@ -32,7 +32,7 @@ function addImageContainer(postContentElement, postId) {
     imageContainer.classList.add('image-container');
 
     const img = document.createElement('img');
-    img.src = `/post/${postId}/image`;      // THIS IS BEING CACHED AND WE DO NOT WANT THAT
+    img.src = `/post/${postId}/image?_=${Date.now()}`; // Add timestamp to prevent caching (new image)
     img.alt = 'A post image';
     imageContainer.appendChild(img);
 

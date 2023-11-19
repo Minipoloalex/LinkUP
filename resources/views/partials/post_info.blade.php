@@ -13,7 +13,7 @@
         @endphp
         @if ($editable)
             <a href="#" class="edit edit-post">&#9998;</a>
-            <a href="{{ url()->previous() }}" class="delete delete-post">&#10761;</a>
+            <a href="{{ url('home') }}" class="delete delete-post">&#10761;</a>
         @endif
     </header>
     <div class='post-body'>
