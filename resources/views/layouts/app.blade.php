@@ -40,6 +40,10 @@
                 @endif
             </header>
 
+
+            <section id="content">
+                @yield('content')
+            </section>
             <section id="content">
               @yield('profile-page')
           </section> 
