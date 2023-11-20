@@ -29,8 +29,9 @@ function appendPostsToTimeline(posts) {
 
     for (const post of posts) {
         const postElement = createPostElement(post);
-        timeline.appendChild(postElement);
+        timeline.insertBefore(postElement, timeline.lastElementChild);
     }
+    console.log(timeline.lastChild);
 }
 
 function prependPostsToTimeline(posts) {
@@ -43,6 +44,7 @@ function prependPostsToTimeline(posts) {
 }
 
 function fetchPosts() {
+    // TODO: take date as an argument and fetch posts older than that date
     const request = new XMLHttpRequest();
     request.open('GET', '/api/posts', false);
     request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
@@ -54,7 +56,6 @@ function fetchPosts() {
 
 export function fetchNewPosts() {
     const posts = fetchPosts();
-    console.log(posts);
     prependPostsToTimeline(posts);
 }
 

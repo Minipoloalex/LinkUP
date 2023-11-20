@@ -26,13 +26,7 @@
 
 <body class="px-64 h-screen flex flex-col">
     @include('partials.header')
-    <main id="homepage" class="grid grid-cols-4 absolute top-32 left-0 w-screen px-64">
-        @include('partials.side.left-tab')
-        <section class="col-span-2 flex flex-grow pt-16 overflow-y-auto scrollbar-hide" id="content">
-            @yield('content')
-        </section>
-        @include('partials.side.right-tab')
-    </main>
+    @yield('content')
 </body>
 
 </html>
