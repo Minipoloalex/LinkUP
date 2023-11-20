@@ -1,0 +1,11 @@
+<div class="flex content-center justify-start flex-wrap col-span-1 border-gray-300 border-solid border-l pl-16">
+    <div>
+        @guest
+        <a href="{{ url('/login') }}">Login</a>
+        @else
+        <a href="{{ url('/profile') }}">
+            <img class="w-8 h-8" src="{{ url('images/profile.png') }}" alt="Profile">
+        </a>
+        @endguest
+    </div>
+</div>

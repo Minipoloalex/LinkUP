@@ -11,4 +11,5 @@ function createPostFetcher() {
 }
 
 posts.fetchNewPosts();
+posts.fetchNewPosts();
 createPostFetcher();

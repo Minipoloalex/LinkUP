@@ -2,10 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-    .post {
-        background-color: teal;
-        border-radius: 0.5rem;
-        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
-    }
+.post {
+    border-style: solid;
+    border-top-width: 1px;
+    border-color: #e2e8f0;
+    padding: 1rem;
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+#homepage {
+    height: calc(100% - 8rem);
 }
