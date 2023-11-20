@@ -143,9 +143,12 @@
                 
             </div>
             <div class="column-3">
-                <div>
-                    Content 4
+                <!-- notifications collumn with notification icon and notification text -->
+                <div class="notifications">
+                    <i class="fas fa-bell"></i>
+                    <p>Notifications</p>
                 </div>
+          
             </div>
             </main>
 

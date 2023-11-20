@@ -422,6 +422,11 @@ button:not(:active) {
     padding: 1rem;
     overflow: auto;
     margin: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     
   }
   
