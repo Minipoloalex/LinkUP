@@ -41,7 +41,8 @@ class PostPolicy
     {
         // if post is in a group, need to check group
         // if post is private, need to check follower
-        return Auth::check() && ($post->is_private === false || $user->id === $post->id_created_by);
+        // return Auth::check() && ($post->is_private === false || $user->id === $post->id_created_by);
+        return true;
     }
 
     /**
