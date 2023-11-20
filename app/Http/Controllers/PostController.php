@@ -6,6 +6,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Policies\PostPolicy;
+use Illuminate\Http\JsonResponse;
+use Log;
 
 class PostController extends Controller
 {
@@ -55,7 +57,7 @@ class PostController extends Controller
 
         $this->setFileName($request, $post);
 
-        \Log::info("created post $post->toJson()");    // check if post is updated from setFileName
+        Log::info("created post $post->toJson()");    // check if post is updated from setFileName
         $post->load('createdBy');   // comments and likes are empty
         return response()->json($post);
     }
@@ -86,7 +88,7 @@ class PostController extends Controller
         $comment->save();
 
         $this->setFileName($request, $comment);
-        \Log::info("created comment $comment->toJson()");
+        Log::info("created comment $comment->toJson()");
 
         $comment->load('createdBy', 'comments', 'likes');
         return response()->json($comment);
@@ -147,14 +149,14 @@ class PostController extends Controller
         $post->save();
 
         $hasNewMedia = false;
-        \Log::info($request->all());
+        Log::info($request->all());
         if ($request->has('media') && $request->file('media')->isValid()) {
             $this->deleteFile($post->media);
             $this->setFileName($request, $post);
             $hasNewMedia = true;
         }
 
-        \Log::info("updated post " . $post->toJson());
+        Log::info("updated post " . $post->toJson());
 
         return response()->json(compact('post', 'hasNewMedia'));
     }
@@ -194,10 +196,11 @@ class PostController extends Controller
         }
         return ImageController::getFile($fileName);
     }
-    public function deleteImage(string $id) {
+    public function deleteImage(string $id)
+    {
         $post = Post::findOrFail($id);
         $this->authorize('delete', $post);
-        
+
         $this->deleteFile($post->media);
         $post->media = null;
         $post->save();
@@ -216,5 +219,27 @@ class PostController extends Controller
         if ($fileName != null) {
             ImageController::delete($fileName);
         }
+    }
+    /**
+     * Get all posts created before a given date.
+     * @param string $date
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function getPostsBeforeDate(string $date): JsonResponse
+    {
+        $date = "2024-01-01"; // TODO: remove this line
+
+        $posts = Post::whereDate('created_at', '<', $date)->orderBy('created_at', 'desc')->limit(10)->get();
+
+        $filteredPosts = $posts->filter(function ($post) {
+            return policy(Post::class)->view(Auth::user(), $post);
+        });
+
+        $filteredPosts->each(function ($post) {
+            $post->load('createdBy', 'comments', 'likes');
+        });
+
+        return response()->json($filteredPosts);
     }
 }

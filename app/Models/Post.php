@@ -37,8 +37,10 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'liked', 'id_post', 'id_user');
     }
-    public function media() {
-        if ($this->media == null) return null;
+    public function media()
+    {
+        if ($this->media == null)
+            return null;
         return "/post/$this->id/image";
     }
     public function isCreatedByCurrentUser()

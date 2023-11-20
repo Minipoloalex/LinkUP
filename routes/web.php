@@ -21,16 +21,12 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-// Home
+// Root
 Route::redirect('/', '/login');
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
-});
-
-
-// API
-
+}); // middleware('auth') ???
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -56,11 +52,11 @@ Route::controller(PostController::class)->group(function () {
     Route::delete('/post/{id}/image', 'deleteImage');
 
     Route::put('/post/{id}', 'update');
-    
-    Route::get('/api/post/search/{search}', 'search');    
+
+    Route::get('/api/post/search/{search}', 'search');
 });
 
-Route::get('/search', function() {
+Route::get('/search', function () {
     return view('pages.search');
 })->name('search');
 
