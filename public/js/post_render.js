@@ -4,11 +4,9 @@ function createPostElement(post) {
     const postElement = document.createElement('article');
     postElement.classList.add('post');
     postElement.dataset.postId = post.id;
+    postElement.dataset.postDate = post.created_at;
 
     const header = document.createElement('header');
-    const title = document.createElement('h1');
-    title.textContent = post.title;
-    header.appendChild(title);
     postElement.appendChild(header);
 
     const content = document.createElement('p');
@@ -31,7 +29,6 @@ function appendPostsToTimeline(posts) {
         const postElement = createPostElement(post);
         timeline.insertBefore(postElement, timeline.lastElementChild);
     }
-    console.log(timeline.lastChild);
 }
 
 function prependPostsToTimeline(posts) {
@@ -43,10 +40,9 @@ function prependPostsToTimeline(posts) {
     }
 }
 
-function fetchPosts() {
-    // TODO: take date as an argument and fetch posts older than that date
+function fetchPosts(date) {
     const request = new XMLHttpRequest();
-    request.open('GET', '/api/posts', false);
+    request.open('GET', `/api/posts/${date}`, false);
     request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.send();
@@ -55,11 +51,16 @@ function fetchPosts() {
 }
 
 export function fetchNewPosts() {
-    const posts = fetchPosts();
+    // date must be in format YYYY-MM-DD
+    const date = new Date().toISOString().slice(0, 10);
+    console.log(date);
+    const posts = fetchPosts(date);
     prependPostsToTimeline(posts);
 }
 
 export function fetchMorePosts() {
-    const posts = fetchPosts();
+    const timeline = document.querySelector('#timeline');
+    const lastPost = timeline.lastElementChild.previousElementSibling; // last element is the fetcher
+    const posts = fetchPosts(lastPost.dataset.postDate);
     appendPostsToTimeline(posts);
 }

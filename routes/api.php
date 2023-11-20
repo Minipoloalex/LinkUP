@@ -22,6 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // define a route for /posts which accepts a GET request with a DATE parameter
 Route::get(
-    '/posts',
-    [PostController::class, 'index']
-);
+    '/posts/{date}',
+    [PostController::class, 'getPostsBeforeDate']
+)->name('posts.beforeDate');

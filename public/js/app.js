@@ -5,7 +5,6 @@ function createPostFetcher() {
     const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
             posts.fetchMorePosts();
-            console.log('Fetching new posts');
         }
     });
     observer.observe(fetcher);
