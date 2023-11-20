@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\View\View;
 
+use App\Models\User;
+
 class LoginController extends Controller
 {
 
@@ -30,20 +32,24 @@ class LoginController extends Controller
      */
     public function authenticate(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $request->validate([
+            'login' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt($credentials, $request->filled('remember'))) {
-            $request->session()->regenerate();
+        $attemptCredentials = [
+            filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username' => $request->login,
+            'password' => $request->password,
+        ];
 
-            return redirect()->intended('home');
+        if (Auth::attempt($attemptCredentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/home');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+            'login' => 'The provided credentials do not match our records.',
+        ])->onlyInput('login');
     }
 
     /**
