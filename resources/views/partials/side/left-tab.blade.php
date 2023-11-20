@@ -1,5 +1,5 @@
-<nav class="col-span-1 flex content-center justify-center border-r border-gray-300 border-solid" id="left-tab">
-    <div class="w-full flex flex-col content-center justify-start py-16">
+<nav class="col-span-1 flex content-center justify-self-end border-r border-gray-300 border-solid pr-20" id="left-tab">
+    <div class="flex flex-col content-center justify-self-end py-16">
         <div class="flex py-2 text-xl">
             <a href="{{ url('/home') }}">Home</a>
         </div>

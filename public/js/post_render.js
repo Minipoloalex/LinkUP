@@ -53,7 +53,6 @@ function fetchPosts(date) {
 export function fetchNewPosts() {
     // date must be in format YYYY-MM-DD
     const date = new Date().toISOString().slice(0, 10);
-    console.log(date);
     const posts = fetchPosts(date);
     prependPostsToTimeline(posts);
 }

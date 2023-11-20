@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 .post {
     border-style: solid;
     border-top-width: 1px;
@@ -22,4 +24,8 @@
 
 #homepage {
     height: calc(100% - 8rem);
+}
+
+#left-tab, #right-tab {
+    font-family: 'Poppins', sans-serif;
 }
