@@ -1,4 +1,3 @@
-
 INSERT INTO users (username, email, password, name, description, photo, is_private)
 VALUES
   ('John Doe', 'admin@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Johnny', 'Travel.', 'johnny.jpg', false),
