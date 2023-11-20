@@ -15,11 +15,15 @@
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
+
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
+        </script>
+
+        <script type="text/javascript" src={{ url('js/edit-profile.js') }} defer>
         </script>
 
         @vite('resources/css/app.css')
@@ -44,9 +48,7 @@
             <section id="content">
                 @yield('content')
             </section>
-            <section id="content">
-              @yield('profile-page')
-          </section> 
+            
         </main>
   
     </body>
