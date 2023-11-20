@@ -40,7 +40,8 @@ CREATE TABLE users (
     description TEXT,
     photo TEXT DEFAULT 'def.jpg',
     is_private BOOLEAN DEFAULT true NOT NULL,
-    id_blocked_by INTEGER REFERENCES admin(id) ON DELETE SET NULL
+    id_blocked_by INTEGER REFERENCES admin(id) ON DELETE SET NULL,
+    remember_token VARCHAR
 );
 CREATE TABLE follows (
     id_user INTEGER REFERENCES users(id),
@@ -692,4 +693,3 @@ VALUES
   ('2023-12-03', 3, 15),
   ('2023-12-04', 4, 9),
   ('2023-12-05', 5, 10);
-
