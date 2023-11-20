@@ -25,18 +25,63 @@
         <script type="text/javascript" src={{ url('js/search.js') }} defer></script>
         <script type="text/javascript" src={{ url('js/edit_post.js') }} defer></script>
         <script type="text/javascript" src={{ url('js/add_post.js') }} defer></script>
+
+        @vite('resources/css/app.css')
     </head>
     <body>
         <main>
-            <header>
-                <h1><a href="{{ url('/cards') }}">Thingy!</a></h1>
+            <!-- header should be floating, with round corner and grey background using tailwind -->
+            <header class="header">
+                <h1><a href="{{ url('/cards') }}">LOGO DA EMPRESA</a></h1>
+                <div class="search-bar">
+                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                    <input type="search" name="q" placeholder="Search">
+                </div>
+
                 @if (Auth::check())
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+                    <a class="button" href="{{ route('profile', ['email' => Auth::user()->email]) }}">Profile</a>
+                    <!-- <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span> -->
                 @endif
             </header>
+  
             <section id="content">
-                @yield('content')
-            </section>
+              @yield('content')
+          </section> 
+           
         </main>
+
+        <div class="columns">
+            <div class="column-1">
+                <ul>
+                    <li>Home</li>
+                    <li>Profile</li>
+                    <li>Following</li>
+                    <li>Followers</li>
+                    <li>Groups</li>
+             
+                    <li>About us</li>
+                    <li>Support</li>
+                   
+                </ul>
+            </div>
+            <div class="column-2">
+                <div>
+                    <button type="button" class="edit-button">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <img src="https://i.pinimg.com/originals/9b/47/a0/9b47a023caf29f113237d61170f34ad9.jpg" alt="Profile Photo">
+                </div>
+                <div>
+                    Content 2
+                </div>
+                <div>
+                    Content 3
+                </div>
+            </div>
+            <div class="column-3">
+                <div>
+                    Content 4
+                </div>
+            </div>
     </body>
 </html>
