@@ -22,6 +22,9 @@ async function deletePost(post, postId) {
     const response = await sendAjaxRequest('DELETE', `/post/${postId}`);
     console.log(response);
     if (response.ok) {
+        if (post.classList.contains('comment')) {   // if it's a comment, decrement comment count
+            decrementCommentCount(post.parentElement.closest('article'));
+        }
         post.remove();
     }
 }

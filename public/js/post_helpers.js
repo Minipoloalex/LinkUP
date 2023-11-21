@@ -166,13 +166,13 @@ function buildComment(commentJson) {
     comment.appendChild(buildPostInfo(commentJson, true));
     return comment;
 }
-function buildPost(postJson, displayComments) {
+function buildPost(postJson, displayComments, editable) {
     const post = document.createElement('article');
     post.classList.add('post', 'w-full');
     post.dataset.id = postJson.id;
     post.dataset.date = postJson.created_at;
     
-    const postInfo = buildPostInfo(postJson, true);
+    const postInfo = buildPostInfo(postJson, editable);
     post.appendChild(postInfo);
     
     if (displayComments && postJson.comments.length > 0) {
@@ -190,7 +190,7 @@ function buildPost(postJson, displayComments) {
     return post;
 }
 function addPostToDom(container, postJson, displayComments) {
-    const post = buildPost(postJson, displayComments);
+    const post = buildPost(postJson, displayComments, false);
     container.appendChild(post);
 }
 function addCommentToDOM(container, commentJson) {

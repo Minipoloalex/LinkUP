@@ -1,23 +1,24 @@
 function createPostElement(post) {
-    const postElement = document.createElement('article');
-    postElement.classList.add('post');
-    postElement.dataset.postId = post.id;
-    postElement.dataset.postDate = post.created_at;
+    const postElement = buildPost(post, false);
+    // const postElement = document.createElement('article');
+    // postElement.classList.add('post');
+    // postElement.dataset.postId = post.id;
+    // postElement.dataset.postDate = post.created_at;
 
-    const header = document.createElement('header');
-    postElement.appendChild(header);
+    // const header = document.createElement('header');
+    // postElement.appendChild(header);
 
-    const content = document.createElement('p');
-    content.textContent = post.content;
-    postElement.appendChild(content);
+    // const content = document.createElement('p');
+    // content.textContent = post.content;
+    // postElement.appendChild(content);
 
-    const footer = document.createElement('footer');
-    const author = document.createElement('p');
-    author.textContent = post.author;
-    footer.appendChild(author);
-    postElement.appendChild(footer);
+    // const footer = document.createElement('footer');
+    // const author = document.createElement('p');
+    // author.textContent = post.author;
+    // footer.appendChild(author);
+    // postElement.appendChild(footer);
 
-    return postElement;
+    // return postElement;
 }
 
 function appendPostsToTimeline(posts) {

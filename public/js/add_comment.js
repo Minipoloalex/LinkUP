@@ -18,8 +18,10 @@ async function submitAddComment(event) {
         console.log(data);
         const commentsContainer = post.querySelector('.comments-container');
         console.log(commentsContainer);
+        
         addCommentToDOM(commentsContainer, data);
         incrementCommentCount(post);
+
         commentForm.reset();
         clearFileInputWrapper(getFileInputWrapper(commentForm));
     }
