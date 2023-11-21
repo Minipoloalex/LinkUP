@@ -10,16 +10,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Admin extends Authenticatable
 {
     use Notifiable;
-    
-    protected $table = 'admin';
 
-    protected $fillable = [
+    public $timestamps = false;
+    
+    public $table = 'admin';
+
+    public $fillable = [
         'name', 
         'email',
         'password',
     ];
 
-    protected $hidden = [
+    public $hidden = [
         'password', 
     ];
 }

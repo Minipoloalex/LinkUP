@@ -6,3 +6,5 @@
 <a href="{{ route('admin.users') }}">Manage Users</a>
 
 <a href="{{ route('admin.posts') }}">Manage Posts</a>
+
+<a href="{{ route('admin.create') }}">Create New Admin</a>
