@@ -1,7 +1,28 @@
-// const toggleAddPost = document.querySelector('.toggle-add-post');
+const addPostOn = document.querySelector('.add-post-on');
+const addPostOff = document.querySelector('.add-post-off');
 const addPostForm = document.querySelector('form.add-post');
+
+if (addPostOn) {
+    addPostOn.addEventListener('click', showAddPostForm);
+    addPostOff.addEventListener('click', hideAddPostForm);
+}
 if (addPostForm) {
     addPostForm.addEventListener('submit', submitAddPost);
+}
+function getFileInputWrapper() {
+    return addPostForm.querySelector('.file-input-wrapper');
+}
+function showAddPostForm() {
+    addPostForm.classList.remove('hidden');
+    addPostOn.classList.add('hidden');
+    addPostOff.classList.remove('hidden');
+}
+function hideAddPostForm() {
+    addPostForm.classList.add('hidden');
+    addPostOn.classList.remove('hidden');
+    addPostOff.classList.add('hidden');
+    addPostForm.reset();
+    clearFileInputWrapper(getFileInputWrapper());
 }
 
 async function submitAddPost(event) {
@@ -15,6 +36,10 @@ async function submitAddPost(event) {
         console.log(data);
         
         addPostForm.reset();
+        clearFileInputWrapper(getFileInputWrapper());
+        if (addPostOff) {
+            hideAddPostForm();
+        }
         
         // addPost(<container>, <post_info>)
     }

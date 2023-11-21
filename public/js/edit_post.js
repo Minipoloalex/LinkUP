@@ -68,24 +68,7 @@ async function submitEditPostOrComment(form, data, postId) {
     return await submitDataPostOrComment(form, data, `/post/${postId}`, 'post');
 }
 
-
 const deleteImageButtons = document.querySelectorAll('.delete-image');
 deleteImageButtons.forEach(button => {
     button.addEventListener('click', deleteImage);
 });
-async function deleteImage(event) {
-    event.preventDefault();
-    if (confirm('Are you sure you want to delete this image?')) {
-        const button = event.currentTarget;
-        const postId = button.dataset.id;
-        
-        const imageContainer = button.closest('.image-container');
-        const response = await sendAjaxRequest('delete', `/post/${postId}/image`);
-        if (response.ok) {
-            imageContainer.remove();
-        }
-        else {
-            console.log('Error: ', response.status);
-        }
-    }
-}

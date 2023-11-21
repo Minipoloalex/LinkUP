@@ -1,5 +1,3 @@
-import { sendAjaxRequest } from "./ajax.js";
-
 function createPostElement(post) {
     const postElement = document.createElement('article');
     postElement.classList.add('post');

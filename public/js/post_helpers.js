@@ -56,6 +56,23 @@ function changeCommentCount(post, value) {
     const nrComments = post.querySelector('.nr-comments');
     nrComments.textContent = parseInt(nrComments.textContent) + value;
 }
+async function deleteImage(event) {
+    event.preventDefault();
+    if (confirm('Are you sure you want to delete this image?')) {
+        const button = event.currentTarget;
+        const postId = button.dataset.id;
+        
+        const imageContainer = button.closest('.image-container');
+        const response = await sendAjaxRequest('delete', `/post/${postId}/image`);
+        if (response.ok) {
+            imageContainer.remove();
+        }
+        else {
+            console.log('Error: ', response.status);
+        }
+    }
+}
+
 // function addCommentToDOM(post/container, commentJson) {
 //     const comment = document.createElement('article');
 //     comment.classList.add('comment');
@@ -89,4 +106,8 @@ function changeCommentCount(post, value) {
 //     p.textContent = commentJson.content;
 //     comment.appendChild(p);
 //     container.appendChild(comment);
+// }
+
+// function addPostToDom() {
+
 // }
