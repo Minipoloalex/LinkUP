@@ -1,24 +1,5 @@
 function createPostElement(post) {
-    const postElement = buildPost(post, false);
-    // const postElement = document.createElement('article');
-    // postElement.classList.add('post');
-    // postElement.dataset.postId = post.id;
-    // postElement.dataset.postDate = post.created_at;
-
-    // const header = document.createElement('header');
-    // postElement.appendChild(header);
-
-    // const content = document.createElement('p');
-    // content.textContent = post.content;
-    // postElement.appendChild(content);
-
-    // const footer = document.createElement('footer');
-    // const author = document.createElement('p');
-    // author.textContent = post.author;
-    // footer.appendChild(author);
-    // postElement.appendChild(footer);
-
-    // return postElement;
+    return buildPost(post, false, false);
 }
 
 function appendPostsToTimeline(posts) {
@@ -49,14 +30,16 @@ function fetchPosts(date) {
     return JSON.parse(request.responseText);
 }
 
-export function fetchNewPosts() {
+// export function fetchNewPosts() {
+function fetchNewPosts() {
     // date must be in format YYYY-MM-DD
     const date = new Date().toISOString().slice(0, 10);
     const posts = fetchPosts(date);
     prependPostsToTimeline(posts);
 }
 
-export function fetchMorePosts() {
+// export function fetchMorePosts() {
+function fetchMorePosts() {
     const timeline = document.querySelector('#timeline');
     const lastPost = timeline.lastElementChild.previousElementSibling; // last element is the fetcher
     const posts = fetchPosts(lastPost.dataset.postDate);
