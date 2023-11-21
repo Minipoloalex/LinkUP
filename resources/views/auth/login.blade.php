@@ -10,7 +10,7 @@
 
         <label for="login" class="pt-4 pb-2 text-lg">Username or Email</label>
         <input id="login" type="text" name="login" value="{{ old('login') }}" required autofocus
-            class="py-2 pl-2 text-sm focus:outline-none bg-slate-200 rounded-lg">
+            class="py-2 pl-2 text-sm focus:outline-none border border-solid border-slate-400 rounded-lg">
         @if ($errors->has('login'))
         <span class="error">
             {{ $errors->first('login') }}
@@ -19,7 +19,7 @@
 
         <label for="password" class="pt-4 pb-2 text-lg">Password</label>
         <input id="password" type="password" name="password" required
-            class="py-2 pl-2 text-sm focus:outline-none bg-slate-200 rounded-lg">
+            class="py-2 pl-2 text-sm focus:outline-none border border-solid border-slate-400 rounded-lg">
         @if ($errors->has('password'))
         <span class="error">
             {{ $errors->first('password') }}
@@ -36,7 +36,7 @@
                 <img src="{{ url('images/icons/login.png') }}" alt="Login" class="w-4 h-4">
             </button>
         </div>
-        <div class="flex content-center justify-end">
+        <div class="flex content-center justify-start">
             <a class="pt-12 text-sm" href="{{ route('register') }}">Register?</a>
         </div>
         @if (session('success'))
