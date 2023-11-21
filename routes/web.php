@@ -10,6 +10,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -61,4 +63,23 @@ Route::get('/search', function () {
 })->name('search');
 
 // profile page
-Route::get('/profile/{email}', [UserController::class, 'show'])->name('profile');
+
+/*
+Route::controller(ProfileController::class)->group(function () {
+    Route::get('/profile/{id}', 'show')->name('user');
+    Route::get('/profile/{id}/username', 'viewUsername')->name('post.username');
+    Route::get('/profile/{id}/description', 'viewDescription')->name('post.description');
+    Route::get('/profile/{id}/image', 'viewPhoto')->name('post.photo');
+
+    Route::post('/profile', 'storePost');
+    Route::post('/comment', 'storeComment');
+
+    // Route::delete('/comment/{id}', 'delete');
+    Route::delete('/profile/{id}', 'delete');
+
+    Route::put('/profile/{id}', 'update');
+
+    Route::get('/api/post/search/{search}', 'search');
+});*/
+Route::get('/profile/{username}', [UserController::class, 'show'])->name('profile.show');
+Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');

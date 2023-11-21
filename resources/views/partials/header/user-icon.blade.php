@@ -3,7 +3,7 @@
         @guest
         <a href="{{ url('/login') }}">Login</a>
         @else
-        <a href="{{ url('/profile') }}">
+        <a href="{{ route('profile.show', ['username' => Auth::user()->username]) }}">
             <img class="w-8 h-8" src="{{ url('images/profile.png') }}" alt="Profile">
         </a>
         <a href="{{ url('/logout') }}">Logout</a>

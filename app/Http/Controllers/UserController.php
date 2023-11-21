@@ -2,27 +2,35 @@
 
 namespace App\Http\Controllers;
 
-// UserController.php
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
+
 use App\Models\User;
+
+
 
 class UserController extends Controller
 {
-    // UserController.php
-
-    public function show($email)
+    public function show($username)
     {
-        // Fetch user data based on the email
-        $user = User::where('email', $email)->first();
+        $user = User::where('username', $username)->firstOrFail();
 
-        if (!$user) {
-            abort(404); // User not found, return a 404 response
-        }
+        return view('pages.profile', compact('user'));
 
-        // Return the user profile view
-        return view('pages.profile', [
-            'user' => $user]);
+    }   
+
+    public function update(Request $request, $id)
+    {
+        // Find the user by ID
+        $user = User::find($id);
+
+        // Update user data with the new values from the form
+        $user->name = $request->input('name');
+        $user->username = $request->input('username');
+
+        // Save the updated user
+        $user->save();
+
+        // Redirect to a success page or back to the profile page
+        return redirect()->route('profile.show', ['username' => $user->username]);
     }
-
 }

@@ -30,6 +30,7 @@
     <script type="text/javascript" src={{ url('js/search.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/edit_post.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/add_post.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/edit_profile.js') }} defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
