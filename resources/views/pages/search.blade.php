@@ -1,18 +1,12 @@
 @extends('layouts.app')
 
 @section('title', 'Search')
-
 @section('content')
-    <section id="search-content">
-        <header>
-            <h2>Search for a post</h2>
-            <form id="search-form">
-                <input id="search" type="text" placeholder="Search for a post">
-                <button id="search-button">Submit</button>
-            </form>
-        </header>
-        <div id="results-container">
-            <p class="empty">No results found</p>
-        </div>
+<main id="searchpage" class="grid grid-cols-4 absolute top-32 left-0 w-screen px-64">
+    @include('partials.side.left-tab')
+    <section id="results-container" class="col-span-2">
+        <p class="flex justify-center">No results found</p>
     </section>
+    @include('partials.side.right-tab')
+</main>
 @endsection

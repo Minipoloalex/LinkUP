@@ -1,4 +1,4 @@
-<section class="col-span-1 flex content-center justify-center pl-16 border-l border-gray-300 border-solid"
+<section class="col-span-1 col-start-4 flex content-center justify-center pl-16 border-l border-gray-300 border-solid"
     id="right-tab">
     <div class="w-full flex py-16 flex-col content-center justify-start">
         <div class="flex py-2 text-xl">
