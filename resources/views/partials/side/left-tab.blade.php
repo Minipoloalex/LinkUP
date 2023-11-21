@@ -1,4 +1,6 @@
-<nav class="col-span-1 flex content-center justify-self-end border-r border-gray-300 border-solid pr-20" id="left-tab">
+<nav class="col-span-1 flex content-center justify-self-end" id="left-tab">
+    @guest
+    @else
     <div class="flex flex-col content-center justify-self-end py-16">
         <div class="flex py-2 text-xl">
             <a href="{{ url('/home') }}">Home</a>
@@ -19,4 +21,5 @@
             <a href="{{ url('/settings') }}">Settings</a>
         </div>
     </div>
+    @endguest
 </nav>

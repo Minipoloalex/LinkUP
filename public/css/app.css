@@ -269,6 +269,6 @@ body {
     height: calc(100% - 8rem);
 }
 
-#left-tab, #right-tab {
+* {
     font-family: 'Poppins', sans-serif;
 }
