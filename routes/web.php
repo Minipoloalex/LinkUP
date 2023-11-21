@@ -2,12 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,28 +21,12 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-// Home
+// Root
 Route::redirect('/', '/login');
 
-// Cards
-Route::controller(CardController::class)->group(function () {
-    Route::get('/cards', 'list')->name('cards');
-    Route::get('/cards/{id}', 'show');
-});
-
-
-// API
-Route::controller(CardController::class)->group(function () {
-    Route::put('/api/cards', 'create');
-    Route::delete('/api/cards/{card_id}', 'delete');
-});
-
-Route::controller(ItemController::class)->group(function () {
-    Route::put('/api/cards/{card_id}', 'create');
-    Route::post('/api/item/{id}', 'update');
-    Route::delete('/api/item/{id}', 'delete');
-});
-
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/home', 'index')->name('home');
+}); // middleware('auth') ???
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -55,6 +40,25 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+Route::controller(PostController::class)->group(function () {
+    Route::get('/post/{id}', 'show')->name('post');
+    Route::get('/post/{id}/image', 'viewImage')->name('post.image');
+
+    Route::post('/post', 'storePost');
+    Route::post('/comment', 'storeComment');
+
+    // Route::delete('/comment/{id}', 'delete');
+    Route::delete('/post/{id}', 'delete');
+    Route::delete('/post/{id}/image', 'deleteImage');
+
+    Route::put('/post/{id}', 'update');
+
+    Route::get('/api/post/search/{search}', 'search');
+});
+
+Route::get('/search', function () {
+    return view('pages.search');
+})->name('search');
 
 // profile page
 Route::get('/profile/{email}', [UserController::class, 'show'])->name('profile');

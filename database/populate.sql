@@ -1,6 +1,6 @@
-
 INSERT INTO users (username, email, password, name, description, photo, is_private)
 VALUES
+  ('John Doe', 'admin@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Johnny', 'Travel.', 'johnny.jpg', false),
   ('alice94', 'alice.johnson@gmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Alice Johnson', 'Travel enthusiast and photographer.', 'alice_profile.jpg', false),
   ('bob1987', 'bob.smith@yahoo.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Bob Smith', 'Music lover and guitar player.', 'bob_profile.jpg', false),
   ('carol2000', 'carol.adams@hotmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Carol Adams', 'Foodie and recipe collector.', 'carol_profile.jpg', false),
