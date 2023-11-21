@@ -5,7 +5,8 @@ if (commentForm != null) {
 
 async function submitAddComment(event) {
     event.preventDefault();
-    const commentContent = commentForm.querySelector('input[type=text]').value;
+    const commentContent = getTextField(commentForm).value;
+
     const post = event.currentTarget.closest('.post');
     const response = await submitAddPostOrComment(commentForm, {
         content: commentContent,

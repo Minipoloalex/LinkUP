@@ -272,3 +272,79 @@ body {
 #left-tab, #right-tab {
     font-family: 'Poppins', sans-serif;
 }
+
+
+
+/*
+make info loaded by Javascript be easier to load there, decoupling the javascript from the css
+*/
+.post-info {
+  margin: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap:   1rem;
+}
+.post-info > header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.post-info .user-date {
+  display: flex;
+  flex-direction: row;
+}
+.post-info .user-image {
+  width: 2rem;
+  height: 2rem;
+}
+.post-info .user-date > a {
+  padding: 0.25rem;
+}
+.post-info .user-date > .date {
+  margin: 0.25rem;
+}
+.edit-delete-post {
+  margin: 0.25rem;
+  display: flex;
+}
+
+.edit-delete-post .edit-post, .edit-delete-post .delete-post {
+  margin: 0 0.25rem;
+}
+.post-info .post-body {
+  grid-row-start: 2;
+  grid-column-start: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.post-info .post-body .post-link {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.post-info .image-container {
+  position: relative;
+}
+.post-info .image-container .delete-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25rem 0.5rem;
+}
+.post-info .post-footer {
+  grid-row-start: 3;
+  grid-column-start: 1;
+  column-span: 3;
+  display: flex;
+  justify-content: space-between;
+  /* row-start-3 col-start-1 col-span-3 flex justify-between */
+}
+.post-info .post-footer .post-likes {
+  grid-column-start: 1;
+  display: flex;
+}
+.post-info .post-footer .nr-comments::after {
+  /* after:content-['_comments'] */
+  content: ' comments';
+}

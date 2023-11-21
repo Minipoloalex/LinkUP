@@ -8,8 +8,6 @@
             <div class='comments-container flex-row'>
                 @each('partials.comment', $comments, 'comment', ['displayComments' => false])
             </div>
-        @else
-            <p>No comments yet</p>
         @endif
     @endif
     @include('partials.create_post_form', ['formClass' => 'add-comment rounded px-10 py-5 bg-gray-300', 'textPlaceholder' => 'Add a new comment', 'buttonText' => 'Create Comment', 'contentValue' => ''])

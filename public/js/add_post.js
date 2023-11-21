@@ -27,7 +27,7 @@ function hideAddPostForm() {
 
 async function submitAddPost(event) {
     event.preventDefault();
-    const content = addPostForm.querySelector('input[name="content"]').value;
+    const content = getTextField(addPostForm).value;
 
     const response = await submitAddPostOrComment(addPostForm, {'content': content}, 'post');
     console.log(response)

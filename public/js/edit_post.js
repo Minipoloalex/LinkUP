@@ -7,10 +7,6 @@ editPostFields.forEach(field => {
     field.addEventListener('submit', submitEditPost);
 });
 
-function getTextField(form) {
-    return form.querySelector('input[type="text"]');
-}
-
 function toggleEditEvent(event) {
     event.preventDefault();
     const post = event.currentTarget.closest('article');

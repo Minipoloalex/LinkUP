@@ -1,3 +1,6 @@
+function getTextField(form) {
+    return form.querySelector('textarea');
+}
 async function submitAddPostOrComment(form, data, type) {  // type = 'post' or 'comment'
     return await submitDataPostOrComment(form, data, `/${type}`, 'post');
 }
