@@ -9,8 +9,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminLoginController;
-use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,17 +43,17 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 // Admin
-Route::redirect('/admin', '/admin/login');
+Route::prefix('/admin')->name('admin.')->group(function () {
+    Route::redirect('/', '/admin/login');
 
-Route::prefix('admin')->group(function () {
-    Route::controller(AdminLoginController::class)->group(function () {
-        Route::get('/login', 'show')->name('admin.login');
-        Route::post('/login', 'authenticate');
-        Route::get('/logout', 'logout')->name('admin.logout');
-    });
+    Route::get('/login', [AdminLoginController::class, 'show'])->name('login');
+    Route::post('/login', [AdminLoginController::class, 'authenticate']);
+    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
 
-    Route::controller(DashboardController::class)->group(function () {
-        Route::get('/dashboard', 'index')->middleware('auth:admin')->name('admin.dashboard');
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('home');
+        Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
+        Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
     });
 });
 
