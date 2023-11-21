@@ -1,3 +1,274 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+body {
+  /* create a color variable */
+
+
+  --column-color : rgb(56, 56, 56);
+
+  --feup-color: #780404;
+
+  display: flex;
+  flex-direction: column;
+}
+  main > header {
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem; /* Add margin to separate the header from the content */
+    /* i want the header to have more margin on all sides */
+    margin-left: 5rem;
+    margin-right: 5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+}
+
+  main > header a.button {
+    margin: 1em;
+    justify-self: center;
+  }
+
+
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    margin-right: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 3rem;
+    background-color: #ccc;
+  }
+  
+  #searchIcon {
+    position: absolute;
+    right: 1rem;
+    margin-left: 2rem;
+    color: #2196F3;
+    transition: opacity 0.2s ease-in-out;
+    opacity: 1;
+    border: none;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    position: relative;
+  }
+  
+  .search-bar input:focus {
+    border: 1px solid grey;
+  }
+  
+  /* Hide the search icon when text is entered */
+  .search-bar input:not(:empty) ~ #searchIcon {
+    opacity: 0;
+  }
+
+.search-bar input:focus, .search-button:focus {
+  outline: none;
+  border: none;
+}
+
+.search-button {
+  color: white;
+  border: none;
+  margin-left: 0.5rem;
+  background-color: transparent;
+}
+
+.search-button:hover{
+  background-color: transparent;
+}
+
+.search-button:clicked{
+  background-color: transparent;
+}
+  
+.search-button:not(:active) {
+  background-color: transparent;
+}
+
+
+
+  #content > form input {
+    background-color: white;
+  }
+
+
+
+  .columns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border-radius: 0.5rem;
+  }
+
+  
+  
+  .column-1 {
+    background-color: var(--column-color);
+    border-radius: 3rem;
+    font-size: 2rem;
+    width: 20%;
+    padding: 1rem;
+    overflow: auto;
+    margin: 2rem;
+  }
+
+
+.column-1 ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.column-1 li {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin: 2rem;
+}
+
+.column-1 li:hover {
+  color: white;
+  font-weight: bold;
+}
+  
+.column-2 {
+  border-radius: 3rem;
+  font-size: 2rem;
+  width: 60%;
+  padding: 1rem;
+  overflow: auto;
+  margin: 2rem;
+}
+
+  /* column 2 first div */
+  .column-2 div:first-child {
+    /* put div first element in center and middle */
+ 
+  }
+
+  .edit-button {
+    /* put content in center and right of div */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: right;
+    margin-right: 2rem;
+  
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+  }
+  
+  .edit-button i {
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .edit-button:hover {
+    background-color: transparent;
+  }
+
+  .edit-button i:hover {
+
+    color: var(--feup-color);
+  }
+  
+
+  .column-2 div {
+    background-color: rgb(56, 56, 56);
+    border-radius: 3rem;
+    font-size: 2rem;
+    
+    border-right: 1px solid #ccc;
+    padding: 1rem;
+    overflow: auto;
+    margin-bottom: 1rem;
+  }
+  
+
+.hidden {
+  display: none;
+}
+  .column-3 {
+    background-color: var(--column-color);
+    border-radius: 3rem;
+    font-size: 2rem;
+    width: 20%;
+    border-right: 1px solid #ccc;
+    padding: 1rem;
+    overflow: auto;
+    margin: 2rem;
+    
+  }
+  
+  .column-3 div {
+    padding: 1rem;
+  }
+  
+  
+
+/* Responsive styles for the header */
+@media (max-width: 768px) {
+  main > header {
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Responsive styles for the search bar */
+@media (max-width: 768px) {
+  .search-bar {
+    max-width: 200px;
+    border-radius: 0.25rem;
+  }
+
+  #searchIcon {
+    margin-left: 1rem;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.post {
+    border-style: solid;
+    border-top-width: 1px;
+    border-color: #e2e8f0;
+    padding: 1rem;
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+#homepage {
+    height: calc(100% - 8rem);
+}
+
+#left-tab, #right-tab {
+    font-family: 'Poppins', sans-serif;
+}

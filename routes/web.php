@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -21,16 +23,12 @@ use App\Http\Controllers\Admin\DashboardController;
 |
 */
 
-// Home
+// Root
 Route::redirect('/', '/login');
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
-});
-
-
-// API
-
+}); // middleware('auth') ???
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -58,3 +56,26 @@ Route::prefix('admin')->group(function () {
         Route::get('/dashboard', 'index')->middleware('auth:admin')->name('admin.dashboard');
     });
 });
+
+Route::controller(PostController::class)->group(function () {
+    Route::get('/post/{id}', 'show')->name('post');
+    Route::get('/post/{id}/image', 'viewImage')->name('post.image');
+
+    Route::post('/post', 'storePost');
+    Route::post('/comment', 'storeComment');
+
+    // Route::delete('/comment/{id}', 'delete');
+    Route::delete('/post/{id}', 'delete');
+    Route::delete('/post/{id}/image', 'deleteImage');
+
+    Route::put('/post/{id}', 'update');
+
+    Route::get('/api/post/search/{search}', 'search');
+});
+
+Route::get('/search', function () {
+    return view('pages.search');
+})->name('search');
+
+// profile page
+Route::get('/profile/{email}', [UserController::class, 'show'])->name('profile');
