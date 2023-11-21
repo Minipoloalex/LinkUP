@@ -7,7 +7,7 @@
 
         <label for="login" class="py-2">Username or Email</label>
         <input id="login" type="text" name="login" value="{{ old('login') }}" required autofocus
-            class="py-2 pl-1 focus:outline-none">
+            class="py-2 pl-1 focus:outline-none bg-slate-200">
         @if ($errors->has('login'))
         <span class="error">
             {{ $errors->first('login') }}
@@ -15,15 +15,15 @@
         @endif
 
         <label for="password" class="py-2">Password</label>
-        <input id="password" type="password" name="password" required class="py-2 pl-1 focus:outline-none">
+        <input id="password" type="password" name="password" required class="py-2 pl-1 focus:outline-none bg-slate-200">
         @if ($errors->has('password'))
         <span class="error">
             {{ $errors->first('password') }}
         </span>
         @endif
 
-        <label>
-            <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} class="py-2"> Remember Me
+        <label class="py-2">
+            <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
         </label>
 
         <button type="submit" class="my-2 py-1 border border-solid border-gray-300 bg-slate-200">
