@@ -6,6 +6,11 @@ const editPostFields = document.querySelectorAll('edit-post-info');
 editPostFields.forEach(field => {
     field.addEventListener('submit', submitEditPost);
 });
+const deleteImageButtons = document.querySelectorAll('.delete-image');
+deleteImageButtons.forEach(button => {
+    button.addEventListener('click', deleteImage);
+});
+
 
 function toggleEditEvent(event) {
     event.preventDefault();
@@ -24,7 +29,7 @@ function toggleEdit(content, editForm, textField) {
     if (!editForm.classList.contains('hidden')) {
         textField.focus();
     }
-    editForm.addEventListener('submit', submitEditPost);
+    editForm.addEventListener('submit', submitEditPost);    // TODO: fix this
 }
 async function submitEditPost(event) {  // submitted the form
     event.preventDefault();
@@ -63,8 +68,3 @@ async function submitEditPostOrComment(form, data, postId) {
     data._method = 'put';
     return await submitDataPostOrComment(form, data, `/post/${postId}`, 'post');
 }
-
-const deleteImageButtons = document.querySelectorAll('.delete-image');
-deleteImageButtons.forEach(button => {
-    button.addEventListener('click', deleteImage);
-});

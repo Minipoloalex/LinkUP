@@ -58,7 +58,7 @@ class PostController extends Controller
         $this->setFileName($request, $post);
 
         Log::info("created post $post->toJson()");    // check if post is updated from setFileName
-        $post->load('createdBy');   // comments and likes are empty
+        $post->load('createdBy', 'comments', 'likes');
         return response()->json($post);
     }
 

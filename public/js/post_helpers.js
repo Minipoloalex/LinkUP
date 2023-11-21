@@ -75,42 +75,127 @@ async function deleteImage(event) {
         }
     }
 }
+function buildPostForm(formClass, textPlaceholder, buttonText, contentValue) {
+    const form = document.createElement('form');
+    const formClasses = formClass.split(' '); // Split formClass into an array of classes
+    
+    formClasses.forEach(className => {
+        form.classList.add(className);
+    });
+    form.classList.add('flex', 'flex-col');
+    
+    form.innerHTML = `
+        <textarea name="content" required placeholder="${textPlaceholder}" class="p-2 bg-gray-600 rounded text-white focus:outline-none focus:bg-gray-700 w-full">${contentValue}</textarea>
+        <button type="submit" class="order-last bg-gray-500 rounded px-4 py-2 mx-5 text-white">${buttonText}</button>
+        <div class="file-input-wrapper">
+            <button class="upload-file bg-gray-500 rounded px-4 py-2 m-6 text-white">Upload image</button>
+            <input type="file" accept=".jpg, .jpeg, .png, .gif, .mp4" name="media" class="hidden">
+            <button class="remove-file hidden bg-gray-500 rounded px-4 py-2 m-6 text-white">Clear image</button>
+            <span class="file-name">No file selected</span>
+        </div>
+    `;
+    return form;
+}
+function buildPostInfo(postJson, editable) {
+    const postInfo = document.createElement('div');
+    postInfo.classList.add('post-info');
 
-// function addCommentToDOM(post/container, commentJson) {
-//     const comment = document.createElement('article');
-//     comment.classList.add('comment');
-//     comment.dataset.id = commentJson.id;
-//     const header = document.createElement('header');
-//     const h2 = document.createElement('h2');
-//     const a = document.createElement('a');
-//     a.href = `/users/${commentJson.id_created_by}`;
-//     a.textContent = commentJson.username;
-//     h2.appendChild(a);
-//     header.appendChild(h2);
-//     const h3 = document.createElement('h3');
-//     const like = document.createElement('a');
-//     like.href = '#';
-//     like.classList.add('like');
-//     like.textContent = '❤';
-//     h3.appendChild(like);
-//     const likes = document.createElement('span');
-//     likes.classList.add('likes');
-//     likes.textContent = commentJson.likes.length;
-//     h3.appendChild(likes);
-//     header.appendChild(h3);
-//     const h4 = document.createElement('h4');
-//     const nrComments = document.createElement('span');
-//     nrComments.classList.add('nr-comments');
-//     nrComments.textContent = commentJson.comments.length;
-//     h4.appendChild(nrComments);
-//     header.appendChild(h4);
-//     comment.appendChild(header);
-//     const p = document.createElement('p');
-//     p.textContent = commentJson.content;
-//     comment.appendChild(p);
-//     container.appendChild(comment);
-// }
+    postInfo.innerHTML = `
+        <header>
+            <div class="user-date">
+                <img class="user-image" src="/images/profile.png" alt="User photo">
+                <a href="/users/${postJson.id_created_by}">${postJson.created_by.username}</a>
+                <span class="date">${postJson.created_at}</span>
+            </div>
+            ${editable ? `
+                <div class="edit-delete-post">
+                    <a href="#" class="edit edit-post">&#9998;</a>
+                    <a href="home" class="delete delete-post">&#10761;</a>
+                </div>
+            ` : ''}
+        </header>
+        <div class="post-body">
+            ${editable ? '<div class="edit-post-info hidden"></div>' : ''}
+            <a class="post-link" href="/post/${postJson.id}">
+                <p class="post-content">${postJson.content}</p>
+                ${postJson.media != null ? `
+                    <div class="image-container">
+                        <img src="/post/${postJson.id}/image" alt="A post image">
+                        ${editable ? `
+                            <a href="#" class="delete delete-image" data-id="${postJson.id}">&#10761;</a>
+                        ` : ''}
+                    </div>
+                ` : ''}
+            </a>
+        </div>
+        <div class="post-footer">
+            <h3 class="post-likes">
+                <a href="#" class="like">&#10084;</a>
+                <span class="likes">${postJson.likes.length}</span>
+            </h3>
+            <span class="nr-comments">${postJson.comments.length}</span>
+        </div>
+    `;
 
-// function addPostToDom() {
+    const editPostForm = buildPostForm('edit-post-info hidden', 'Edit post', 'Update Post', postJson.content);
+    postInfo.querySelector('.edit-post-info').appendChild(editPostForm);
 
-// }
+    if (editable) {
+        const deletePostButton = document.querySelector('.delete-post');
+        deletePostButton.addEventListener('click', deletePostOrComment);
+
+        const editPostButton = postInfo.querySelector('.edit-post');
+        editPostButton.addEventListener('click', toggleEditEvent);
+        const editPostField = postInfo.querySelector('.edit-post-info');
+        editPostField.addEventListener('submit', submitEditPost);
+        if (postJson.media != null) {
+            const deleteImageButton = postInfo.querySelector('.delete-image');
+            deleteImageButton.addEventListener('click', deleteImage);
+        }
+
+        handlerFileInput(postInfo.querySelector('.file-input-wrapper'));
+    }
+    return postInfo;
+}
+
+
+function buildComment(commentJson) {
+    const comment = document.createElement('article');
+    comment.classList.add('comment');
+    comment.dataset.id = commentJson.id;
+    
+    comment.appendChild(buildPostInfo(commentJson, true));
+    return comment;
+}
+function buildPost(postJson, displayComments) {
+    const post = document.createElement('article');
+    post.classList.add('post', 'w-full');
+    post.dataset.id = postJson.id;
+    post.dataset.date = postJson.created_at;
+    
+    const postInfo = buildPostInfo(postJson, true);
+    post.appendChild(postInfo);
+    
+    if (displayComments && postJson.comments.length > 0) {
+        const commentsContainer = document.createElement('div');
+        commentsContainer.classList.add('comments-container');
+        postJson.comments.forEach(commentJson => {
+            const comment = buildComment(commentJson);
+            commentsContainer.appendChild(comment);
+        });
+        post.appendChild(commentsContainer);
+    }
+
+    const addNewCommentForm = buildPostForm('add-comment rounded px-10 py-5 bg-gray-300', 'Add a new comment', 'Create Comment', '');
+    post.appendChild(addNewCommentForm);
+    return post;
+}
+function addPostToDom(container, postJson, displayComments) {
+    const post = buildPost(postJson, displayComments);
+    container.appendChild(post);
+}
+function addCommentToDOM(container, commentJson) {
+    const comment = buildComment(commentJson);
+    container.appendChild(comment);
+}
+

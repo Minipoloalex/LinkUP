@@ -5,7 +5,7 @@
             $comments = $post->comments;
         @endphp
         @if ($comments->count() > 0)
-            <div class='comments-container flex-row'>
+            <div class='comments-container'>
                 @each('partials.comment', $comments, 'comment', ['displayComments' => false])
             </div>
         @endif

@@ -9,8 +9,8 @@ if (addPostOn) {
 if (addPostForm) {
     addPostForm.addEventListener('submit', submitAddPost);
 }
-function getFileInputWrapper() {
-    return addPostForm.querySelector('.file-input-wrapper');
+function getFileInputWrapper(form) {
+    return form.querySelector('.file-input-wrapper');
 }
 function showAddPostForm() {
     addPostForm.classList.remove('hidden');
@@ -22,7 +22,7 @@ function hideAddPostForm() {
     addPostOn.classList.remove('hidden');
     addPostOff.classList.add('hidden');
     addPostForm.reset();
-    clearFileInputWrapper(getFileInputWrapper());
+    clearFileInputWrapper(getFileInputWrapper(addPostForm));
 }
 
 async function submitAddPost(event) {
@@ -36,7 +36,7 @@ async function submitAddPost(event) {
         console.log(data);
         
         addPostForm.reset();
-        clearFileInputWrapper(getFileInputWrapper());
+        clearFileInputWrapper(getFileInputWrapper(addPostFormm));
         if (addPostOff) {
             hideAddPostForm();
         }
