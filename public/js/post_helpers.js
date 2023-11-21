@@ -115,7 +115,6 @@ function buildPostInfo(postJson, editable) {
             ` : ''}
         </header>
         <div class="post-body">
-            ${editable ? '<div class="edit-post-info hidden"></div>' : ''}
             <a class="post-link" href="/post/${postJson.id}">
                 <p class="post-content">${postJson.content}</p>
                 ${postJson.media != null ? `
@@ -137,11 +136,11 @@ function buildPostInfo(postJson, editable) {
         </div>
     `;
 
-    const editPostForm = buildPostForm('edit-post-info hidden', 'Edit post', 'Update Post', postJson.content);
-    postInfo.querySelector('.edit-post-info').appendChild(editPostForm);
-
     if (editable) {
-        const deletePostButton = document.querySelector('.delete-post');
+        const editPostForm = buildPostForm('edit-post-info hidden', 'Edit post', 'Update Post', postJson.content);
+        postInfo.querySelector('.post-body').appendChild(editPostForm);
+
+        const deletePostButton = postInfo.querySelector('.delete-post');
         deletePostButton.addEventListener('click', deletePostOrComment);
 
         const editPostButton = postInfo.querySelector('.edit-post');
