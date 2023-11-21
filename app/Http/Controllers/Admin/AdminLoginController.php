@@ -19,7 +19,7 @@ class AdminLoginController extends Controller
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');
         } else {
-            return view('pages.admin.auth');
+            return view('admin.auth');
         }
     }
 
