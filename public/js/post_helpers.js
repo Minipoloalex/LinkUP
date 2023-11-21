@@ -185,8 +185,6 @@ function buildPost(postJson, displayComments, editable) {
         post.appendChild(commentsContainer);
     }
 
-    const addNewCommentForm = buildPostForm('add-comment rounded px-10 py-5 bg-gray-300', 'Add a new comment', 'Create Comment', '');
-    post.appendChild(addNewCommentForm);
     return post;
 }
 function addPostToDom(container, postJson, displayComments) {
