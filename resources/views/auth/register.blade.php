@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 <main id="login-page" class="grid grid-cols-4 absolute top-32 left-0 w-screen px-64">
-    @include('partials.side.left-tab')
+    @include('partials.side.navbar')
     <form method="POST" action="{{ route('register') }}" class="col-span-2 flex flex-col flex-grow p-24">
         {{ csrf_field() }}
 
@@ -41,5 +41,5 @@
             <a class="button button-outline" href="{{ route('login') }}">Login</a>
         </div>
     </form>
-    @include('partials.side.right-tab')
+    @include('partials.side.notifications-tab')
 </main>

@@ -7,7 +7,7 @@
 
     @include('partials.header.logo')
     @include('partials.header.search-bar')
-    @include('partials.header.user-icon')
+    @include('partials.header.logout')
 
     @endguest
 </header>
