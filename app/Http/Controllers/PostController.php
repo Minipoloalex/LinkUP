@@ -58,7 +58,7 @@ class PostController extends Controller
         $this->setFileName($request, $post);
 
         Log::info("created post $post->toJson()");    // check if post is updated from setFileName
-        $post->load('createdBy');   // comments and likes are empty
+        $post->load('createdBy', 'comments', 'likes');
         return response()->json($post);
     }
 
@@ -109,7 +109,7 @@ class PostController extends Controller
             'post' => $post
         ]);
     }
-    public function search(string $search)
+    public function getSearchResults(string $search)
     {
         $posts = Post::search($search);
         $filteredPosts = $posts->filter(function ($post) {
@@ -118,7 +118,21 @@ class PostController extends Controller
         $filteredPosts->each(function ($post) {
             $post->load('createdBy', 'comments', 'likes');
         });
-        return response()->json($filteredPosts);
+        return $filteredPosts;
+    }
+    public function search(string $search)
+    {
+        $posts = $this->getSearchResults($search);
+        return response()->json($posts);
+    }
+    public function searchResults(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|max:255'
+        ]);
+        $posts = $this->getSearchResults($request->input('query'));
+        Log::info($posts->toJson());
+        return view('pages.search', ['posts' => $posts]);
     }
 
     /**

@@ -5,7 +5,8 @@ if (commentForm != null) {
 
 async function submitAddComment(event) {
     event.preventDefault();
-    const commentContent = commentForm.querySelector('input[type=text]').value;
+    const commentContent = getTextField(commentForm).value;
+
     const post = event.currentTarget.closest('.post');
     const response = await submitAddPostOrComment(commentForm, {
         content: commentContent,
@@ -15,10 +16,14 @@ async function submitAddComment(event) {
     if (response.ok) {
         const data = await response.json();
         console.log(data);
-        // const commentsContainer = post.querySelector('.comments-container');
-        // addCommentToDOM(commentsContainer, data);
+        const commentsContainer = post.querySelector('.comments-container');
+        console.log(commentsContainer);
+        
+        addCommentToDOM(commentsContainer, data);
         incrementCommentCount(post);
+
         commentForm.reset();
+        clearFileInputWrapper(getFileInputWrapper(commentForm));
     }
     else {
         console.log('response not ok');

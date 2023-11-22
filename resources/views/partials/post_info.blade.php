@@ -1,26 +1,26 @@
+@php
+    $editable = $showEdit && $post->isCreatedByCurrentUser();
+@endphp
 <div class="post-info">
     <header>
-        <h2><a href="/users/{{ $post->id_created_by }}">{{ $post->createdBy->username }}</a></h2>
-        <h3>
-            <a href="#" class="like">&#10084;</a>
-            <span class="likes">{{ $post->likes->count() }}</span>
-        </h3>
-        <h3>
+        <div class="user-date">
+            {{-- <img src="/users/{{ $post->id_created_by }}/image" alt="User photo"> --}}
+            <img class="user-image" src="{{ url('images/profile.png') }}" alt="User photo">
+            <a class="post-info-user" href="/users/{{ $post->id_created_by }}">{{ $post->createdBy->username }}</a>
             <span class="date">{{ $post->created_at }}</span>
-        </h3>
-        @php
-            $editable = $post->isCreatedByCurrentUser();
-        @endphp
+        </div>
         @if ($editable)
-            <a href="#" class="edit edit-post">&#9998;</a>
-            <a href="{{ url('home') }}" class="delete delete-post">&#10761;</a>
+            <div class="edit-delete-post">
+                <a href="#" class="edit edit-post">&#9998;</a>
+                <a href="{{ url('home') }}" class="delete delete-post">&#10761;</a>
+            </div>
         @endif
     </header>
     <div class='post-body'>
         @if ($editable)
             @include('partials.create_post_form', ['formClass' => 'edit-post-info hidden', 'textPlaceholder' => 'Edit post', 'contentValue' => $post->content, 'buttonText' => 'Update Post'])
         @endif
-        <a href="/post/{{ $post->id }}">
+        <a class="post-link" href="/post/{{ $post->id }}">
             <p class='post-content'>{{ $post->content }}</p>
             @if ($post->media != null)
                 <div class="image-container">
@@ -32,7 +32,11 @@
             @endif
         </a>
     </div>
-    <h4>
+    <div class="post-footer">
+        <h3 class="post-likes">
+            <a href="#" class="like">&#10084;</a>
+            <span class="likes">{{ $post->likes->count() }}</span>
+        </h3>
         <span class="nr-comments">{{ $post->comments->count() }}</span>
-    </h4>
+    </div>
 </div>

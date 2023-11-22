@@ -9,6 +9,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminLoginController;
 
 
 
@@ -42,6 +44,21 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+// Admin
+Route::prefix('/admin')->name('admin.')->group(function () {
+    Route::redirect('/', '/admin/login');
+
+    Route::get('/login', [AdminLoginController::class, 'show'])->name('login');
+    Route::post('/login', [AdminLoginController::class, 'authenticate']);
+    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('home');
+        Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
+        Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
+    });
+});
+
 Route::controller(PostController::class)->group(function () {
     Route::get('/post/{id}', 'show')->name('post');
     Route::get('/post/{id}/image', 'viewImage')->name('post.image');
@@ -55,12 +72,12 @@ Route::controller(PostController::class)->group(function () {
 
     Route::put('/post/{id}', 'update');
 
-    Route::get('/api/post/search/{search}', 'search');
+    Route::get('/search', 'searchResults');
 });
 
-Route::get('/search', function () {
-    return view('pages.search');
-})->name('search');
+// Route::get('/search', function () {
+//     return view('pages.search');
+// })->name('search');
 
 // profile page
 
@@ -84,3 +101,4 @@ Route::controller(ProfileController::class)->group(function () {
 
 Route::get('/profile/{username}', [UserController::class, 'show'])->name('profile.show');
 Route::post('/profile', [UserController::class, 'update'])->name('profile.update');
+

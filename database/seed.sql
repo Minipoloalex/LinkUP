@@ -493,7 +493,8 @@ VALUES
   ('johnsmith@gmail.com', 'John Smith', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', NULL),
   ('emmawilliams@yahoo.com', 'Emma williams', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 1),
   ('marysmith@hotmail.com', 'Mary Smith', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 2),
-  ('michaelbrown@gmail.com', 'Michael Brown', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 2);
+  ('michaelbrown@gmail.com', 'Michael Brown', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 2),
+  ('admin@example.com', 'Admin', '$2a$12$bZWMN0BRqYrLplO1N7UP2O7MH2s4b6sywbcb5LHbWqdr1gvLR4lfy', NULL);
 
 
 INSERT INTO follows (id_user, id_followed, since) VALUES

@@ -1,26 +1,30 @@
-const search = document.querySelector('#search');
-const resultsContainer = document.querySelector('#results-container');
-const searchForm = document.querySelector('#search-form');
-const searchButton = document.querySelector('#search-button');
-if (search) {
+const resultsContainer = document.querySelector('#searchpage #results-container');
+if (resultsContainer) {   // only if on the search page
+    const searchForm = getSearchForm();
+    const searchButton = searchForm.querySelector('button[type="submit"]');
     searchForm.addEventListener('submit', updateSearchResults);
     searchButton.addEventListener('click', updateSearchResults);
 }
+function getSearchForm() {
+    return document.querySelector('#search-form');
+}
 async function updateSearchResults(event) {
     event.preventDefault();
-    const response = await sendAjaxRequest('get', `/api/post/search/${search.value}`, null);
+    const searchForm = getSearchForm();
+    const searchValue = searchForm.querySelector('#search-text').value;
+    const response = await sendAjaxRequest('get', `/api/post/search/${searchValue}`);
     if (response.ok) {
         const data = await response.json();
         resultsContainer.innerHTML = '';
 
         console.log(data);
-        // data.forEach(element => {
-        //     addPost(element, resultsContainer);
-        // });
+        data.forEach(element => {
+            addPostToDom(resultsContainer, element, false);
+        });
         if (data.length == 0) {
-            resultsContainer.innerHTML = 'No results found';
+            resultsContainer.innerHTML = '<p class="flex justify-center">No results found</p>';
         }
-        search.value = '';  // clear search bar
+        searchForm.reset();     // clear the search bar
     }
     else {
         // display error message to user
