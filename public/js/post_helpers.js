@@ -104,7 +104,7 @@ function buildPostInfo(postJson, editable) {
         <header>
             <div class="user-date">
                 <img class="user-image" src="/images/profile.png" alt="User photo">
-                <a href="/users/${postJson.id_created_by}">${postJson.created_by.username}</a>
+                <a href="/profile/${postJson.created_by.username}">${postJson.created_by.username}</a>
                 <span class="date">${postJson.created_at}</span>
             </div>
             ${editable ? `
