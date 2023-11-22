@@ -1,8 +1,8 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const editButton = document.getElementById('editButton');
-    const editModal = document.getElementById('editModal');
+const editButton = document.getElementById('editButton');
+const editModal = document.getElementById('editModal');
+// const editForm = document.getElementById('editForm');
+if (editButton && editModal) {
     const closeModalButton = editModal.querySelector('.modal-content button[type="button"]');
-    const editForm = document.getElementById('editForm');
 
     // Function to open the edit modal
     function openEditModal() {
@@ -25,4 +25,4 @@ document.addEventListener('DOMContentLoaded', function() {
     closeModalButton.addEventListener('click', function() {
         closeEditModal();
     });
-});
+}

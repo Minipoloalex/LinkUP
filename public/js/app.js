@@ -12,5 +12,7 @@ function createPostFetcher() {
 }
 
 // posts.fetchNewPosts();
-fetchNewPosts();
-createPostFetcher();
+if (document.querySelector('#timeline')) {
+    fetchNewPosts();
+    createPostFetcher();
+}

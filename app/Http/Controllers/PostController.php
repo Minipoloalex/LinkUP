@@ -188,6 +188,7 @@ class PostController extends Controller
         $post->media = null;
         $post->save();
         $post->success = 'Post image deleted successfully!';
+        return response()->json($post);
     }
     private function setFileName(Request $request, Post $post)
     {

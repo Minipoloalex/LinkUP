@@ -102,8 +102,8 @@ function buildPostInfo(postJson, editable) {
         <header>
             <div class="user-date">
                 <img class="user-image" src="/images/profile.png" alt="User photo">
-                <a class="post-info-user" href="/users/${postJson.id_created_by}"></a>
-                <span class="date">${postJson.created_at}</span>
+                <a class="post-info-user"></a>
+                <span class="date"></span>
             </div>
             ${editable ? `
                 <div class="edit-delete-post">
@@ -134,7 +134,25 @@ function buildPostInfo(postJson, editable) {
         </div>
     `;
     // avoid XSS
-    postInfo.querySelector('.post-info-user').textContent = postJson.created_by.username;
+    const postInfoUser = postInfo.querySelector('.post-info-user');
+    postInfoUser.textContent = postJson.created_by.username;
+    postInfoUser.href = `/profile/${postJson.created_by.username}`;
+
+    const postInfoDate = postInfo.querySelector('.user-date .date');
+    postInfoDate.textContent = postJson.created_at
+    if (postJson.created_at == null) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}`;
+        postInfoDate.textContent = formattedDate;
+    }
+    
+    
+    
+
     postInfo.querySelector('.post-content').textContent = postJson.content;
 
     if (editable) {
