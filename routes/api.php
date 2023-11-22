@@ -25,3 +25,8 @@ Route::get(
     '/posts/{date}',
     [PostController::class, 'getPostsBeforeDate']
 )->name('posts.beforeDate');
+
+Route::get(
+    '/post/search/{search}',
+    [PostController::class, 'search']
+)->name('post.search');

@@ -50,10 +50,17 @@ class Post extends Model
     }
     public static function search(string $search)
     {
-        // Full-text search
+        
         $posts = DB::select("SELECT * FROM post
-            WHERE tsvectors @@ to_tsquery('english', ?)
-            ORDER BY ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$search, $search]);
+                    WHERE tsvectors @@ plainto_tsquery('english', ?)
+                    ORDER BY ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search, $search]);
+
+            // WHERE tsvectors @@ to_tsquery('english', plainto_tsquery('english', ?))
+            // ORDER BY ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search, $search]);
+        
+        // $posts = DB::select("SELECT * FROM post
+        //     WHERE tsvectors @@ to_tsquery('english', ?)
+        //     ORDER BY ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$search, $search]);
         $posts = Post::hydrate($posts);
         return $posts;
     }

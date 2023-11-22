@@ -16,7 +16,7 @@
         <div class="flex py-2 text-xl">
             <img class="w-8 h-8 rounded-full" src="{{ url('images/users/icons/' . Auth::user()->id . '.png') }}"
                 alt="User Icon">
-            <a href="{{ url('/profile') }}" class="ml-3">
+            <a href="{{ url('/profile/' . Auth::user()->username) }}" class="ml-3">
                 {{ Auth::user()->username }}
             </a>
         </div>

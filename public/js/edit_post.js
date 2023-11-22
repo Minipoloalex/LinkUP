@@ -6,10 +6,11 @@ const editPostFields = document.querySelectorAll('edit-post-info');
 editPostFields.forEach(field => {
     field.addEventListener('submit', submitEditPost);
 });
+const deleteImageButtons = document.querySelectorAll('.delete-image');
+deleteImageButtons.forEach(button => {
+    button.addEventListener('click', deleteImage);
+});
 
-function getTextField(form) {
-    return form.querySelector('input[type="text"]');
-}
 
 function toggleEditEvent(event) {
     event.preventDefault();
@@ -28,7 +29,7 @@ function toggleEdit(content, editForm, textField) {
     if (!editForm.classList.contains('hidden')) {
         textField.focus();
     }
-    editForm.addEventListener('submit', submitEditPost);
+    editForm.addEventListener('submit', submitEditPost);    // TODO: fix this
 }
 async function submitEditPost(event) {  // submitted the form
     event.preventDefault();
@@ -40,11 +41,8 @@ async function submitEditPost(event) {  // submitted the form
     const textField = getTextField(form);
     const newContent = textField.value;
 
-    const response = await submitEditPostOrComment(form, {'content': newContent}, postId);
-    if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-    
+    const data = await submitEditPostOrComment(form, {'content': newContent}, postId);
+    if (data != null) {
         const postContentElement = post.querySelector('.post-content');
         postContentElement.textContent = newContent;
         toggleEdit(postContentElement, form, textField);
@@ -56,36 +54,10 @@ async function submitEditPost(event) {  // submitted the form
         }
         
     }
-    else {
-        console.log('Error: ', response.status);
-        // show error message to user
-    }
 }
 
 async function submitEditPostOrComment(form, data, postId) {
     // Explains the use of _method https://laravel.com/docs/10.x/routing#form-method-spoofing
     data._method = 'put';
     return await submitDataPostOrComment(form, data, `/post/${postId}`, 'post');
-}
-
-
-const deleteImageButtons = document.querySelectorAll('.delete-image');
-deleteImageButtons.forEach(button => {
-    button.addEventListener('click', deleteImage);
-});
-async function deleteImage(event) {
-    event.preventDefault();
-    if (confirm('Are you sure you want to delete this image?')) {
-        const button = event.currentTarget;
-        const postId = button.dataset.id;
-        
-        const imageContainer = button.closest('.image-container');
-        const response = await sendAjaxRequest('delete', `/post/${postId}/image`);
-        if (response.ok) {
-            imageContainer.remove();
-        }
-        else {
-            console.log('Error: ', response.status);
-        }
-    }
 }

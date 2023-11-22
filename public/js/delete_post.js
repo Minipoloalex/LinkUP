@@ -1,4 +1,3 @@
-// To delete a post or a comment
 const deletePostButtons = document.querySelectorAll('.delete-post');
 deletePostButtons.forEach(button => {
     button.addEventListener('click', deletePostOrComment);
@@ -6,7 +5,6 @@ deletePostButtons.forEach(button => {
 
 async function deletePostOrComment(event) {
     if (confirm('Are you sure you want to delete this post?')) {
-        console.log('deleting post')
         const post = event.currentTarget.closest('article');
         const postId = post.dataset.id;
         deletePost(post, postId);
@@ -20,9 +18,11 @@ async function deletePostOrComment(event) {
 }
 
 async function deletePost(post, postId) {
-    const response = await sendAjaxRequest('DELETE', `/post/${postId}`);
-    console.log(response);
-    if (response.ok) {
+    const data = await sendAjaxRequest('DELETE', `/post/${postId}`);
+    if (data != null) {
+        if (post.classList.contains('comment')) {   // if it's a comment, decrement comment count
+            decrementCommentCount(post.parentElement.closest('article'));
+        }
         post.remove();
     }
 }

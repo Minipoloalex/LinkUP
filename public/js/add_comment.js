@@ -5,23 +5,21 @@ if (commentForm != null) {
 
 async function submitAddComment(event) {
     event.preventDefault();
-    const commentContent = commentForm.querySelector('input[type=text]').value;
+    const commentContent = getTextField(commentForm).value;
+
     const post = event.currentTarget.closest('.post');
-    const response = await submitAddPostOrComment(commentForm, {
+    const data = await submitAddPostOrComment(commentForm, {
         content: commentContent,
         id_parent: post.dataset.id
     }, 'comment');
 
-    if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        // const commentsContainer = post.querySelector('.comments-container');
-        // addCommentToDOM(commentsContainer, data);
+    if (data != null) {
+        const commentsContainer = post.querySelector('.comments-container');
+        
+        addCommentToDOM(commentsContainer, data);
         incrementCommentCount(post);
+
         commentForm.reset();
-    }
-    else {
-        console.log('response not ok');
-        // display error message to user
+        clearFileInputWrapper(getFileInputWrapper(commentForm));
     }
 }

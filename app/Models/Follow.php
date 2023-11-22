@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Follow extends Model
 {
     use HasFactory;
-    protected $table = 'follow';
+    protected $table = 'follows';
     public $timestamps = false;
     protected $fillable = [
         'id_user',
