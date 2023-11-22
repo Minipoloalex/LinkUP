@@ -104,7 +104,7 @@ function buildPostInfo(postJson, editable) {
         <header>
             <div class="user-date">
                 <img class="user-image" src="/images/profile.png" alt="User photo">
-                <a href="/users/${postJson.id_created_by}">${postJson.created_by.username}</a>
+                <a class="post-info-user" href="/users/${postJson.id_created_by}"></a>
                 <span class="date">${postJson.created_at}</span>
             </div>
             ${editable ? `
@@ -116,7 +116,7 @@ function buildPostInfo(postJson, editable) {
         </header>
         <div class="post-body">
             <a class="post-link" href="/post/${postJson.id}">
-                <p class="post-content">${postJson.content}</p>
+                <p class="post-content"></p>
                 ${postJson.media != null ? `
                     <div class="image-container">
                         <img src="/post/${postJson.id}/image" alt="A post image">
@@ -135,6 +135,9 @@ function buildPostInfo(postJson, editable) {
             <span class="nr-comments">${postJson.comments.length}</span>
         </div>
     `;
+    // avoid XSS
+    postInfo.querySelector('.post-info-user').textContent = postJson.created_by.username;
+    postInfo.querySelector('.post-content').textContent = postJson.content;
 
     if (editable) {
         const editPostForm = buildPostForm('edit-post-info hidden', 'Edit post', 'Update Post', postJson.content);
@@ -186,10 +189,6 @@ function buildPost(postJson, displayComments, editable) {
     }
 
     return post;
-}
-function addPostToDom(container, postJson, displayComments) {
-    const post = buildPost(postJson, displayComments, false);
-    container.appendChild(post);
 }
 function addCommentToDOM(container, commentJson) {
     const comment = buildComment(commentJson);
