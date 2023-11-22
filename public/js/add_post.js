@@ -30,13 +30,12 @@ async function submitAddPost(event) {
     const content = getTextField(addPostForm).value;
 
     const response = await submitAddPostOrComment(addPostForm, {'content': content}, 'post');
-    console.log(response)
     if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        prependPostsToTimeline([data]);
         
         addPostForm.reset();
-        clearFileInputWrapper(getFileInputWrapper(addPostFormm));
+        clearFileInputWrapper(getFileInputWrapper(addPostForm));
         if (addPostOff) {
             hideAddPostForm();
         }
