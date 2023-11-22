@@ -24,8 +24,7 @@
     @vite('resources/js/app.js')
 </head>
 
-<body class="h-screen flex flex-col mx-auto w-1/3 content-center">
-    @include('partials.guest.header')
+<body>
     @yield('content')
 </body>
 

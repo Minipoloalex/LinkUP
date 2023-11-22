@@ -1,6 +1,7 @@
 const addPostOn = document.querySelector('.add-post-on');
 const addPostOff = document.querySelector('.add-post-off');
 const addPostForm = document.querySelector('form.add-post');
+const darkOverlay = document.getElementById('dark-overlay');
 
 if (addPostOn) {
     addPostOn.addEventListener('click', showAddPostForm);
@@ -16,6 +17,7 @@ function showAddPostForm() {
     addPostForm.classList.remove('hidden');
     addPostOn.classList.add('hidden');
     addPostOff.classList.remove('hidden');
+    darkOverlay.classList.remove('hidden'); // Show dark overlay
 }
 function hideAddPostForm() {
     addPostForm.classList.add('hidden');
@@ -23,6 +25,7 @@ function hideAddPostForm() {
     addPostOff.classList.add('hidden');
     addPostForm.reset();
     clearFileInputWrapper(getFileInputWrapper(addPostForm));
+    darkOverlay.classList.add('hidden'); // Hide dark overlay
 }
 
 async function submitAddPost(event) {

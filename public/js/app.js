@@ -16,3 +16,4 @@ if (document.querySelector('#timeline')) {
     fetchNewPosts();
     createPostFetcher();
 }
+

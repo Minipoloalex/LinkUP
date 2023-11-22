@@ -1,11 +1,11 @@
 <div class="profile-edit flex flex-row-reverse ml-4">
-    <button id="editButton" class="bg-blue-500 hover:bg-black-700 text-black font-bold py-2 px-4 rounded-full">
+    <button id="editButton" class=" hover:bg-black-700 text-black font-bold py-2 px-4 rounded-full">
         Edit
     </button>
 </div>
 
 <!-- Edit modal -->
-<div id="editModal" class="edit-modal hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+<div id="editModal" class="edit-modal hidden fixed top-0 left-0 w-full h-full flex justify-center items-center ">
     <div class="modal-content bg-white p-6 rounded shadow-lg">
         <h2 class="text-2xl font-bold mb-4">Edit Profile</h2>
         <form id="editForm" method="POST" action="{{ route('profile.update') }}">
@@ -19,11 +19,11 @@
                 </span>
             @endif
             
-            <label for="username" class="block mb-2">Username</label>
-            <input type="text" id="username" name="username" class="w-full border border-gray-300 rounded-md p-2 mb-4" value="{{ $user->username }}">
-            @if ($errors->has('username'))
+            <label for="username" class="block mb-2">Description</label>
+            <textarea id="description" name="description" class="w-full border border-gray-300 rounded-md p-2 mb-4">{{ $user->description }}</textarea>
+            @if ($errors->has('description'))
                 <span class="error">
-                    {{ $errors->first('username') }}
+                    {{ $errors->first('description') }}
                 </span>
             @endif
             

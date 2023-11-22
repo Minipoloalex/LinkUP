@@ -22,14 +22,14 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'username' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:150',
         ]);
 
         $user->update([
             'name' => $request->name,
-            'username' => $request->username,
+            'description' => $request->description,
         ]);
 
-        return redirect()->route('profile.show', ['username' => $user->username]);
+        return redirect()->back()->with('success', 'Profile updated successfully!');    
     }
 }

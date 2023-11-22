@@ -23,7 +23,6 @@
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
-    {{-- <script type="module" src={{ url('js/app.js') }}></script> --}}
     <script type="text/javascript" src={{ url('js/feedback.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/ajax.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/file_input.js') }} defer></script>
@@ -40,7 +39,7 @@
     @vite('resources/js/app.js')
 </head>
 
-<body class="px-64 h-screen flex flex-col">
+<body class="mx-64 h-screen flex flex-col bg-white">
     @include('partials.header')
     @yield('content')
     

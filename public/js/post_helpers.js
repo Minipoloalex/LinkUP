@@ -139,7 +139,7 @@ function buildPostInfo(postJson, editable) {
     postInfoUser.href = `/profile/${postJson.created_by.username}`;
 
     const postInfoDate = postInfo.querySelector('.user-date .date');
-    postInfoDate.textContent = postJson.created_at
+    postInfoDate.textContent = postJson.created_at;
     if (postJson.created_at == null) {
         const today = new Date();
         const year = today.getFullYear();
