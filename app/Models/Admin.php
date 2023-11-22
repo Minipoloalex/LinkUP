@@ -2,25 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Admin extends Model
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class Admin extends Authenticatable
 {
-
-    use HasFactory;
-
-    public $timestamps = false;
-
+    use Notifiable;
+    
     protected $table = 'admin';
 
     protected $fillable = [
-        'name',
+        'name', 
         'email',
         'password',
     ];
-    public function createdBy()
-    {
-        return $this->belongsTo(Admin::class, 'id_created_by');
-    }
+
+    protected $hidden = [
+        'password', 
+    ];
 }
