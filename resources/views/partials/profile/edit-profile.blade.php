@@ -28,7 +28,7 @@
             @endif
             
             <div class="flex justify-center">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-full mr-1">Save</button>
+                <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1">Save</button>
                 <button type="button" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full" onclick="closeEditModal()">Cancel</button>
             </div>
         </form>
