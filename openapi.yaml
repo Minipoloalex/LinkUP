@@ -5,22 +5,19 @@ info:
     title: 'LBAW Link-UP Web API'
     descripiton: 'Web resources specification for Link-UP'
 
-servers:
-    url: [TODO]
-    description: 'Production server'
 
-externalDocuments:
-    url: [TODO]
-    description: 'Information in detail here'
+servers:
+    - url: https://lbaw2351.lbaw.fe.up.pt/
+        description: 'Production server'
 
 tags:
-    - name: 'M01:' [Authentication and Individual profile]
-    - name: 'M02:' [Groups and group profiles]
-    - name: 'M03:' [Posts]
-    - name: 'M04:' [Notifications]
-    - name: 'M05:' [Search for content]
-    - name: 'M06:' [User administration and static pages]
-
+    - name: 'M01: Authentication and Individual profile'
+    - name: 'M02:' Groups and group profiles
+    - name: 'M03:' Posts
+    - name: 'M04:' Notifications
+    - name: 'M05:' Search for content
+    - name: 'M06:' User administration and static pages
+    
 paths:
     /login:
         get:
@@ -69,7 +66,7 @@ paths:
         post:
             operationID: 'R103'
             summary: 'R103: Logout action'
-            description: 'Logout the current user. Access: USR+' [TODO]
+            description: 'Logout the current user. Access: USR, ADM'
             tags:
                 - 'M01'
             responses:
@@ -87,7 +84,6 @@ paths:
                                     description: 'Failed logout because the user was not authenticated. Redirect to login page'
                                     value: '/login'
                                     
-    
     /register:
         get:
             operationId: R104
@@ -134,444 +130,577 @@ paths:
                                     302Failure:
                                         description: 'Failed authentication. Redirect to login form.'
                                         value: '/login'
-    /users/{id}:
-      get:
-          operationId: R106
-          summary: 'R106: View user profile'
-          description: 'Show the individual user profile. Access: USR'
-          tags:
-              - 'M01: Authentication and Individual Profile'
-          parameters:
-              - in: path
-                name: id
-                schema:
-                  type: integer
-                required: true
-          responses:
-              '200':
-                  description: 'Ok. Show User Profile UI'
-    /users/{id}/posts:
+    
+    /profile/{username}:
         get:
-            operationId: R123
-            summary: 'R123: List User Posts'
-            description: 'Retrieve a list of posts created by a specific user. Access: PUB'
-            tags:
-                - 'M03: Posts'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Show list of user posts.'
-    /users/{id}/follow:
-        post:
-            operationId: R126
-            summary: 'R126: Follow User'
-            description: 'Follow another user. Access: USR'
+            operationId: R105
+            summary: 'R105: View Profile'
+            description: 'Show the details of a specific user profile. Access: PUB, USR'
             tags:
                 - 'M01: Authentication and Individual profile'
             parameters:
                 - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Follow request sent successfully.'
-    /users/{id}/followers:
-        get:
-            operationId: R133
-            summary: 'R133: List User Followers'
-            description: 'Retrieve a list of users following a specific user. Access: PUB'
-            tags:
-                - 'M01: Authentication and Individual profile'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Show list of user followers.'
-    /users/{id}/following:
-        get:
-            operationId: R134
-            summary: 'R134: List User Following'
-            description: 'Retrieve a list of users followed by a specific user. Access: PUB'
-            tags:
-                - 'M01: Authentication and Individual profile'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Show list of user following.'       
-    /posts:
-        get:
-            operationId: R107
-            summary: 'R107: List Posts'
-            description: 'Retrieve a list of posts. Access: PUB'
-            tags:
-                - 'M03: Posts'
-            parameters:
-                - in: query
-                  name: page
-                  schema:
-                    type: integer
-                  description: 'Page number for pagination'
-                - in: query
-                  name: per_page
-                  schema:
-                    type: integer
-                  description: 'Number of posts per page'
-            responses:
-                '200':
-                    description: 'OK. Show list of posts.'
-        post:
-            operationId: R108
-            summary: 'R108: Create Post'
-            description: 'Create a new post. Access: USR'
-            tags:
-                - 'M03: Posts'
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                content:
-                                    type: string
-                                    description: 'Content of the post'
-                                is_private:
-                                    type: boolean
-                                    description: 'Flag indicating if the post is private'
-            responses:
-                '201':
-                    description: 'Created. Post created successfully.'
-                    headers:
-                        Location:
-                            schema:
-                                type: string
-                            description: 'URL of the created post'
-                            example: '/posts/{post_id}'
-      /posts/{id}:
-        get:
-            operationId: R109
-            summary: 'R109: View Post'
-            description: 'Show the details of a specific post. Access: PUB'
-            tags:
-                - 'M03: Posts'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Show post details.'
-        put:
-            operationId: R110
-            summary: 'R110: Update Post'
-            description: 'Update an existing post. Access: USR'
-            tags:
-                - 'M03: Posts'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                content:
-                                    type: string
-                                    description: 'Updated content of the post'
-                                is_private:
-                                    type: boolean
-                                    description: 'Flag indicating if the post is private'
-            responses:
-                '200':
-                    description: 'OK. Post updated successfully.'
-        delete:
-            operationId: R111
-            summary: 'R111: Delete Post'
-            description: 'Delete an existing post. Access: USR'
-            tags:
-                - 'M03: Posts'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '204':
-                    description: 'No Content. Post deleted successfully.'
-    /posts/{id}/comments:
-        post:
-            operationId: R118
-            summary: 'R118: Create Comment'
-            description: 'Create a new comment on a post. Access: USR'
-            tags:
-                - 'M03: Posts'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                content:
-                                    type: string
-                                    description: 'Content of the comment'
-            responses:
-                '201':
-                    description: 'Created. Comment created successfully.'
-                    headers:
-                        Location:
-                            schema:
-                                type: string
-                            description: 'URL of the created comment'
-                            example: '/posts/{post_id}/comments/{comment_id}'
-    /posts/{id}/likes:
-        get:
-            operationId: R132
-            summary: 'R132: List Post Likes'
-            description: 'Retrieve a list of users who liked a specific post. Access: PUB'
-            tags:
-                - 'M03: Posts'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Show list of post likes.'
-    /groups:
-        get:
-            operationId: R112
-            summary: 'R112: List Groups'
-            description: 'Retrieve a list of groups. Access: PUB'
-            tags:
-                - 'M02: Groups and group profiles'
-            parameters:
-                - in: query
-                  name: page
-                  schema:
-                    type: integer
-                  description: 'Page number for pagination'
-                - in: query
-                  name: per_page
-                  schema:
-                    type: integer
-                  description: 'Number of groups per page'
-            responses:
-                '200':
-                    description: 'OK. Show list of groups.'
-        post:
-            operationId: R113
-            summary: 'R113: Create Group'
-            description: 'Create a new group. Access: USR'
-            tags:
-                - 'M02: Groups and group profiles'
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                name:
-                                    type: string
-                                    description: 'Name of the group'
-                                created_at:
-                                    type: string
-                                    format: date
-                                    description: 'Creation date of the group'
-                                is_private:
-                                    type: boolean
-                                    description: 'Flag indicating if the group is private'
-            responses:
-                '201':
-                    description: 'Created. Group created successfully.'
-                    headers:
-                        Location:
-                            schema:
-                                type: string
-                            description: 'URL of the created group'
-                            example: '/groups/{group_id}'
-    /groups/{id}:
-        get:
-            operationId: R114
-            summary: 'R114: View Group'
-            description: 'Show the details of a specific group. Access: PUB'
-            tags:
-                - 'M02: Groups and group profiles'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Show group details.'
-        put:
-            operationId: R115
-            summary: 'R115: Update Group'
-            description: 'Update an existing group. Access: USR'
-            tags:
-                - 'M02: Groups and group profiles'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                name:
-                                    type: string
-                                    description: 'Updated name of the group'
-                                created_at:
-                                    type: string
-                                    format: date
-                                    description: 'Updated creation date of the group'
-                                is_private:
-                                    type: boolean
-                                    description: 'Flag indicating if the group is private'
-            responses:
-                '200':
-                    description: 'OK. Group updated successfully.'
-        delete:
-            operationId: R116
-            summary: 'R116: Delete Group'
-            description: 'Delete an existing group. Access: USR'
-            tags:
-                - 'M02: Groups and group profiles'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '204':
-                    description: 'No Content. Group deleted successfully.'
-    /groups/{id}/join:
-        post:
-            operationId: R127
-            summary: 'R127: Join Group'
-            description: 'Join a group. Access: USR'
-            tags:
-                - 'M02: Groups and group profiles'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. User joined the group successfully.'
-    /groups/{id}/members:
-        get:
-            operationId: R124
-            summary: 'R124: List Group Members'
-            description: 'Retrieve a list of members in a specific group. Access: PUB'
-            tags:
-                - 'M02: Groups and group profiles'
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                    type: integer
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Show list of group members.'
-    /notifications:
-        get:
-            operationId: R125
-            summary: 'R125: List Notifications'
-            description: 'Retrieve a list of notifications for the authenticated user. Access: USR'
-            tags:
-                - 'M04: Notifications'
-            parameters:
-                - in: query
-                  name: page
-                  schema:
-                    type: integer
-                  description: 'Page number for pagination'
-                - in: query
-                  name: per_page
-                  schema:
-                    type: integer
-                  description: 'Number of notifications per page'
-            responses:
-                '200':
-                    description: 'OK. Show list of notifications.'
-    /api/like:
-        post:
-            operationId: R117
-            summary: 'R117: Like Post (API)'
-            description: 'Like a post using the API. Access: USR'
-            tags:
-                - 'API'
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                post_id:
-                                    type: integer
-                                    description: 'ID of the post to be liked'
-            responses:
-                '200':
-                    description: 'OK. Post liked successfully.'
-    /api/search:
-        get:
-            operationId: R122
-            summary: 'R122: Search'
-            description: 'Search for users, posts, or groups. Access: PUB'
-            tags:
-                - 'API'
-            parameters:
-                - in: query
-                  name: query
+                  name: username
                   schema:
                     type: string
                   required: true
             responses:
                 '200':
-                    description: 'OK. Show search results.'
+                    description: 'OK. Show user profile details.'
+    
+    /profile:
+        post:
+            operationId: R106
+            summary: 'R106: Update Profile'
+            description: 'Update an existing user profile. Access: USR'
+            tags:
+                - 'M01: Authentication and Individual profile'
+            parameters:
+                - in: path
+                  name: username
+                  schema:
+                    type: string
+                  required: true
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    description: 'Updated name of the user'
+                                descripiton:
+                                    type: string
+                                    description: 'Updated description of the user'
+                                required:
+                                    - name
+                                    - email
+                                    - password
+            responses:
+                '200':
+                    description: 'OK. User profile updated successfully.'
+
+    /home:
+        get:
+            operationId: R301
+            summary: 'R301: Home Page'
+            description: 'Provide the home page. Access: USR'
+            tags:
+                - 'M03: Posts'
+            responses:
+                '200':
+                    description: 'Ok. Show Home UI'
+                '403':
+                    description: 'User is not authenticated'
+
+    /post/{id}:
+        parameters:
+            - in: path
+              name: id
+              schema:
+                type: integer
+              required: true
+        get:
+            operationId: R302
+            summary: 'R302: Show the individual post'
+            description: 'Show the comments and information of a post. Access: PUB, USR'
+            tags:
+                - 'M03: Posts'
+            responses:
+                '200':
+                    description: 'Ok. Show Post UI'
+                '403':
+                    description: 'User does not have permission to view this post'
+                '404':
+                    description: 'Post not found'
+        delete:
+            operationId: R303
+            summary: 'R303: Delete a post'
+            description: 'Delete a post and its information. Access: OWN'
+            tags:
+                - 'M03: Posts'
+            responses:
+                '200':
+                    description: 'Ok. Delete Post'
+                '403':
+                    description: 'User does not have permission to delete this post'
+                '404':
+                    description: 'Post not found'
+
+        put:
+            operationId: R304
+            summary: 'R304: Edit a post'
+            description: 'Edit a post or a comment and its information. Access: OWN'
+            tags:
+                - 'M03: Posts'
+            requestBody:
+                required: true
+                content:
+                    application/x-www-form-urlencoded:
+                        schema:
+                            type: object
+                            properties:
+                                content:
+                                    type: string
+                                image:
+                                    type: file
+                                is_private:
+                                    type: bool
+                            required:
+                                - content
+            responses:
+                '200':
+                    description: 'Ok. Edit Post'
+                    headers:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                                    content:
+                                        type: string
+                                    image:
+                                        type: string
+                                    created_at:
+                                        type: string
+                                    id_created_by:
+                                        type: integer
+                                    is_private:
+                                        type: bool
+                                    id_parent:
+                                        type: integer
+                                    id_group:
+                                        type: integer
+                                example:
+                                    -   id : 1
+                                        content : 'Last sunday, the game was so crazy!'
+                                        image: 'media_post_1.png'
+                                        created_at: '2021-10-10 10:00:00'
+                                        id_created_by: 1
+                                        is_private: false
+                                        id_parent: null
+                                        id_group: null
+                '403':
+                    description: 'User does not have permission to edit this post'
+                '404':
+                    description: 'Post not found'
+
+    /post/{id}/image:
+        parameters:
+            - in: path
+              name: id
+              schema:
+                type: integer
+              required: true
+        get:
+            operationId: R305
+            summary: 'R305: Show the image of a post'
+            description: 'Show the image of a post. Access: USR, PUB'
+            tags:
+                - 'M03: Posts'
+            responses:
+                '200':
+                    description: 'Ok. Show Post Image'
+                '403':
+                    description: 'User does not have permission to view this post'
+                '404':
+                    description: 'Post or image not found'
+        delete:
+            operationId: R306
+            summary: 'R306: Delete the image of a post'
+            description: 'Delete the image of a post from the file system and database. Access: OWN'
+            tags:
+                - 'M03: Posts'
+            responses:
+                '200':
+                    description: 'Ok. Delete Post Image'
+                '403':
+                    description: 'User does not have permission to delete the image of the post'
+                '404':
+                    description: 'Post or image not found'
+    /post:
+        post:
+            operationId: R307
+            summary: 'R307: Create a post'
+            description: 'Create a post. Access: USR'
+            tags:
+                - 'M03: Posts'
+            requestBody:
+                required: true
+                content:
+                    application/x-www-form-urlencoded:
+                        schema:
+                            type: object
+                            properties:
+                                content:
+                                    type: string
+                                image:
+                                    type: file
+                            required:
+                                - content
+            responses:
+                '200':
+                    description: 'Ok. Return created post json'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                                    content:
+                                        type: string
+                                    image:
+                                        type: string
+                                    created_at:
+                                        type: string
+                                    id_created_by:
+                                        type: integer
+                                example:
+                                    -   id : 1
+                                        content : 'Last sunday, the game was awesome!'
+                                        image: 'media_post_1.png'
+                                        created_at: '2021-10-10 10:00:00'
+                                        id_created_by: 1
+                '403':
+                    description: 'User is not authenticated'
+    /comment:
+        post:
+            operationId: R308
+            summary: 'R308: Create a comment'
+            description: 'Create a comment on a post. Access: USR'
+            tags:
+                - 'M03: Posts'
+            requestBody:
+                required: true
+                content:
+                    application/x-www-form-urlencoded:
+                        schema:
+                            type: object
+                            properties:
+                                content:
+                                    type: string
+                                id_parent:
+                                    type: integer
+                                image:
+                                    type: file
+                            required:
+                                - content
+            responses:
+                '200':
+                    description: 'Ok. Return created comment json'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                                    content:
+                                        type: string
+                                    image:
+                                        type: string
+                                    created_at:
+                                        type: string
+                                    id_created_by:
+                                        type: integer
+                                    id_parent:
+                                        type: integer
+                                example:
+                                    -   id : 10
+                                        content : 'Indeed, I was so happy for my team!'
+                                        image: 'media_post_10.png'
+                                        created_at: '2021-10-10 11:00:00'
+                                        id_created_by: 2
+                                        id_parent: 1
+                '403':
+                    description: 'User is not authenticated or cannot access the post'
+                 /search:
+    get:
+        operationId: R309
+        summary: 'R309: Search for content'
+        description: 'Search for posts. Access: PUB, USR'
+        tags:
+            - 'M05: Search'
+        parameters:
+            - in: query
+            name: query
+            schema:
+                type: string
+            required: true
+            description: 'The search query'
+        responses:
+            '200':
+                description: 'OK. Show page results of search query'
+            '403':
+                description: 'User is not authenticated'
+
+    /api:
+        /posts/search/{query}:
+            get:
+                operationId: R501
+                summary: 'R501: Search'
+                description: 'Search for posts. Access: PUB, USR'
+                tags:
+                    - 'M05: Search for content'
+                parameters:
+                    - in: path
+                    name: query
+                    schema:
+                        type: string
+                    required: true
+                responses:
+                    '200':
+                        description: 'OK. Show search results.'
+                        content:
+                            application/json:
+                                schema:
+                                    type: array
+                                    items:
+                                        type: object
+                                        properties:
+                                            id:
+                                                type: integer
+                                            content:
+                                                type: string
+                                            created_at:
+                                                type: string
+                                                format: date
+                                            is_private:
+                                                type: boolean
+                                            media:
+                                                type: string
+                                            id_created_by:
+                                                type: integer
+                                            id_group:
+                                                type: integer
+                                            id_parent:
+                                                type: integer    
+                 
+            /posts/{date}:
+                get:
+                    operationId: R502
+                    summary: 'R502: Get posts older than a specific date'
+                    description: 'Retrieve posts that were created before the specified date. Access: PUB, USR'
+                    tags:
+                        - 'M03: Posts'
+                    parameters:
+                        - in: path
+                        name: date
+                        required: true
+                        description: 'The date in the format YYYY-MM-DD'
+                        schema:
+                            type: string
+                            format: date
+                    responses:
+                        '200':
+                            description: 'Ok. Return a list of posts'
+                            content:
+                                application/json:
+                                    schema:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id:
+                                                    type: integer
+                                                content:
+                                                    type: string
+                                                media:
+                                                    type: string
+                                                created_at:
+                                                    type: string
+                                                id_created_by:
+                                                    type: integer
+                                                id_group:
+                                                    type: integer
+                                                id_parent:
+                                                    type: integer
+                                                is_private:
+                                                    type: bool
+                        '400':
+                            description: 'Bad Request. Invalid date format or missing parameter'
+                        '403':
+                            description: 'User is not authenticated or does not have permission to access posts'
+                            
+    
+    /profile/{username}:
+        get:
+            operationId: R112
+            summary: 'R112: View Profile'
+            description: 'Show the details of a specific user profile. Access: PUB, USR'
+            tags:
+                - 'M01: Authentication and Individual profile'
+            parameters:
+                - in: path
+                  name: username
+                  schema:
+                    type: string
+                  required: true
+            responses:
+                '200':
+                    description: 'OK. Show user profile details.'
+    
+    /profile:
+        post:
+            operationId: R113
+            summary: 'R113: Update Profile'
+            description: 'Update an existing user profile. Access: USR'
+            tags:
+                - 'M01: Authentication and Individual profile'
+            parameters:
+                - in: path
+                  name: username
+                  schema:
+                    type: string
+                  required: true
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                    description: 'Updated name of the user'
+                                descripiton:
+                                    type: string
+                                    description: 'Updated description of the user'
+                                required:
+                                    - name
+                                    - email
+                                    - password
+            responses:
+                '200':
+                    description: 'OK. User profile updated successfully.'
+
+    /admin:
+        /login:
+            get:
+                operationId: R601
+                summary: 'R601: Admin Login Page'
+                description: 'Provide the admin login page (form). Access: ADM'
+                tags:
+                    - 'M06: User administration and static pages'
+                responses:
+                    '200':
+                        description: 'OK. Provide requested page.'
+            post:
+                operationId: R602
+                summary: 'R602: Admin Login Action'
+                description: 'Process the admin login form submitted. Access: PUB'
+                tags:
+                    - 'M06: User administration and static pages'
+                requestBody:
+                    required: true
+                    content:
+                        application/x-www-form-urlencoded:
+                            schema:
+                                type: object
+                                properties:
+                                    email:
+                                        type: string
+                                    password:
+                                        type: string
+                                required:
+                                    - email
+                                    - password
+                responses:
+                    '302':
+                        description: 'Redirect after processing login information'
+                        headers:
+                            location:
+                                schema:
+                                    type: string
+                                examples:
+                                    Success:
+                                        description: 'Successful authentication. Redirect to Admin Dashboard Page'
+                                        value: '/admin/dashboard'
+                                    Error:
+                                        description: 'Unsuccessful authentication. Redirect to Admin Login Page'
+                                        value: '/admin/login'
+        
+        /dashboard:
+            get:
+                operationId: R603
+                summary: 'R603: Admin Dashboard'
+                description: 'Provide the admin dashboard page. Access: ADM'
+                tags:
+                    - 'M06: User administration and static pages'
+                responses:
+                    '200':
+                        description: 'OK. Provide requested page.'
+        
+        /users:
+            get:
+                operationId: R604
+                summary: 'R604: List Users'
+                description: 'Retrieve a list of users. Access: ADM'
+                tags:
+                    - 'M06: User administration and static pages'
+                responses:
+                    '200':
+                        description: 'OK. Show list of users.'
+                    
+        /posts:
+            get:
+                operationId: R605
+                summary: 'R605: List Posts'
+                description: 'Retrieve a list of posts. Access: ADM'
+                tags:
+                    - 'M06: User administration and static pages'
+                responses:
+                    '200':
+                        description: 'OK. Show list of posts.'
+
+        /create:
+            get:
+                operationId: R606
+                summary: 'R606: Create User'
+                description: 'Provide the create user page (form). Access: ADM'
+                tags:
+                    - 'M06: User administration and static pages'
+                responses:
+                    '200':
+                        description: 'OK. Provide requested page.'
+            post:
+                operationId: R607
+                summary: 'R607: Create User Action'
+                description: 'Process the create user form submitted. Access: ADM'
+                tags:
+                    - 'M06: User administration and static pages'
+                requestBody:
+                    required: true
+                    content:
+                        application/x-www-form-urlencoded:
+                            schema:
+                                type: object
+                                properties:
+                                    name:
+                                        type: string
+                                    email:
+                                        type: string
+                                    password:
+                                        type: string
+                                required:
+                                    - name
+                                    - email
+                                    - password
+                responses:
+                    '302':
+                        description: 'Redirect after processing create user information'
+                        headers:
+                            location:
+                                schema:
+                                    type: string
+                                examples:
+                                    Success:
+                                        description: 'Successful create user. Redirect to Admin Dashboard Page'
+                                        value: '/admin/dashboard'
+                                    Error:
+                                        description: 'Unsuccessful create user. Redirect to Admin Create User Page'
+                                        value: '/admin/create'
