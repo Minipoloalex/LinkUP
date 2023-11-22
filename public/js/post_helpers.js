@@ -195,3 +195,7 @@ function addCommentToDOM(container, commentJson) {
     container.appendChild(comment);
 }
 
+function addPostToDOM(container, postJson, editable) {
+    const post = buildPost(postJson, false, editable);
+    container.appendChild(post);
+}

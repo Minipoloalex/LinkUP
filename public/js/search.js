@@ -19,7 +19,7 @@ async function updateSearchResults(event) {
 
         console.log(data);
         data.forEach(element => {
-            addPostToDom(resultsContainer, element, false);
+            addPostToDOM(resultsContainer, element, false);
         });
         if (data.length == 0) {
             resultsContainer.innerHTML = '<p class="flex justify-center">No results found</p>';
