@@ -1,5 +1,5 @@
 @guest
-<section class="col-span-1 col-start-4 flex content-center justify-center pl-16 border-l border-gray-300 border-solid" id="notifications-tab">
+<section class="col-span-1 flex content-center justify-center pl-16" id="notifications-tab">
     <div class="h-full flex py-16 flex-col flex-grow">
         <!-- Filler -->
     </div>
