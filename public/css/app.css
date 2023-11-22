@@ -82,14 +82,10 @@ body {
 }
 
 button {
-  color: white;
-  border: none;
   margin-left: 1rem;
-  background-color: transparent;
 }
 
 button:hover{
-  background-color: transparent;
   color: var(--feup-color);
 }
 
@@ -98,7 +94,6 @@ button:clicked{
 }
   
 button:not(:active) {
-  background-color: transparent;
 }
 
 

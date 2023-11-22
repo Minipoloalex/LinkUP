@@ -1,11 +1,11 @@
 <div class="profile-edit flex flex-row-reverse ml-4">
-    <button id="editButton" class="bg-blue-500 hover:bg-black-700 text-black font-bold py-2 px-4 rounded-full">
+    <button id="editButton" class=" hover:bg-black-700 text-black font-bold py-2 px-4 rounded-full">
         Edit
     </button>
 </div>
 
 <!-- Edit modal -->
-<div id="editModal" class="edit-modal hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+<div id="editModal" class="edit-modal hidden fixed top-0 left-0 w-full h-full flex justify-center items-center ">
     <div class="modal-content bg-white p-6 rounded shadow-lg">
         <h2 class="text-2xl font-bold mb-4">Edit Profile</h2>
         <form id="editForm" method="POST" action="{{ route('profile.update') }}">

@@ -3,17 +3,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const editModal = document.getElementById('editModal');
     const closeModalButton = editModal.querySelector('.modal-content button[type="button"]');
     const editForm = document.getElementById('editForm');
+    const darkOverlay = document.getElementById('dark-overlay');
+
 
     // Function to open the edit modal
     function openEditModal() {
         editModal.classList.remove('hidden');
         document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        darkOverlay.classList.remove('hidden'); // Show dark overlay
+
     }
 
     // Function to close the edit modal
     function closeEditModal() {
         editModal.classList.add('hidden');
         document.body.style.overflow = ''; // Enable scrolling when modal is closed
+        darkOverlay.classList.add('hidden'); // Hide dark overlay
+
     }
 
     // Handle click events on the Edit button
