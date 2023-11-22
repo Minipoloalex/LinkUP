@@ -55,4 +55,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class, 'id_created_by');
     }
+
+    protected function followers() : HasMany
+    {
+        return $this->hasMany(Follow::class, 'id_followed');
+    }
+
+    protected function following() : HasMany
+    {
+        return $this->hasMany(Follow::class, 'id_user');
+    }
+
+    protected function groups() : HasMany
+    {
+        return $this->hasMany(GroupMember::class, 'id_user');
+    }
 }

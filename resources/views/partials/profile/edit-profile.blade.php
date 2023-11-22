@@ -5,7 +5,7 @@
 </div>
 
 <!-- Edit modal -->
-<div id="editModal" class="edit-modal hidden fixed top-0 left-0 w-full h-full flex justify-center items-center ">
+<div id="editModal" class="edit-modal hidden fixed top-0 left-0 w-full h-full justify-center items-center ">
     <div class="modal-content bg-white p-6 rounded shadow-lg">
         <h2 class="text-2xl font-bold mb-4">Edit Profile</h2>
         <form id="editForm" method="POST" action="{{ route('profile.update') }}">
