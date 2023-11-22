@@ -230,7 +230,8 @@ class PostController extends Controller
     {
         $date = "2024-01-01"; // TODO: remove this line
 
-        $posts = Post::whereDate('created_at', '<', $date)->orderBy('created_at', 'desc')->limit(10)->get();
+        $posts = Post::whereDate('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
+
 
         $filteredPosts = $posts->filter(function ($post) {
             return policy(Post::class)->view(Auth::user(), $post);

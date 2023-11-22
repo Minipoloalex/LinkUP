@@ -45,3 +45,16 @@ function fetchMorePosts() {
     const posts = fetchPosts(lastPost.dataset.postDate);
     appendPostsToTimeline(posts);
 }
+
+function createPostFetcher() {
+    const fetcher = document.querySelector('#fetcher');
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            fetchMorePosts();
+        }
+    });
+    observer.observe(fetcher);
+}
+
+fetchNewPosts();
+createPostFetcher();
