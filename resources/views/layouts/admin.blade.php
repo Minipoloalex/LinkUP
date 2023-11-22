@@ -19,6 +19,19 @@
 </head>
 
 <body class="h-screen w-2/3 flex flex-col mx-auto">
+    <header class="flex content-center justify-between items-center px-6 py-4">
+        <a href="{{ url('admin/dashboard') }}">
+            <img src="{{ url('images/logo.png') }}" alt="Link up logo" class="w-24">
+        </a>
+        <div class="w-42">
+            <h1 class="text-2xl">Admin Dashboard</h1>
+        </div>
+        <div class="w-24">
+            <a href="{{ route('admin.logout') }}" class="text-slate-200 hover:text-white">
+                <img src="{{ url('images/icons/logout.png') }}" alt="Logout" class="w-6">
+            </a>
+        </div>
+    </header>
     @yield('content')
 </body>
 
