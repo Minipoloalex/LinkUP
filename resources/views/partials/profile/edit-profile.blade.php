@@ -19,11 +19,11 @@
                 </span>
             @endif
             
-            <label for="username" class="block mb-2">Username</label>
-            <input type="text" id="username" name="username" class="w-full border border-gray-300 rounded-md p-2 mb-4" value="{{ $user->username }}">
-            @if ($errors->has('username'))
+            <label for="username" class="block mb-2">Description</label>
+            <textarea id="description" name="description" class="w-full border border-gray-300 rounded-md p-2 mb-4">{{ $user->description }}</textarea>
+            @if ($errors->has('description'))
                 <span class="error">
-                    {{ $errors->first('username') }}
+                    {{ $errors->first('description') }}
                 </span>
             @endif
             
