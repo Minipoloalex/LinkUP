@@ -29,9 +29,8 @@ async function submitAddPost(event) {
     event.preventDefault();
     const content = getTextField(addPostForm).value;
 
-    const response = await submitAddPostOrComment(addPostForm, {'content': content}, 'post');
-    if (response.ok) {
-        const data = await response.json();
+    const data = await submitAddPostOrComment(addPostForm, {'content': content}, 'post');
+    if (data != null) {
         prependPostsToTimeline([data]);
         
         addPostForm.reset();
@@ -41,8 +40,5 @@ async function submitAddPost(event) {
         }
         
         // addPost(<container>, <post_info>)
-    }
-    else {
-        console.log('Error: ' + response.status);
     }
 }

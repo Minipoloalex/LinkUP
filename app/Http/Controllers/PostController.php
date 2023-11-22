@@ -11,34 +11,11 @@ use Log;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    // public function getPosts() {
-    //     $posts = Post::all();
-    //     $filteredPosts = $posts->filter(function ($post) {
-    //         return policy(Post::class)->view(Auth::user(), $post);
-    //     });
-    //     $filteredPosts->each(function ($post) {
-    //         $post->load('createdBy', 'comments', 'likes');            
-    //     });
-    //     return response()->json($filteredPosts);
-    // }
-
-    /**
-     * Displays the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-
-    }
     public function storePost(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
         $request->validate([
             'content' => 'required|max:255',
             // 'id_group' => 'nullable|exists:groups,id',
@@ -57,8 +34,9 @@ class PostController extends Controller
 
         $this->setFileName($request, $post);
 
-        Log::info("created post $post->toJson()");    // check if post is updated from setFileName
         $post->load('createdBy', 'comments', 'likes');
+        
+        $post->success = 'Post created successfully!';
         return response()->json($post);
     }
 
@@ -67,6 +45,9 @@ class PostController extends Controller
      */
     public function storeComment(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
         $request->validate([
             'content' => 'required|max:255',
             'id_parent' => 'required|exists:post,id',
@@ -91,6 +72,7 @@ class PostController extends Controller
         Log::info("created comment $comment->toJson()");
 
         $comment->load('createdBy', 'comments', 'likes');
+        $comment->success = 'Comment created successfully!';
         return response()->json($comment);
     }
     /**
@@ -123,6 +105,7 @@ class PostController extends Controller
     public function search(string $search)
     {
         $posts = $this->getSearchResults($search);
+        $posts->success = 'Search results retrieved';
         return response()->json($posts);
     }
     public function searchResults(Request $request)
@@ -132,15 +115,7 @@ class PostController extends Controller
         ]);
         $posts = $this->getSearchResults($request->input('query'));
         Log::info($posts->toJson());
-        return view('pages.search', ['posts' => $posts]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
-    {
-        //
+        return view('pages.search', ['posts' => $posts, 'success' => 'Search results retrieved']);
     }
 
     /**
@@ -148,6 +123,9 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
         $post = Post::findOrFail($id);
         $request->validate([
             'content' => 'nullable|max:255',
@@ -163,24 +141,14 @@ class PostController extends Controller
         $post->save();
 
         $hasNewMedia = false;
-        Log::info($request->all());
         if ($request->has('media') && $request->file('media')->isValid()) {
             $this->deleteFile($post->media);
             $this->setFileName($request, $post);
             $hasNewMedia = true;
         }
-
-        Log::info("updated post " . $post->toJson());
-
-        return response()->json(compact('post', 'hasNewMedia'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Post $post)
-    {
-        //
+        $post->hasNewMedia = $hasNewMedia;
+        $post->success = 'Post updated successfully!';
+        return response()->json($post);
     }
     /**
      * Delete a post.
@@ -197,6 +165,7 @@ class PostController extends Controller
 
         // Delete the post and return it as JSON.
         $post->delete();
+        $post->success = 'Post deleted successfully!';
         return response()->json($post);
     }
     public function viewImage(string $id)
@@ -218,6 +187,7 @@ class PostController extends Controller
         $this->deleteFile($post->media);
         $post->media = null;
         $post->save();
+        $post->success = 'Post image deleted successfully!';
     }
     private function setFileName(Request $request, Post $post)
     {

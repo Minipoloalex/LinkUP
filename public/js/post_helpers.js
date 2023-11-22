@@ -13,13 +13,14 @@ async function submitDataPostOrComment(form, data, url, method) {
             formData.append(key, data[key]);
         }
         formData.append('media', file[0]);
-        return await fetch(url, {
+        const response = await fetch(url, {
             method: method,
             headers: {
                 'X-CSRF-TOKEN': getCsrfToken(),
             },
             body: formData
         });
+        return handleFeedbackToResponse(response);
     }
     return await sendAjaxRequest(method, url, data);
 }
@@ -66,12 +67,9 @@ async function deleteImage(event) {
         const postId = button.dataset.id;
         
         const imageContainer = button.closest('.image-container');
-        const response = await sendAjaxRequest('delete', `/post/${postId}/image`);
-        if (response.ok) {
+        const data = await sendAjaxRequest('delete', `/post/${postId}/image`);
+        if (data != null) {
             imageContainer.remove();
-        }
-        else {
-            console.log('Error: ', response.status);
         }
     }
 }

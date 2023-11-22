@@ -9,8 +9,27 @@ function getCsrfToken() {
   return document.querySelector('meta[name="csrf-token"]').content;
 }
 
-async function sendAjaxRequest(method, url, data, handler) {
-  return await fetch(url, {
+async function handleFeedbackToResponse(response) {
+  if (response.ok) {
+    const data = await response.json();
+    if (data.error) {
+      showFeedback(data.error);
+    }
+    else {
+      if (data.success) {
+        showFeedback(data.success);
+      }
+      return data ?? [];
+    }
+  }
+  else {
+    showFeedback(response.statusText);
+  }
+  return null;
+}
+
+async function sendAjaxRequest(method, url, data) {
+  const response = await fetch(url, {
     method: method,
     headers: {
       'X-CSRF-TOKEN': getCsrfToken(),
@@ -18,4 +37,5 @@ async function sendAjaxRequest(method, url, data, handler) {
     },
     body: encodeForAjax(data)
   });
+  return handleFeedbackToResponse(response);
 }
