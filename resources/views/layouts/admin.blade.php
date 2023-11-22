@@ -13,6 +13,7 @@
 
     <!-- Styles -->
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
+    <link href="{{ url('css/posts.css') }}" rel="stylesheet">
     <script type="module" src={{ url('js/app.js') }} defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
