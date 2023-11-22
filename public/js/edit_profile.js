@@ -25,16 +25,4 @@ document.addEventListener('DOMContentLoaded', function() {
     closeModalButton.addEventListener('click', function() {
         closeEditModal();
     });
-
-    // Handle form submission
-    editForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        // Here you can handle form submission
-        // Retrieve new name and username values from inputs
-        const newName = document.getElementById('name').value;
-        const newUsername = document.getElementById('username').value;
-        // Perform actions to update profile with the new values
-        // Close the modal after successful submission or perform relevant actions
-        closeEditModal();
-    });
 });

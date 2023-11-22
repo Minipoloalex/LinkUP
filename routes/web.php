@@ -81,5 +81,6 @@ Route::controller(ProfileController::class)->group(function () {
 
     Route::get('/api/post/search/{search}', 'search');
 });*/
+
 Route::get('/profile/{username}', [UserController::class, 'show'])->name('profile.show');
-Route::put('/profile/{id}', [ProfileController::class, 'update'])->name('profile.update');
+Route::post('/profile', [UserController::class, 'update'])->name('profile.update');

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
-
-
 
 class UserController extends Controller
 {
@@ -14,23 +13,23 @@ class UserController extends Controller
     {
         $user = User::where('username', $username)->firstOrFail();
 
-        return view('pages.profile', compact('user'));
+        return view('pages.profile', ['user' => $user]);
+    } 
 
-    }   
-
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        // Find the user by ID
-        $user = User::find($id);
+        $user = Auth::user();
 
-        // Update user data with the new values from the form
-        $user->name = $request->input('name');
-        $user->username = $request->input('username');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'nullable|string|max:255',
+        ]);
 
-        // Save the updated user
-        $user->save();
+        $user->update([
+            'name' => $request->name,
+            'username' => $request->username,
+        ]);
 
-        // Redirect to a success page or back to the profile page
         return redirect()->route('profile.show', ['username' => $user->username]);
     }
 }
