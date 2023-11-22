@@ -44,7 +44,6 @@ function handlerFileInput(fileInputWrapper) {
     });
     uploadFileBtn.addEventListener('click', (event) => {
         event.preventDefault();
-        console.log('clicked button to upload file');
         fileInput.click();
     });
 }
