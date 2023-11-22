@@ -19,7 +19,6 @@
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
     <script type="module" src={{ url('js/app.js') }} defer></script>
-    <script type="module" src={{ url('js/auth.js') }} defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
