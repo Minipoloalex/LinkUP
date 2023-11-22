@@ -9,6 +9,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <!-- font awesome -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> -->
+
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
@@ -30,6 +34,7 @@
     <script type="text/javascript" src={{ url('js/search.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/edit_post.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/add_post.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/edit_profile.js') }} defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
@@ -38,5 +43,4 @@
     @include('partials.header')
     @yield('content')
 </body>
-
 </html>

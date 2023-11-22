@@ -3,6 +3,7 @@
   @include('partials.profile.edit-profile')
    
   <!-- create a div for the profile image in the center of the card circle shape -->
+
   <div class="profile-image flex flex-row justify-center mt-6">
     <img class="w-32 h-32 rounded-full" src="{{ url('images/profile.png') }}" alt="Profile">
   </div> 

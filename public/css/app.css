@@ -52,7 +52,7 @@ body {
     position: absolute;
     right: 1rem;
     margin-left: 2rem;
-    color: #2196F3;
+    color: var(--feup-color);
     transition: opacity 0.2s ease-in-out;
     opacity: 1;
     border: none;
@@ -76,27 +76,28 @@ body {
     opacity: 0;
   }
 
-.search-bar input:focus, .search-button:focus {
+.search-bar input:focus, button:focus {
   outline: none;
   border: none;
 }
 
-.search-button {
+button {
   color: white;
   border: none;
-  margin-left: 0.5rem;
+  margin-left: 1rem;
   background-color: transparent;
 }
 
-.search-button:hover{
+button:hover{
   background-color: transparent;
+  color: var(--feup-color);
 }
 
-.search-button:clicked{
+button:clicked{
   background-color: transparent;
 }
   
-.search-button:not(:active) {
+button:not(:active) {
   background-color: transparent;
 }
 
@@ -156,10 +157,73 @@ body {
 }
 
   /* column 2 first div */
-  .column-2 div:first-child {
+  .profile {
     /* put div first element in center and middle */
- 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
+
+  .profile img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    /* image is a circle */
+    object-fit: cover;
+  }
+
+  /* The Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7); /* Dark background color with transparency */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* Close button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+  .edit-profile {
+    width: 100%;
+    /* put content in center and right of div */
+    display: flex;
+    justify-content: right;
+    align-items: center;
+
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+  }
+
 
   .edit-button {
     /* put content in center and right of div */
@@ -174,20 +238,171 @@ body {
     cursor: pointer;
 
   }
+
   
-  .edit-button i {
+  
+
+  .name-username {
+    /* put content in center and right of div and separate the elements*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    
+
+
+  }
+
+  /* name-username first child */
+  .name-username :first-child {
+    font-weight: bold;
+  }
+  
+
+  .name-username p{
     color: white;
-    font-size: 1.5rem;
+    font-size: 2rem;
+    margin-right: 1rem;
   }
 
-  .edit-button:hover {
-    background-color: transparent;
+
+  .profile-numbers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
   }
 
-  .edit-button i:hover {
+  .profile-numbers div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
 
+  .profile-numbers div p {
+    color: white;
+    font-size: 2rem;
+    margin-right: 1rem;
+  }
+
+  .profile-numbers div p:first-child {
+    font-weight: bold;
+  }
+
+  .bio {
+    text-align: left;
+    color: white;
+  }
+  
+
+  .post {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .profile-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    /* cover all the div */
+    object-fit: cover;
+    
+  }
+  
+  .post-info {
+    margin-left: 10px;
+
+  }
+  
+  .post-username {
+    font-weight: bold;
+  }
+  
+  .post-timestamp {
+    color: #999;
+  }
+  
+  .post-content {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    
+  }
+  
+  .post-image {
+    /*put image in center */
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+    flex-direction: column;
+  }
+  
+  .post-actions {
+    display: flex;
+
+  }
+  
+  .post-action {
+    margin-right: 10px;
+    cursor: pointer;
+    border: none;
+  }
+
+  .post-actions :hover {
     color: var(--feup-color);
   }
+  
+  .post-comments {
+    margin-top: 10px;
+  }
+  
+  .comment {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .commenter-picture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  
+  .comment-info {
+    margin-left: 10px;
+  }
+  
+  .comment-username {
+    font-weight: bold;
+  }
+  
+  .comment-timestamp {
+    color: #999;
+  }
+  
+  .comment-text {
+    margin-top: 5px;
+  }
+
+  .write-comment button {
+    
+  }
+
+
+  
   
 
   .column-2 div {
@@ -195,11 +410,12 @@ body {
     border-radius: 3rem;
     font-size: 2rem;
     
-    border-right: 1px solid #ccc;
     padding: 1rem;
     overflow: auto;
     margin-bottom: 1rem;
   }
+
+  
   
 
 .hidden {
@@ -214,6 +430,11 @@ body {
     padding: 1rem;
     overflow: auto;
     margin: 2rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     
   }
   
