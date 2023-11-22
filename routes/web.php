@@ -48,14 +48,16 @@ Route::controller(RegisterController::class)->group(function () {
 Route::prefix('/admin')->name('admin.')->group(function () {
     Route::redirect('/', '/admin/login');
 
-    Route::get('/login', [AdminLoginController::class, 'show'])->name('login');
+    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminLoginController::class, 'authenticate']);
     Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'index'])->name('home');
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
+        Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
+        Route::post('/create', [AdminController::class, 'createAdmin']);
     });
 });
 

@@ -14,7 +14,7 @@ use App\Models\Admin;
 
 class AdminLoginController extends Controller 
 {
-    protected function show()
+    protected function showLoginForm()
     {
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');
