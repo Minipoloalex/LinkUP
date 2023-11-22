@@ -68,10 +68,8 @@ make posts added by Javascript be easier to create there, by decoupling the CSS 
 }
 
 .post-info .post-footer {
-    grid-row-start: 3;
-    grid-column-start: 1;
-    column-span: 3;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
 }
 
@@ -91,5 +89,4 @@ make posts added by Javascript be easier to create there, by decoupling the CSS 
     background-color: var(--bg-gray-300);
     margin: 1.25rem;
     padding: 1.25rem;
-    /* bg-gray-300 m-5 p-5 */
 }

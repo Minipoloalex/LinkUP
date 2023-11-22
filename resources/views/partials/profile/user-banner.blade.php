@@ -1,8 +1,6 @@
 <div class="w-full flex flex-col content-center justify-start border border-grey-300 border-solid">
 
   @include('partials.profile.edit-profile')
-   
-  <!-- create a div with content in center -->
   <div class="profile-image flex flex-row justify-center mt-6">
     <img class="w-32 h-32 rounded-full" src="{{ url('images/profile.png') }}" alt="Profile">
   </div> 

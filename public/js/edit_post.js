@@ -41,11 +41,8 @@ async function submitEditPost(event) {  // submitted the form
     const textField = getTextField(form);
     const newContent = textField.value;
 
-    const response = await submitEditPostOrComment(form, {'content': newContent}, postId);
-    if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-    
+    const data = await submitEditPostOrComment(form, {'content': newContent}, postId);
+    if (data != null) {
         const postContentElement = post.querySelector('.post-content');
         postContentElement.textContent = newContent;
         toggleEdit(postContentElement, form, textField);
@@ -56,10 +53,6 @@ async function submitEditPost(event) {  // submitted the form
             addImageContainer(postContentElement, postId);
         }
         
-    }
-    else {
-        console.log('Error: ', response.status);
-        // show error message to user
     }
 }
 

@@ -26,11 +26,11 @@ use App\Http\Controllers\Admin\AdminLoginController;
 */
 
 // Root
-Route::redirect('/', '/login');
+Route::redirect('/', '/home');
 
-Route::controller(HomeController::class)->group(function () {
-    Route::get('/home', 'index')->name('home');
-}); // middleware('auth') ???
+Route::get('/home', function() {
+    return view('pages.home');
+})->name('home');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -74,10 +74,6 @@ Route::controller(PostController::class)->group(function () {
 
     Route::get('/search', 'searchResults');
 });
-
-// Route::get('/search', function () {
-//     return view('pages.search');
-// })->name('search');
 
 // profile page
 

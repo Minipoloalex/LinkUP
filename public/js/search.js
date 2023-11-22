@@ -12,22 +12,16 @@ async function updateSearchResults(event) {
     event.preventDefault();
     const searchForm = getSearchForm();
     const searchValue = searchForm.querySelector('#search-text').value;
-    const response = await sendAjaxRequest('get', `/api/post/search/${searchValue}`);
-    if (response.ok) {
-        const data = await response.json();
+    const data = await sendAjaxRequest('get', `/api/post/search/${searchValue}`);
+    if (data != null) {
         resultsContainer.innerHTML = '';
 
-        console.log(data);
         data.forEach(element => {
-            addPostToDom(resultsContainer, element, false);
+            addPostToDOM(resultsContainer, element, false);
         });
         if (data.length == 0) {
             resultsContainer.innerHTML = '<p class="flex justify-center">No results found</p>';
         }
         searchForm.reset();     // clear the search bar
-    }
-    else {
-        // display error message to user
-        console.log('Error fetching search results');
     }
 }

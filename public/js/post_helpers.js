@@ -13,13 +13,14 @@ async function submitDataPostOrComment(form, data, url, method) {
             formData.append(key, data[key]);
         }
         formData.append('media', file[0]);
-        return await fetch(url, {
+        const response = await fetch(url, {
             method: method,
             headers: {
                 'X-CSRF-TOKEN': getCsrfToken(),
             },
             body: formData
         });
+        return handleFeedbackToResponse(response);
     }
     return await sendAjaxRequest(method, url, data);
 }
@@ -66,12 +67,9 @@ async function deleteImage(event) {
         const postId = button.dataset.id;
         
         const imageContainer = button.closest('.image-container');
-        const response = await sendAjaxRequest('delete', `/post/${postId}/image`);
-        if (response.ok) {
+        const data = await sendAjaxRequest('delete', `/post/${postId}/image`);
+        if (data != null) {
             imageContainer.remove();
-        }
-        else {
-            console.log('Error: ', response.status);
         }
     }
 }
@@ -104,8 +102,8 @@ function buildPostInfo(postJson, editable) {
         <header>
             <div class="user-date">
                 <img class="user-image" src="/images/profile.png" alt="User photo">
-                <a href="/profile/${postJson.created_by.username}">${postJson.created_by.username}</a>
-                <span class="date">${postJson.created_at}</span>
+                <a class="post-info-user"></a>
+                <span class="date"></span>
             </div>
             ${editable ? `
                 <div class="edit-delete-post">
@@ -136,7 +134,25 @@ function buildPostInfo(postJson, editable) {
         </div>
     `;
     // avoid XSS
-    postInfo.querySelector('.post-info-user').textContent = postJson.created_by.username;
+    const postInfoUser = postInfo.querySelector('.post-info-user');
+    postInfoUser.textContent = postJson.created_by.username;
+    postInfoUser.href = `/profile/${postJson.created_by.username}`;
+
+    const postInfoDate = postInfo.querySelector('.user-date .date');
+    postInfoDate.textContent = postJson.created_at;
+    if (postJson.created_at == null) {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}`;
+        postInfoDate.textContent = formattedDate;
+    }
+    
+    
+    
+
     postInfo.querySelector('.post-content').textContent = postJson.content;
 
     if (editable) {
@@ -195,3 +211,7 @@ function addCommentToDOM(container, commentJson) {
     container.appendChild(comment);
 }
 
+function addPostToDOM(container, postJson, editable) {
+    const post = buildPost(postJson, false, editable);
+    container.appendChild(post);
+}
