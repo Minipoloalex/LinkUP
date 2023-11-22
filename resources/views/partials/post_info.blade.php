@@ -1,5 +1,5 @@
 @php
-    $editable = $post->isCreatedByCurrentUser();
+    $editable = $showEdit && $post->isCreatedByCurrentUser();
 @endphp
 <div class="post-info">
     <header>

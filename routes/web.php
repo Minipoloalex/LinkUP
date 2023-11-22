@@ -69,11 +69,13 @@ Route::controller(PostController::class)->group(function () {
     Route::delete('/post/{id}/image', 'deleteImage');
 
     Route::put('/post/{id}', 'update');
+
+    Route::get('/search', 'searchResults');
 });
 
-Route::get('/search', function () {
-    return view('pages.search');
-})->name('search');
+// Route::get('/search', function () {
+//     return view('pages.search');
+// })->name('search');
 
 // profile page
 Route::get('/profile/{email}', [UserController::class, 'show'])->name('profile');
