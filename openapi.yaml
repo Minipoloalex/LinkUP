@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 
 info:
     version: '1.0'
@@ -7,16 +7,17 @@ info:
 
 
 servers:
-    - url: https://lbaw2351.lbaw.fe.up.pt/
+    - 
+        url: 'https://lbaw2351.lbaw.fe.up.pt/'
         description: 'Production server'
 
 tags:
     - name: 'M01: Authentication and Individual profile'
-    - name: 'M02:' Groups and group profiles
-    - name: 'M03:' Posts
-    - name: 'M04:' Notifications
-    - name: 'M05:' Search for content
-    - name: 'M06:' User administration and static pages
+    - name: 'M02: Groups and group profiles'
+    - name: 'M03: Posts'
+    - name: 'M04: Notifications'
+    - name: 'M05: Search for content'
+    - name: 'M06: User administration and static pages'
     
 paths:
     /login:
@@ -24,7 +25,7 @@ paths:
             operationID: R101
             summary: 'R101: Login page'
             description: 'Provide the login page (form). Access: PUB'
-            tags: <authentication tag>
+            tags: ['M01: Authentication and Individual profile']
             responses:
                 '200':
                     description: 'OK. Provide requested page.'
@@ -418,25 +419,25 @@ paths:
                                         id_parent: 1
                 '403':
                     description: 'User is not authenticated or cannot access the post'
-                 /search:
-    get:
-        operationId: R309
-        summary: 'R309: Search for content'
-        description: 'Search for posts. Access: PUB, USR'
-        tags:
-            - 'M05: Search'
-        parameters:
-            - in: query
-            name: query
-            schema:
-                type: string
-            required: true
-            description: 'The search query'
-        responses:
-            '200':
-                description: 'OK. Show page results of search query'
-            '403':
-                description: 'User is not authenticated'
+    /search:
+        get:
+            operationId: R309
+            summary: 'R309: Search for content'
+            description: 'Search for posts. Access: PUB, USR'
+            tags:
+                - 'M05: Search'
+            parameters:
+                  - in: path
+                    name: query
+                    schema:
+                        type: string
+                    required: true
+                    description: 'The search query'
+            responses:
+                '200':
+                    description: 'OK. Show page results of search query'
+                '403':
+                    description: 'User is not authenticated'
 
     /api:
         /posts/search/{query}:
@@ -447,11 +448,11 @@ paths:
                 tags:
                     - 'M05: Search for content'
                 parameters:
-                    - in: path
-                    name: query
-                    schema:
-                        type: string
-                    required: true
+                      - in: path
+                        name: query
+                        schema:
+                            type: string
+                        required: true
                 responses:
                     '200':
                         description: 'OK. Show search results.'
@@ -489,10 +490,10 @@ paths:
                         - 'M03: Posts'
                     parameters:
                         - in: path
-                        name: date
-                        required: true
-                        description: 'The date in the format YYYY-MM-DD'
-                        schema:
+                          name: date
+                          required: true
+                          description: 'The date in the format YYYY-MM-DD'
+                          schema:
                             type: string
                             format: date
                     responses:
@@ -525,58 +526,6 @@ paths:
                             description: 'Bad Request. Invalid date format or missing parameter'
                         '403':
                             description: 'User is not authenticated or does not have permission to access posts'
-                            
-    
-    /profile/{username}:
-        get:
-            operationId: R112
-            summary: 'R112: View Profile'
-            description: 'Show the details of a specific user profile. Access: PUB, USR'
-            tags:
-                - 'M01: Authentication and Individual profile'
-            parameters:
-                - in: path
-                  name: username
-                  schema:
-                    type: string
-                  required: true
-            responses:
-                '200':
-                    description: 'OK. Show user profile details.'
-    
-    /profile:
-        post:
-            operationId: R113
-            summary: 'R113: Update Profile'
-            description: 'Update an existing user profile. Access: USR'
-            tags:
-                - 'M01: Authentication and Individual profile'
-            parameters:
-                - in: path
-                  name: username
-                  schema:
-                    type: string
-                  required: true
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            type: object
-                            properties:
-                                name:
-                                    type: string
-                                    description: 'Updated name of the user'
-                                descripiton:
-                                    type: string
-                                    description: 'Updated description of the user'
-                                required:
-                                    - name
-                                    - email
-                                    - password
-            responses:
-                '200':
-                    description: 'OK. User profile updated successfully.'
 
     /admin:
         /login:
