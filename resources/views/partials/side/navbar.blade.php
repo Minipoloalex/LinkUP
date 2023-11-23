@@ -14,6 +14,12 @@
             <a href="{{ url('/settings') }}">Settings</a>
         </div>
         <div class="flex py-2 text-xl">
+            <a href="{{ url('/about') }}">About Us</a>
+        </div>
+        <div class="flex py-2 text-xl">
+            <a href="{{ url('/contact') }}">Contact</a>
+        </div>
+        <div class="flex py-2 text-xl">
             <img class="w-8 h-8 rounded-full" src="{{ url('images/users/icons/' . Auth::user()->id . '.png') }}"
                 alt="User Icon">
             <a href="{{ url('/profile/' . Auth::user()->username) }}" class="ml-3">

@@ -100,3 +100,12 @@ Route::controller(ProfileController::class)->group(function () {
 Route::get('/profile/{username}', [UserController::class, 'show'])->name('profile.show');
 Route::post('/profile', [UserController::class, 'update'])->name('profile.update');
 
+/* route for about us page */
+Route::get('/about', function() {
+    return view('pages.about');
+})->name('about');
+
+/* route for contact us page */
+Route::get('/contact', function() {
+    return view('pages.contact');
+})->name('contact');
