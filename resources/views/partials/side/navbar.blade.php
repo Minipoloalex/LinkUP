@@ -4,7 +4,9 @@
 @else
 <nav class="col-span-1 w-52 flex content-center justify-self-end border-r border-gray-300 border-solid" id="navbar">
     <div class="flex flex-col content-center justify-self-end py-16">
-        <div class="flex py-2 text-xl">
+        <!-- crate a div that on hover, color of texts becomes dark orange -->
+
+        <div class="flex py-2 text-xl text-purple-50">
             <a href="{{ url('/home') }}">Home</a>
         </div>
         <div class="flex py-2 text-xl">

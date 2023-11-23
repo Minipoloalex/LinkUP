@@ -13,79 +13,19 @@ body {
   display: flex;
   flex-direction: column;
 }
-  main > header {
-    
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: transparent;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem; /* Add margin to separate the header from the content */
-    /* i want the header to have more margin on all sides */
-    margin-left: 5rem;
-    margin-right: 5rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-
-}
-
-  main > header a.button {
-    margin: 1em;
-    justify-self: center;
-  }
+ 
 
 
 
-  .search-bar {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 300px;
-    margin-right: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 3rem;
-    background-color: #ccc;
-  }
+
   
-  #searchIcon {
-    position: absolute;
-    right: 1rem;
-    margin-left: 2rem;
-    color: var(--feup-color);
-    transition: opacity 0.2s ease-in-out;
-    opacity: 1;
-    border: none;
-  }
-  
-  .search-bar input {
-    width: 100%;
-    padding: 0.5rem;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    position: relative;
-  }
-  
-  .search-bar input:focus {
-    border: 1px solid grey;
-  }
-  
-  /* Hide the search icon when text is entered */
-  .search-bar input:not(:empty) ~ #searchIcon {
-    opacity: 0;
-  }
 
-.search-bar input:focus, button:focus {
-  outline: none;
-  border: none;
-}
-
-button {
-  margin-left: 1rem;
-}
 
 button:hover{
+  color: var(--feup-color);
+}
+
+a:hover{
   color: var(--feup-color);
 }
 
@@ -98,88 +38,15 @@ button:not(:active) {
 
 
 
-  #content > form input {
-    background-color: white;
-  }
 
 
 
-  .columns {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    border-radius: 0.5rem;
-  }
-
-  
-  
-  .column-1 {
-    background-color: var(--column-color);
-    border-radius: 3rem;
-    font-size: 2rem;
-    width: 20%;
-    padding: 1rem;
-    overflow: auto;
-    margin: 2rem;
-  }
 
 
-.column-1 ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
 
-.column-1 li {
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  margin: 2rem;
-}
 
-.column-1 li:hover {
-  color: white;
-  font-weight: bold;
-}
-  
-.column-2 {
-  border-radius: 3rem;
-  font-size: 2rem;
-  width: 60%;
-  padding: 1rem;
-  overflow: auto;
-  margin: 2rem;
-}
 
-  /* column 2 first div */
-  .profile {
-    /* put div first element in center and middle */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
 
-  .profile img {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    /* image is a circle */
-    object-fit: cover;
-  }
-
-  /* The Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.7); /* Dark background color with transparency */
-}
 
 /* Modal Content */
 .modal-content {
@@ -206,90 +73,6 @@ button:not(:active) {
 }
 
 
-  .edit-profile {
-    width: 100%;
-    /* put content in center and right of div */
-    display: flex;
-    justify-content: right;
-    align-items: center;
-
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-
-  }
-
-
-  .edit-button {
-    /* put content in center and right of div */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    float: right;
-    margin-right: 2rem;
-  
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-
-  }
-
-  
-  
-
-  .name-username {
-    /* put content in center and right of div and separate the elements*/
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    
-
-
-  }
-
-  /* name-username first child */
-  .name-username :first-child {
-    font-weight: bold;
-  }
-  
-
-  .name-username p{
-    color: white;
-    font-size: 2rem;
-    margin-right: 1rem;
-  }
-
-
-  .profile-numbers {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-  }
-
-  .profile-numbers div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-  }
-
-  .profile-numbers div p {
-    color: white;
-    font-size: 2rem;
-    margin-right: 1rem;
-  }
-
-  .profile-numbers div p:first-child {
-    font-weight: bold;
-  }
-
-  .bio {
-    text-align: left;
-    color: white;
-  }
-  
 
   .post {
     border: 1px solid #ccc;
@@ -397,47 +180,6 @@ button:not(:active) {
   }
 
 
-  
-  
-
-  .column-2 div {
-    background-color: rgb(56, 56, 56);
-    border-radius: 3rem;
-    font-size: 2rem;
-    
-    padding: 1rem;
-    overflow: auto;
-    margin-bottom: 1rem;
-  }
-
-  
-  
-
-.hidden {
-  display: none;
-}
-  .column-3 {
-    background-color: var(--column-color);
-    border-radius: 3rem;
-    font-size: 2rem;
-    width: 20%;
-    border-right: 1px solid #ccc;
-    padding: 1rem;
-    overflow: auto;
-    margin: 2rem;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    
-  }
-  
-  .column-3 div {
-    padding: 1rem;
-  }
-  
-  
 
 /* Responsive styles for the header */
 @media (max-width: 768px) {
@@ -456,9 +198,6 @@ button:not(:active) {
     border-radius: 0.25rem;
   }
 
-  #searchIcon {
-    margin-left: 1rem;
-  }
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
