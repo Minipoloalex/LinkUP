@@ -51,4 +51,9 @@ class UserController extends Controller
 
         return redirect()->back()->with('success', 'Profile updated successfully!');    
     }
+    public function viewProfilePicture(string $id)
+    {
+        $user = User::findOrFail($id);
+        return $this->imageController->getFileResponse($user->photo);
+    }
 }

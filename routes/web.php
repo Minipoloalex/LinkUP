@@ -81,4 +81,5 @@ Route::controller(PostController::class)->group(function () {
 Route::controller(UserController::class)->group(function() {
     Route::get('/profile/{username}', 'show')->name('profile.show');
     Route::post('/profile', 'update')->name('profile.update');
+    Route::get('/profile/photo/{id}', 'viewProfilePicture');
 });

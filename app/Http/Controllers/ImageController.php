@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class ImageController extends Controller
 {
+    static protected $default = 'def.jpg';
     static protected $pathUsers = "public/images/users/";
     static protected $pathPosts = "images/";
     protected string $path = "";
@@ -49,11 +50,14 @@ class ImageController extends Controller
     }
     public function getFile(?string $fileName)
     {
-        if ($fileName == null) {
-            $fileName = 'def.jpg';
-        }
+        $fileName ??= self::$default;
         if (!$this->existsFile($fileName)) {
-            abort(404);
+            if ($fileName == self::$default) {
+                abort(404);
+            }
+            else {
+                return $this->getFile(self::$default);
+            }
         }
         $filePath = Storage::url($this->getFilePath($fileName));
         
@@ -61,8 +65,14 @@ class ImageController extends Controller
     }
     public function getFileResponse(string $fileName)
     {
+        $fileName ??= self::$default;
         if (!$this->existsFile($fileName)) {
-            abort(404);
+            if ($fileName == self::$default) {
+                abort(404);
+            }
+            else {
+                return $this->getFileResponse(self::$default);
+            }
         }
         $filePath = $this->getFilePath($fileName);
         return Storage::response($filePath);
