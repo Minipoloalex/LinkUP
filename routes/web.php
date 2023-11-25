@@ -82,4 +82,5 @@ Route::controller(UserController::class)->group(function() {
     Route::get('/profile/{username}', 'show')->name('profile.show');
     Route::post('/profile', 'update')->name('profile.update');
     Route::get('/profile/photo/{id}', 'viewProfilePicture');
+    Route::get('/profile/network/{username}', 'viewNetworkPage')->name('profile.network');
 });

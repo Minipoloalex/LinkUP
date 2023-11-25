@@ -76,7 +76,7 @@ body {
     opacity: 0;
   }
 
-.search-bar input:focus, button:focus {
+.search-bar input:focus, .search-bar button:focus {
   outline: none;
   border: none;
 }

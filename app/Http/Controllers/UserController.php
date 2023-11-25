@@ -56,4 +56,10 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         return $this->imageController->getFileResponse($user->photo);
     }
+    public function viewNetworkPage(string $username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+
+        return view('pages.network', ['user' => $user]);
+    }
 }

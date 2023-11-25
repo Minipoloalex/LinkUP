@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Http\Controllers\ImageController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -58,14 +59,14 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'id_created_by');
     }
 
-    protected function followers() : HasMany
+    protected function followers() : BelongsToMany
     {
-        return $this->hasMany(Follow::class, 'id_followed');
+        return $this->belongsToMany(User::class, 'follows', 'id_user', 'id_followed')->orderBy('username');
     }
 
-    protected function following() : HasMany
+    protected function following() : BelongsToMany
     {
-        return $this->hasMany(Follow::class, 'id_user');
+        return $this->belongsToMany(User::class, 'follows', 'id_followed', 'id_user')->orderBy('username');
     }
 
     protected function groups() : HasMany
