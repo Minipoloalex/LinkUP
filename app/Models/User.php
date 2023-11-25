@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -54,19 +55,19 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected function posts() : HasMany
+    public function posts() : HasMany
     {
         return $this->hasMany(Post::class, 'id_created_by');
     }
 
-    protected function followers() : BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'follows', 'id_user', 'id_followed')->orderBy('username');
-    }
-
-    protected function following() : BelongsToMany
+    public function followers() : BelongsToMany
     {
         return $this->belongsToMany(User::class, 'follows', 'id_followed', 'id_user')->orderBy('username');
+    }
+
+    public function following() : BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'id_user', 'id_followed')->orderBy('username');
     }
 
     protected function groups() : HasMany

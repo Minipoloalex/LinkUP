@@ -83,4 +83,7 @@ Route::controller(UserController::class)->group(function() {
     Route::post('/profile', 'update')->name('profile.update');
     Route::get('/profile/photo/{id}', 'viewProfilePicture');
     Route::get('/profile/network/{username}', 'viewNetworkPage')->name('profile.network');
+
+    Route::delete('/follower/{id}', 'removeFollower');
+    Route::delete('/following/{id}', 'removeFollowing');
 });

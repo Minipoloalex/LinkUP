@@ -62,4 +62,36 @@ class UserController extends Controller
 
         return view('pages.network', ['user' => $user]);
     }
+
+    public function removeFollower(string $id)
+    {
+        $this->authorize('update', User::class);
+        $user = Auth::user();
+
+        $follower = User::findOrFail($id);
+        $user->followers()->detach($follower->id);
+
+        $follower->success = "$follower->username removed from follower list successfully!";
+        return response()->json($follower);
+    }
+    public function removeFollowing(string $id)
+    {
+        $this->authorize('update', User::class);
+        $user = Auth::user();
+
+        $following = User::findOrFail($id);
+        $user->following()->detach($following->id);
+
+        $following->success = "$following->username removed from following list successfully!";
+        return response()->json($following);
+    }
+    // public function addFollowing(string $id)
+    // {
+    //     $this->authorize('update', User::class);
+    //     $user = Auth::user();
+    //     $following = User::findOrFail($id);
+    //     $user->following()->attach($following->id);
+    //     $following->success = "$following->username added to following list successfully!";
+    //     return $user;
+    // }
 }
