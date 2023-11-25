@@ -8,9 +8,16 @@ use Illuminate\Support\Facades\Auth;
 use App\Policies\PostPolicy;
 use Illuminate\Http\JsonResponse;
 use Log;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ImageController;
 
 class PostController extends Controller
 {
+    private $imageController;
+    public function __construct()
+    {
+        $this->imageController = new ImageController('posts');
+    }
     public function storePost(Request $request)
     {
         if (!Auth::check()) {
@@ -23,6 +30,7 @@ class PostController extends Controller
             'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
         ]);
         $this->authorize('createPost', Post::class);  // user must be logged in
+        DB::beginTransaction();
         $post = new Post();
 
         $post->content = $request->input('content');
@@ -33,6 +41,7 @@ class PostController extends Controller
         $post->save();  // get the post id to make file name unique
 
         $this->setFileName($request, $post);
+        DB::commit();
 
         $post->load('createdBy', 'comments', 'likes');
         
@@ -174,10 +183,10 @@ class PostController extends Controller
         $this->authorize('view', $post);
 
         $fileName = $post->media;
-        if (!ImageController::existsFile($fileName)) {
+        if (!$this->imageController->existsFile($fileName)) {
             abort(404);
         }
-        return ImageController::getFile($fileName);
+        return $this->imageController->getFileResponse($fileName);
     }
     public function deleteImage(string $id)
     {
@@ -194,7 +203,7 @@ class PostController extends Controller
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
             $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
-            ImageController::store($request->media, $fileName);
+            $this->imageController->store($request->media, $fileName);
             $post->media = $fileName;
             $post->save();
         }
@@ -202,7 +211,7 @@ class PostController extends Controller
     private function deleteFile(?string $fileName)
     {
         if ($fileName != null) {
-            ImageController::delete($fileName);
+            $this->imageController->delete($fileName);
         }
     }
     /**

@@ -77,26 +77,8 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/search', 'searchResults');
 });
 
-// profile page
-
-/*
-Route::controller(ProfileController::class)->group(function () {
-    Route::get('/profile/{id}', 'show')->name('user');
-    Route::get('/profile/{id}/username', 'viewUsername')->name('post.username');
-    Route::get('/profile/{id}/description', 'viewDescription')->name('post.description');
-    Route::get('/profile/{id}/image', 'viewPhoto')->name('post.photo');
-
-    Route::post('/profile', 'storePost');
-    Route::post('/comment', 'storeComment');
-
-    // Route::delete('/comment/{id}', 'delete');
-    Route::delete('/profile/{id}', 'delete');
-
-    Route::put('/profile/{id}', 'update');
-
-    Route::get('/api/post/search/{search}', 'search');
-});*/
-
-Route::get('/profile/{username}', [UserController::class, 'show'])->name('profile.show');
-Route::post('/profile', [UserController::class, 'update'])->name('profile.update');
-
+// Profile page
+Route::controller(UserController::class)->group(function() {
+    Route::get('/profile/{username}', 'show')->name('profile.show');
+    Route::post('/profile', 'update')->name('profile.update');
+});

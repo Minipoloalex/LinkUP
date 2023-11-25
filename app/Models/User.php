@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\Controllers\ImageController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -69,5 +71,10 @@ class User extends Authenticatable
     protected function groups() : HasMany
     {
         return $this->hasMany(GroupMember::class, 'id_user');
+    }
+    public function getProfilePicture()
+    {
+        $imageController = new ImageController('users');
+        return $imageController->getFile($this->photo);
     }
 }

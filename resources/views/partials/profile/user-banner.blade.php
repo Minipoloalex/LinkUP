@@ -2,8 +2,8 @@
 
   @include('partials.profile.edit-profile')
   <div class="profile-image flex flex-row justify-center mt-6">
-    <img class="w-32 h-32 rounded-full" src="{{ url('images/profile.png') }}" alt="Profile">
-  </div> 
+    <img class="w-32 h-32 rounded-full" src="{{ $user->getProfilePicture() }}" alt="Profile Picture">
+  </div>
   <div class="profile-info text-center mt-2"> 
     <p class="profile-name text-xl font-bold py-2">{{ $user->name }}</p> 
     <p class="profile-username text-gray-700">{{ $user->username }}</p>
