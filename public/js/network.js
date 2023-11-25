@@ -53,6 +53,14 @@ async function deleteFollowGeneral(type, event) {
         if (data != null) {
             const userArticle = button.closest('article');
             userArticle.remove();
+            switch (type) {
+                case 'follower':
+                    decrementCount(followersButton);
+                    break;
+                case 'following':
+                    decrementCount(followingButton);
+                    break;
+            }
         }
     }
 }
@@ -61,6 +69,9 @@ async function deleteFollower(event) {
 }
 async function deleteFollowing(event) {
     deleteFollowGeneral('following', event);
+}
+function decrementCount(element) {
+    element.textContent = parseInt(element.textContent) - 1;
 }
 // async function addFollow(event) {
 //     event.preventDefault();

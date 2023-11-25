@@ -8,7 +8,7 @@
     </a>
     @auth
         @if ($editable)
-            <button data-id="{{ $user->id }}" data-username="{{ $user->username }}" class="delete-{{$type}} justify-end">X</button>
+            <button data-id="{{ $user->id }}" data-username="{{ $user->username }}" class="delete-{{$type}} justify-end p-2">X</button>
         @endif
     @endauth
 </article>
