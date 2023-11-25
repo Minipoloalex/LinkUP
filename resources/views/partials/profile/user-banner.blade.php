@@ -1,6 +1,8 @@
 <div class="w-full flex flex-col content-center justify-start border border-grey-300 border-solid">
 
-  @include('partials.profile.edit-profile')
+  @auth
+    @include('partials.profile.edit-profile')
+  @endauth
   <div class="profile-image flex flex-row justify-center mt-6">
     <img class="w-32 h-32 rounded-full" src="{{ $user->getProfilePicture() }}" alt="Profile Picture">
   </div>
