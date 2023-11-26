@@ -16,11 +16,8 @@ if (network) {
     const deleteFollowingButtons = network.querySelectorAll('.delete-following');
     deleteFollowingButtons.forEach(but => but.addEventListener('click', deleteFollowing));
 
-    const deleteFollowerButton = network.querySelectorAll('.delete-follower') ?? [];
+    const deleteFollowerButton = network.querySelectorAll('.delete-follower');
     deleteFollowerButton.forEach(but => but.addEventListener('click', deleteFollower));
-        
-    const addFollowButtons = document.querySelectorAll('.add-follow');  // on profile page
-    addFollowButtons.forEach(but => but.addEventListener('click', addFollow));
 }
 
 function getFollowersList(container) {
@@ -76,51 +73,10 @@ async function deleteFollower(event) {
 async function deleteFollowing(event) {
     deleteFollowGeneral('following', event);
 }
+
 function decrementCount(element) {
     element.textContent = parseInt(element.textContent) - 1;
 }
-// async function addFollow(event) {
-//     event.preventDefault();
-//     const button = event.currentTarget;
-//     const userId = button.dataset.id;
-//     const data = await sendAjaxRequest('POST', `/following/add/`, {userId: userId});
-//     if (data != null) {
-//         const followingNumber = document.querySelector('#following-number');
-//         followingNumber.textContent = parseInt(followingNumber.textContent) + 1;
-//     }
-// }
-async function requestToFollow(event) {
-    event.preventDefault();
-    const button = event.currentTarget;
-    const userId = button.dataset.id;
-    const data = await sendAjaxRequest('POST', `/following/add/`, {userId: userId});
-    showRequestedToFollow(button);
-    if (data != null) {
-        const followingNumber = document.querySelector('#following-number');
-        followingNumber.textContent = parseInt(followingNumber.textContent) + 1;
-    }
-    else {
-        showFollowButton(button);
-    }
-}
-function showFollowButton(followButton, requestedButton, unfollowButton) {
-    show(followButton);
-    hide(requestedButton);
-    hide(unfollowButton);
-}
-function showRequestedToFollow(followButton, requestedButton, unfollowButton) {
-    hide(followButton);
-    show(requestedButton);
-    hide(unfollowButton);
-}
-function showUnfollowButton(followButton, requestedButton, unfollowButton) {
-    hide(followButton);
-    hide(requestedButton);
-    show(unfollowButton);
-}
-function hide(element) {
-    button.classList.add('hidden');
-}
-function show(element) {
-    button.classList.remove('hidden');
+function incrementCount(element) {
+    element.textContent = parseInt(element.textContent) + 1;
 }

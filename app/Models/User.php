@@ -69,7 +69,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'follows', 'id_user', 'id_followed')->orderBy('username');
     }
-    public function isFollowing($user) : bool
+    public function isFollowing(User $user) : bool
     {
         return $this->following()->where('id_followed', $user->id)->exists();
     }
@@ -82,5 +82,17 @@ class User extends Authenticatable
     {
         $imageController = new ImageController('users');
         return $imageController->getFile($this->photo);
+    }
+    public function followRequestsReceived() : HasMany
+    {
+        return $this->hasMany(FollowRequest::class, 'id_user_to');
+    }
+    public function followRequestsSent() : HasMany
+    {
+        return $this->hasMany(FollowRequest::class, 'id_user_from');
+    }
+    public function hasFollowRequestPending(User $user) : bool
+    {
+        return $this->followRequestsReceived()->where('id_user_from', $user->id)->exists();
     }
 }

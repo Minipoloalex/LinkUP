@@ -6,12 +6,15 @@
       <div id="follow-actions" class="flex flex-row-reverse m-4">
         @php
           $follows = Auth::user()->isFollowing($user);
-          $follows_class = $follows ? 'hidden' : '';
-          $unfollows_class = $follows ? '' : 'hidden';
+          $pending = Auth::user()->hasFollowRequestPending($user);
+
+          $follows_button = !$pending && !$follows ? '' : 'hidden';
+          $sent_button = $pending ? '' : 'hidden';
+          $unfollows_button = $follows ? '' : 'hidden';
         @endphp
-        <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1 {{$unfollows_class}}">Unfollow</button>
-        <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1 {{$follows_class}}">Follow</button>
-        <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1 {{$follows_class}}">Requested to follow (Cancel)</button>
+        <button id="unfollow" data-id="{{ $user->id }}" type="submit" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1 {{$unfollows_button}}">Unfollow</button>
+        <button id="request-follow" data-id="{{ $user->id }}" type="submit" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1 {{$follows_button}}">Follow</button>
+        <button id="sent-follow" data-id="{{ $user->id }}" type="submit" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1 {{$sent_button}}">Requested to follow (Cancel)</button>
       </div>
     @endif
   @endauth
@@ -31,7 +34,7 @@
     </a>
     <a href="{{ route('profile.network', $user->username) }}" class="text-center flex flex-row border-r border-gray-400 border-solid">
       <p class="p-1 profile-stat-label font-bold">Following</p>
-      <p class="p-1 profile-stat-value text-gray-600">{{ $user->following->count() }}</p>
+      <p id="following-number" class="p-1 profile-stat-value text-gray-600">{{ $user->following->count() }}</p>
     </a>
     <div class="text-center flex flex-row border-r border-gray-400 border-solid">
       <p class="p-1 profile-stat-label font-bold">Groups</p>

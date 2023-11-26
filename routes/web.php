@@ -84,6 +84,7 @@ Route::controller(UserController::class)->group(function() {
     Route::get('/profile/photo/{id}', 'viewProfilePicture');
     Route::get('/profile/network/{username}', 'viewNetworkPage')->name('profile.network');
 
-    Route::delete('/follower/{id}', 'removeFollower');
-    Route::delete('/following/{id}', 'removeFollowing');
+    Route::delete('/follower/{id}', 'removeFollower')->where('id', '[0-9]+');
+    Route::delete('/following/{id}', 'removeFollowing')->where('id', '[0-9]+');
+    Route::post('/follow', 'requestFollow');
 });

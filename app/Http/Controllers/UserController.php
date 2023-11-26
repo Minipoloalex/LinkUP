@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FollowRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,35 +22,32 @@ class UserController extends Controller
         $user = User::where('username', $username)->firstOrFail();
 
         return view('pages.profile', ['user' => $user]);
-    } 
+    }
 
     public function update(Request $request)
     {
         $this->authorize('update', User::class);
         $user = Auth::user();
-        Log::info($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:150',
             'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
         ]);
-        Log::info('Hello');
         if ($request->has('media') && $request->media != null && $request->file('media')->isValid()) {
-            Log::info('Request has media');
             if ($user->photo != 'def.jpg' && $user->photo != null) {
                 $this->imageController->delete($user->photo);
             }
             $user->photo = 'profile_' . $user->id . '.' . $request->media->extension();
             $this->imageController->store($request->media, $user->photo);
         }
-        
+
         $user->update([
             'name' => $request->name,
             'description' => $request->description,
             'photo' => $user->photo ?? 'def.jpg'
         ]);
 
-        return redirect()->back()->with('success', 'Profile updated successfully!');    
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
     public function viewProfilePicture(string $id)
     {
@@ -80,10 +78,69 @@ class UserController extends Controller
         $user = Auth::user();
 
         $following = User::findOrFail($id);
+
+        if (!$user->isFollowing($following)) {      // check if user is not following
+            return response()->json([
+                'error' => 'You are not following this user!'
+            ]);
+        }
         $user->following()->detach($following->id);
 
         $following->success = "$following->username removed from following list successfully!";
         return response()->json($following);
+    }
+    public function requestFollow(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer'
+        ]);
+        $this->authorize('update', User::class);
+        $user = Auth::user();
+
+        // check if user is already following
+        $requestTo = User::findOrFail($request->id);
+        if ($user->isFollowing($requestTo)) {
+            return response()->json([
+                'error' => 'You are already following this user!'
+            ]);
+        }
+        if ($user->hasFollowRequestPending($requestTo)) {
+            return response()->json([
+                'error' => 'You already have a pending follow request to this user!'
+            ]);
+        }
+        $feedback = ''; 
+        $accepted = true;
+        if ($requestTo->is_private) {   // request to follow
+            FollowRequest::create([
+                'id_user_from' => $user->id,
+                'id_user_to' => $requestTo->id,
+                'timestamp' => now()
+            ]);
+            $accepted = false;
+            $feedback = "Follow request sent to $requestTo->username successfully!";
+        } else {                          // add to following list
+            $user->following()->attach($requestTo->id);
+            $feedback = "$requestTo->username added to following list successfully!";
+        }
+
+        $requestTo->success = $feedback;
+        $requestTo->accepted = $accepted;
+        return response()->json($requestTo);
+    }
+    public function cancelRequestToFollow(string $id)
+    {
+        $this->authorize('update', User::class);
+        $user = Auth::user();
+
+        $sentTo = User::findOrFail($id);
+
+        $followRequest = $user->followRequestsSent()->where('id_user_to', $sentTo->id)
+            ->firstOrFail('Follow request not found!');
+        $followRequest->delete();
+
+        $sentTo->success = "Follow request to $sentTo->username cancelled successfully!";
+        return response()->json($sentTo);
     }
     // public function addFollowing(string $id)
     // {
