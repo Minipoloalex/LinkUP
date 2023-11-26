@@ -1,21 +1,27 @@
 // followers/following
 
 const network = document.querySelector('#network');
-const followingButton = network.querySelector('#following-button');
-const followersButton = network.querySelector('#followers-button');
-if (network && followingButton && followersButton) {
+function getFollowersButton() {
+    return network.querySelector('#followers-button');
+}
+function getFollowingButton() {
+    return network.querySelector('#following-button');
+}
+if (network) {
+    const followingButton = getFollowingButton();
+    const followersButton = getFollowersButton();
     followersButton.addEventListener('click', showFollowers);
     followingButton.addEventListener('click', showFollowing);
+
+    const deleteFollowingButtons = network.querySelectorAll('.delete-following');
+    deleteFollowingButtons.forEach(but => but.addEventListener('click', deleteFollowing));
+
+    const deleteFollowerButton = network.querySelectorAll('.delete-follower') ?? [];
+    deleteFollowerButton.forEach(but => but.addEventListener('click', deleteFollower));
+        
+    const addFollowButtons = document.querySelectorAll('.add-follow');  // on profile page
+    addFollowButtons.forEach(but => but.addEventListener('click', addFollow));
 }
-
-const deleteFollowingButtons = network.querySelectorAll('.delete-following');
-deleteFollowingButtons.forEach(but => but.addEventListener('click', deleteFollowing));
-
-const deleteFollowerButton = network.querySelectorAll('.delete-follower') ?? [];
-deleteFollowerButton.forEach(but => but.addEventListener('click', deleteFollower));
-    
-const addFollowButtons = document.querySelectorAll('.add-follow');  // on profile page
-addFollowButtons.forEach(but => but.addEventListener('click', addFollow));
 
 function getFollowersList(container) {
     return container.querySelector('#followers-list');
@@ -29,8 +35,8 @@ function showFollowers(event) {
     const following = getFollowingList(network);
     followers.classList.remove('hidden');
     following.classList.add('hidden');
-    followersButton.classList.add('active');
-    followingButton.classList.remove('active');
+    getFollowersButton().classList.add('active');
+    getFollowingButton().classList.remove('active');
 }
 function showFollowing(event) {
     event.preventDefault();
@@ -38,8 +44,8 @@ function showFollowing(event) {
     const following = getFollowingList(network);
     followers.classList.add('hidden');
     following.classList.remove('hidden');
-    followersButton.classList.remove('active');
-    followingButton.classList.add('active');
+    getFollowersButton().classList.remove('active');
+    getFollowingButton().classList.add('active');
 }
 
 // type = 'follower' or 'following'
@@ -55,10 +61,10 @@ async function deleteFollowGeneral(type, event) {
             userArticle.remove();
             switch (type) {
                 case 'follower':
-                    decrementCount(followersButton);
+                    decrementCount(getFollowersButton());
                     break;
                 case 'following':
-                    decrementCount(followingButton);
+                    decrementCount(getFollowingButton());
                     break;
             }
         }
@@ -81,5 +87,40 @@ function decrementCount(element) {
 //     if (data != null) {
 //         const followingNumber = document.querySelector('#following-number');
 //         followingNumber.textContent = parseInt(followingNumber.textContent) + 1;
-//     }   
+//     }
 // }
+async function requestToFollow(event) {
+    event.preventDefault();
+    const button = event.currentTarget;
+    const userId = button.dataset.id;
+    const data = await sendAjaxRequest('POST', `/following/add/`, {userId: userId});
+    showRequestedToFollow(button);
+    if (data != null) {
+        const followingNumber = document.querySelector('#following-number');
+        followingNumber.textContent = parseInt(followingNumber.textContent) + 1;
+    }
+    else {
+        showFollowButton(button);
+    }
+}
+function showFollowButton(followButton, requestedButton, unfollowButton) {
+    show(followButton);
+    hide(requestedButton);
+    hide(unfollowButton);
+}
+function showRequestedToFollow(followButton, requestedButton, unfollowButton) {
+    hide(followButton);
+    show(requestedButton);
+    hide(unfollowButton);
+}
+function showUnfollowButton(followButton, requestedButton, unfollowButton) {
+    hide(followButton);
+    hide(requestedButton);
+    show(unfollowButton);
+}
+function hide(element) {
+    button.classList.add('hidden');
+}
+function show(element) {
+    button.classList.remove('hidden');
+}

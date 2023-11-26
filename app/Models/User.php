@@ -69,6 +69,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'follows', 'id_user', 'id_followed')->orderBy('username');
     }
+    public function isFollowing($user) : bool
+    {
+        return $this->following()->where('id_followed', $user->id)->exists();
+    }
 
     protected function groups() : HasMany
     {
