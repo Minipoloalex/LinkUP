@@ -36,6 +36,10 @@ button:clicked{
 button:not(:active) {
 }
 
+/* when page is same as the link, ref is feup color */
+a:active {
+  color: var(--feup-color);
+}
 
 
 
@@ -177,6 +181,14 @@ button:not(:active) {
 
   .write-comment button {
     
+  }
+
+
+/* contact page */
+#contactForm textarea:focus, input:focus {
+    border-color: transparent;
+    border-bottom-color: var(--feup-color);
+    outline: none;
   }
 
 

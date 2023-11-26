@@ -6,7 +6,7 @@
     <div class="flex flex-col content-center justify-self-end py-16">
         <!-- crate a div that on hover, color of texts becomes dark orange -->
 
-        <div class="flex py-2 text-xl text-purple-50">
+        <div class="flex py-2 text-xl">
             <a href="{{ url('/home') }}">Home</a>
         </div>
         <div class="flex py-2 text-xl">
@@ -16,7 +16,7 @@
             <a href="{{ url('/settings') }}">Settings</a>
         </div>
         <div class="flex py-2 text-xl">
-            <a href="{{ url('/about') }}">About Us</a>
+            <a href="{{ url('/about') }}" >About Us</a>
         </div>
         <div class="flex py-2 text-xl">
             <a href="{{ url('/contact') }}">Contact</a>
