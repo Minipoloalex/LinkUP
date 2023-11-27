@@ -86,5 +86,9 @@ Route::controller(UserController::class)->group(function() {
 
     Route::delete('/follower/{id}', 'removeFollower')->where('id', '[0-9]+');
     Route::delete('/following/{id}', 'removeFollowing')->where('id', '[0-9]+');
+    
+    Route::delete('/follow/request/{id}', 'cancelRequestToFollow')->where('id', '[0-9]+');
+
     Route::post('/follow', 'requestFollow');
+    Route::delete('/follow/{id}', 'cancelRequestToFollow')->where('id', '[0-9]+');
 });

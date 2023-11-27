@@ -14,18 +14,18 @@ function getFileInputWrapper(form) {
     return form.querySelector('.file-input-wrapper');
 }
 function showAddPostForm() {
-    addPostForm.classList.remove('hidden');
-    addPostOn.classList.add('hidden');
-    addPostOff.classList.remove('hidden');
-    darkOverlay.classList.remove('hidden'); // Show dark overlay
+    show(addPostForm);
+    hide(addPostOn);
+    show(addPostOff);
+    show(darkOverlay); // Show dark overlay
 }
 function hideAddPostForm() {
-    addPostForm.classList.add('hidden');
-    addPostOn.classList.remove('hidden');
-    addPostOff.classList.add('hidden');
+    hide(addPostForm);
+    show(addPostOn);
+    hide(addPostOff);
     addPostForm.reset();
     clearFileInputWrapper(getFileInputWrapper(addPostForm));
-    darkOverlay.classList.add('hidden'); // Hide dark overlay
+    hide(darkOverlay); // Hide dark overlay
 }
 
 async function submitAddPost(event) {

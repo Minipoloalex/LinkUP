@@ -30,8 +30,8 @@ function showFollowers(event) {
     event.preventDefault();
     const followers = getFollowersList(network);
     const following = getFollowingList(network);
-    followers.classList.remove('hidden');
-    following.classList.add('hidden');
+    show(followers);
+    hide(following);
     getFollowersButton().classList.add('active');
     getFollowingButton().classList.remove('active');
 }
@@ -39,8 +39,8 @@ function showFollowing(event) {
     event.preventDefault();
     const followers = getFollowersList(network);
     const following = getFollowingList(network);
-    followers.classList.add('hidden');
-    following.classList.remove('hidden');
+    hide(followers);
+    show(following);
     getFollowersButton().classList.remove('active');
     getFollowingButton().classList.add('active');
 }

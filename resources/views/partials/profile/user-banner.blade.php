@@ -6,7 +6,9 @@
       <div id="follow-actions" class="flex flex-row-reverse m-4">
         @php
           $follows = Auth::user()->isFollowing($user);
-          $pending = Auth::user()->hasFollowRequestPending($user);
+          $pending = Auth::user()->requestedToFollow($user);
+          Log::debug("follows = $follows");
+          Log::debug("pending = $pending");
 
           $follows_button = !$pending && !$follows ? '' : 'hidden';
           $sent_button = $pending ? '' : 'hidden';

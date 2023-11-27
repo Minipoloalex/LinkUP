@@ -91,8 +91,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(FollowRequest::class, 'id_user_from');
     }
-    public function hasFollowRequestPending(User $user) : bool
+    public function requestedToFollow(User $user) : bool
     {
-        return $this->followRequestsReceived()->where('id_user_from', $user->id)->exists();
+        return $this->followRequestsSent()->where('id_user_to', $user->id)->exists();
     }
 }

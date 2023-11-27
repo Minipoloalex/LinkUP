@@ -8,7 +8,7 @@
             <a href="{{ url('/home') }}">Home</a>
         </div>
         <div class="flex py-2 text-xl">
-            <a href="{{ url('/groups') }}">Network</a>
+            <a href="{{ route('profile.network', Auth::user()->username) }}">Network</a>
         </div>
         <div class="flex py-2 text-xl">
             <a href="{{ url('/settings') }}">Settings</a>

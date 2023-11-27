@@ -104,7 +104,7 @@ class UserController extends Controller
                 'error' => 'You are already following this user!'
             ]);
         }
-        if ($user->hasFollowRequestPending($requestTo)) {
+        if ($user->requestedToFollow($requestTo)) {
             return response()->json([
                 'error' => 'You already have a pending follow request to this user!'
             ]);
@@ -135,20 +135,22 @@ class UserController extends Controller
 
         $sentTo = User::findOrFail($id);
 
+        if ($user->isFollowing($sentTo)) {      // check if user is already following
+            return response()->json([
+                'error' => 'You are already following this user!',
+                'accepted' => true
+            ]);
+        }
+        if (!$user->requestedToFollow($sentTo)) {      // check if user is not following
+            return response()->json([
+                'error' => 'You do not have a pending follow request to this user!'
+            ]);
+        }
         $followRequest = $user->followRequestsSent()->where('id_user_to', $sentTo->id)
-            ->firstOrFail('Follow request not found!');
+            ->firstOrFail();
         $followRequest->delete();
 
         $sentTo->success = "Follow request to $sentTo->username cancelled successfully!";
         return response()->json($sentTo);
     }
-    // public function addFollowing(string $id)
-    // {
-    //     $this->authorize('update', User::class);
-    //     $user = Auth::user();
-    //     $following = User::findOrFail($id);
-    //     $user->following()->attach($following->id);
-    //     $following->success = "$following->username added to following list successfully!";
-    //     return $user;
-    // }
 }

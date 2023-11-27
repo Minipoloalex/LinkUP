@@ -44,10 +44,11 @@ async function cancelRequestFollow(event) {
     event.preventDefault();
     const button = event.currentTarget;
     const userId = button.dataset.id;
-    const data = await sendAjaxRequest('DELETE', '/follow', {id: userId});
+    const data = await sendAjaxRequest('DELETE', `/follow/${userId}`, null);
     showFollowButton();
     if (data == null) {
-        showRequestedToFollow();
+        if (data.accepted) showUnfollowButton();   // trying to cancel but already accepted, show unfollow button
+        else showRequestedToFollow();
     }
 }
 function showFollowButton() {
