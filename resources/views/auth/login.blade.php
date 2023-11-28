@@ -2,8 +2,9 @@
 
 @section('content')
 
-<main id="login-page" class="w-screen h-screen flex flex-col items-center justify-center bg-white py-24">
-    <img src="{{ url('images/logo.png') }}" alt="Link up logo" class="w-1/2 self-center">
+<main id="login-page" class="w-screen h-screen flex flex-col items-center justify-center bg-white py-24 mx-auto
+                            lg:w-1/2 lg:border-x lg:border-slate-400">
+    <img src="{{ url('images/logo.png') }}" alt="Link up logo" class="self-center w-48 mt-4">
     <div class="my-4 text-base font-bold text-center italic">
         <h1>A rede social da UPorto</h1>
     </div>
@@ -29,7 +30,7 @@
             </button>
         </div>
 
-        <div class="flex mt-6 mr-2 content-center justify-end">
+        <div class="flex mt-6 mr-2 content-center justify-center">
             <a class="mt-12 text-sm hover:underline" href="{{ route('register') }}">no account? register here</a>
         </div>
 

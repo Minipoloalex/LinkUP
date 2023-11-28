@@ -3,7 +3,7 @@ function hideSuccessMessage() {
     if (successMessage) {
         setTimeout(() => {
             successMessage.style.display = 'none';
-        }, 3000);
+        }, 5000);
     }
 }
 
@@ -12,7 +12,7 @@ function hideErrorMessage() {
     if (errorMessage) {
         setTimeout(() => {
             errorMessage.style.display = 'none';
-        }, 3000);
+        }, 5000);
     }
 }
 
