@@ -14,11 +14,8 @@
     <!-- Styles -->
     <link href="{{ url('css/milligram.min.css') }}" rel="stylesheet">
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
-    <script type="text/javascript">
-        // Fix for Firefox autofocus CSS bug
-        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
-    </script>
     <script type="module" src={{ url('js/app.js') }} defer></script>
+    <script type="module" src={{ url('js/auth.js') }} defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
