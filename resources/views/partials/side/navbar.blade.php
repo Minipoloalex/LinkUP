@@ -1,25 +1,27 @@
-@guest
-<nav class="col-span-1 flex content-center justify-self-end" id="navbar">
-</nav>
-@else
-<nav class="col-span-1 w-52 flex content-center justify-self-end border-r border-gray-300 border-solid" id="navbar">
-    <div class="flex flex-col content-center justify-self-end py-16">
-        <div class="flex py-2 text-xl">
-            <a href="{{ url('/home') }}">Home</a>
-        </div>
-        <div class="flex py-2 text-xl">
-            <a href="{{ url('/groups') }}">Network</a>
-        </div>
-        <div class="flex py-2 text-xl">
-            <a href="{{ url('/settings') }}">Settings</a>
-        </div>
-        <div class="flex py-2 text-xl">
-            <img class="w-8 h-8 rounded-full" src="{{ url('images/users/icons/' . Auth::user()->id . '.png') }}"
-                alt="User Icon">
-            <a href="{{ url('/profile/' . Auth::user()->username) }}" class="ml-3">
-                {{ Auth::user()->username }}
-            </a>
-        </div>
+@php $username = Auth::user()->username; @endphp
+<nav class="fixed bottom-0 left-0 z-50 w-full h-16 grid grid-cols-5 items-center px-8 bg-white border-t border-slate-400"
+    id="navbar">
+    <div class="flex justify-center">
+        <a href="{{ route('home') }}">
+            <i class="fa-solid fa-house fa-xl"></i>
+        </a>
+    </div>
+    <div class="flex justify-center">
+        <a href="{{ route('home') }}">
+            <i class="fa-solid fa-search fa-xl"></i>
+        </a>
+    </div>
+    <div class="flex justify-center">
+        <i class="fa-solid fa-plus fa-xl"></i>
+    </div>
+    <div class="flex justify-center">
+        <a href="{{ route('home') }}">
+            <i class="fa-solid fa-bell fa-xl"></i>
+        </a>
+    </div>
+    <div class="flex justify-center">
+        <a href="{{ url('/profile/' . $username) }}">
+            <i class="fa-solid fa-user fa-xl"></i>
+        </a>
     </div>
 </nav>
-@endguest

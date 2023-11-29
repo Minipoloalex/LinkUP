@@ -1,6 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 body {
   /* create a color variable */
@@ -289,20 +290,7 @@ button:not(:active) {
     text-align: left;
     color: white;
   }
-  
 
-  .post {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
   .profile-picture {
     width: 50px;
     height: 50px;
@@ -310,11 +298,6 @@ button:not(:active) {
     /* cover all the div */
     object-fit: cover;
     
-  }
-  
-  .post-info {
-    margin-left: 10px;
-
   }
   
   .post-username {
@@ -461,14 +444,13 @@ button:not(:active) {
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
 .post {
     border-style: solid;
     border-top-width: 1px;
     border-color: #e2e8f0;
-    padding: 1rem;
+    padding: 10px;
 }
+
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {

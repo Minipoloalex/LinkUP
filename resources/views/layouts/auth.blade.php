@@ -20,7 +20,7 @@
     @vite('resources/js/app.js')
 </head>
 
-<body>
+<body class="lg:bg-slate-400">
     @yield('content')
 </body>
 
