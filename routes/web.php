@@ -84,11 +84,12 @@ Route::controller(UserController::class)->group(function() {
     Route::get('/profile/photo/{id}', 'viewProfilePicture');
     Route::get('/profile/network/{username}', 'viewNetworkPage')->name('profile.network');
 
-    Route::delete('/follower/{id}', 'removeFollower')->where('id', '[0-9]+');
-    Route::delete('/following/{id}', 'removeFollowing')->where('id', '[0-9]+');
+    Route::delete('/follow/follower/{id}', 'removeFollower')->where('id', '[0-9]+');
+    Route::delete('/follow/following/{id}', 'removeFollowing')->where('id', '[0-9]+');
+    Route::delete('/follow/request/cancel/{id}', 'cancelRequestToFollow')->where('id', '[0-9]+');
+    Route::delete('/follow/request/deny/{id}', 'denyFollowRequest')->where('id', '[0-9]+');
+    Route::patch('/follow/request/accept/{id}', 'acceptFollowRequest')->where('id', '[0-9]+');
     
-    Route::delete('/follow/request/{id}', 'cancelRequestToFollow')->where('id', '[0-9]+');
-
+    
     Route::post('/follow', 'requestFollow');
-    Route::delete('/follow/{id}', 'cancelRequestToFollow')->where('id', '[0-9]+');
 });

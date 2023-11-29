@@ -51,6 +51,7 @@ async function cancelRequestFollow(event) {
         else showRequestedToFollow();
     }
 }
+
 function showFollowButton() {
     show(requestToFollowButton);
     hide(sentFollowButton);
