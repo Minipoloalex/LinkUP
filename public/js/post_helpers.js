@@ -95,6 +95,8 @@ function buildPostForm(formClass, textPlaceholder, buttonText, contentValue) {
     return form;
 }
 function buildPostInfo(postJson, editable) {
+    const likesCount = postJson.likes.length; // Likes count from postJson
+
     const postInfo = document.createElement('div');
     postInfo.classList.add('post-info');
 
@@ -127,8 +129,8 @@ function buildPostInfo(postJson, editable) {
         </div>
         <div class="post-footer">
             <h3 class="post-likes">
-                <a href="#" class="like">&#10084;</a>
-                <span class="likes">${postJson.likes.length}</span>
+                <button class="like-button mr-1" data-id="${postJson.id}">&#10084;</button>
+                <span class="likes">${likesCount}</span>
             </h3>
             <span class="nr-comments">${postJson.comments.length}</span>
         </div>
@@ -172,6 +174,7 @@ function buildPostInfo(postJson, editable) {
         }
 
         handlerFileInput(postInfo.querySelector('.file-input-wrapper'));
+        
     }
     return postInfo;
 }
