@@ -90,6 +90,5 @@ Route::controller(UserController::class)->group(function() {
     Route::delete('/follow/request/deny/{id}', 'denyFollowRequest')->where('id', '[0-9]+');
     Route::patch('/follow/request/accept/{id}', 'acceptFollowRequest')->where('id', '[0-9]+');
     
-    
     Route::post('/follow', 'requestFollow');
 });

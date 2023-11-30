@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FollowRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -109,7 +110,7 @@ class UserController extends Controller
                 'error' => 'You already have a pending follow request to this user!'
             ]);
         }
-        $feedback = ''; 
+        $feedback = '';
         $accepted = true;
         if ($requestTo->is_private) {   // request to follow
             FollowRequest::create([
@@ -152,5 +153,46 @@ class UserController extends Controller
 
         $sentTo->success = "Follow request to $sentTo->username cancelled successfully!";
         return response()->json($sentTo);
+    }
+    public function denyFollowRequest(string $id) {
+        $this->authorize('update', User::class);
+        $user = Auth::user();
+        $sentFrom = User::findOrFail($id);
+        Log::debug($sentFrom->toJson() . ' ' . $user->toJson());
+        if (!$sentFrom->requestedToFollow($user)) {
+            return response()->json(['error' => "You do not have a pending follow request from $sentFrom->username!"]);
+        }
+
+        $followRequest = $user->followRequestsReceived()->where('id_user_from', $sentFrom->id)
+            ->firstOrFail();
+        $followRequest->delete();
+
+        $sentFrom->success = "You denied the follow request from $sentFrom->username";
+        return response()->json($sentFrom);
+    }
+    public function acceptFollowRequest(string $id) {
+        Log::debug("Accept follow request starting");
+        $this->authorize('update', User::class);
+        $user = Auth::user();
+        $sentFrom = User::findOrFail($id);
+    
+        if (!$sentFrom->requestedToFollow($user)) {
+            return response()->json(["error' => 'You do not have a pending follow request from $sentFrom->username!"]);
+        }
+
+        Log::debug("Valid request to accept the follow request");
+        DB::beginTransaction();
+
+        $followRequest = $user->followRequestsReceived()->where('id_user_from', $sentFrom->id)
+            ->firstOrFail();
+        $followRequest->delete();
+        $user->followers()->attach($sentFrom->id);
+        DB::commit();
+        Log::debug("Accepted follow request");
+        $userHTML = view('partials.network.user_follow_request', [
+            'user' => $user,
+        ])->render();
+        Log::debug("Rendered HTML: $userHTML");
+        return response()->json(['userHTML' => $userHTML, 'success' => "You accepted the follow request from $sentFrom->username", 'userId' => $sentFrom->id]);
     }
 }

@@ -80,7 +80,7 @@ async function generalFollowHandler(event, ajax, confirmMessage, action) {
         if (data != null) {
             const userArticle = button.closest('article');
             userArticle.remove();
-            action();
+            action(data);
         }
     }
 }
@@ -88,40 +88,46 @@ async function deleteFollower(event) {
     return await generalFollowHandler(event,
         (userId, username) => sendAjaxRequest('DELETE', `/follow/follower/${userId}`, null),
         (username) => `Are you sure you want to delete ${username} from your follower list?`,
-        () => decrementCount(getFollowersButton())
+        (data) => decrementCount(getFollowersButton())
     );
 }
 async function deleteFollowing(event) {
     return await generalFollowHandler(event,
         (userId, username) => sendAjaxRequest('DELETE', `/follow/following/${userId}`, null),
         (username) => `Are you sure you want to delete ${username} from your following list?`,
-        () => decrementCount(getFollowingButton())
+        (data) => decrementCount(getFollowingButton())
     );
 }
 async function cancelFollowRequestSent(event) {
     return await generalFollowHandler(event,
         (userId, username) => sendAjaxRequest('DELETE', `/follow/request/cancel/${userId}`, null),
         (username) => `Are you sure you want to cancel your follow request to ${username}?`,
-        () => decrementCount(getFollowRequestsButton())
+        (data) => decrementCount(getFollowRequestsButton())
     );
 }
 async function denyFollowRequestReceived(event) {
     return await generalFollowHandler(event,
         (userId, username) => sendAjaxRequest('DELETE', `/follow/request/deny/${userId}`, null),
         (username) => `Are you sure you want to delete ${username}'s follow request?`,
-        () => decrementCount(getFollowRequestsButton())
+        (data) => decrementCount(getFollowRequestsButton())
     );
 }
 async function acceptFollowRequest(event) {
     return await generalFollowHandler(event,
         (userId, username) => sendAjaxRequest('PATCH', `/follow/request/accept/${userId}`, null),
         (username) => `Are you sure you want to accept ${username}'s follow request?`,
-        () => {
+        (data) => {
             decrementCount(getFollowRequestsButton());
-            incrementCount(getFollowingButton());
-            // const followersList = getFollowersList();
-            // const user_follower = buildFollower();
-            // followersList.appendChild(user_follower);
+            incrementCount(getFollowersButton());
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data.userHTML, 'text/html'); // parse HTML received from server
+            const userHTML = doc.body.firstElementChild;
+
+            getFollowersList(network).appendChild(userHTML);    // append to the followers list
+            
+            const deleteFollowerButton = network.querySelector('.delete-follower');
+            deleteFollowerButton.forEach(but => but.addEventListener('click', deleteFollower));
         });
 }
 function decrementCount(element) {
@@ -129,37 +135,4 @@ function decrementCount(element) {
 }
 function incrementCount(element) {
     element.textContent = parseInt(element.textContent) + 1;
-}
-function buildUser(user) {
-    const userArticle = document.createElement('article');
-    userArticle.classList.add('user');
-    /*
-    <article class="border-2 p-5 flex justify-between">
-        <a href="{{ url("/profile/" . $user->username) }}" class="user-follow flex gap-4 items-center">
-            <img class="w-8 h-8" src="{{ $user->getProfilePicture() }}" alt="Profile Picture">
-            <div id="user-info" class="flex flex-col">
-                <p class="font-bold">{{ $user->name }}</p>
-                <p class="text-gray-600">{{ $user->username }}</p>
-            </div>
-        </a>
-        @auth
-            @if ($editable) 
-                <div class="flex flex-row">
-                    @foreach($buttons as $button)
-                        <button data-id="{{ $user->id }}" data-username="{{ $user->username }}" class="{{ $button['class'] }} justify-end p-2">{{ $button['text'] }}</button>
-                    @endforeach
-                </div>
-            @endif
-        @endauth
-    </article>
-    */
-
-    // const userFollow = document.createElement('a');
-    // userFollow.classList.add('user-follow');
-    // userFollow.classList.add('flex');
-    // userFollow.classList.add('gap-4');
-    // userFollow.classList.add('items-center');
-    // userFollow.href = `/profile/${user.username}`;
-    
-    return userArticle;
 }

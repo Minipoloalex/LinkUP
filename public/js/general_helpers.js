@@ -1,6 +1,10 @@
 function hide(element) {
-    element.classList.add('hidden');
+    if (element) {
+        element.classList.add('hidden');    
+    }
 }
 function show(element) {
-    element.classList.remove('hidden');
+    if (element) {
+        element.classList.remove('hidden');
+    }
 }
