@@ -8,7 +8,7 @@
         <h1>A rede social da UPorto</h1>
     </div>
     <form method="POST" action="{{ route('register') }}" class="col-span-2 flex flex-col flex-grow px-12">
-        { csrf_field() }}
+        {{ csrf_field() }}
 
         <label for="username" class="pt-4 pb-2">username</label>
         <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus
@@ -30,8 +30,8 @@
                 <img src="{{ url('images/icons/login.png') }}" alt="Login" class="w-6 h-6">
             </button>
         </div>
-        <div class="flex content-center justify-end text-sm">
-            <a class="pt-12 hover:underline" href="{{ route('login') }}">already have an account? login
+        <div class="flex content-center justify-center text-sm">
+            <a class="mt-12 hover:underline" href="{{ route('login') }}">already have an account? login
                 here</a>
         </div>
     </form>
