@@ -34,9 +34,10 @@
     </div>
     <div class="post-footer">
         <h3 class="post-likes">
-            <a href="#" class="like">&#10084;</a>
-            <span class="likes">{{ $post->likes->count() }}</span>
+            <button class="like-button" data-id="{{ $post->id }}">&#10084; Like Post</button>
+            <span class="likes">{{ count($post->likes) }}</span>
         </h3>
+
         <span class="nr-comments">{{ $post->comments->count() }}</span>
     </div>
 </div>

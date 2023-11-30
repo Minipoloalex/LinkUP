@@ -15,10 +15,10 @@ class Liked extends Model
         'id_user',
         'id_post',
     ];
-    // public function post()
-    // {
-    //     return $this->belongsTo(Post::class, 'id_post');
-    // }
+    public function post()
+    {
+        return $this->belongsTo(Post::class, 'id_post');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');

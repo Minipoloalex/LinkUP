@@ -75,6 +75,10 @@ Route::controller(PostController::class)->group(function () {
     Route::put('/post/{id}', 'update');
 
     Route::get('/search', 'searchResults');
+
+    // Update likes on a post
+    Route::post('/post/{id}/like', 'updateLikes');
+
 });
 
 // profile page

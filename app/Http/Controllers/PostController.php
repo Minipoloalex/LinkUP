@@ -228,4 +228,34 @@ class PostController extends Controller
 
         return response()->json($filteredPosts);
     }
+
+    /**
+     * Update likes on a post
+     */
+
+    public function updateLikes(Request $request, string $id)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
+
+        
+        $post = Post::findOrFail($id);
+        $request->validate([
+            'like' => 'required|boolean'
+        ]);
+
+        $like = $request->input('like');
+        $user = Auth::user();
+
+        if ($like) {
+            $post->likes()->attach($user->id);
+        } else {
+            $post->likes()->detach($user->id);
+        }
+
+        $post->load('likes'); // Load updated likes
+        return response()->json($post);
+    }
+
 }

@@ -36,6 +36,9 @@
     <script type="text/javascript" src={{ url('js/add_post.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/edit_profile.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/contact.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/like.js') }} defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>

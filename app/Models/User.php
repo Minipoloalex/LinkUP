@@ -70,4 +70,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(GroupMember::class, 'id_user');
     }
+
+    protected function liked() : HasMany
+    {
+        return $this->hasMany(Liked::class, 'id_user');
+    }
 }
