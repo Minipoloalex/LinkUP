@@ -34,14 +34,12 @@ async function submitAddPost(event) {
 
     const data = await submitAddPostOrComment(addPostForm, {'content': content}, 'post');
     if (data != null) {
-        prependPostsToTimeline([data]);
+        prependPostsToTimeline([data.postHTML]);
         
         addPostForm.reset();
         clearFileInputWrapper(getFileInputWrapper(addPostForm));
         if (addPostOff) {
             hideAddPostForm();
         }
-        
-        // addPost(<container>, <post_info>)
     }
 }

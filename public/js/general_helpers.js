@@ -8,3 +8,7 @@ function show(element) {
         element.classList.remove('hidden');
     }
 }
+function parseHTML(htmlText) {
+    const parser = new DOMParser();
+    return parser.parseFromString(htmlText, 'text/html').body.firstChild;
+}

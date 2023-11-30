@@ -52,7 +52,6 @@ async function submitEditPost(event) {  // submitted the form
             removeImageContainer(post);
             addImageContainer(postContentElement, postId);
         }
-        
     }
 }
 

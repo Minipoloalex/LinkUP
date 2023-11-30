@@ -1,21 +1,17 @@
-function createPostElement(post) {
-    return buildPost(post, false, false);
-}
-
-function appendPostsToTimeline(posts) {
+function appendPostsToTimeline(postsHTML) {
     const timeline = document.querySelector('#timeline');
 
-    for (const post of posts) {
-        const postElement = createPostElement(post);
+    for (const postHTML of postsHTML) {
+        const postElement = parseHTML(postHTML);
         timeline.insertBefore(postElement, timeline.lastElementChild);
     }
 }
 
-function prependPostsToTimeline(posts) {
+function prependPostsToTimeline(postsHTML) {
     const timeline = document.querySelector('#timeline');
-
-    for (const post of posts) {
-        const postElement = createPostElement(post);
+    
+    for (const postHTML of postsHTML) {
+        const postElement = parseHTML(postHTML);
         timeline.insertBefore(postElement, timeline.firstChild);
     }
 }

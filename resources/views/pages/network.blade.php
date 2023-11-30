@@ -54,9 +54,6 @@
                             $followRequestsReceived = $user->followRequestsReceived;
                         @endphp
                         @forelse ($followRequestsReceived as $followRequest)
-                            @php
-                                Log::debug($followRequest->toJson());
-                            @endphp
                             @include('partials.network.follow_request_card', [
                                 'user' => $followRequest->userRequesting
                             ])
