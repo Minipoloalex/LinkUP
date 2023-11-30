@@ -33,4 +33,9 @@ class Group extends Model
     {
         return $this->hasMany(Post::class, 'id_group');
     }
+
+    public function pendingMembers()
+    {
+        return $this->belongsToMany(User::class, 'group_notification', 'id_group', 'id_user');
+    }
 }

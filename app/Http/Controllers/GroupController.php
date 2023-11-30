@@ -18,6 +18,8 @@ class GroupController extends Controller
 
         $user = Auth::user();
         $is_member = $members->contains($user);
+        $is_owner = $group->id_owner == $user->id;
+        $is_pending = $is_member ? false : $group->pendingMembers()->where('id_user', $user->id)->where('type', 'Request')->exists();
 
         $this->authorize('view', $group);
 
@@ -28,6 +30,8 @@ class GroupController extends Controller
             'posts' => $posts,
             'members' => $members,
             'user_is_member' => $is_member,
+            'user_is_owner' => $is_owner,
+            'user_is_pending' => $is_pending,
         ]);
     }
 }
