@@ -169,9 +169,18 @@ class PostController extends Controller
             $this->setFileName($request, $post);
             $hasNewMedia = true;
         }
-        $post->hasNewMedia = $hasNewMedia;
-        $post->success = 'Post updated successfully!';
-        return response()->json($post);
+
+        if ($hasNewMedia) {
+            $postImageHTML = $this->getPostImageHTML($post);
+            
+            return response()->json([
+                'postImageHTML' => $postImageHTML,
+                'success' => 'Post updated successfully!',
+                'hasNewMedia' => true
+            ]);
+        }
+
+        return response()->json(['success' => 'Post updated successfully!']);
     }
     /**
      * Delete a post.
@@ -219,7 +228,7 @@ class PostController extends Controller
      * @param Post $post
      * @return bool true if the file name was set, false otherwise (if there was no file)
      */
-    private function setFileName(Request $request, Post $post)  : bool
+    private function setFileName(Request $request, Post $post): bool
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
             $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
@@ -279,5 +288,14 @@ class PostController extends Controller
             return $this->translatePostToHTML($post, false, false, false);
         });
         return $html;
+    }
+    /**
+     * Returns the HTML code to display the image of a post. The post must have an image.
+     * Used in the edit post, so this image is always editable (can be deleted).
+     * @param Post $post
+     */
+    private function getPostImageHTML(Post $post)
+    {
+        return view('partials.post_image', ['post' => $post, 'editable' => true])->render();
     }
 }

@@ -51,7 +51,12 @@ async function submitEditPost(event) {  // submitted the form
 
         if (data.hasNewMedia) {
             removeImageContainer(post);
-            addImageContainer(postContentElement, postId);
+            const imageContainer = parseHTML(data.postImageHTML);
+            
+            const deleteButton = imageContainer.querySelector('.delete-image');
+            deleteButton.addEventListener('click', deleteImage);
+
+            postContentElement.after(imageContainer);
         }
     }
 }

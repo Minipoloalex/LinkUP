@@ -30,26 +30,6 @@ function removeImageContainer(post) {
         imageContainer.remove();
     }
 }
-function addImageContainer(postContentElement, postId) {
-    // check partials.post_info
-    const imageContainer = document.createElement('div');
-    imageContainer.classList.add('image-container');
-
-    const img = document.createElement('img');
-    img.src = `/post/${postId}/image?_=${Date.now()}`; // Add timestamp to prevent caching (new image)
-    img.alt = 'A post image';
-    imageContainer.appendChild(img);
-
-    const deleteButton = document.createElement('a');
-    deleteButton.href = '#';
-    deleteButton.classList.add('delete', 'delete-image');
-    deleteButton.dataset.id = postId;
-    deleteButton.innerHTML = '&#10761;';
-    deleteButton.addEventListener('click', deleteImage);
-    imageContainer.appendChild(deleteButton);
-
-    postContentElement.after(imageContainer);
-}
 function incrementCommentCount(post) {
     changeCommentCount(post, 1);
 }
