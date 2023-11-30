@@ -51,7 +51,7 @@ CREATE TABLE follows (
 );
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(50) UNIQUE,
     description TEXT,
     photo TEXT DEFAULT 'def.jpg',
     created_at DATE DEFAULT CURRENT_DATE NOT NULL,

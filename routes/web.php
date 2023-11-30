@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 
@@ -28,7 +29,7 @@ use App\Http\Controllers\Admin\AdminLoginController;
 // Root
 Route::redirect('/', '/home');
 
-Route::get('/home', function() {
+Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
 
@@ -77,6 +78,16 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/search', 'searchResults');
 });
 
+// Groups
+Route::controller(GroupController::class)->group(function () {
+    Route::get('/group/{id}', 'show')->name('group');
+
+    Route::post('/group', 'createGroup')->name('group.create');
+    Route::put('/group/{id}', 'update')->name('group.update');
+
+    Route::delete('/group/{id}', 'delete');
+});
+
 // profile page
 
 /*
@@ -101,11 +112,11 @@ Route::get('/profile/{username}', [UserController::class, 'show'])->name('profil
 Route::post('/profile', [UserController::class, 'update'])->name('profile.update');
 
 /* route for about us page */
-Route::get('/about', function() {
+Route::get('/about', function () {
     return view('pages.about');
 })->name('about');
 
 /* route for contact us page */
-Route::get('/contact', function() {
+Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
