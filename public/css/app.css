@@ -1,6 +1,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 body {
   /* create a color variable */
@@ -72,19 +73,90 @@ a:active {
 }
 
 
-
-  .post {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .post-header {
+  .edit-profile {
+    width: 100%;
+    /* put content in center and right of div */
     display: flex;
+    justify-content: right;
     align-items: center;
-    margin-bottom: 10px;
+
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+  }
+
+
+  .edit-button {
+    /* put content in center and right of div */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: right;
+    margin-right: 2rem;
+  
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+  }
+
+  
+  
+
+  .name-username {
+    /* put content in center and right of div and separate the elements*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    
+
+
+  }
+
+  /* name-username first child */
+  .name-username :first-child {
+    font-weight: bold;
   }
   
+
+  .name-username p{
+    color: white;
+    font-size: 2rem;
+    margin-right: 1rem;
+  }
+
+
+  .profile-numbers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .profile-numbers div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .profile-numbers div p {
+    color: white;
+    font-size: 2rem;
+    margin-right: 1rem;
+  }
+
+  .profile-numbers div p:first-child {
+    font-weight: bold;
+  }
+
+  .bio {
+    text-align: left;
+    color: white;
+  }
+
   .profile-picture {
     width: 50px;
     height: 50px;
@@ -92,11 +164,6 @@ a:active {
     /* cover all the div */
     object-fit: cover;
     
-  }
-  
-  .post-info {
-    margin-left: 10px;
-
   }
   
   .post-username {
@@ -207,14 +274,15 @@ a:active {
 
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
 .post {
     border-style: solid;
     border-top-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 1px;
     border-color: #e2e8f0;
-    padding: 1rem;
+    padding: 10px;
 }
+
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
