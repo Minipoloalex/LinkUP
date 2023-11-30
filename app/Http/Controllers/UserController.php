@@ -46,11 +46,13 @@ class UserController extends Controller
             'username' => ['required', 'string', 'max:15', 'unique:users,username,' . $user->id],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'privacy' => ['required', 'string', 'in:public,private'],
         ]);
 
         $user->update([
             'username' => $request->username,
             'email' => $request->email,
+            'is_private' => $request->privacy === 'private',        
         ]);
 
         if ($request->password) {
