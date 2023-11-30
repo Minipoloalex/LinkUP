@@ -32,6 +32,7 @@ Route::get('/home', function() {
     return view('pages.home');
 })->name('home');
 
+
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
@@ -43,6 +44,7 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
 });
+
 
 // Admin
 Route::prefix('/admin')->name('admin.')->group(function () {
@@ -61,6 +63,8 @@ Route::prefix('/admin')->name('admin.')->group(function () {
     });
 });
 
+
+// Post
 Route::controller(PostController::class)->group(function () {
     Route::get('/post/{id}', 'show')->name('post');
     Route::get('/post/{id}/image', 'viewImage')->name('post.image');
@@ -77,35 +81,20 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/search', 'searchResults');
 });
 
-// profile page
 
-/*
-Route::controller(ProfileController::class)->group(function () {
-    Route::get('/profile/{id}', 'show')->name('user');
-    Route::get('/profile/{id}/username', 'viewUsername')->name('post.username');
-    Route::get('/profile/{id}/description', 'viewDescription')->name('post.description');
-    Route::get('/profile/{id}/image', 'viewPhoto')->name('post.photo');
+// User
+Route::get('/profile/{username}', [UserController::class, 'showProfile'])->name('profile');
+Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
 
-    Route::post('/profile', 'storePost');
-    Route::post('/comment', 'storeComment');
+Route::get('/settings', [UserController::class, 'showSettings'])->name('settings');
+Route::post('/settings', [UserController::class, 'updateSettings'])->name('settings.update');
 
-    // Route::delete('/comment/{id}', 'delete');
-    Route::delete('/profile/{id}', 'delete');
 
-    Route::put('/profile/{id}', 'update');
-
-    Route::get('/api/post/search/{search}', 'search');
-});*/
-
-Route::get('/profile/{username}', [UserController::class, 'show'])->name('profile.show');
-Route::post('/profile', [UserController::class, 'update'])->name('profile.update');
-
-/* route for about us page */
+// Static pages
 Route::get('/about', function() {
     return view('pages.about');
 })->name('about');
 
-/* route for contact us page */
 Route::get('/contact', function() {
     return view('pages.contact');
 })->name('contact');
