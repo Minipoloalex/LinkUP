@@ -7,7 +7,7 @@
 <main id="group-page" class=" flex flex-col w-screen overflow-clip overflow-y-scroll h-screen pt-24
                             md:pl-16
                             lg:px-56">
-    <section class="flex overflow-clip overflow-y-auto scrollbar-hide" id="group-content">
+    <section class="flex" id="group-content">
         <div class="flex flex-col items-center justify-center h-56 w-full border border-slate-400 mt-1">
             <div class="flex justify-start items-center w-full pl-12">
                 <img src="{{ url('images/groups/icons/' . $group->id . '.jpg') }}" alt="group photo"
@@ -19,6 +19,32 @@
             </div>
         </div>
     </section>
+
+    <div class="flex w-full items-center">
+        <div id="posts" class="flex items-center justify-center w-1/2 h-10 border border-slate-400">
+            <h1>Posts</h1>
+        </div>
+        <div id="members" class="flex items-center justify-center w-1/2 h-10 border border-slate-400">
+            <h1>Members</h1>
+        </div>
+    </div>
+
+    <section id="posts-section" class="flex flex-col items-center">
+        @foreach ($posts as $post)
+        @include('partials.post', ['post' => $post, 'displayComments' => true, 'showEdit' => false])
+        @endforeach
+    </section>
+
+    <section id="members-section" class="flex flex-col items-center hidden">
+        @foreach ($members as $member)
+        @include('partials.group.member', ['member' => $member])
+        @endforeach
+    </section>
+
+
+
+
+
     <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black z-10" style="opacity: 0.8;"></div>
 
     @if(Auth::check())
@@ -32,4 +58,6 @@
     </div>
     @endif
 </main>
+
+<script type="module" src="{{ url('js/group/group.js') }}"></script>
 @endsection

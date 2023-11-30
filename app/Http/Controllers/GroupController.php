@@ -14,10 +14,20 @@ class GroupController extends Controller
             return redirect('/login');
 
         $group = Group::findOrFail($id);
+        $members = $group->members()->get();
+
+        $user = Auth::user();
+        $is_member = $members->contains($user);
+
         $this->authorize('view', $group);
+
+        $posts = $group->posts()->orderBy('created_at', 'desc')->paginate(10);
 
         return view('pages.group', [
             'group' => $group,
+            'posts' => $posts,
+            'members' => $members,
+            'user_is_member' => $is_member,
         ]);
     }
 }
