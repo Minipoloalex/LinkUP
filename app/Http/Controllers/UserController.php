@@ -189,10 +189,12 @@ class UserController extends Controller
         $user->followers()->attach($sentFrom->id);
         DB::commit();
         Log::debug("Accepted follow request");
-        $userHTML = view('partials.network.user_follow_request', [
+        $userHTML = view('partials.network.follower_card', [
             'user' => $user,
+            'isMyProfile' => true
         ])->render();
         Log::debug("Rendered HTML: $userHTML");
+
         return response()->json(['userHTML' => $userHTML, 'success' => "You accepted the follow request from $sentFrom->username", 'userId' => $sentFrom->id]);
     }
 }
