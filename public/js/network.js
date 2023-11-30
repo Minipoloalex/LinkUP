@@ -12,7 +12,8 @@ function getFollowRequestsButton() {
 if (network) {
     getFollowersButton().addEventListener('click', showFollowers);
     getFollowingButton().addEventListener('click', showFollowing);
-    getFollowRequestsButton().addEventListener('click', showFollowRequests);
+    const followRequestsButton = getFollowRequestsButton();
+    if (followRequestsButton) followRequestsButton.addEventListener('click', showFollowRequests);
 
     const deleteFollowingButtons = network.querySelectorAll('.delete-following');
     deleteFollowingButtons.forEach(but => but.addEventListener('click', deleteFollowing));
@@ -36,32 +37,38 @@ function getFollowingList(container) {
 function getFollowRequestsList(container) {
     return container.querySelector('#follow-requests-list');
 }
+function addActiveClass(element) {
+    if (element) element.classList.add('active');
+}
+function removeActiveClass(element) {
+    if (element) element.classList.remove('active');
+}
 function showFollowers(event) {
     event.preventDefault();
     show(getFollowersList(network));
     hide(getFollowingList(network));
     hide(getFollowRequestsList(network));
-    getFollowersButton().classList.add('active');
-    getFollowingButton().classList.remove('active');
-    getFollowRequestsButton().classList.remove('active');
+    addActiveClass(getFollowersButton());
+    removeActiveClass(getFollowingButton());
+    removeActiveClass(getFollowRequestsButton());
 }
 function showFollowing(event) {
     event.preventDefault();
     hide(getFollowersList(network));
     show(getFollowingList(network));
     hide(getFollowRequestsList(network));
-    getFollowersButton().classList.remove('active');
-    getFollowingButton().classList.add('active');
-    getFollowRequestsButton().classList.remove('active');
+    removeActiveClass(getFollowersButton());
+    addActiveClass(getFollowingButton());
+    removeActiveClass(getFollowRequestsButton());
 }
 function showFollowRequests(event) {
     event.preventDefault();
     hide(getFollowersList(network));
     hide(getFollowingList(network));
     show(getFollowRequestsList(network));
-    getFollowersButton().classList.remove('active');
-    getFollowingButton().classList.remove('active');
-    getFollowRequestsButton().classList.add('active');
+    removeActiveClass(getFollowersButton());
+    removeActiveClass(getFollowingButton());
+    addActiveClass(getFollowRequestsButton());
 }
 
 // 'remove-follower' or 'remove-following' or 'deny-follow-request' or 'accept-follow-request' or 'cancel-follow-request'
@@ -85,7 +92,7 @@ async function deleteFollower(event) {
         (userId) => sendAjaxRequest('DELETE', `/follow/follower/${userId}`, null),
         (username) => `Are you sure you want to delete ${username} from your follower list?`,
         (data) => {
-            decrementCount(getFollowersButton);
+            decrementCount(getFollowersButton());
             handleEmpty(getFollowersList(network), 'You have no followers');
         }
     );
