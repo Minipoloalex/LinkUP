@@ -59,6 +59,7 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE group_member (
+    id SERIAL,
     id_user INTEGER REFERENCES users(id) ON DELETE CASCADE,
     id_group INTEGER REFERENCES groups(id) ON DELETE CASCADE,
     PRIMARY KEY (id_user, id_group)

@@ -27,4 +27,14 @@ class GroupPolicy
 
         // return false;
     }
+
+    public function deleteMember(User $user, Group $group): bool
+    {
+        if ($group->id_owner != $user->id) {
+            return false;
+        }
+
+        $group->load('members');
+        return $group->members->contains($user) && $user !== null;
+    }
 }

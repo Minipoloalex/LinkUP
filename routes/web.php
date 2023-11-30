@@ -86,7 +86,8 @@ Route::controller(GroupController::class)->group(function () {
     Route::put('/group/{id}', 'update')->name('group.update');
 
     Route::delete('/group/{id}', 'delete');
-});
+    Route::delete('/group/{id}/member/{member_id}', 'deleteMember');
+})->middleware('auth');
 
 // profile page
 

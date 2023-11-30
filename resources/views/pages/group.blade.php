@@ -1,5 +1,11 @@
 @php
 $type = $user_is_owner ? 'owner' : ($user_is_member ? 'member' : ($user_is_pending ? 'pending' : 'none'));
+$id = ['owner' => 'settings-group', 'member' => 'leave-group', 'pending' => 'pending-group', 'none' =>
+'join-group'][$type];
+$icon = ['owner' => 'fa-gear', 'member' => 'fa-arrow-right-from-bracket', 'pending' => 'fa-clock-rotate-left',
+'none' => 'fa-users'][$type];
+$color = ['owner' => 'gray', 'member' => 'red', 'pending' => 'yellow', 'none' => 'blue'][$type];
+$text = ['owner' => 'Settings', 'member' => 'Leave Group', 'pending' => 'Pending', 'none' => 'Join Group'][$type];
 @endphp
 
 @extends('layouts.app')
@@ -21,18 +27,18 @@ $type = $user_is_owner ? 'owner' : ($user_is_member ? 'member' : ($user_is_pendi
                 <p class="text-lg">{{ $group->description }}</p>
             </div>
         </div>
-        <div class="h-16 flex w-full items-end justify-end py-6 px-10">
-            @include('partials.group.button', ['type' => $type])
+        <div class="h-16 flex w-full items-end justify-end mb-4 px-8">
+            @include('partials.components.button', ['id' => $id, 'icon' => $icon, 'color' => $color, 'text' => $text])
         </div>
     </section>
 
     @if($user_is_member)
 
     <div class="flex w-full items-center">
-        <div id="posts" class="flex items-center justify-center w-1/2 h-10 border border-slate-400">
+        <div id="posts" class="flex items-center justify-center w-1/2 h-10 border border-slate-400 cursor-pointer">
             <h1>Posts</h1>
         </div>
-        <div id="members" class="flex items-center justify-center w-1/2 h-10 border border-slate-400">
+        <div id="members" class="flex items-center justify-center w-1/2 h-10 border border-slate-400 cursor-pointer">
             <h1>Members</h1>
         </div>
     </div>
@@ -45,7 +51,7 @@ $type = $user_is_owner ? 'owner' : ($user_is_member ? 'member' : ($user_is_pendi
 
     <section id="members-section" class="flex flex-col items-center hidden">
         @foreach ($members as $member)
-        @include('partials.group.member', ['member' => $member])
+        @include('partials.group.member', ['member' => $member, 'owner' => $user_is_owner, 'user' => $user])
         @endforeach
     </section>
 
@@ -73,5 +79,5 @@ $type = $user_is_owner ? 'owner' : ($user_is_member ? 'member' : ($user_is_pendi
     @endif
 </main>
 
-<script type="module" src="{{ url('js/group/group.js') }}"></script>
+<input type="hidden" id="group-id" value="{{ $group->id }}">
 @endsection

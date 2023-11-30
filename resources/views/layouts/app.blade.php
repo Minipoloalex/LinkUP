@@ -23,20 +23,22 @@
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
-    <script type="text/javascript" src={{ url('js/feedback.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/ajax.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/file_input.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/post_helpers.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/post_render.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/app.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/add_comment.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/delete_post.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/search.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/edit_post.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/add_post.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/edit_profile.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/contact.js') }} defer></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script type="module" src={{ url('js/feedback.js') }} defer></script>
+    <script type="module" src={{ url('js/ajax.js') }} defer></script>
+    <script type="module" src={{ url('js/file_input.js') }} defer></script>
+    <script type="module" src={{ url('js/post_helpers.js') }} defer></script>
+    <script type="module" src={{ url('js/post_render.js') }} defer></script>
+    <script type="module" src={{ url('js/app.js') }} defer></script>
+    <script type="module" src={{ url('js/add_comment.js') }} defer></script>
+    <script type="module" src={{ url('js/delete_post.js') }} defer></script>
+    <script type="module" src={{ url('js/search.js') }} defer></script>
+    <script type="module" src={{ url('js/edit_post.js') }} defer></script>
+    <script type="module" src={{ url('js/add_post.js') }} defer></script>
+    <script type="module" src={{ url('js/edit_profile.js') }} defer></script>
+    <script type="module" src={{ url('js/contact.js') }} defer></script>
+    <script type="module" src={{ url('js/group/group.js') }} defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
