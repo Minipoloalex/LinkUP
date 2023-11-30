@@ -13,15 +13,6 @@ async function submitAddComment(event) {
         id_parent: post.dataset.id
     }, 'comment');
 
-    // if (data != null) {
-    //     const commentsContainer = post.querySelector('.comments-container');
-        
-    //     addCommentToDOM(commentsContainer, data);
-    //     incrementCommentCount(post);
-
-    //     commentForm.reset();
-    //     clearFileInputWrapper(getFileInputWrapper(commentForm));
-    // }
     if (data != null) {
         const commentsContainer = post.querySelector('.comments-container');
         const commentHTML = parseHTML(data.commentHTML);

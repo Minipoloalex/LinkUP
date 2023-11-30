@@ -1,8 +1,9 @@
+function getFileInputWrapper(form) {
+    return form.querySelector('.file-input-wrapper');
+}
 function clearFileInputWrapper(fileInputWrapper) {
-    const fileName = fileInputWrapper.querySelector('.file-name');
-    const removeFileBtn = fileInputWrapper.querySelector('.remove-file');
-    const uploadFileBtn = fileInputWrapper.querySelector('.upload-file');
-    clearFileInput(fileName, removeFileBtn, uploadFileBtn);
+    const removeFileBtn = getRemoveFileBtn(fileInputWrapper);
+    removeFileBtn.click();
 }
 function clearFileInput(fileName, removeFileBtn, uploadFileBtn) {
     fileName.textContent = 'No file selected';

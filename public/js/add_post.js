@@ -10,9 +10,6 @@ if (addPostOn) {
 if (addPostForm) {
     addPostForm.addEventListener('submit', submitAddPost);
 }
-function getFileInputWrapper(form) {
-    return form.querySelector('.file-input-wrapper');
-}
 function showAddPostForm() {
     show(addPostForm);
     hide(addPostOn);
