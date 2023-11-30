@@ -34,7 +34,7 @@
     </div>
     <div class="post-footer">
         <h3 class="post-likes">
-            <button class="like-button" data-id="{{ $post->id }}">&#10084; Like Post</button>
+            <button class="like-button mr-1" data-id="{{ $post->id }}">&#10084; Like Post</button>
             <span class="likes">{{ count($post->likes) }}</span>
         </h3>
 

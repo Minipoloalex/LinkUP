@@ -254,8 +254,12 @@ class PostController extends Controller
             $post->likes()->detach($user->id);
         }
 
+
+
         $post->load('likes'); // Load updated likes
-        return response()->json($post);
+        $updatedLikesCount = $post->likes->count(); // Get the updated likes count
+
+        return response()->json(['likesCount' => $updatedLikesCount]);
     }
 
 }
