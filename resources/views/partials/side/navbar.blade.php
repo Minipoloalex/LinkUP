@@ -13,13 +13,11 @@
         <div class="flex py-2 text-xl">
             <a href="{{ url('/settings') }}">Settings</a>
         </div>
-        <div class="flex py-2 text-xl">
-            <img class="w-8 h-8 rounded-full" src="{{ url('images/users/icons/' . Auth::user()->id . '.png') }}"
-                alt="User Icon">
-            <a href="{{ url('/profile/' . Auth::user()->username) }}" class="ml-3">
-                {{ Auth::user()->username }}
-            </a>
-        </div>
+        <a class="flex py-2 text-xl" href="{{ url('/profile/' . Auth::user()->username) }}">
+            <img class="w-8 h-8 rounded-full" src="{{ Auth::user()->getProfilePicture() }}"
+            alt="User Icon">
+            <p class="ml-3">{{ Auth::user()->username }}</p>
+        </a>
     </div>
 </nav>
 @endguest
