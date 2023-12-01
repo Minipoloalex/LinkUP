@@ -43,7 +43,8 @@ class AdminController extends Controller
     
     public function listUsers()
     {
-        $users = User::all();
+        $users = User::all()->sortBy('id');
+    
         return view('admin.users', ['users' => $users]);
     }
 
@@ -52,4 +53,22 @@ class AdminController extends Controller
         $posts = Post::all();
         return view('admin.posts', ['posts' => $posts]);
     }  
+
+    public function banUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->is_banned = true;
+        $user->save();
+
+        return redirect()->route('admin.users')->with('success', 'User banned successfully.');
+    }
+
+    public function unbanUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->is_banned = false;
+        $user->save();
+
+        return redirect()->route('admin.users')->with('success', 'User unbanned successfully.');
+    }
 }

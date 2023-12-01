@@ -46,6 +46,9 @@
         @if ($errors->has('password'))
         <p class="error text-red-500"> {{ $errors->first('password') }} </p>
         @endif
+        @if (session('error'))
+        <p class="error text-red-500"> {{ session('error') }} </p>
+        @endif
     </div>
 </main>
 @endsection

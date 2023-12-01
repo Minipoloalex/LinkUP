@@ -30,6 +30,7 @@ class User extends Authenticatable
         'password',
         'description',
         'is_private',
+        'is_banned',
     ];
 
     /**
