@@ -101,7 +101,7 @@ function buildPostInfo(postJson, editable) {
     postInfo.innerHTML = `
         <header>
             <div class="user-date">
-                <img class="user-image" src="/images/profile.png" alt="User photo">
+                <img class="user-image" src="/profile/photo/${postJson.created_by.id}" alt="User photo">
                 <a class="post-info-user"></a>
                 <span class="date"></span>
             </div>

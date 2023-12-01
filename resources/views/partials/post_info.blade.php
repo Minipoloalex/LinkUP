@@ -4,8 +4,7 @@
 <div class="post-info">
     <header>
         <div class="user-date">
-            {{-- <img src="/users/{{ $post->id_created_by }}/image" alt="User photo"> --}}
-            <img class="user-image" src="{{ url('images/profile.png') }}" alt="User photo">
+            <img class="user-image" src="{{ $post->createdBy->getProfilePicture() }}" alt="User photo">
             <a class="post-info-user" href="/profile/{{ $post->createdBy->username }}">{{ $post->createdBy->username }}</a>
             <span class="date">{{ $post->created_at }}</span>
         </div>
