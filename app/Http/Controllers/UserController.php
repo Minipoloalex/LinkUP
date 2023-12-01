@@ -9,18 +9,35 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    public function showProfile($username)
+    /**
+     * Show the user's profile.
+     * 
+     * @param string $username 
+     * @return \Illuminate\Http\Response
+     */
+    public function showProfile(string $username)
     {
         $user = User::where('username', $username)->firstOrFail();
 
         return view('pages.profile', ['user' => $user]);
     } 
 
+    /**
+     * Show the user's settings.
+     * 
+     * @return \Illuminate\Http\Response
+     */
     public function showSettings()
     {
         return view('pages.settings', ['user' => Auth::user()]);
     }
 
+    /**
+     * Update the user's profile.
+     * 
+     * @param Request $request 
+     * @return \Illuminate\Http\RedirectResponse 
+     */
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -38,6 +55,12 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Profile updated successfully!');    
     }
 
+    /**
+     * Update the user's settings.
+     * 
+     * @param Request $request 
+     * @return \Illuminate\Http\RedirectResponse 
+     */
     public function updateSettings(Request $request)
     {
         $user = Auth::user();
@@ -45,19 +68,24 @@ class UserController extends Controller
         $request->validate([
             'username' => ['required', 'string', 'max:15', 'unique:users,username,' . $user->id],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'new_password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'privacy' => ['required', 'string', 'in:public,private'],
+            'current_password' => ['required', 'string'],
         ]);
+
+        if (!password_verify($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'The given password is incorrect.']);
+        }
 
         $user->update([
             'username' => $request->username,
             'email' => $request->email,
-            'is_private' => $request->privacy === 'private',        
+            'is_private' => $request->privacy === 'private',
         ]);
 
-        if ($request->password) {
+        if ($request->new_password) {
             $user->update([
-                'password' => bcrypt($request->password),
+                'password' => bcrypt($request->new_password),
             ]);
         }
 
