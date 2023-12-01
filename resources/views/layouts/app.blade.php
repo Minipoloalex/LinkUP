@@ -19,13 +19,17 @@
     <link href="{{ url('css/milligram.min.css') }}" rel="stylesheet">
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <link href="{{ url('css/posts.css') }}" rel="stylesheet">
+    <link href="{{ url('css/follow.css') }}" rel="stylesheet">
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
     <script type="text/javascript" src={{ url('js/feedback.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/general_helpers.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/ajax.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/file_input.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/network.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/add_follow.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/post_helpers.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/post_render.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/app.js') }} defer></script>

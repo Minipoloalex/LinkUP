@@ -8,18 +8,16 @@ if (editButton && editModal) {
 
     // Function to open the edit modal
     function openEditModal() {
-        editModal.classList.remove('hidden');
+        show(editModal);
         document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-        darkOverlay.classList.remove('hidden'); // Show dark overlay
-
+        show(darkOverlay); // Show dark overlay
     }
 
     // Function to close the edit modal
     function closeEditModal() {
-        editModal.classList.add('hidden');
+        hide(editModal);
         document.body.style.overflow = ''; // Enable scrolling when modal is closed
-        darkOverlay.classList.add('hidden'); // Hide dark overlay
-
+        hide(darkOverlay); // Hide dark overlay
     }
 
     // Handle click events on the Edit button
