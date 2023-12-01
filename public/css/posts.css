@@ -8,7 +8,7 @@ make posts added by Javascript be easier to create there, by decoupling the CSS 
     gap: 1rem;
 }
 
-.post-info>header {
+.post-info > header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -24,12 +24,14 @@ make posts added by Javascript be easier to create there, by decoupling the CSS 
     height: 2rem;
 }
 
-.post-info .user-date>a {
+.post-info .user-date > a {
     padding: 0.25rem;
+    margin-left: 1rem;
 }
 
-.post-info .user-date>.date {
+.post-info .user-date > .date {
     margin: 0.25rem;
+    display: none;
 }
 
 .edit-delete-post {
@@ -80,6 +82,10 @@ make posts added by Javascript be easier to create there, by decoupling the CSS 
 
 .post-info .post-footer .nr-comments::after {
     content: ' comments';
+}
+
+.post-likes > .likes {
+    margin-left: 0.5rem;
 }
 
 :root {
