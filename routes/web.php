@@ -83,6 +83,8 @@ Route::controller(GroupController::class)->group(function () {
     Route::get('/group/{id}', 'show')->name('group');
 
     Route::post('/group', 'createGroup')->name('group.create');
+    Route::post('/group/{id}/join', 'joinRequest')->name('group.join');
+    Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
     Route::put('/group/{id}', 'update')->name('group.update');
 
     Route::delete('/group/{id}', 'delete');

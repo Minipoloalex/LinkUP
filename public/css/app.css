@@ -25,13 +25,6 @@ a:hover{
   color: var(--feup-color);
 }
 
-button:clicked{
-  background-color: transparent;
-}
-  
-button:not(:active) {
-}
-
 /* when page is same as the link, ref is feup color */
 a:active {
   color: var(--feup-color);
@@ -240,11 +233,6 @@ a:active {
   .comment-text {
     margin-top: 5px;
   }
-
-  .write-comment button {
-    
-  }
-
 
 /* contact page */
 #contactForm textarea:focus, input:focus {

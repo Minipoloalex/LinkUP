@@ -39,8 +39,12 @@ class GroupController extends Controller
 
     public function deleteMember(string $id, string $id_member)
     {
+        if ($id_member == 'self') {
+            $id_member = Auth::user()->id;
+        }
+
         $group = Group::findOrFail($id);
-        $this->authorize('deleteMember', $group);
+        $this->authorize('deleteMember', [$group, $id_member]);
 
         if ($group->id_owner == $id_member) {
             return response('Cannot delete owner', 403);
@@ -49,6 +53,41 @@ class GroupController extends Controller
         $member = GroupMember::where('id_group', $id)->where('id_user', $id_member)->firstOrFail();
         $member->delete();
 
-        return response();
+        \Log::info('User ' . Auth::user()->id . ' deleted member ' . $id_member . ' from group ' . $id);
+        return response('Member deleted', 200);
+    }
+
+    public function joinRequest(string $id)
+    {
+        $group = Group::findOrFail($id);
+        $user = Auth::user();
+
+        if ($group->members()->where('id_user', $user->id)->exists()) {
+            return response('Already member', 403);
+        }
+
+        if ($group->pendingMembers()->where('id_user', $user->id)->exists()) {
+            return response('Already pending', 403);
+        }
+
+        $group->pendingMembers()->attach($user->id, ['type' => 'Request']);
+
+        \Log::info('User ' . Auth::user()->id . ' requested to join group ' . $id);
+        return response('Request sent', 200);
+    }
+
+    public function cancelJoinRequest(string $id)
+    {
+        $group = Group::findOrFail($id);
+        $user = Auth::user();
+
+        if (!$group->pendingMembers()->where('id_user', $user->id)->exists()) {
+            return response('Not pending', 403);
+        }
+
+        $group->pendingMembers()->detach($user->id);
+
+        \Log::info('User ' . Auth::user()->id . ' canceled join request to group ' . $id);
+        return response('Request canceled', 200);
     }
 }

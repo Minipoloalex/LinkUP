@@ -28,12 +28,24 @@ class GroupPolicy
         // return false;
     }
 
-    public function deleteMember(User $user, Group $group): bool
+    public function deleteMember(User $user, Group $group, string $id_member): bool
     {
+        /* Leave group <=> remove himself from group */
+        if ($user->id == $id_member) {
+            return true;
+        }
+
+        /* Otherwise only owner can delete members */
         if ($group->id_owner != $user->id) {
             return false;
         }
 
+        /* Owner cannot delete himself */
+        if ($group->id_owner == $id_member) {
+            return false;
+        }
+
+        /* Member must exist */
         $group->load('members');
         return $group->members->contains($user) && $user !== null;
     }
