@@ -93,3 +93,13 @@ Route::controller(UserController::class)->group(function() {
     
     Route::post('/follow', 'requestFollow');
 });
+
+/* route for about us page */
+Route::get('/about', function() {
+    return view('pages.about');
+})->name('about');
+
+/* route for contact us page */
+Route::get('/contact', function() {
+    return view('pages.contact');
+})->name('contact');
