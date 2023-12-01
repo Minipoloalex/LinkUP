@@ -7,8 +7,6 @@
         @php
           $follows = Auth::user()->isFollowing($user);
           $pending = Auth::user()->requestedToFollow($user);
-          Log::debug("follows = $follows");
-          Log::debug("pending = $pending");
 
           $follows_button = !$pending && !$follows ? '' : 'hidden';
           $sent_button = $pending ? '' : 'hidden';

@@ -10,9 +10,6 @@ if (addPostOn) {
 if (addPostForm) {
     addPostForm.addEventListener('submit', submitAddPost);
 }
-function getFileInputWrapper(form) {
-    return form.querySelector('.file-input-wrapper');
-}
 function showAddPostForm() {
     show(addPostForm);
     hide(addPostOn);
@@ -34,14 +31,12 @@ async function submitAddPost(event) {
 
     const data = await submitAddPostOrComment(addPostForm, {'content': content}, 'post');
     if (data != null) {
-        prependPostsToTimeline([data]);
+        prependPostsToTimeline([data.postHTML]);
         
         addPostForm.reset();
         clearFileInputWrapper(getFileInputWrapper(addPostForm));
         if (addPostOff) {
             hideAddPostForm();
         }
-        
-        // addPost(<container>, <post_info>)
     }
 }

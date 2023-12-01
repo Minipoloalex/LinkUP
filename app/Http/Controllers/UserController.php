@@ -158,7 +158,6 @@ class UserController extends Controller
         $this->authorize('update', User::class);
         $user = Auth::user();
         $sentFrom = User::findOrFail($id);
-        Log::debug($sentFrom->toJson() . ' ' . $user->toJson());
         if (!$sentFrom->requestedToFollow($user)) {
             return response()->json(['error' => "You do not have a pending follow request from $sentFrom->username!"]);
         }
@@ -171,7 +170,6 @@ class UserController extends Controller
         return response()->json($sentFrom);
     }
     public function acceptFollowRequest(string $id) {
-        Log::debug("Accept follow request starting");
         $this->authorize('update', User::class);
         $user = Auth::user();
         $sentFrom = User::findOrFail($id);
@@ -180,7 +178,6 @@ class UserController extends Controller
             return response()->json(["error' => 'You do not have a pending follow request from $sentFrom->username!"]);
         }
 
-        Log::debug("Valid request to accept the follow request");
         DB::beginTransaction();
 
         $followRequest = $user->followRequestsReceived()->where('id_user_from', $sentFrom->id)
@@ -188,12 +185,10 @@ class UserController extends Controller
         $followRequest->delete();
         $user->followers()->attach($sentFrom->id);
         DB::commit();
-        Log::debug("Accepted follow request");
         $userHTML = view('partials.network.follower_card', [
             'user' => $user,
             'isMyProfile' => true
         ])->render();
-        Log::debug("Rendered HTML: $userHTML");
 
         return response()->json(['userHTML' => $userHTML, 'success' => "You accepted the follow request from $sentFrom->username", 'userId' => $sentFrom->id]);
     }

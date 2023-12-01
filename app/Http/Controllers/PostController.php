@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Log;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ImageController;
+use Illuminate\Support\Collection;
 
 class PostController extends Controller
 {
@@ -18,6 +19,9 @@ class PostController extends Controller
     {
         $this->imageController = new ImageController('posts');
     }
+    /**
+     * Store a newly created post in the database
+     */
     public function storePost(Request $request)
     {
         if (!Auth::check()) {
@@ -34,19 +38,22 @@ class PostController extends Controller
         $post = new Post();
 
         $post->content = $request->input('content');
-        if ($request->has('is_private'))
+        if ($request->has('is_private')) {
             $post->is_private = $request->input('is_private');
+        }
         $post->id_created_by = Auth::user()->id;
 
         $post->save();  // get the post id to make file name unique
 
-        $this->setFileName($request, $post);
+        $createdFile = $this->setFileName($request, $post);
+        if (!$createdFile) {
+            $post->media = null;
+            $post->created_at = $post->freshTimestamp();
+        }
         DB::commit();
 
-        $post->load('createdBy', 'comments', 'likes');
-        
-        $post->success = 'Post created successfully!';
-        return response()->json($post);
+        $postHTML = $this->translatePostToHTML($post, false, false, false);
+        return response()->json(['postHTML' => $postHTML, 'success' => 'Post created successfully!']);
     }
 
     /**
@@ -77,12 +84,14 @@ class PostController extends Controller
 
         $comment->save();
 
-        $this->setFileName($request, $comment);
-        Log::info("created comment $comment->toJson()");
+        $createdFile = $this->setFileName($request, $comment);
+        if (!$createdFile) {
+            $comment->media = null;
+            $post->created_at = $post->freshTimestamp();
+        }
 
-        $comment->load('createdBy', 'comments', 'likes');
-        $comment->success = 'Comment created successfully!';
-        return response()->json($comment);
+        $commentHTML = $this->translatePostToHTML($comment, true, true, false);
+        return response()->json(['commentHTML' => $commentHTML, 'success' => 'Comment created successfully!']);
     }
     /**
      * Display the specified resource.
@@ -95,7 +104,6 @@ class PostController extends Controller
         // Check if the current user can see (show) the post.
         $this->authorize('view', $post);
 
-        // Use the pages.post template to display the post.
         return view('pages.post', [
             'post' => $post
         ]);
@@ -111,12 +119,18 @@ class PostController extends Controller
         });
         return $filteredPosts;
     }
+    /**
+     * Returns the search results for a given query for AJAX requests.
+     */
     public function search(string $search)
     {
         $posts = $this->getSearchResults($search);
-        $posts->success = 'Search results retrieved';
-        return response()->json($posts);
+        $postsHTML = $this->translatePostsArrayToHTML($posts);
+        return response()->json(['postsHTML' => $postsHTML, 'success' => 'Search results retrieved']);
     }
+    /**
+     * Display the search results page for a given query.
+     */
     public function searchResults(Request $request)
     {
         $request->validate([
@@ -141,7 +155,7 @@ class PostController extends Controller
             'is_private' => 'nullable|boolean',
             'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
         ]);
-        // media -> can change, add or maintain (null) (cannot delete)
+        // media -> can change, add or maintain (null) (cannot delete -> check deleteImage for that)
         $this->authorize('update', $post);
 
         $post->content = $request->input('content') ?? $post->content;
@@ -155,9 +169,18 @@ class PostController extends Controller
             $this->setFileName($request, $post);
             $hasNewMedia = true;
         }
-        $post->hasNewMedia = $hasNewMedia;
-        $post->success = 'Post updated successfully!';
-        return response()->json($post);
+
+        if ($hasNewMedia) {
+            $postImageHTML = $this->getPostImageHTML($post);
+            
+            return response()->json([
+                'postImageHTML' => $postImageHTML,
+                'success' => 'Post updated successfully!',
+                'hasNewMedia' => true
+            ]);
+        }
+
+        return response()->json(['success' => 'Post updated successfully!']);
     }
     /**
      * Delete a post.
@@ -199,14 +222,22 @@ class PostController extends Controller
         $post->success = 'Post image deleted successfully!';
         return response()->json($post);
     }
-    private function setFileName(Request $request, Post $post)
+    /**
+     * Set the media file name for a post.
+     * @param Request $request
+     * @param Post $post
+     * @return bool true if the file name was set, false otherwise (if there was no file)
+     */
+    private function setFileName(Request $request, Post $post): bool
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
             $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
             $this->imageController->store($request->media, $fileName);
             $post->media = $fileName;
             $post->save();
+            return true;
         }
+        return false;
     }
     private function deleteFile(?string $fileName)
     {
@@ -226,15 +257,45 @@ class PostController extends Controller
 
         $posts = Post::whereDate('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
 
-
         $filteredPosts = $posts->filter(function ($post) {
             return policy(Post::class)->view(Auth::user(), $post);
         });
-
-        $filteredPosts->each(function ($post) {
-            $post->load('createdBy', 'comments', 'likes');
+        $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
+        return response()->json($postsHTML);
+    }
+    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $displayComments = false)
+    {
+        if ($isComment) {
+            return view('partials.comment', ['comment' => $post, 'showEdit' => $showEdit])->render();
+        } else {
+            return view('partials.post', [
+                'post' => $post,
+                'showEdit' => $showEdit,
+                'displayComments' => $displayComments
+            ])->render();
+        }
+    }
+    /**
+     * Given an array of (Post::class) posts, returns the HTML code to display them.
+     * Does not translate comments to HTML.
+     * Used to display a list of posts, without displaying their comments and without the option to edit them.
+     * @param Collection $posts
+     * @return Collection HTML code to display the posts
+     */
+    private function translatePostsArrayToHTML($posts)
+    {
+        $html = $posts->map(function ($post) {
+            return $this->translatePostToHTML($post, false, false, false);
         });
-
-        return response()->json($filteredPosts);
+        return $html;
+    }
+    /**
+     * Returns the HTML code to display the image of a post. The post must have an image.
+     * Used in the edit post, so this image is always editable (can be deleted).
+     * @param Post $post
+     */
+    private function getPostImageHTML(Post $post)
+    {
+        return view('partials.post_image', ['post' => $post, 'editable' => true])->render();
     }
 }
