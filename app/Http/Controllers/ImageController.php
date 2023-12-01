@@ -4,44 +4,77 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ImageController extends Controller
 {
-    static protected $path = "images/";
-    public static function store($media, string $fileName)
+    static protected $default = 'def.jpg';
+    static protected $pathUsers = "public/images/users/";
+    static protected $pathPosts = "images/";
+    protected string $path = "";
+    public function __construct(string $type)
     {
-        if (self::existsFile($fileName)) {
+        if ($type == 'users')
+            $this->path = self::$pathUsers;
+        else if ($type == 'posts')
+            $this->path = self::$pathPosts;
+        else
+            abort(400);
+    }
+    private function getFilePath(string $fileName) {
+        return $this->path . $fileName;
+    }
+    public function store($media, string $fileName)
+    {
+        if ($this->existsFile($fileName)) {
             abort(400);
         }
-        \Log::info("Storing file: $fileName in " . self::$path);
-        Storage::putFileAs(self::$path, $media, $fileName);
+        Storage::putFileAs($this->path, $media, $fileName);
     }
-    public static function delete(string $fileName)
+    public function delete(string $fileName)
     {
-        $filePath = self::getFilePath($fileName);
-        if (self::existsFile($fileName)) {
+        $filePath = $this->getFilePath($fileName);
+        if ($this->existsFile($fileName)) {
             $deleted = Storage::delete($filePath);
             if ($deleted) {
-                \Log::info("File deleted: $filePath");
+                Log::info("File deleted: $filePath");
             }
             else {
-                \Log::info("File not found: $filePath");
+                Log::info("File not found: $filePath");
             }
         }
     }
-    private static function getFilePath(string $fileName) {
-        return self::$path . $fileName;
-    }
-    public static function existsFile(string $fileName) : bool
+    public function existsFile(string $fileName) : bool
     {
-        return Storage::exists(self::getFilePath($fileName));
+        return Storage::exists($this->getFilePath($fileName));
     }
-    public static function getFile(string $fileName)
+    public function getFile(?string $fileName)
     {
-        if (!self::existsFile($fileName)) {
-            abort(404);
+        $fileName ??= self::$default;
+        if (!$this->existsFile($fileName)) {
+            if ($fileName == self::$default) {
+                abort(404);
+            }
+            else {
+                return $this->getFile(self::$default);
+            }
         }
-        $filePath = self::getFilePath($fileName);        
+        $filePath = Storage::url($this->getFilePath($fileName));
+        
+        return asset($filePath);
+    }
+    public function getFileResponse(string $fileName)
+    {
+        $fileName ??= self::$default;
+        if (!$this->existsFile($fileName)) {
+            if ($fileName == self::$default) {
+                abort(404);
+            }
+            else {
+                return $this->getFileResponse(self::$default);
+            }
+        }
+        $filePath = $this->getFilePath($fileName);
         return Storage::response($filePath);
     }
 }

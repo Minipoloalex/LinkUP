@@ -13,7 +13,9 @@
             @endif
         </div>
     @endif
-    @if ($showEdit)
-        @include('partials.create_post_form', ['formClass' => 'add-comment rounded px-10 py-5 bg-gray-300', 'textPlaceholder' => 'Add a new comment', 'buttonText' => 'Create Comment', 'contentValue' => ''])
-    @endif
+    @auth
+        @if ($showEdit)
+            @include('partials.create_post_form', ['formClass' => 'add-comment rounded px-10 py-5 bg-gray-300', 'textPlaceholder' => 'Add a new comment', 'buttonText' => 'Create Comment', 'contentValue' => ''])
+        @endif
+    @endauth
 </article>

@@ -84,9 +84,18 @@ Route::controller(PostController::class)->group(function () {
 });
 
 
-// User
-Route::get('/profile/{username}', [UserController::class, 'showProfile'])->name('profile');
-Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
+Route::get('profile/{username}', [UserController::class, 'showProfile'])->name('profile.show');
+Route::post('profile', [UserController::class, 'updateProfile'])->name('profile.update');
+Route::get('profile/photo/{id}', [UserController::class, 'viewProfilePicture'])->name('profile.photo');
+
+Route::get('network/{username}', [UserController::class, 'showNetwork'])->name('profile.network');
+
+Route::delete('follow/follower/{id}', [UserController::class, 'removeFollower'])->where('id', '[0-9]+');
+Route::delete('follow/following/{id}', [UserController::class, 'removeFollowing'])->where('id', '[0-9]+');
+Route::delete('follow/request/cancel/{id}', [UserController::class, 'cancelRequestToFollow'])->where('id', '[0-9]+');
+Route::delete('follow/request/deny/{id}', [UserController::class, 'denyFollowRequest'])->where('id', '[0-9]+');
+Route::patch('follow/request/accept/{id}', [UserController::class, 'acceptFollowRequest'])->where('id', '[0-9]+');
+Route::post('follow', [UserController::class, 'requestFollow']);
 
 Route::get('/settings', [UserController::class, 'showSettings'])->name('settings');
 Route::post('/settings', [UserController::class, 'updateSettings'])->name('settings.update');

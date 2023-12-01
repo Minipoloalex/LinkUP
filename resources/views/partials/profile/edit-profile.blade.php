@@ -8,7 +8,7 @@
 <div id="editModal" class="edit-modal hidden fixed top-0 left-0 w-full h-full justify-center items-center ">
     <div class="modal-content bg-white p-6 rounded shadow-lg">
         <h2 class="text-2xl font-bold mb-4">Edit Profile</h2>
-        <form id="editForm" method="POST" action="{{ route('profile.update') }}">
+        <form id="editForm" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
             {{ csrf_field() }}
 
             <label for="name" class="block mb-2">Name</label>
@@ -26,6 +26,7 @@
                     {{ $errors->first('description') }}
                 </span>
             @endif
+            @include('partials.file_input')
             
             <div class="flex justify-center">
                 <button type="submit" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1">Save</button>

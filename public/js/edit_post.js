@@ -46,13 +46,18 @@ async function submitEditPost(event) {  // submitted the form
         const postContentElement = post.querySelector('.post-content');
         postContentElement.textContent = newContent;
         toggleEdit(postContentElement, form, textField);
-        
-        if (data['hasNewMedia']) {
 
+        clearFileInputWrapper(getFileInputWrapper(form));
+
+        if (data.hasNewMedia) {
             removeImageContainer(post);
-            addImageContainer(postContentElement, postId);
+            const imageContainer = parseHTML(data.postImageHTML);
+            
+            const deleteButton = imageContainer.querySelector('.delete-image');
+            deleteButton.addEventListener('click', deleteImage);
+
+            postContentElement.after(imageContainer);
         }
-        
     }
 }
 

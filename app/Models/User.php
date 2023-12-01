@@ -3,13 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\Controllers\ImageController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
@@ -53,23 +57,45 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected function posts() : HasMany
+    public function posts() : HasMany
     {
         return $this->hasMany(Post::class, 'id_created_by');
     }
 
-    protected function followers() : HasMany
+    public function followers() : BelongsToMany
     {
-        return $this->hasMany(Follow::class, 'id_followed');
+        return $this->belongsToMany(User::class, 'follows', 'id_followed', 'id_user')->orderBy('username');
     }
 
-    protected function following() : HasMany
+    public function following() : BelongsToMany
     {
-        return $this->hasMany(Follow::class, 'id_user');
+        return $this->belongsToMany(User::class, 'follows', 'id_user', 'id_followed')->orderBy('username');
+    }
+    public function isFollowing(User $user) : bool
+    {
+        return $this->following()->where('id_followed', $user->id)->exists();
     }
 
     protected function groups() : HasMany
     {
         return $this->hasMany(GroupMember::class, 'id_user');
+    }
+    public function getProfilePicture()
+    {
+        $imageController = new ImageController('users');
+
+        return $imageController->getFile($this->photo);
+    }
+    public function followRequestsReceived() : HasMany
+    {
+        return $this->hasMany(FollowRequest::class, 'id_user_to');
+    }
+    public function followRequestsSent() : HasMany
+    {
+        return $this->hasMany(FollowRequest::class, 'id_user_from');
+    }
+    public function requestedToFollow(User $user) : bool
+    {
+        return $this->followRequestsSent()->where('id_user_to', $user->id)->exists();
     }
 }

@@ -4,9 +4,9 @@ if (feedbackMessage) {
     closeFeedback.addEventListener('click', dismissFeedback);
 }
 function dismissFeedback() {
-    feedbackMessage.classList.add('hidden');
+    hide(feedbackMessage);
 }
 function showFeedback(message) {
-    feedbackMessage.classList.remove('hidden');
+    show(feedbackMessage);
     feedbackMessage.querySelector('#feedback-text').textContent = message;
 }

@@ -4,8 +4,7 @@
 <div class="post-info">
     <header>
         <div class="user-date">
-            {{-- <img src="/users/{{ $post->id_created_by }}/image" alt="User photo"> --}}
-            <img class="user-image" src="{{ url('images/profile.png') }}" alt="User photo">
+            <img class="user-image" src="{{ $post->createdBy->getProfilePicture() }}" alt="User photo">
             <a class="post-info-user" href="/profile/{{ $post->createdBy->username }}">{{ $post->createdBy->username }}</a>
             <span class="date">{{ $post->created_at }}</span>
         </div>
@@ -23,12 +22,7 @@
         <a class="post-link" href="/post/{{ $post->id }}">
             <p class='post-content'>{{ $post->content }}</p>
             @if ($post->media != null)
-                <div class="image-container">
-                    <img src="{{ route('post.image', ['id' => $post->id]) }}" alt="A post image">
-                    @if ($editable)
-                        <a href="#" class="delete delete-image" data-id="{{ $post->id }}">&#10761;</a>
-                    @endif
-                </div>
+                @include('partials.post_image', ['post' => $post, 'editable' => $editable])
             @endif
         </a>
     </div>

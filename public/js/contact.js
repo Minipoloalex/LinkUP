@@ -38,11 +38,10 @@ function submitForm() {
 
   
 /* make the message field automatically grow as the user types */
-let messageInput = document.getElementById('message');
-
-messageInput.addEventListener('input', function () {
+const messageInput = document.getElementById('message');
+if (messageInput) {
+  messageInput.addEventListener('input', function () {
     this.style.height = 'auto'; // Reset the height to auto to ensure the correct height calculation
     this.style.height = (this.scrollHeight) + 'px'; // Set the height based on content
-});
-
-
+  });
+}

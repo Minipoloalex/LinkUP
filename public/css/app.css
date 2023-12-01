@@ -4,17 +4,57 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 body {
-  /* create a color variable */
-
-
   --column-color : rgb(56, 56, 56);
-
   --feup-color: #780404;
 
   display: flex;
   flex-direction: column;
 }
- 
+
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  margin-right: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 3rem;
+  background-color: #ccc;
+}
+
+#searchIcon {
+  position: absolute;
+  right: 1rem;
+  margin-left: 2rem;
+  color: var(--feup-color);
+  transition: opacity 0.2s ease-in-out;
+  opacity: 1;
+  border: none;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  position: relative;
+}
+  
+.search-bar input:focus {
+  border: 1px solid grey;
+}
+  
+/* Hide the search icon when text is entered */
+.search-bar input:not(:empty) ~ #searchIcon {
+  opacity: 0;
+}
+
+.search-bar input:focus, .search-bar button:focus {
+  outline: none;
+  border: none;
+}
 
 
 button:hover{
@@ -28,23 +68,11 @@ a:hover{
 button:clicked{
   background-color: transparent;
 }
-  
-button:not(:active) {
-}
 
 /* when page is same as the link, ref is feup color */
 a:active {
   color: var(--feup-color);
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -73,185 +101,180 @@ a:active {
 }
 
 
-  .edit-profile {
-    width: 100%;
-    /* put content in center and right of div */
-    display: flex;
-    justify-content: right;
-    align-items: center;
+.edit-profile {
+  width: 100%;
+  /* put content in center and right of div */
+  display: flex;
+  justify-content: right;
+  align-items: center;
 
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 
-  }
-
-
-  .edit-button {
-    /* put content in center and right of div */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    float: right;
-    margin-right: 2rem;
-  
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-
-  }
-
-  
-  
-
-  .name-username {
-    /* put content in center and right of div and separate the elements*/
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    
+}
 
 
-  }
+.edit-button {
+  /* put content in center and right of div */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: right;
+  margin-right: 2rem;
 
-  /* name-username first child */
-  .name-username :first-child {
-    font-weight: bold;
-  }
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+}
+
+
+
+
+.name-username {
+  /* put content in center and right of div and separate the elements*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
   
 
-  .name-username p{
-    color: white;
-    font-size: 2rem;
-    margin-right: 1rem;
-  }
+
+}
+
+/* name-username first child */
+.name-username :first-child {
+  font-weight: bold;
+}
 
 
-  .profile-numbers {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-  }
+.name-username p{
+  color: white;
+  font-size: 2rem;
+  margin-right: 1rem;
+}
 
-  .profile-numbers div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-  }
 
-  .profile-numbers div p {
-    color: white;
-    font-size: 2rem;
-    margin-right: 1rem;
-  }
+.profile-numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
 
-  .profile-numbers div p:first-child {
-    font-weight: bold;
-  }
+.profile-numbers div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
 
-  .bio {
-    text-align: left;
-    color: white;
-  }
+.profile-numbers div p {
+  color: white;
+  font-size: 2rem;
+  margin-right: 1rem;
+}
 
-  .profile-picture {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    /* cover all the div */
-    object-fit: cover;
-    
-  }
-  
-  .post-username {
-    font-weight: bold;
-  }
-  
-  .post-timestamp {
-    color: #999;
-  }
-  
-  .post-content {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    
-  }
-  
-  .post-image {
-    /*put image in center */
-    width: 100%;
-    max-width: 600px;
-  }
-  
-  .post-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: left;
-    flex-direction: column;
-  }
-  
-  .post-actions {
-    display: flex;
+.profile-numbers div p:first-child {
+  font-weight: bold;
+}
 
-  }
-  
-  .post-action {
-    margin-right: 10px;
-    cursor: pointer;
-    border: none;
-  }
+.bio {
+  text-align: left;
+  color: white;
+}
 
-  .post-actions :hover {
-    color: var(--feup-color);
-  }
+.profile-picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  /* cover all the div */
+  object-fit: cover;
   
-  .post-comments {
-    margin-top: 10px;
-  }
-  
-  .comment {
-    border: 1px solid #eee;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .commenter-picture {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-  }
-  
-  .comment-info {
-    margin-left: 10px;
-  }
-  
-  .comment-username {
-    font-weight: bold;
-  }
-  
-  .comment-timestamp {
-    color: #999;
-  }
-  
-  .comment-text {
-    margin-top: 5px;
-  }
+}
 
-  .write-comment button {
-    
-  }
+.post-username {
+  font-weight: bold;
+}
 
+.post-timestamp {
+  color: #999;
+}
+
+.post-content {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.post-image {
+  /*put image in center */
+  width: 100%;
+  max-width: 600px;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  flex-direction: column;
+}
+
+.post-actions {
+  display: flex;
+
+}
+
+.post-action {
+  margin-right: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.post-actions :hover {
+  color: var(--feup-color);
+}
+
+.post-comments {
+  margin-top: 10px;
+}
+
+.comment {
+  border: 1px solid #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.commenter-picture {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.comment-info {
+  margin-left: 10px;
+}
+
+.comment-username {
+  font-weight: bold;
+}
+
+.comment-timestamp {
+  color: #999;
+}
+
+.comment-text {
+  margin-top: 5px;
+}
 
 /* contact page */
 #contactForm textarea:focus, input:focus {
-    border-color: transparent;
-    border-bottom-color: var(--feup-color);
-    outline: none;
-  }
+  border-color: transparent;
+  border-bottom-color: var(--feup-color);
+  outline: none;
+}
 
 
 
