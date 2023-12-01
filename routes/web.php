@@ -83,3 +83,13 @@ Route::controller(UserController::class)->group(function() {
     Route::post('/profile', 'update')->name('profile.update');
     Route::get('/profile/photo/{id}', 'viewProfilePicture');
 });
+
+/* route for about us page */
+Route::get('/about', function() {
+    return view('pages.about');
+})->name('about');
+
+/* route for contact us page */
+Route::get('/contact', function() {
+    return view('pages.contact');
+})->name('contact');
