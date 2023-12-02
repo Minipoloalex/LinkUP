@@ -234,90 +234,104 @@ class PostController extends Controller
      * Update likes on a post
      */
 
-     public function addLike(Request $request, string $id)
-     {
-         if (!Auth::check()) {
-             return response()->json(['error' => 'You are not logged in'], 401);
-         }
+        public function addLike(Request $request, string $id)
+        {
+            if (!Auth::check()) {
+                return response()->json(['error' => 'You are not logged in'], 401);
+            }
 
-         Log::info("trying to like post");
-     
-         $post = Post::findOrFail($id);
-         $request->validate([
-             'like' => 'required|boolean'
-         ]);
-
-         Log::info("post is nbeing elkfnwlnf");
-     
-         $like = $request->input('like');
-         $user = Auth::user();
-     
-         // Check if the user has already liked the post
-         $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
-         Log::info("existing like: $existingLike");
-
-        if($existingLike == null) { // if its null, we can create a new like
-            Log::info("existing like is null");
-            $liked = new Liked();
-            $liked->id_user = $user->id;
-            $liked->id_post = $post->id;
-            $liked->save();
-            Log::info("User $user->id liked post $post->id");
-        }
-        else { // if its not null
-            Log::info("existing like is not null");
-            Log::info("User $user->id already liked post $post->id");
-        }
-
-        $post->loadCount('likes'); // Load the count of likes for the post
-        $likeCount = $post->likes()->count();
-
-
-
-        $post->success = 'Post updated successfully!';
-
+            Log::info("trying to like post");
         
+            $post = Post::findOrFail($id);
+            $request->validate([
+                'like' => 'required|boolean'
+            ]);
 
+            Log::info("post is nbeing elkfnwlnf");
+        
+            $like = $request->input('like');
+            $user = Auth::user();
+        
+            // Check if the user has already liked the post
+            $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
+            Log::info("existing like: $existingLike");
+
+            if($existingLike == null) { // if its null, we can create a new like
+                Log::info("existing like is null");
+                $liked = new Liked();
+                $liked->id_user = $user->id;
+                $liked->id_post = $post->id;
+                $liked->save();
+                Log::info("User $user->id liked post $post->id");
+            }
+            else { // if its not null
+                Log::info("existing like is not null");
+                Log::info("User $user->id already liked post $post->id");
+            }
+
+            //log all users who liked a post
+            $users = Liked::where('id_post', $post->id)->get();
+            Log::info("users who liked post $post->id: $users");
+
+            $post->loadCount('likes'); // Load the count of likes for the post
+            $likeCount = $post->likes()->count();
+
+
+
+            $post->success = 'Post updated successfully!';
+
+            
+
+            return response()->json([
+                'likesCount' => $likeCount,
+                'alreadyLiked' => true, // 
+            ]);
+
+    }
+    public function removeLike(Request $request, string $id)
+    {
+        $user = Auth::user();
+    
+        if (!$user) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
+    
+        $post = Post::findOrFail($id);
+    
+        // Detach the relationship between the user and the post
+        $post->likes()->detach($user->id);
+        Log::info("User $user->id unliked post $post->id");
+        //users who liked a post
+        $users = Liked::where('id_post', $post->id)->get();
+    
+        $post->loadCount('likes');
+        $likeCount = $post->likes_count;
+    
+        $post->success = 'Post updated successfully!';
         return response()->json([
             'likesCount' => $likeCount,
-            'alreadyLiked' => true, // 
+            'alreadyLiked' => false,
         ]);
-
-}
-
-public function removeLike(Request $request, string $id)
-{
-    // Check if the user is logged in
-    if (!Auth::check()) {
-        return response()->json(['error' => 'You are not logged in'], 401);
     }
-
-    Log::info("trying to unlike post");
-    $post = Post::findOrFail($id);
-    $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
+    
 
 
-    if(existingLike != null) {
-        Log::info("existing like is not null");
-        $existingLike->delete();
-        Log::info("User $user->id unliked post $post->id");
+    public function likeStatus(Request $request, string $id)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
+
+        $user = Auth::user();
+        $post = Post::findOrFail($id);
+
+        $alreadyLiked = Liked::where('id_user', $user->id)->where('id_post', $post->id)->exists();
+
+        Log::info("User $user->id already liked post $post->id: $alreadyLiked");
+
+        return response()->json(['alreadyLiked' => $alreadyLiked]);
     }
-    else {
-        Log::info("existing like is null");
-        Log::info("User $user->id already unliked post $post->id");
+    
+    
+
     }
-
-    $post->loadCount('likes'); // Load the count of likes for the post
-    $likeCount = $post->likes->count();
-
-
-
-    $post->success = 'Post updated successfully!';
-    return response()->json([
-        'likesCount' => $likeCount,
-        'alreadyLiked' => false, // Always false as the user unliked the post
-    ]);
-
-}
-
-}

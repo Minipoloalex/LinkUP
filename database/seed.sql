@@ -365,6 +365,25 @@ AFTER INSERT ON liked
 FOR EACH ROW
 EXECUTE FUNCTION like_trigger_function();
 
+
+-- Trigger for unlike events (user unlikes a post)
+CREATE OR REPLACE FUNCTION unlike_trigger_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM like_notification
+    WHERE id_post = OLD.id_post AND id_user = OLD.id_user;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS unlike_trigger ON liked;
+
+CREATE TRIGGER unlike_trigger
+AFTER DELETE ON liked
+FOR EACH ROW
+EXECUTE FUNCTION unlike_trigger_function();
+
+
 -- Trigger for comment events
 CREATE OR REPLACE FUNCTION comment_trigger_function() RETURNS TRIGGER AS $$
 BEGIN
