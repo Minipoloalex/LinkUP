@@ -26,7 +26,7 @@ class GroupController extends Controller
 
         $posts = $group->posts()->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('pages.group', [
+        return view('pages.groups.group', [
             'group' => $group,
             'posts' => $posts,
             'members' => $members,
@@ -35,6 +35,15 @@ class GroupController extends Controller
             'user_is_owner' => $is_owner,
             'user_is_pending' => $is_pending,
         ]);
+    }
+
+    public function settings(string $id)
+    {
+        $group = Group::findOrFail($id);
+
+        $this->authorize('settings', $group);
+
+        return view('pages.groups.settings', ['group' => $group]);
     }
 
     public function deleteMember(string $id, string $id_member)

@@ -7,14 +7,15 @@ $icon = ['owner' => 'fa-gear', 'member' => 'fa-arrow-right-from-bracket', 'pendi
 $color = ['owner' => 'gray', 'member' => 'red', 'pending' => 'yellow', 'none' => 'blue'][$type];
 $text = ['owner' => 'Settings', 'member' => 'Leave Group', 'pending' => 'Pending', 'none' => 'Join Group'][$type];
 $width = $user_is_owner ? 'w-1/3' : 'w-1/2';
+$link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 @endphp
 
 @extends('layouts.app')
-@section('content')
 @include('partials.side.navbar')
 
 
-<main id="group-page" class=" flex flex-col w-screen overflow-clip overflow-y-scroll h-screen pt-24
+@section('content')
+<main id="group-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-screen pt-24
                             md:pl-16
                             lg:px-56">
     <section class="flex flex-col border border-slate-400 mt-1" id="group-content">

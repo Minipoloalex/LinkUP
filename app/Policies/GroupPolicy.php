@@ -28,6 +28,11 @@ class GroupPolicy
         // return false;
     }
 
+    public function settings(User $user, Group $group): bool
+    {
+        return $group->id_owner == $user->id;
+    }
+
     public function deleteMember(User $user, Group $group, string $id_member): bool
     {
         /* Leave group <=> remove himself from group */

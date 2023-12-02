@@ -81,6 +81,7 @@ Route::controller(PostController::class)->group(function () {
 // Groups
 Route::controller(GroupController::class)->group(function () {
     Route::get('/group/{id}', 'show')->name('group');
+    Route::get('/group/{id}/settings', 'settings')->name('group.settings');
 
     Route::post('/group', 'createGroup')->name('group.create');
     Route::post('/group/{id}/join', 'joinRequest')->name('group.join');

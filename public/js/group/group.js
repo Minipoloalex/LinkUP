@@ -6,7 +6,7 @@ function toggleSections () {
   const members = document.getElementById('members')
   const requests = document.getElementById('requests')
 
-  if (!posts || !members || !requests) return
+  if (!posts || !members) return
 
   const posts_section = document.getElementById('posts-section')
   const members_section = document.getElementById('members-section')
@@ -24,6 +24,7 @@ function toggleSections () {
     requests_section.classList.add('hidden')
   })
 
+  if (!requests) return
   requests.addEventListener('click', () => {
     requests_section.classList.remove('hidden')
     posts_section.classList.add('hidden')
