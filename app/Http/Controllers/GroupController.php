@@ -112,4 +112,23 @@ class GroupController extends Controller
         $group->members()->attach($id_member);
         return response('Request accepted', 200);
     }
+
+    public function update(Request $request, string $id)
+    {
+        $group = Group::findOrFail($id);
+
+        $this->authorize('settings', $group);
+
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'description' => 'nullable|string|max:150',
+        ]);
+
+        $group->name = $request->input('name');
+        $group->description = $request->input('description');
+
+        $group->save();
+
+        return redirect()->route('group', ['id' => $id]);
+    }
 }
