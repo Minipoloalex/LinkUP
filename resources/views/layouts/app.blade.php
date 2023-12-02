@@ -8,7 +8,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    @auth
+        <meta name="user-id" content="{{ Auth::user()->id }}">
+    @endauth
     <!-- font awesome -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> -->
 
@@ -24,6 +26,7 @@
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
     <script type="text/javascript" src={{ url('js/feedback.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/general_helpers.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/ajax.js') }} defer></script>
@@ -40,6 +43,7 @@
     <script type="text/javascript" src={{ url('js/add_post.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/edit_profile.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/contact.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/notifications.js') }} defer></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommentNotification;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ use Log;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Collection;
+use \App\Events\CommentEvent;
 
 class PostController extends Controller
 {
@@ -83,12 +85,15 @@ class PostController extends Controller
         $comment->id_parent = $request->input('id_parent');
 
         $comment->save();
-
+        
         $createdFile = $this->setFileName($request, $comment);
         if (!$createdFile) {
             $comment->media = null;
             $post->created_at = $post->freshTimestamp();
         }
+        Log::debug($comment->toJson());
+        $commentNotification = CommentNotification::where('id_comment', $comment->id)->firstOrFail();
+        event(new CommentEvent($commentNotification));
 
         $commentHTML = $this->translatePostToHTML($comment, true, true, false);
         return response()->json(['commentHTML' => $commentHTML, 'success' => 'Comment created successfully!']);
