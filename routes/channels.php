@@ -20,9 +20,5 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 
 // Corresponds to private-user.{id}
 Broadcast::channel('user.{id}', function (User $user, int $id) {
-    Log::debug("EXECUTION INSIDE CHANNEL");
-    Log::debug($user->toJson());
-    Log::debug($id);
-    Log::debug($user->id === $id);
     return $user->id === $id;
 });

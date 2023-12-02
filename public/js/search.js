@@ -14,14 +14,13 @@ async function updateSearchResults(event) {
         return;
     }
     const type = getSearchType();
-    console.log("sending to " + type);
     const data = await sendAjaxRequest('get', `/api/${type}/search?${encodeForAjax({query: searchValue})}`);
-    console.log(data);
+    // TODO: Fix this to also include the type
     // Change the URL so the user can share the search results (or save them)
-    const encodedSearchValue = encodeURIComponent(searchValue); // Encode special characters
-    const newUrl = window.location.href.split('?')[0] + '?query=' + encodedSearchValue;
+    // const encodedSearchValue = encodeURIComponent(searchValue); // Encode special characters
+    // const newUrl = window.location.href.split('?')[0] + '?query=' + encodedSearchValue;
 
-    history.replaceState(null, null, newUrl); // Replace current URL without reloading page
+    // history.replaceState(null, null, newUrl); // Replace current URL without reloading page
 
     
     if (data != null) {

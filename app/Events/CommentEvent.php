@@ -20,9 +20,7 @@ class CommentEvent implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct(CommentNotification $commentNotification)
-
     {
-        Log::debug("EXECUTION INSIDE CONSTRUCTOR OF COMMENT EVENT");
         $this->commentNotification = $commentNotification;
     }
     /**

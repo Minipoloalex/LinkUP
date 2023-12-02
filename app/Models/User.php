@@ -95,13 +95,9 @@ class User extends Authenticatable
         return $this->followRequestsSent()->where('id_user_to', $user->id)->exists();
     }
     public static function search(string $search) {
-        // $users = DB::select("SELECT * FROM users
-        //             WHERE tsvectors @@ plainto_tsquery('english', ?)
-        //             ORDER BY ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search, $search]);
         $users = User::whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$search])
         ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search])
         ->get();
-        Log::debug($users);
         return $users;
     }
 }

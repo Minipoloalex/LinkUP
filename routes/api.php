@@ -21,18 +21,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get(
-    '/posts/search',        // query parameter
-    [PostController::class, 'search']
-)->name('post.search');
-Route::get(
-    '/comments/search',     // query parameter
-    [PostController::class, 'search']
-)->name('comment.search');
-Route::get(
-    '/users/search',
-    [UserController::class, 'search']
-)->name('users.search');
+Route::middleware('web')->group(function () {
+    Route::get(
+        '/posts/search',        // query parameter
+        [PostController::class, 'searchPosts']
+    )->name('post.search');
+    Route::get(
+        '/comments/search',     // query parameter
+        [PostController::class, 'searchComments']
+    )->name('comment.search');
+    Route::get(
+        '/users/search',
+        [UserController::class, 'search']
+    )->name('users.search');
+});
+
 // Route::get(
 //     'groups/search',
 //     [GroupController::class, 'search']

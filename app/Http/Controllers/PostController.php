@@ -91,7 +91,6 @@ class PostController extends Controller
             $comment->media = null;
             $post->created_at = $post->freshTimestamp();
         }
-        Log::debug($comment->toJson());
         $commentNotification = CommentNotification::where('id_comment', $comment->id)->firstOrFail();
         event(new CommentEvent($commentNotification));
 
@@ -124,16 +123,23 @@ class PostController extends Controller
         });
         return $filteredPosts;
     }
+    public function searchPosts(Request $request) {
+        return $this->search($request, 'posts');
+    }
+    public function searchComments(Request $request) {
+        return $this->search($request, 'comments');
+    }
     /**
      * Returns the search results for a given query for AJAX requests.
      */
-    public function search(Request $request)
+    public function search(Request $request, string $type)
     {
         $request->validate([
             'query' => 'required|string|max:255'
         ]);
         $posts = $this->getSearchResults($request->input('query'));
-        if ($posts->isEmpty()) {
+        $filtered = $this->filterByType($posts, $type);
+        if ($filtered->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
                 'noResultsHTML' => $noResultsHTML,
@@ -141,8 +147,24 @@ class PostController extends Controller
                 'resultsHTML' => []
             ]);
         }
-        $postsHTML = $this->translatePostsArrayToHTML($posts);
-        return response()->json(['resultsHTML' => $postsHTML, 'success' => 'Search results retrieved']);
+        $resultsHTML = $this->translatePostsArrayToHTML($filtered);
+        return response()->json(['resultsHTML' => $resultsHTML, 'success' => 'Search results retrieved']);
+    }
+    private function filterByType($allPosts, string $type) {
+        if ($type == 'comments') {
+            $comments = $allPosts->filter(function ($post) {
+                // has parent post and not created by authenticated user
+                return $post->id_parent !== null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
+            })->values();
+            return $comments;
+        }
+        else {
+            $posts = $allPosts->filter(function ($post) {
+                // no parent post and not created by authenticated user
+                return $post->id_parent === null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
+            })->values();
+            return $posts;
+        }
     }
     /**
      * Display the search results page for a given query.
@@ -299,7 +321,7 @@ class PostController extends Controller
      * @param Collection $posts
      * @return Collection HTML code to display the posts
      */
-    private function translatePostsArrayToHTML($posts)
+    private function translatePostsArrayToHTML(Collection $posts)
     {
         $html = $posts->map(function ($post) {
             return $this->translatePostToHTML($post, false, false, false);

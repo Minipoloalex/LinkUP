@@ -50,18 +50,10 @@ class Post extends Model
     }
     public static function search(string $search)
     {
-        
-        $posts = DB::select("SELECT * FROM post
-                    WHERE tsvectors @@ plainto_tsquery('english', ?)
-                    ORDER BY ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search, $search]);
+        $posts = Post::whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$search])
+        ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search])
+        ->get();
 
-            // WHERE tsvectors @@ to_tsquery('english', plainto_tsquery('english', ?))
-            // ORDER BY ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search, $search]);
-        
-        // $posts = DB::select("SELECT * FROM post
-        //     WHERE tsvectors @@ to_tsquery('english', ?)
-        //     ORDER BY ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$search, $search]);
-        $posts = Post::hydrate($posts);
         return $posts;
     }
     // public function group()

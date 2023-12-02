@@ -215,6 +215,11 @@ class UserController extends Controller
             'query' => 'required|string|max:255'
         ]);
         $users = User::search($request->input('query'));
+        if (Auth::check()) {
+            $users = $users->filter(function (User $user) {    // remove self from results
+                return $user->id != Auth::user()->id;
+            })->values();
+        }
         if ($users->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
@@ -222,11 +227,6 @@ class UserController extends Controller
                 'noResultsHTML' => $noResultsHTML,
                 'resultsHTML' => []
             ]);
-        }
-        if (Auth::check()) {
-            $users = $users->filter(function ($user) {    // remove self from results
-                return $user->id != Auth::user()->id;
-            });
         }
         $usersHTML = $this->translateUsersArrayToHTML($users);
         return response()->json(['resultsHTML' => $usersHTML, 'success' => 'Search results retrieved']);

@@ -3,7 +3,7 @@
 --}}
 <article class="border-2 p-5 flex justify-between">
     <a href="{{ url("/profile/" . $user->username) }}" class="user-follow flex gap-4 items-center">
-        <img class="w-8 h-8" src="{{ $user->getProfilePicture() }}" alt="Profile Picture">
+        <img class="w-8 h-8 rounded-full" src="{{ $user->getProfilePicture() }}" alt="Profile Picture">
         <div id="user-info" class="flex flex-col">
             <p class="font-bold">{{ $user->name }}</p>
             <p class="text-gray-600">{{ $user->username }}</p>
