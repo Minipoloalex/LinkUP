@@ -58,18 +58,22 @@ document.addEventListener('click', async function (e) {
 });
 
 // Call initializeLikeButton when the page loads or when the post section is rendered
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const posts = document.querySelectorAll('.post');
 
-    posts.forEach(post => {
+    for (const post of posts) {
         const postId = post.getAttribute('data-id');
         const likeButton = post.querySelector('.like-button');
 
-        checkLikedStatus(postId);
+        await initializeLikeButton(postId, likeButton);
 
-        initializeLikeButton(postId, likeButton);
-
-    });
+        // Find like buttons for comments and initialize them
+        const commentLikeButtons = post.querySelectorAll('.comment .like-button');
+        commentLikeButtons.forEach(async (commentLikeButton) => {
+            const commentId = commentLikeButton.getAttribute('data-id');
+            await initializeLikeButton(commentId, commentLikeButton);
+        });
+    }
 });
 
 // Function to check the like status of the post
