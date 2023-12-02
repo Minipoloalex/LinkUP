@@ -6,6 +6,7 @@ $icon = ['owner' => 'fa-gear', 'member' => 'fa-arrow-right-from-bracket', 'pendi
 'none' => 'fa-users'][$type];
 $color = ['owner' => 'gray', 'member' => 'red', 'pending' => 'yellow', 'none' => 'blue'][$type];
 $text = ['owner' => 'Settings', 'member' => 'Leave Group', 'pending' => 'Pending', 'none' => 'Join Group'][$type];
+$width = $user_is_owner ? 'w-1/3' : 'w-1/2';
 @endphp
 
 @extends('layouts.app')
@@ -35,12 +36,20 @@ $text = ['owner' => 'Settings', 'member' => 'Leave Group', 'pending' => 'Pending
     @if($user_is_member)
 
     <div class="flex w-full items-center">
-        <div id="posts" class="flex items-center justify-center w-1/2 h-10 border border-slate-400 cursor-pointer">
+        <div id="posts"
+            class="flex items-center justify-center {{ $width }} h-10 border border-slate-400 cursor-pointer">
             <h1>Posts</h1>
         </div>
-        <div id="members" class="flex items-center justify-center w-1/2 h-10 border border-slate-400 cursor-pointer">
+        <div id="members"
+            class="flex items-center justify-center {{ $width }} h-10 border border-slate-400 cursor-pointer">
             <h1>Members</h1>
         </div>
+        @if($user_is_owner)
+        <div id="requests"
+            class="flex items-center justify-center {{ $width }} h-10 border border-slate-400 cursor-pointer">
+            <h1>Requests</h1>
+        </div>
+        @endif
     </div>
 
     <section id="posts-section" class="flex flex-col items-center">
@@ -54,6 +63,15 @@ $text = ['owner' => 'Settings', 'member' => 'Leave Group', 'pending' => 'Pending
         @include('partials.group.member', ['member' => $member, 'owner' => $user_is_owner, 'user' => $user])
         @endforeach
     </section>
+
+    @if($user_is_owner)
+    <section id="requests-section" class="flex flex-col items-center hidden">
+        @foreach ($group->pendingMembers()->where('type', 'Request')->get() as $member)
+        @include('partials.group.member', ['member' => $member, 'owner' => $user_is_owner,
+        'user' => $user, 'request' => true])
+        @endforeach
+    </section>
+    @endif
 
     @else
 

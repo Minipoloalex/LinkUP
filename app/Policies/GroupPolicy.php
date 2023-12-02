@@ -49,4 +49,15 @@ class GroupPolicy
         $group->load('members');
         return $group->members->contains($user) && $user !== null;
     }
+
+    public function resolveRequest(User $user, Group $group, string $id_member): bool
+    {
+        /* Only owner can resolve requests */
+        if ($group->id_owner != $user->id) {
+            return false;
+        }
+
+        /* User must be pending */
+        return $group->pendingMembers()->where('id_user', $id_member)->exists();
+    }
 }

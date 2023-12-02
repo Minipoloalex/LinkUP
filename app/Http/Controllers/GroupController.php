@@ -53,7 +53,6 @@ class GroupController extends Controller
         $member = GroupMember::where('id_group', $id)->where('id_user', $id_member)->firstOrFail();
         $member->delete();
 
-        \Log::info('User ' . Auth::user()->id . ' deleted member ' . $id_member . ' from group ' . $id);
         return response('Member deleted', 200);
     }
 
@@ -71,8 +70,6 @@ class GroupController extends Controller
         }
 
         $group->pendingMembers()->attach($user->id, ['type' => 'Request']);
-
-        \Log::info('User ' . Auth::user()->id . ' requested to join group ' . $id);
         return response('Request sent', 200);
     }
 
@@ -87,7 +84,23 @@ class GroupController extends Controller
 
         $group->pendingMembers()->detach($user->id);
 
-        \Log::info('User ' . Auth::user()->id . ' canceled join request to group ' . $id);
         return response('Request canceled', 200);
+    }
+
+    public function resolveRequest(request $request, string $id, string $id_member)
+    {
+        $group = Group::findOrFail($id);
+
+        $this->authorize('resolveRequest', [$group, $id_member]);
+
+        $group->pendingMembers()->detach($id_member);
+
+        \Log::info($request->input('accept'));
+        if ($request->input('accept') == 'reject') {
+            return response('Request rejected', 200);
+        }
+
+        $group->members()->attach($id_member);
+        return response('Request accepted', 200);
     }
 }

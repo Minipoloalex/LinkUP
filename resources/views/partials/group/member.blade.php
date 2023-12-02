@@ -1,3 +1,4 @@
+@php $request ??= false; @endphp
 <div class="flex w-full items-center justify-between p-8 border border-slate-400">
     <a href="{{ url('profile/' . $member->username) }}">
         <div class="flex items-center justify-start">
@@ -8,10 +9,23 @@
     </a>
     <div class="self-end flex items-center h-full">
         @if($owner && $member->id != $user)
+
+        @if($request)
+        {{-- If request is set we want buttons to accept or reject the request --}}
+
+        @include('partials.components.button', ['id' => 'a' . $member->id, 'icon' => 'fa-check', 'color' => 'green',
+        'text' => null, 'classes' => 'member-accept mr-4 w-12'])
+        @include('partials.components.button', ['id' => 'r' . $member->id, 'icon' => 'fa-times', 'color' => 'red',
+        'text' => null, 'classes' => 'member-reject w-12'])
+
+        @else
         {{-- If user is owner and not himself it loads remove button --}}
 
-        @include('partials.components.button', ['id' => $member->id, 'icon' => 'fa-times', 'color' => 'red', 'text'
+        @include('partials.components.button', ['id' => $member->id, 'icon' => 'fa-times', 'color' => 'red',
+        'text'
         => 'Remove', 'classes' => 'member-remove'])
+
+        @endif
 
         @endif
     </div>

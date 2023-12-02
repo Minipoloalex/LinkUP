@@ -1,23 +1,33 @@
 // Path: public/js/group/group.js
 const Swal = window.swal
 
-function togglePostsMembers () {
+function toggleSections () {
   const posts = document.getElementById('posts')
   const members = document.getElementById('members')
+  const requests = document.getElementById('requests')
 
-  if (!posts || !members) return
+  if (!posts || !members || !requests) return
 
   const posts_section = document.getElementById('posts-section')
   const members_section = document.getElementById('members-section')
+  const requests_section = document.getElementById('requests-section')
 
   posts.addEventListener('click', () => {
     posts_section.classList.remove('hidden')
     members_section.classList.add('hidden')
+    requests_section.classList.add('hidden')
   })
 
   members.addEventListener('click', () => {
-    posts_section.classList.add('hidden')
     members_section.classList.remove('hidden')
+    posts_section.classList.add('hidden')
+    requests_section.classList.add('hidden')
+  })
+
+  requests.addEventListener('click', () => {
+    requests_section.classList.remove('hidden')
+    posts_section.classList.add('hidden')
+    members_section.classList.add('hidden')
   })
 }
 
@@ -200,8 +210,56 @@ function addCancelJoinGroupEvent () {
   })
 }
 
-togglePostsMembers()
+function resolveMemberRequest (group, member_id, element, accept) {
+  const url = `/group/${group}/request/${member_id}`
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+    },
+    body: JSON.stringify({
+      accept: accept
+    })
+  })
+    .then(data => {
+      if (data.status === 200) {
+        element.innerHTML = accept === 'accept' ? 'Accepted' : 'Rejected'
+      }
+    })
+    .catch(error => console.error(error))
+}
+
+function addResolveMemberRequestEvents () {
+  const group = document.getElementById('group-id').value
+  const requests = document.querySelectorAll('#requests-section > div > div')
+  if (!requests) return
+
+  for (const request of requests) {
+    const accept = request.querySelector('.member-accept')
+    const reject = request.querySelector('.member-reject')
+
+    if (!accept || !reject) continue
+
+    // member id is all but the first character
+    const member_id = accept.id.slice(1)
+
+    accept.addEventListener('click', () => {
+      resolveMemberRequest(group, member_id, request, 'accept')
+      console.log(member_id)
+    })
+
+    reject.addEventListener('click', () => {
+      resolveMemberRequest(group, member_id, request, 'reject')
+      console.log(member_id)
+    })
+  }
+}
+
+toggleSections()
 addRemoveMemberEvents()
 addLeaveGroupEvent()
 addJoinGroupEvent()
 addCancelJoinGroupEvent()
+addResolveMemberRequestEvents()
