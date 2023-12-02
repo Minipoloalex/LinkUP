@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\LikeNotification;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,21 +12,17 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Post;
 
-class PostLike
+class PostLikeEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Post $post;
-    public int $userId;
-    public string $message;
+    public LikeNotification $likeNotification;
     /**
      * Create a new event instance.
      */
-    public function __construct(Post $post, int $userId, string $message)
+    public function __construct(LikeNotification $likeNotification, string $message)
     {
-        $this->post = $post;
-        $this->userId = $userId;
-        $this->message = "User $userId liked your post $post->id";
+        $this->likeNotification = $likeNotification;
     }
 
     /**
@@ -36,11 +33,11 @@ class PostLike
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('user.' . $this->post->id_created_by),
+            new PrivateChannel('user.' . $this->likeNotification->userNotified()->id),
         ];
     }
     public function broadcastAs(): string
     {
-        return 'notification-postlike';
+        return 'notification-like';
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\GroupNotification;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -9,18 +10,17 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\FollowRequest;
 
-class FollowRequestEvent implements ShouldBroadcast
+class GroupNotificationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public FollowRequest $followRequest;
+    public GroupNotification $groupNotification;
     /**
      * Create a new event instance.
      */
-    public function __construct(FollowRequest $followRequest)
+    public function __construct(GroupNotification $groupNotification)
     {
-        $this->followRequest = $followRequest;
+        $this->groupNotification = $groupNotification;
     }
 
     /**
@@ -31,11 +31,11 @@ class FollowRequestEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('user.' . $this->followRequest->id_user_to),
+            new PrivateChannel('user.' . $this->groupNotification->userNotified()->id),
         ];
     }
     public function broadcastAs(): string
     {
-        return 'notification-followrequest';
+        return 'notification-group';
     }
 }

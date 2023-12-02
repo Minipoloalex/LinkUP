@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\FollowRequestEvent;
 use App\Models\FollowRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -113,13 +114,14 @@ class UserController extends Controller
         $feedback = '';
         $accepted = true;
         if ($requestTo->is_private) {   // request to follow
-            FollowRequest::create([
+            $request = FollowRequest::create([
                 'id_user_from' => $user->id,
                 'id_user_to' => $requestTo->id,
                 'timestamp' => now()
             ]);
             $accepted = false;
             $feedback = "Follow request sent to $requestTo->username successfully!";
+            event(new FollowRequestEvent(FollowRequest::findOrFail($request->id)));
         } else {                          // add to following list
             $user->following()->attach($requestTo->id);
             $feedback = "$requestTo->username added to following list successfully!";

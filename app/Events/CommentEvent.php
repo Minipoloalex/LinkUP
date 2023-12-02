@@ -12,10 +12,10 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class CommentEvent
+class CommentEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public CommentNotification $commentNot;
+    public CommentNotification $commentNotification;
     /**
      * Create a new event instance.
      */
@@ -23,7 +23,7 @@ class CommentEvent
 
     {
         Log::debug("EXECUTION INSIDE CONSTRUCTOR OF COMMENT EVENT");
-        $this->commentNot = $commentNotification;
+        $this->commentNotification = $commentNotification;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -33,7 +33,7 @@ class CommentEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('private-user.' . $this->commentNot->userNotified->id),
+            new PrivateChannel('user.' . $this->commentNotification->userNotified()->id),
         ];
     }
     public function broadcastAs(): string

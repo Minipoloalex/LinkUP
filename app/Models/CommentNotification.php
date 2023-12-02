@@ -24,6 +24,6 @@ class CommentNotification extends Model
     }
     public function userNotified()
     {
-        return $this->comment()->parent()->createdBy();
+        return $this->comment->parent->createdBy;
     }
 }
