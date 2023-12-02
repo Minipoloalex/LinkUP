@@ -129,20 +129,19 @@ class PostController extends Controller
      */
     public function search(Request $request)
     {
-        Log::debug("HELLO");
         $request->validate([
             'query' => 'required|string|max:255'
         ]);
         $posts = $this->getSearchResults($request->input('query'));
-        $postsHTML = $this->translatePostsArrayToHTML($posts);
         if ($posts->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
                 'noResultsHTML' => $noResultsHTML,
-                'success' => 'Search results retrieved',
+                'success' => 'No results found',
                 'resultsHTML' => []
             ]);
         }
+        $postsHTML = $this->translatePostsArrayToHTML($posts);
         return response()->json(['resultsHTML' => $postsHTML, 'success' => 'Search results retrieved']);
     }
     /**
@@ -278,6 +277,7 @@ class PostController extends Controller
             return policy(Post::class)->view(Auth::user(), $post);
         });
         $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
+        
         return response()->json($postsHTML);
     }
     private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $displayComments = false)

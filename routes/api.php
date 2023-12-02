@@ -21,17 +21,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get(
+    '/posts/search',        // query parameter
+    [PostController::class, 'search']
+)->name('post.search');
+Route::get(
+    '/comments/search',     // query parameter
+    [PostController::class, 'search']
+)->name('comment.search');
+Route::get(
+    '/users/search',
+    [UserController::class, 'search']
+)->name('users.search');
+// Route::get(
+//     'groups/search',
+//     [GroupController::class, 'search']
+// )->name('groups.search');
+
 // define a route for /posts which accepts a GET request with a DATE parameter
 Route::get(
     '/posts/{date}',
     [PostController::class, 'getPostsBeforeDate']
 )->name('posts.beforeDate');
-
-Route::get(
-    '/posts/search',
-    [PostController::class, 'search']
-)->name('post.search');
-Route::get(
-    '/users/search',
-    [UserController::class, 'search']
-)->name('users.search');
