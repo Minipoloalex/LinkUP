@@ -72,8 +72,6 @@ Route::controller(PostController::class)->group(function () {
     Route::delete('/post/{id}/image', 'deleteImage');
 
     Route::put('/post/{id}', 'update');
-
-    Route::get('/search', 'searchResults');
 });
 
 // Profile page
@@ -92,6 +90,10 @@ Route::controller(UserController::class)->group(function() {
     
     Route::post('/follow', 'requestFollow');
 });
+
+Route::get('/search', function(){
+    return view('pages.search');
+})->name('search');
 
 /* route for about us page */
 Route::get('/about', function() {

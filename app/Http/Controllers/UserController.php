@@ -71,8 +71,7 @@ class UserController extends Controller
         $follower = User::findOrFail($id);
         $user->followers()->detach($follower->id);
 
-        $follower->success = "$follower->username removed from follower list successfully!";
-        return response()->json($follower);
+        return response()->json(['success' => "$follower->username removed from follower list successfully!"]);
     }
     public function removeFollowing(string $id)
     {
@@ -88,8 +87,7 @@ class UserController extends Controller
         }
         $user->following()->detach($following->id);
 
-        $following->success = "$following->username removed from following list successfully!";
-        return response()->json($following);
+        return response()->json(['success' => "$following->username removed from following list successfully!"]);
     }
     public function requestFollow(Request $request)
     {
@@ -156,7 +154,8 @@ class UserController extends Controller
         $sentTo->success = "Follow request to $sentTo->username cancelled successfully!";
         return response()->json($sentTo);
     }
-    public function denyFollowRequest(string $id) {
+    public function denyFollowRequest(string $id)
+    {
         $this->authorize('update', User::class);
         $user = Auth::user();
         $sentFrom = User::findOrFail($id);
@@ -171,11 +170,12 @@ class UserController extends Controller
         $sentFrom->success = "You denied the follow request from $sentFrom->username";
         return response()->json($sentFrom);
     }
-    public function acceptFollowRequest(string $id) {
+    public function acceptFollowRequest(string $id)
+    {
         $this->authorize('update', User::class);
         $user = Auth::user();
         $sentFrom = User::findOrFail($id);
-    
+
         if (!$sentFrom->requestedToFollow($user)) {
             return response()->json(["error' => 'You do not have a pending follow request from $sentFrom->username!"]);
         }
@@ -193,5 +193,42 @@ class UserController extends Controller
         ])->render();
 
         return response()->json(['userHTML' => $userHTML, 'success' => "You accepted the follow request from $sentFrom->username", 'userId' => $sentFrom->id]);
+    }
+    public function translateUserToHTML(User $user)
+    {
+        $userHTML = view('partials.network.follower_card', [
+            'user' => $user,
+            'isMyProfile' => false
+        ])->render();
+        return $userHTML;
+    }
+    public function translateUsersArrayToHTML($users)
+    {
+        $usersHTML = $users->map(function ($user) {
+            return $this->translateUserToHTML($user);
+        });
+        return $usersHTML;
+    }
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|max:255'
+        ]);
+        $users = User::search($request->input('query'));
+        if ($users->isEmpty()) {
+            $noResultsHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'success' => 'No results found',
+                'noResultsHTML' => $noResultsHTML,
+                'resultsHTML' => []
+            ]);
+        }
+        if (Auth::check()) {
+            $users = $users->filter(function ($user) {    // remove self from results
+                return $user->id != Auth::user()->id;
+            });
+        }
+        $usersHTML = $this->translateUsersArrayToHTML($users);
+        return response()->json(['resultsHTML' => $usersHTML, 'success' => 'Search results retrieved']);
     }
 }

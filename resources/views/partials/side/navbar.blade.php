@@ -16,7 +16,7 @@ $username = Auth::user()->username ?? "";
         </a>
     </div>
     <div class="lg:w-full md:flex md:h-12 md:items-center">
-        <a href="{{ route('home') }}">
+        <a href="{{ route('search') }}">
             <div class="flex w-full items-center justify-center">
                 <i class="fa-solid fa-search fa-xl"></i>
                 <p class="hidden lg:block ml-4">Search</p>

@@ -85,7 +85,7 @@ class PostController extends Controller
         $comment->id_parent = $request->input('id_parent');
 
         $comment->save();
-        
+
         $createdFile = $this->setFileName($request, $comment);
         if (!$createdFile) {
             $comment->media = null;
@@ -127,11 +127,23 @@ class PostController extends Controller
     /**
      * Returns the search results for a given query for AJAX requests.
      */
-    public function search(string $search)
+    public function search(Request $request)
     {
-        $posts = $this->getSearchResults($search);
+        Log::debug("HELLO");
+        $request->validate([
+            'query' => 'required|string|max:255'
+        ]);
+        $posts = $this->getSearchResults($request->input('query'));
         $postsHTML = $this->translatePostsArrayToHTML($posts);
-        return response()->json(['postsHTML' => $postsHTML, 'success' => 'Search results retrieved']);
+        if ($posts->isEmpty()) {
+            $noResultsHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'noResultsHTML' => $noResultsHTML,
+                'success' => 'Search results retrieved',
+                'resultsHTML' => []
+            ]);
+        }
+        return response()->json(['resultsHTML' => $postsHTML, 'success' => 'Search results retrieved']);
     }
     /**
      * Display the search results page for a given query.
@@ -142,7 +154,7 @@ class PostController extends Controller
             'query' => 'required|max:255'
         ]);
         $posts = $this->getSearchResults($request->input('query'));
-        Log::info($posts->toJson());
+
         return view('pages.search', ['posts' => $posts, 'success' => 'Search results retrieved']);
     }
 
@@ -177,7 +189,7 @@ class PostController extends Controller
 
         if ($hasNewMedia) {
             $postImageHTML = $this->getPostImageHTML($post);
-            
+
             return response()->json([
                 'postImageHTML' => $postImageHTML,
                 'success' => 'Post updated successfully!',

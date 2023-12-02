@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,10 @@ Route::get(
 )->name('posts.beforeDate');
 
 Route::get(
-    '/post/search/{search}',
+    '/posts/search',
     [PostController::class, 'search']
 )->name('post.search');
+Route::get(
+    '/users/search',
+    [UserController::class, 'search']
+)->name('users.search');
