@@ -11,6 +11,10 @@ class Liked extends Model
     use HasFactory;
     protected $table = 'liked';
     public $timestamps = false;
+    protected $primaryKey = ['id_user', 'id_post'];
+
+    public $incrementing = false; // Since it's a composite primary key
+
     protected $fillable = [
         'id_user',
         'id_post',

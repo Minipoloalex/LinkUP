@@ -77,7 +77,8 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/search', 'searchResults');
 
     // Update likes on a post
-    Route::post('/post/{id}/like', 'updateLikes');
+    Route::post('/post/{id}/like', 'addLike');
+    Route::delete('/post/{id}/like', 'removeLike');
 
 });
 
