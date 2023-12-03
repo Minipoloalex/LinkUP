@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GroupMember;
+use App\Models\User;
 use Auth;
 use \App\Models\Group;
 use Illuminate\Http\Request;
@@ -130,5 +131,30 @@ class GroupController extends Controller
         $group->save();
 
         return redirect()->route('group', ['id' => $id]);
+    }
+
+    /**
+     * Verify authentication of a user.
+     */
+    public function verifyPassword(Request $request)
+    {
+        $user = Auth::user();
+        $password = $request->input('password');
+
+        if (password_verify($password, $user->password)) {
+            return response('Password verified', 200);
+        }
+
+        return response('The provided password does not match our records.', 403);
+    }
+
+    public function delete(string $id)
+    {
+        $group = Group::findOrFail($id);
+
+        $this->authorize('settings', $group);
+        $group->delete();
+
+        return response('Group deleted', 200);
     }
 }

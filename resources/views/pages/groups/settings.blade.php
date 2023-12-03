@@ -47,6 +47,11 @@
 
     <section class="flex flex-col border border-slate-400 mt-4" id="group-content">
         <h1 class="text-xl text-bold ml-12 mt-4">Delete Group</h1>
+        <div class="flex justify-start items-center w-full py-2 pl-12">
+            @include('partials.components.button', ['id' => 'delete-group', 'icon' => 'fas fa-trash-alt', 'color'
+            =>
+            'red', 'text' => 'Delete'])
+        </div>
     </section>
 </main>
 
