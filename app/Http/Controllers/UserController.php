@@ -61,7 +61,7 @@ class UserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
-            'faculty' => ['nullable', 'string', 'max:255'],
+            'faculty' => ['required', 'string', 'max:255'],
             'course' => ['nullable', 'string', 'max:255'],
             'media' => ['nullable', 'mimes:jpeg,png,jpg,gif,svg', 'max:1024'],
         ]);
@@ -121,7 +121,7 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Settings updated successfully!');
+        return redirect()->route('settings.show', ['from' => 'account'])->with('success', 'Settings updated successfully!');
     }
 
     public function viewProfilePicture(string $id)
