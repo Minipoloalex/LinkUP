@@ -13,7 +13,6 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminLoginController;
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,6 +31,7 @@ Route::get('/home', function() {
     return view('pages.home');
 })->name('home');
 
+
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
@@ -44,6 +44,7 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+
 // Admin
 Route::prefix('/admin')->name('admin.')->group(function () {
     Route::redirect('/', '/admin/login');
@@ -55,12 +56,17 @@ Route::prefix('/admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
+        Route::post('/users/{id}/ban', [AdminController::class, 'banUser'])->name('users.ban');
+        Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
+        
     });
 });
 
+
+// Post
 Route::controller(PostController::class)->group(function () {
     Route::get('/post/{id}', 'show')->name('post');
     Route::get('/post/{id}/image', 'viewImage')->name('post.image');
@@ -83,29 +89,29 @@ Route::controller(PostController::class)->group(function () {
 
 });
 
-// Profile page
-Route::controller(UserController::class)->group(function() {
-    Route::get('/profile/{username}', 'show')->name('profile.show');
-    Route::post('/profile', 'update')->name('profile.update');
-    Route::get('/profile/photo/{id}', 'viewProfilePicture');
-    
-    Route::get('/network/{username}', 'viewNetworkPage')->name('profile.network');
 
-    Route::delete('/follow/follower/{id}', 'removeFollower')->where('id', '[0-9]+');
-    Route::delete('/follow/following/{id}', 'removeFollowing')->where('id', '[0-9]+');
-    Route::delete('/follow/request/cancel/{id}', 'cancelRequestToFollow')->where('id', '[0-9]+');
-    Route::delete('/follow/request/deny/{id}', 'denyFollowRequest')->where('id', '[0-9]+');
-    Route::patch('/follow/request/accept/{id}', 'acceptFollowRequest')->where('id', '[0-9]+');
-    
-    Route::post('/follow', 'requestFollow');
-});
+Route::get('profile/{username}', [UserController::class, 'showProfile'])->name('profile.show');
+Route::post('profile', [UserController::class, 'updateProfile'])->name('profile.update');
+Route::get('profile/photo/{id}', [UserController::class, 'viewProfilePicture'])->name('profile.photo');
 
-/* route for about us page */
+Route::get('network/{username}', [UserController::class, 'showNetwork'])->name('profile.network');
+
+Route::delete('follow/follower/{id}', [UserController::class, 'removeFollower'])->where('id', '[0-9]+');
+Route::delete('follow/following/{id}', [UserController::class, 'removeFollowing'])->where('id', '[0-9]+');
+Route::delete('follow/request/cancel/{id}', [UserController::class, 'cancelRequestToFollow'])->where('id', '[0-9]+');
+Route::delete('follow/request/deny/{id}', [UserController::class, 'denyFollowRequest'])->where('id', '[0-9]+');
+Route::patch('follow/request/accept/{id}', [UserController::class, 'acceptFollowRequest'])->where('id', '[0-9]+');
+Route::post('follow', [UserController::class, 'requestFollow']);
+
+Route::get('/settings', [UserController::class, 'showSettings'])->name('settings');
+Route::post('/settings', [UserController::class, 'updateSettings'])->name('settings.update');
+
+
+// Static pages
 Route::get('/about', function() {
     return view('pages.about');
 })->name('about');
 
-/* route for contact us page */
 Route::get('/contact', function() {
     return view('pages.contact');
 })->name('contact');

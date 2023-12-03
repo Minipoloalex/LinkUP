@@ -23,7 +23,9 @@
   </div>
   <div class="profile-info text-center mt-2"> 
     <p class="profile-name text-xl font-bold py-2">{{ $user->name }}</p> 
-    <p class="profile-username text-gray-700">{{ $user->username }}</p>
+    <p class="profile-username text-gray-700 mb-4">{{ $user->username }}</p>
+    <i class="fa-solid fa-lock" @if (!$user->is_private) hidden @endif></i>
+    <i class="fa-solid fa-globe" @if ($user->is_private) hidden @endif></i>
     <p class="profile-description text-gray-700 py-2">{{ $user->description }}</p>
   </div>
 

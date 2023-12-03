@@ -33,6 +33,8 @@ class User extends Authenticatable
         'email',
         'password',
         'description',
+        'is_private',
+        'is_banned',
     ];
 
     /**
@@ -88,6 +90,7 @@ class User extends Authenticatable
     public function getProfilePicture()
     {
         $imageController = new ImageController('users');
+
         return $imageController->getFile($this->photo);
     }
     public function followRequestsReceived() : HasMany
