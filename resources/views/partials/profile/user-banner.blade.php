@@ -1,7 +1,12 @@
 <div class="w-full flex flex-col content-center justify-start border border-grey-300 border-solid">
   @auth
     @if (Auth::user()->id == $user->id)
-      @include('partials.profile.edit-profile')
+      <div id="edit-profile" class="flex flex-row-reverse m-4">
+        <a href="{{ route('settings.show', ['from' => 'profile']) }}" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1">
+          <i class="fa-solid fa-pen-to-square"></i>
+          Edit Profile
+        </a>
+      </div>
     @else
       <div id="follow-actions" class="flex flex-row-reverse m-4">
         @php

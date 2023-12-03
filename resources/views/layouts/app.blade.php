@@ -40,6 +40,7 @@
     <script type="text/javascript" src={{ url('js/add_post.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/edit_profile.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/contact.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/settings.js') }} defer></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')

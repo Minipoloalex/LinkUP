@@ -4,12 +4,20 @@
 
 @section('content')
 <main id="settings-page" class="flex flex-col items-center justify-center w-full h-full">
+    <input type="hidden" id="active-section" value="{{ $activeSection }}">
     <div class="w-full max-w-md">
         <div class="flex flex-col break-words bg-white border-2 rounded shadow-md">
-            <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
-                Account Settings
+            
+            <div class="flex justify-between items-center bg-gray-200 text-gray-700 py-3 px-6 mb-0">
+                <button id="account-settings-toggle" class="font-semibold focus:outline-none @if ($activeSection == 'account') border-b-2 border-black @endif">
+                    Account
+                </button>
+                <button id="profile-settings-toggle" class="font-semibold focus:outline-none @if ($activeSection == 'profile') border-b-2 border-black @endif">
+                    Profile
+                </button>
             </div>
             
+            <div id="account-settings" class="@if ($activeSection == 'account') block @else hidden @endif">
             <form class="w-full p-6" method="POST" action="{{ route('settings.update') }}">
                 {{ csrf_field() }}
 
@@ -87,7 +95,7 @@
                         Current Password
                     </label>
 
-                    <input id="current_password" type="password" class="form-input w-full border-b border-black" name="current_password" required autocomplete="current-password">
+                    <input id="current_password" type="password" class="form-input w-full" name="current_password" required autocomplete="current-password">
 
                     @error('current_password')
                     <p class="text-red-500 text-xs italic mt-4">
@@ -100,11 +108,111 @@
                     Update 
                 </button>
             </form>
+            </div>
+
+            <div id="profile-settings" class="@if ($activeSection == 'profile') block @else hidden @endif">
+            <form class="w-full p-6" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                {{ csrf_field() }}
+
+                <div class="flex flex-wrap mb-6">
+                    <label for="name" class="block text-gray-700 text-sm font-bold mb-1">
+                        Name
+                    </label>
+
+                    <input id="name" type="text" class="form-input w-full" name="name" value="{{ $user->name }}" required autocomplete="name" autofocus>
+
+                    @error('name')
+                    <p class="text-red-500 text-xs italic mt-4">
+                        {{ $message }}
+                    </p>
+                    @enderror
+
+                    <p class="text-gray-600 text-xs italic mt-4">
+                        Your name will be displayed on your profile.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap mb-6">
+                    <label for="description" class="block text-gray-700 text-sm font-bold mb-1">
+                        Bio
+                    </label>
+
+                    <textarea id="description" class="form-input w-full resize-none h-24 border-none focus:outline-none" name="description" autocomplete="bio">{{ $user->description }}</textarea>
+
+                    @error('bio')
+                    <p class="text-red-500 text-xs italic mt-4">
+                        {{ $message }}
+                    </p>
+                    @enderror
+
+                    <p class="text-gray-600 text-xs italic mt-4">
+                        Let fellow students know a little about you.
+                    </p>
+                </div>
+
+                <label for="media" class="block text-gray-700 text-sm font-bold mb-6">
+                    Profile Picture 
+                </label>
+                
+                <p class="text-gray-600 text-xs italic mb-6">
+                    Upload a profile picture to make your account more recognizable.
+                </p>    
+                
+                <div class="grid grid-cols-2 gap-4 w-full bg-gray-100 rounded-lg p-6">
+                    <div class="flex flex-col items-center justify-center">
+                        <img id="profile-picture-preview" class="w-24 h-24 rounded-full" src="{{ route('profile.photo', ['id' => $user->id]) }}" alt="Profile Picture">
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center">
+                        <input type="file" id="media" name="media" accept="image/*" class="hidden">
+                        <button id="media-button" type="button" class="border border-gray-400 hover:border-gray-500 bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        onclick="document.getElementById('media').click()">
+                            Upload 
+                        </button>
+
+                        @error('media')
+                        <p class="text-red-500 text-xs italic mt-4">
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+                </div>
+                
+                <button type="submit" class="bg-gray-200 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded mt-6">
+                    Update
+                </button>
+            </form>
+            </div>
         </div>
     </div>
+
     @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded relative mt-3" role="alert">
-            <span class="block sm:inline">{{ session('success') }}</span>   
-        </div>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded relative mt-3" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>   
+            </div>
     @endif
 </main>
+                    
+
+
+                            
+
+                            
+                       
+            
+
+
+
+                    
+
+
+
+
+
+
+
+                    
+
+
+
+                    
