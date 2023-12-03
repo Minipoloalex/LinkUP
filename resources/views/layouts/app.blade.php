@@ -34,7 +34,6 @@
     <script type="text/javascript" src={{ url('js/general_helpers.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/ajax.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/file_input.js') }} defer></script>
-    <script type="text/javascript" src={{ url('js/crop_images.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/network.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/add_follow.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/post_helpers.js') }} defer></script>

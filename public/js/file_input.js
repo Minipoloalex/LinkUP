@@ -40,12 +40,14 @@ function handlerFileInput(fileInputWrapper) {
     const clearFile = () => {
         clearFileInput(fileName, removeFileBtn, uploadFileBtn);
         hide(cropperContainer);
+        hide(cropButton);
     }
     let cropper = null;
     fileInput.addEventListener('change', () => {
         if (fileInput.files.length > 0) {
             fileName.textContent = fileInput.files[0].name;
             show(removeFileBtn);
+            show(cropButton);
             hide(uploadFileBtn);
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -85,6 +87,7 @@ function handlerFileInput(fileInputWrapper) {
             height.value = canvas.height;
             
             hide(cropperContainer);
+            hide(cropButton);
         }
     });
 }
