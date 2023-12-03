@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PostPolicy
 {  
@@ -14,11 +15,18 @@ class PostPolicy
      */
     public function view(?User $user, Post $post): bool
     {
-        // or is admin or is follower ($user->isFollowing($post->createdBy))
-        // return $post->is_private === false || $user->id === $post->id_created_by;
+        if($user === null) {
+            return $post->is_private === false;
+        }
+    
+        /*if ($user->isAdmin()) {
+            return true; // Admins can view any post
+        }*/
+
+        Log::debug("PostPolicy: view: user->id: $user->id, post->id_created_by: $post->id_created_by");
         
-        // not yet implemented
-        return true;
+        // Check if the user is following the creator of the post
+        return $user->isFollowing($post->createdBy) || $post->is_private === false || $user->id === $post->id_created_by;
     }
 
     /**

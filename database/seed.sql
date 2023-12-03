@@ -79,7 +79,7 @@ CREATE TABLE post (
     id SERIAL PRIMARY KEY,
     content TEXT,
     created_at DATE DEFAULT CURRENT_DATE NOT NULL,
-    is_private BOOLEAN DEFAULT true NOT NULL,
+    is_private BOOLEAN DEFAULT false NOT NULL,
     media TEXT,
     id_created_by INTEGER REFERENCES users(id) ON DELETE SET NULL NOT NULL,
     id_group INTEGER REFERENCES groups(id) ON DELETE CASCADE,
@@ -491,7 +491,7 @@ VALUES
   ('alice94', 'alice.johnson@gmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Alice Johnson', 'Travel enthusiast and photographer.', 'alice_profile.jpg', false),
   ('bob1987', 'bob.smith@yahoo.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Bob Smith', 'Music lover and guitar player.', 'bob_profile.jpg', false),
   ('carol2000', 'carol.adams@hotmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Carol Adams', 'Foodie and recipe collector.', 'carol_profile.jpg', false),
-  ('dave85', 'dave.wilson@outlook.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Dave Wilson', 'Fitness guru and adventure seeker.', 'dave_profile.jpg', false),
+  ('dave85', 'dave.wilson@outlook.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Dave Wilson', 'Fitness guru and adventure seeker.', 'dave_profile.jpg', true),
   ('elena75', 'elena.martinez@aol.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Elena Martinez', 'Fashionista and makeup artist.', 'elena_profile.jpg', false),
   ('alexsmith3', 'alex.smith@hotmail.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Alex Smith', 'Student and artist.', 'alex_smith.jpg', false),
   ('emilyjones4', 'emily.jones@outlook.com', '$2y$12$T3zMwcp0B5sfS71rce48yeRm8FGUt1k/NZc/fOKHX649cPUW8piQm', 'Emily Jones', 'Cooking enthusiast and food lover.', 'emily_jones.jpg', false),
@@ -653,11 +653,14 @@ VALUES
 -- Posts that belong to a group
 INSERT INTO post (content, id_created_by, id_group, id_parent)
 VALUES
-  ('Just finished a 10-mile hike in the mountains. What an adventure!', 4, 4, NULL),  -- Outdoor Adventure Club: travel
   ('Does anyone want to go to a concert with me? It is a week from today', 2, 2, NULL),          -- Music Enthusiasts: music
   ('Trying out a new recipe today: Spicy Thai Curry. Yum!', 3, 3, NULL),           -- Foodies United: cooking
   ('Solving coding challenges in our competitive programming group. #CodingLife', 6, 6, NULL),  -- Tech Geeks Society: competitive programming
   ('Just started reading "The Queen''s Gambit." Anyone else reading it?', 7, 7, NULL);  -- Chess Lovers Club: chess
+
+INSERT INTO post (content, id_created_by, id_group, id_parent, is_private)
+VALUES
+    ('Just finished a 10-mile hike in the mountains. What an adventure!', 4, 4, NULL, true);  -- Outdoor Adventure Club: travel
 
 -- Sample Comment Data with Group Associations
 INSERT INTO post (content, id_created_by, id_group, id_parent)

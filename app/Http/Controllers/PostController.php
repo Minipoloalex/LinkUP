@@ -260,7 +260,10 @@ class PostController extends Controller
 
         $filteredPosts = $posts->filter(function ($post) {
             return policy(Post::class)->view(Auth::user(), $post);
-        });
+        })->values();
+
+        Log::info($filteredPosts->toJson());
+
         $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
         return response()->json($postsHTML);
     }
