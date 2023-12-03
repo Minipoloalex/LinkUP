@@ -1,5 +1,6 @@
 @php
     $editable = $showEdit && $post->isCreatedByCurrentUser();
+    $canShow = !$post->is_private;
 @endphp
 <div class="post-info">
     <header>
