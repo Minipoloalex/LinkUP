@@ -33,7 +33,11 @@ class PostController extends Controller
             'content' => 'required|max:255',
             // 'id_group' => 'nullable|exists:groups,id',
             'is_private' => 'nullable|boolean',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
         ]);
         $this->authorize('createPost', Post::class);  // user must be logged in
         DB::beginTransaction();
@@ -47,7 +51,7 @@ class PostController extends Controller
 
         $post->save();  // get the post id to make file name unique
 
-        $createdFile = $this->setFileName($request, $post);
+        $createdFile = $this->setFileName($request, $post,  $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height')); // TODO
         if (!$createdFile) {
             $post->media = null;
             $post->created_at = $post->freshTimestamp();
@@ -69,7 +73,11 @@ class PostController extends Controller
         $request->validate([
             'content' => 'required|max:255',
             'id_parent' => 'required|exists:post,id',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
             // 'id_group' => 'nullable|exists:groups,id'
         ]);
 
@@ -86,7 +94,7 @@ class PostController extends Controller
 
         $comment->save();
 
-        $createdFile = $this->setFileName($request, $comment);
+        $createdFile = $this->setFileName($request, $comment, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
             $comment->media = null;
             $post->created_at = $post->freshTimestamp();
@@ -191,7 +199,11 @@ class PostController extends Controller
         $request->validate([
             'content' => 'nullable|max:255',
             'is_private' => 'nullable|boolean',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
         ]);
         // media -> can change, add or maintain (null) (cannot delete -> check deleteImage for that)
         $this->authorize('update', $post);
@@ -204,7 +216,7 @@ class PostController extends Controller
         $hasNewMedia = false;
         if ($request->has('media') && $request->file('media')->isValid()) {
             $this->deleteFile($post->media);
-            $this->setFileName($request, $post);
+            $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
             $hasNewMedia = true;
         }
 
@@ -266,11 +278,11 @@ class PostController extends Controller
      * @param Post $post
      * @return bool true if the file name was set, false otherwise (if there was no file)
      */
-    private function setFileName(Request $request, Post $post): bool
+    private function setFileName(Request $request, Post $post, int $x, int $y, int $width, int $height): bool
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
             $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
-            $this->imageController->store($request->media, $fileName);
+            $this->imageController->store($request->media, $fileName, $x, $y, $width, $height);
             $post->media = $fileName;
             $post->save();
             return true;
@@ -291,8 +303,6 @@ class PostController extends Controller
      */
     public function getPostsBeforeDate(string $date): JsonResponse
     {
-        $date = "2024-01-01"; // TODO: remove this line
-
         $posts = Post::whereDate('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
 
         $filteredPosts = $posts->filter(function ($post) {

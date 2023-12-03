@@ -31,7 +31,7 @@ function handlerFileInput(fileInputWrapper) {
 
     const cropperContainer = fileInputWrapper.querySelector('.cropper-container');
     const cropperImage = fileInputWrapper.querySelector('.cropper-image');
-    const cropButton = document.querySelector('.crop-button');
+    const cropButton = fileInputWrapper.querySelector('.crop-button');
 
     const fileName = getFileName(fileInputWrapper);
     const removeFileBtn = getRemoveFileBtn(fileInputWrapper);

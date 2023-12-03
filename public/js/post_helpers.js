@@ -13,6 +13,14 @@ async function submitDataPostOrComment(form, data, url, method) {
             formData.append(key, data[key]);
         }
         formData.append('media', file[0]);
+        const x = form.querySelector('input[name="x"]');
+        const y = form.querySelector('input[name="y"]');
+        const width = form.querySelector('input[name="width"]');
+        const height = form.querySelector('input[name="height"]');
+        formData.append('x', x.value);
+        formData.append('y', y.value);
+        formData.append('width', width.value);
+        formData.append('height', height.value);
         const response = await fetch(url, {
             method: method,
             headers: {
