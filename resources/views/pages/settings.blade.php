@@ -3,8 +3,8 @@
 @section('title', 'Settings')
 
 @section('content')
-<main id="settings-page" class="flex flex-col items-center justify-center w-full h-full">
-    <input type="hidden" id="active-section" value="{{ $activeSection }}">
+<main id="settings-page" class="flex flex-col items-center justify-center w-full mt-24">
+
     <div class="w-full max-w-md">
         <div class="flex flex-col break-words bg-white border-2 rounded shadow-md">
             
@@ -133,11 +133,55 @@
                 </div>
 
                 <div class="flex flex-wrap mb-6">
+                    <label for="faculty" class="block text-gray-700 text-sm font-bold mb-1">
+                        Faculty
+                    </label>
+
+                    <select id="faculty" class="form-input w-full" name="faculty" required>
+                        <option value="faup" @if ($user->faculty == 'faup') selected @endif>FAUP</option>
+                        <option value="fbaup" @if ($user->faculty == 'fbaup') selected @endif>FBAUP</option>
+                        <option value="fcup" @if ($user->faculty == 'fcup') selected @endif>FCUP</option>
+                        <option value="fcnaup" @if ($user->faculty == 'fcnaup') selected @endif>FCNAUP</option>
+                        <option value="fadeup" @if ($user->faculty == 'fadeup') selected @endif>FADEUP</option>
+                        <option value="fdup" @if ($user->faculty == 'fdup') selected @endif>FDUP</option>
+                        <option value="fep" @if ($user->faculty == 'fep') selected @endif>FEP</option>
+                        <option value="feup" @if ($user->faculty == 'feup') selected @endif>FEUP</option>
+                        <option value="ffup" @if ($user->faculty == 'ffup') selected @endif>FFUP</option>
+                        <option value="flup" @if ($user->faculty == 'flup') selected @endif>FLUP</option>
+                        <option value="fmup" @if ($user->faculty == 'fmup') selected @endif>FMUP</option>
+                        <option value="fmdup" @if ($user->faculty == 'fmdup') selected @endif>FMDUP</option>
+                        <option value="fpceup" @if ($user->faculty == 'fpceup') selected @endif>FPCEUP</option>
+                        <option value="icbas" @if ($user->faculty == 'icbas') selected @endif>ICBAS</option>
+                    </select>
+
+                    @error('faculty')
+                    <p class="text-red-500 text-xs
+                    italic mt-4">
+                        {{ $message }}
+                    </p>
+                    @enderror
+                </div>
+
+                <div class="flex flex-wrap mb-6"> 
+                    <label for="course" class="block text-gray-700 text-sm font-bold mb-1">
+                        Course
+                    </label>
+
+                    <input id="course" type="text" class="form-input w-full" name="course" value="{{ $user->course }}" required autocomplete="course">
+
+                    @error('course')
+                    <p class="text-red-500 text-xs italic mt-4">
+                        {{ $message }}
+                    </p>
+                    @enderror
+                </div>
+
+                <div class="flex flex-wrap mb-6">
                     <label for="description" class="block text-gray-700 text-sm font-bold mb-1">
                         Bio
                     </label>
 
-                    <textarea id="description" class="form-input w-full resize-none h-24 border-none focus:outline-none" name="description" autocomplete="bio">{{ $user->description }}</textarea>
+                    <textarea id="description" class="form-input w-full resize-none h-16 border-none focus:outline-none" name="description" autocomplete="bio">{{ $user->description }}</textarea>
 
                     @error('bio')
                     <p class="text-red-500 text-xs italic mt-4">
@@ -187,32 +231,10 @@
     </div>
 
     @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded relative mt-3" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>   
-            </div>
+        <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded relative mt-3" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>   
+        </div>
     @endif
+
 </main>
-                    
-
-
-                            
-
-                            
-                       
-            
-
-
-
-                    
-
-
-
-
-
-
-
-                    
-
-
-
-                    
+@endsection
