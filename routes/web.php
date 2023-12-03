@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 
@@ -27,7 +28,7 @@ use App\Http\Controllers\Admin\AdminLoginController;
 // Root
 Route::redirect('/', '/home');
 
-Route::get('/home', function() {
+Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
 
@@ -61,7 +62,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
-        
+
     });
 });
 
@@ -89,9 +90,28 @@ Route::controller(PostController::class)->group(function () {
 
 });
 
+// Groups
+Route::controller(GroupController::class)->group(function () {
+    Route::get('/group/{id}', 'show')->name('group');
+    Route::get('/group/{id}/settings', 'settings')->name('group.settings');
 
-Route::get('profile/{username}', [UserController::class, 'showProfile'])->name('profile.show');
-Route::post('profile', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/group', 'createGroup')->name('group.create');
+    Route::post('/group/{id}/join', 'joinRequest')->name('group.join');
+    Route::post('/group/{id}/request/{member_id}', 'resolveRequest')->name('group.resolveRequest');
+    Route::post('/group/verify-password', 'verifyPassword')->name('group.verifyPassword');
+    Route::put('/group/{id}/update', 'update')->name('group.update');
+
+
+    Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
+    Route::put('/group/{id}', 'update')->name('group.update');
+
+    Route::delete('/group/{id}', 'delete')->name('group.delete');
+    Route::delete('/group/{id}/member/{member_id}', 'deleteMember');
+})->middleware('auth');
+
+// profile page
+Route::get('/profile/{username}', [UserController::class, 'showProfile'])->name('profile.show');
+Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
 Route::get('profile/photo/{id}', [UserController::class, 'viewProfilePicture'])->name('profile.photo');
 
 Route::get('network/{username}', [UserController::class, 'showNetwork'])->name('profile.network');
@@ -107,11 +127,13 @@ Route::get('/settings', [UserController::class, 'showSettings'])->name('settings
 Route::post('/settings', [UserController::class, 'updateSettings'])->name('settings.update');
 
 
-// Static pages
-Route::get('/about', function() {
+
+/* route for about us page */
+Route::get('/about', function () {
     return view('pages.about');
 })->name('about');
 
-Route::get('/contact', function() {
+/* route for contact us page */
+Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
