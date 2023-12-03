@@ -19,7 +19,11 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm(): View
     {
-        return view('auth.register');
+        if (Auth::check()) {
+            return redirect('home')->withSuccess('You are already logged in!');;
+        } else {
+            return view('auth.register');
+        }
     }
 
     /**
@@ -27,6 +31,9 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        if (Auth::check()) {
+            return redirect('home')->withSuccess('You are already logged in!');
+        }
         $request->validate([
             'username' => 'required|string|max:15|unique:users',
             'email' => 'required|email|max:250|unique:users',
