@@ -4,7 +4,7 @@ const accountSettingsToggle = document.getElementById('account-settings-toggle')
 const profileSettings = document.getElementById('profile-settings');
 const profileSettingsToggle = document.getElementById('profile-settings-toggle');
 
-const activeSection = document.getElementById('active-section');
+const successMessage = document.getElementById('success-message');
 
 accountSettingsToggle.addEventListener('click', () => {
     accountSettingsToggle.classList.add('border-b-2');
@@ -33,5 +33,8 @@ profileSettingsToggle.addEventListener('click', () => {
 
     // hide the account settings
     accountSettings.classList.add('hidden');
+
+    // hide the success message shown after updating the account settings
+    successMessage.classList.add('hidden');
 });
 

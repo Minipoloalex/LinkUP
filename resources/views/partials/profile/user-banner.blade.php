@@ -37,7 +37,7 @@
     <p class="mb-4">
       <i class="fa-solid fa-university"></i>
       {{ $user->faculty }}
-      <i class="fa-solid fa-graduation-cap"></i>
+      @if ($user->course) <i class="fa-solid fa-graduation-cap"></i> @endif
       {{ $user->course }}
     </p>
       
