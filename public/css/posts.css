@@ -88,9 +88,6 @@ make posts added by Javascript be easier to create there, by decoupling the CSS 
     margin-left: 0.5rem;
 }
 
-:root {
-    --bg-gray-300: rgb(209 213 219);
-}
 .comments-container .comment {
     background-color: var(--bg-gray-300);
     margin: 1.25rem;
