@@ -1,13 +1,14 @@
+function getFileInputWrapper(form) {
+    return form.querySelector('.file-input-wrapper');
+}
 function clearFileInputWrapper(fileInputWrapper) {
-    const fileName = fileInputWrapper.querySelector('.file-name');
-    const removeFileBtn = fileInputWrapper.querySelector('.remove-file');
-    const uploadFileBtn = fileInputWrapper.querySelector('.upload-file');
-    clearFileInput(fileName, removeFileBtn, uploadFileBtn);
+    const removeFileBtn = getRemoveFileBtn(fileInputWrapper);
+    removeFileBtn.click();
 }
 function clearFileInput(fileName, removeFileBtn, uploadFileBtn) {
     fileName.textContent = 'No file selected';
-    removeFileBtn.classList.add('hidden');
-    uploadFileBtn.classList.remove('hidden');
+    hide(removeFileBtn);
+    show(uploadFileBtn);
 }
 function getFileName(fileInputWrapper) {
     return fileInputWrapper.querySelector('.file-name');
@@ -30,9 +31,9 @@ function handlerFileInput(fileInputWrapper) {
     }
     fileInput.addEventListener('change', () => {
         if (fileInput.files.length > 0) {
-          fileName.textContent = fileInput.files[0].name;
-          removeFileBtn.classList.remove('hidden');
-          uploadFileBtn.classList.add('hidden');
+            fileName.textContent = fileInput.files[0].name;
+            show(removeFileBtn);
+            hide(uploadFileBtn);
         } else {
             clearFile();
         }

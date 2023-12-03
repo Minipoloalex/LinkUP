@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminLoginController;
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +32,7 @@ Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
 
+
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
@@ -45,6 +45,7 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+
 // Admin
 Route::prefix('/admin')->name('admin.')->group(function () {
     Route::redirect('/', '/admin/login');
@@ -56,12 +57,17 @@ Route::prefix('/admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
+        Route::post('/users/{id}/ban', [AdminController::class, 'banUser'])->name('users.ban');
+        Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
+
     });
 });
 
+
+// Post
 Route::controller(PostController::class)->group(function () {
     Route::get('/post/{id}', 'show')->name('post');
     Route::get('/post/{id}/image', 'viewImage')->name('post.image');
@@ -98,27 +104,23 @@ Route::controller(GroupController::class)->group(function () {
 })->middleware('auth');
 
 // profile page
+Route::get('/profile/{username}', [UserController::class, 'showProfile'])->name('profile.show');
+Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
+Route::get('profile/photo/{id}', [UserController::class, 'viewProfilePicture'])->name('profile.photo');
 
-/*
-Route::controller(ProfileController::class)->group(function () {
-    Route::get('/profile/{id}', 'show')->name('user');
-    Route::get('/profile/{id}/username', 'viewUsername')->name('post.username');
-    Route::get('/profile/{id}/description', 'viewDescription')->name('post.description');
-    Route::get('/profile/{id}/image', 'viewPhoto')->name('post.photo');
+Route::get('network/{username}', [UserController::class, 'showNetwork'])->name('profile.network');
 
-    Route::post('/profile', 'storePost');
-    Route::post('/comment', 'storeComment');
+Route::delete('follow/follower/{id}', [UserController::class, 'removeFollower'])->where('id', '[0-9]+');
+Route::delete('follow/following/{id}', [UserController::class, 'removeFollowing'])->where('id', '[0-9]+');
+Route::delete('follow/request/cancel/{id}', [UserController::class, 'cancelRequestToFollow'])->where('id', '[0-9]+');
+Route::delete('follow/request/deny/{id}', [UserController::class, 'denyFollowRequest'])->where('id', '[0-9]+');
+Route::patch('follow/request/accept/{id}', [UserController::class, 'acceptFollowRequest'])->where('id', '[0-9]+');
+Route::post('follow', [UserController::class, 'requestFollow']);
 
-    // Route::delete('/comment/{id}', 'delete');
-    Route::delete('/profile/{id}', 'delete');
+Route::get('/settings', [UserController::class, 'showSettings'])->name('settings');
+Route::post('/settings', [UserController::class, 'updateSettings'])->name('settings.update');
 
-    Route::put('/profile/{id}', 'update');
 
-    Route::get('/api/post/search/{search}', 'search');
-});*/
-
-Route::get('/profile/{username}', [UserController::class, 'show'])->name('profile.show');
-Route::post('/profile', [UserController::class, 'update'])->name('profile.update');
 
 /* route for about us page */
 Route::get('/about', function () {

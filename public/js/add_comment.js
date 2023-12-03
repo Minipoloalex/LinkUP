@@ -15,11 +15,30 @@ async function submitAddComment(event) {
 
     if (data != null) {
         const commentsContainer = post.querySelector('.comments-container');
-        
-        addCommentToDOM(commentsContainer, data);
+        const commentHTML = parseHTML(data.commentHTML);
+
+        addEventListenersToComment(commentHTML);
+        commentsContainer.appendChild(commentHTML);
         incrementCommentCount(post);
 
         commentForm.reset();
         clearFileInputWrapper(getFileInputWrapper(commentForm));
     }
+}
+function addEventListenersToComment(comment) {
+    const deleteCommentButton = comment.querySelector('.delete-post');
+    deleteCommentButton.addEventListener('click', deletePostOrComment);
+
+    const editCommentButton = comment.querySelector('.edit-post');
+    editCommentButton.addEventListener('click', toggleEditEvent);
+
+    const editCommentField = comment.querySelector('.edit-post-info');
+    editCommentField.addEventListener('submit', submitEditPost);
+
+    const deleteImageButton = comment.querySelector('.delete-image');
+    if (deleteImageButton) {
+        deleteImageButton.addEventListener('click', deleteImage);
+    }
+
+    handlerFileInput(comment.querySelector('.file-input-wrapper'));
 }

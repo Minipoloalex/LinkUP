@@ -51,7 +51,10 @@ function removeMember (group, member_id, member) {
 }
 
 function addRemoveMemberEvents () {
-  const group = document.getElementById('group-id').value
+  const group_element = document.getElementById('group-id')
+  if (!group_element) return
+
+  const group = group_element.value
   const members = document.querySelectorAll('#members-section > div')
   if (!members) return
 
@@ -101,7 +104,10 @@ function leaveGroup (group) {
 }
 
 function addLeaveGroupEvent () {
-  const group = document.getElementById('group-id').value
+  const group_element = document.getElementById('group-id')
+  if (!group_element) return
+
+  const group = group_element.value
   const button = document.getElementById('leave-group')
 
   if (!button) return
@@ -157,7 +163,10 @@ function joinGroup (group, button) {
 }
 
 function addJoinGroupEvent () {
-  const group = document.getElementById('group-id').value
+  const group_element = document.getElementById('group-id')
+  if (!group_element) return
+
+  const group = group_element.value
   const button = document.getElementById('join-group')
 
   if (!button) return
@@ -201,7 +210,10 @@ function cancelJoinGroup (group, button) {
 }
 
 function addCancelJoinGroupEvent () {
-  const group = document.getElementById('group-id').value
+  const group_element = document.getElementById('group-id')
+  if (!group_element) return
+
+  const group = group_element.value
   const button = document.getElementById('pending-group')
 
   if (!button) return
@@ -233,7 +245,10 @@ function resolveMemberRequest (group, member_id, element, accept) {
 }
 
 function addResolveMemberRequestEvents () {
-  const group = document.getElementById('group-id').value
+  const group_element = document.getElementById('group-id')
+  if (!group_element) return
+
+  const group = group_element.value
   const requests = document.querySelectorAll('#requests-section > div > div')
   if (!requests) return
 

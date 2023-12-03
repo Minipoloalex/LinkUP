@@ -1,0 +1,8 @@
+#network button.active {
+    background-color: grey;
+    border-color: grey;
+}
+.empty-list {
+    padding: 0.5rem;
+    text-align: center;
+}

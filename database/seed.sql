@@ -40,7 +40,7 @@ CREATE TABLE users (
     description TEXT,
     photo TEXT DEFAULT 'def.jpg',
     is_private BOOLEAN DEFAULT true NOT NULL,
-    id_blocked_by INTEGER REFERENCES admin(id) ON DELETE SET NULL,
+    is_banned BOOLEAN DEFAULT false NOT NULL,
     remember_token VARCHAR
 );
 CREATE TABLE follows (
