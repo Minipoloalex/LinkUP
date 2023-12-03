@@ -76,11 +76,10 @@ Route::controller(PostController::class)->group(function () {
 
     Route::get('/search', 'searchResults');
 
-    // Update likes on a post
-    Route::post('/post/{id}/like', 'addLike');
-    Route::delete('/post/{id}/like', 'removeLike');
-    // get  like status
-    Route::get('/post/{id}/like', 'likeStatus');
+    // Like routes
+    Route::post('/post/{id}/like', 'addLike'); // add like
+    Route::delete('/post/{id}/like', 'removeLike'); // remove like
+    Route::get('/post/{id}/like', 'likeStatus');  // get like status
 
 });
 

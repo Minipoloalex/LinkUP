@@ -6,8 +6,6 @@ async function initializeLikeButton(postId, likeButton) {
     try {
         const alreadyLiked = await checkLikedStatus(postId);
         likeButton.setAttribute('data-liked', alreadyLiked);
-        // Update the appearance of the button based on alreadyLiked status
-        // change the color of the button
         if(alreadyLiked === true){
             likeButton.style.color = "red";
         }
@@ -46,13 +44,10 @@ document.addEventListener('click', async function (e) {
 
                 alreadyLiked = response.alreadyLiked;
                 likeButton.setAttribute('data-liked', alreadyLiked);
-                // Update the color or appearance based on alreadyLiked
-                // ...
                 console.log('Post action performed successfully');
             }
         } catch (error) {
             console.error('Error performing action on post:', error.message);
-            // Handle error, show error message, etc.
         }
     }
 });
@@ -83,7 +78,6 @@ async function checkLikedStatus(postId) {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                // Add any necessary headers or authentication tokens
             },
         });
 
@@ -92,7 +86,7 @@ async function checkLikedStatus(postId) {
         }
 
         const data = await response.json();
-        return data.alreadyLiked; // Assuming the response has the alreadyLiked property
+        return data.alreadyLiked; 
     } catch (error) {
         console.error('Error checking liked status:', error.message);
         throw new Error('Failed to fetch liked status');

@@ -302,7 +302,12 @@ class PostController extends Controller
 
     /**
      * Update likes on a post
+     * Add like on a post
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
      */
+
 
         public function addLike(Request $request, string $id)
         {
@@ -316,8 +321,6 @@ class PostController extends Controller
             $request->validate([
                 'like' => 'required|boolean'
             ]);
-
-            Log::info("post is nbeing elkfnwlnf");
         
             $like = $request->input('like');
             $user = Auth::user();
@@ -358,6 +361,13 @@ class PostController extends Controller
             ]);
 
     }
+
+      /**
+     * Remove like on a post
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
     public function removeLike(Request $request, string $id)
     {
         $user = Auth::user();
