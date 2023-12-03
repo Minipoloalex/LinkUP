@@ -44,6 +44,7 @@
     <script type="module" src={{ url('js/edit_profile.js') }} defer></script>
     <script type="module" src={{ url('js/contact.js') }} defer></script>
     <script type="module" src={{ url('js/group/group.js') }} defer></script>
+    
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
