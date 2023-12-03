@@ -123,8 +123,8 @@ Route::delete('follow/request/deny/{id}', [UserController::class, 'denyFollowReq
 Route::patch('follow/request/accept/{id}', [UserController::class, 'acceptFollowRequest'])->where('id', '[0-9]+');
 Route::post('follow', [UserController::class, 'requestFollow']);
 
-Route::get('/settings', [UserController::class, 'showSettings'])->name('settings');
-Route::post('/settings', [UserController::class, 'updateSettings'])->name('settings.update');
+Route::get('/settings', [UserController::class, 'showSettings'])->name('settings.show');
+Route::post('/settings/update', [UserController::class, 'updateSettings'])->name('settings.update');
 
 
 

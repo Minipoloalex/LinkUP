@@ -37,9 +37,13 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function showSettings()
+    public function showSettings(Request $request)
     {
-        return view('pages.settings', ['user' => Auth::user()]);
+        $user = Auth::user();
+
+        $activeSection = $request->from ?? 'account'; // default to account section
+
+        return view('pages.settings', ['user' => $user, 'activeSection' => $activeSection]);
     }
 
     /**
@@ -51,11 +55,15 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $this->authorize('update', User::class);
+        
         $user = Auth::user();
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
-            'media' => ['nullable', 'image', 'max:1024'],
+            'faculty' => ['nullable', 'string', 'max:255'],
+            'course' => ['nullable', 'string', 'max:255'],
+            'media' => ['nullable', 'mimes:jpeg,png,jpg,gif,svg', 'max:1024'],
         ]);
 
         if ($request->has('media') && $request->media != null && $request->file('media')->isValid()) {
@@ -69,10 +77,12 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'description' => $request->description,
+            'faculty' => $request->faculty,
+            'course' => $request->course,
             'photo' => $user->photo ?? 'def.jpg'
         ]);
 
-        return redirect()->back()->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile.show', ['username' => $user->username])->with('success', 'Profile updated successfully!');
     }
 
     /**
@@ -83,6 +93,8 @@ class UserController extends Controller
      */
     public function updateSettings(Request $request)
     {
+        $this->authorize('update', User::class);
+
         $user = Auth::user();
 
         $request->validate([

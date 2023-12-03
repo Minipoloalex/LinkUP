@@ -14,6 +14,26 @@
         <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus
             class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
 
+        <label for="faculty" class="pt-4 pb-2">faculty</label>
+            <select id="faculty" name="faculty" required 
+                class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
+                <option value="none" disabled selected hidden>select your faculty</option>
+                <option value="faup">FAUP</option>
+                <option value="fbaup">FBAUP</option>
+                <option value="fcup">FCUP</option>
+                <option value="fcnaup">FCNAUP</option>
+                <option value="fadeup">FADEUP</option>
+                <option value="fdup">FDUP</option>
+                <option value="fep">FEP</option>
+                <option value="feup">FEUP</option>
+                <option value="ffup">FFUP</option>
+                <option value="flup">FLUP</option>
+                <option value="fmup">FMUP</option>
+                <option value="fmdup">FMDUP</option>
+                <option value="fpceup">FPCEUP</option>
+                <option value="icbas">ICBAS</option>
+            </select>
+
         <label for="email" class="pt-4 pb-2">email</label>
         <input id="email" type="email" name="email" value="{{ old('email') }}" required
             class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">

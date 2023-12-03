@@ -18,6 +18,8 @@ CREATE TABLE users (
     username VARCHAR(200) UNIQUE,
     email VARCHAR(200) UNIQUE,
     password TEXT,
+    faculty VARCHAR(200) NOT NULL,
+    course VARCHAR(200),
     name VARCHAR(200) NOT NULL,
     faculty VARCHAR(200) NOT NULL,
     course VARCHAR(200) DEFAULT NULL,

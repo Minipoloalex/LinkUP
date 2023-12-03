@@ -50,7 +50,7 @@ $username = Auth::user()->username ?? "";
         </a>
     </div>  
     <div class="lg:w-full md:flex md:h-12 md:items-center">
-        <a href="{{ $authenticated ? route('settings') : route('login') }}">
+        <a href="{{ $authenticated ? route('settings.show') : route('login') }}">
             <div class="flex items-center w-full justify-center">
                 <i class="fa-solid fa-gears fa-xl"></i>
                 <p class="hidden lg:block ml-4">Settings</p>
