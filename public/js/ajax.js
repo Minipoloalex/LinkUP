@@ -5,7 +5,7 @@ function encodeForAjax(data) {
   }).join('&');
 }
 
-function getCsrfToken() {
+export function getCsrfToken() {
   return document.querySelector('meta[name="csrf-token"]').content;
 }
 
@@ -28,7 +28,7 @@ async function handleFeedbackToResponse(response) {
   return null;
 }
 
-async function sendAjaxRequest(method, url, data) {
+export async function sendAjaxRequest(method, url, data) {
   const response = await fetch(url, {
     method: method,
     headers: {

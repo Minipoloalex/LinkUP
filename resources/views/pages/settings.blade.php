@@ -177,11 +177,11 @@
                 </div>
 
                 <div class="flex flex-wrap mb-6">
-                    <label for="description" class="block text-gray-700 text-sm font-bold mb-1">
+                    <label for="bio" class="block text-gray-700 text-sm font-bold mb-1">
                         Bio
                     </label>
 
-                    <textarea id="description" class="form-input w-full resize-none h-16 border-none focus:outline-none" name="description" autocomplete="bio">{{ $user->description }}</textarea>
+                    <textarea id="bio" class="form-input w-full resize-none h-16 border-none focus:outline-none" name="bio" autocomplete="bio">{{ $user->bio }}</textarea>
 
                     @error('bio')
                     <p class="text-red-500 text-xs italic mt-4">

@@ -60,7 +60,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255'],
+            'bio' => ['nullable', 'string', 'max:255'],
             'faculty' => ['required', 'string', 'max:255'],
             'course' => ['nullable', 'string', 'max:255'],
             'media' => ['nullable', 'mimes:jpeg,png,jpg,gif,svg', 'max:1024'],
@@ -76,7 +76,7 @@ class UserController extends Controller
 
         $user->update([
             'name' => $request->name,
-            'description' => $request->description,
+            'bio' => $request->bio,
             'faculty' => $request->faculty,
             'course' => $request->course,
             'photo' => $user->photo ?? 'def.jpg'

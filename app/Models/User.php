@@ -34,7 +34,7 @@ class User extends Authenticatable
         'course',
         'email',
         'password',
-        'description',
+        'bio',
         'is_private',
         'is_banned',
     ];

@@ -33,6 +33,7 @@
     <script type="module" src={{ url('js/contact.js') }} defer></script>
     <script type="module" src={{ url('js/settings.js') }} defer></script>
     <script type="module" src={{ url('js/group/group.js') }} defer></script>
+    <script type="module" src={{ url('js/like.js') }} defer></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     @vite('resources/css/app.css')

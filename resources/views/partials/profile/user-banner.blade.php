@@ -41,7 +41,7 @@
       {{ $user->course }}
     </p>
       
-    <p class="profile-bio text-gray-600">{{ $user->description }}</p>
+    <p class="profile-bio text-gray-600">{{ $user->bio }}</p>
   </div>
 
   <div class="profile-stats flex flex-row center justify-center mt-6">
