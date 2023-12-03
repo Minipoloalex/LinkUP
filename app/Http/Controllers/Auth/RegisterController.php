@@ -33,14 +33,16 @@ class RegisterController extends Controller
             'password' => 'required|min:8|confirmed'
         ]);
 
-        User::create([
+        $user = User::create([
             'username' => $request->username,
             'name' => $request->username,   // Default name is username.
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
 
-        return redirect()->route('login')
+        Auth::login($user);
+
+        return redirect()->route('home')
             ->withSuccess('You have successfully registered!');
     }
 }

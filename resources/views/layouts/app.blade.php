@@ -22,15 +22,19 @@
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <link href="{{ url('css/posts.css') }}" rel="stylesheet">
     <link href="{{ url('css/follow.css') }}" rel="stylesheet">
+    <link href="{{ mix('node_modules/cropperjs/dist/cropper.css')}}" rel="stylesheet">
+
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
-    <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+    <script type="text/javascript" src="{{ mix('node_modules/cropperjs/dist/cropper.js') }}" defer></script>
+    <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
     <script type="text/javascript" src={{ url('js/feedback.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/general_helpers.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/ajax.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/file_input.js') }} defer></script>
+    <script type="text/javascript" src={{ url('js/crop_images.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/network.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/add_follow.js') }} defer></script>
     <script type="text/javascript" src={{ url('js/post_helpers.js') }} defer></script>
