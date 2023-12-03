@@ -1,9 +1,9 @@
-function hide (element) {
+export function hide (element) {
   if (element) {
     element.classList.add('hidden')
   }
 }
-function show (element) {
+export function show (element) {
   if (element) {
     element.classList.remove('hidden')
   }
