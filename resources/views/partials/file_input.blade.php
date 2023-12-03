@@ -8,7 +8,7 @@
     <button class="remove-file hidden bg-gray-500 rounded px-4 py-2 m-6 text-white">Clear image</button>
     <span class="file-name">No file selected</span>
     <div class="cropper-container hidden max-h-96">
-        <img class="cropper-image block max-w-full" src="" alt="Profile Picture">
+        <img class="cropper-image block max-w-full" src="_" alt="Profile Picture">
     </div>
     <button class="crop-button">Crop</button>
 </div>

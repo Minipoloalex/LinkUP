@@ -21,10 +21,10 @@
         @endif
         <a class="post-link" href="/post/{{ $post->id }}">
             <p class='post-content'>{{ $post->content }}</p>
-            @if ($post->media != null)
-                @include('partials.post_image', ['post' => $post, 'editable' => $editable])
-            @endif
         </a>
+        @if ($post->media != null)
+            @include('partials.post_image', ['post' => $post, 'editable' => $editable])
+        @endif
     </div>
     <div class="post-footer">
         <h3 class="post-likes">

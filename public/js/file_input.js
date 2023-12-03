@@ -39,7 +39,6 @@ function handlerFileInput(fileInputWrapper) {
 
     const clearFile = () => {
         clearFileInput(fileName, removeFileBtn, uploadFileBtn);
-        cropperImage.src = '';
         hide(cropperContainer);
     }
     let cropper = null;

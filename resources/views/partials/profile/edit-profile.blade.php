@@ -19,7 +19,7 @@
                 </span>
             @endif
             
-            <label for="username" class="block mb-2">Description</label>
+            <label for="description" class="block mb-2">Description</label>
             <textarea id="description" name="description" class="w-full border border-gray-300 rounded-md p-2 mb-4">{{ $user->description }}</textarea>
             @if ($errors->has('description'))
                 <span class="error">

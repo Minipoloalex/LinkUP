@@ -34,10 +34,10 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:150',
             'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
-            'x' => 'nullable|integer',
-            'y' => 'nullable|integer',
-            'width' => 'integer',
-            'height' => 'integer'
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
         ]);
         if ($request->has('media') && $request->media != null && $request->file('media')->isValid()) {
             if ($user->photo != 'def.jpg' && $user->photo != null) {

@@ -278,7 +278,7 @@ class PostController extends Controller
      * @param Post $post
      * @return bool true if the file name was set, false otherwise (if there was no file)
      */
-    private function setFileName(Request $request, Post $post, int $x, int $y, int $width, int $height): bool
+    private function setFileName(Request $request, Post $post, ?int $x, ?int $y, ?int $width, ?int $height): bool
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
             $fileName = "media_post_" . $post->id . '.' . $request->media->extension();

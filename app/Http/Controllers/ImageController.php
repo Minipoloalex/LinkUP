@@ -27,16 +27,20 @@ class ImageController extends Controller
     private function getFilePath(string $fileName) {
         return $this->path . $fileName;
     }
-    public function store($media, string $fileName, int $x, int $y, int $width, int $height)
+    public function store($media, string $fileName, ?int $x, ?int $y, ?int $width, ?int $height)
     {
         if ($this->existsFile($fileName)) {
             abort(400);
         }
-        
-        $media = Image::make($media)->crop($width, $height, $x, $y)
-            ->resize(self::$profilePictureSize, self::$profilePictureSize)
-            ->encode('jpg', 75);
-
+        if ($x == null || $y == null || $width == null || $height == null) {
+            $media = Image::make($media)->resize(self::$profilePictureSize, self::$profilePictureSize)
+                ->encode('jpg', 75);
+        }
+        else {
+            $media = Image::make($media)->crop($width, $height, $x, $y)
+                ->resize(self::$profilePictureSize, self::$profilePictureSize)
+                ->encode('jpg', 75);
+        }
         $media->save(storage_path('app/' . $this->path . $fileName));
     }
     public function delete(string $fileName)
