@@ -1,31 +1,23 @@
 @extends('layouts.auth')
 
 @section('content')
-<img src="{{ url('images/background.png') }}" alt="UP Colors Background"
-    class="absolute inset-0 w-full h-full object-cover -z-10">
-<main id="login-page"
-    class="absolute top-0 left-[61.66%] flex flex-col justify-center self-center content-center bg-white h-screen min-w-[600px]">
-    <img src="{{ url('images/logo.png') }}" alt="Link up logo" class="w-1/2 self-center">
-    <form method="POST" action="{{ route('login') }}" class="col-span-2 flex flex-col flex-grow my-6 px-12">
+
+<main id="login-page" class="w-screen h-screen flex flex-col items-center justify-center bg-white py-24 mx-auto
+                            lg:w-1/2 lg:border-x lg:border-slate-400">
+    <img src="{{ url('images/logo.png') }}" alt="Link up logo" class="self-center w-48 mt-4">
+    <div class="my-4 text-base font-bold text-center italic">
+        <h1>A rede social da UPorto</h1>
+    </div>
+    <form method="POST" action="{{ route('login') }}" class="col-span-2 flex flex-col flex-grow my-6 justify-center">
         {{ csrf_field() }}
 
-        <label for="login" class="pt-4 pb-2 text-lg">username or email</label>
+        <label for="login" class="pt-4 pb-2">username or email</label>
         <input id="login" type="text" name="login" value="{{ old('login') }}" required autofocus
-            class="pb-1 pl-2 text-sm focus:outline-none border-b border-solid border-slate-400">
-        @if ($errors->has('login'))
-        <span class="error">
-            {{ $errors->first('login') }}
-        </span>
-        @endif
+            class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
 
-        <label for="password" class="pt-4 pb-2 text-lg">password</label>
+        <label for="password" class="pt-4 pb-2">password</label>
         <input id="password" type="password" name="password" required
-            class="pb-1 pl-2 text-sm focus:outline-none border-b border-solid border-slate-400">
-        @if ($errors->has('password'))
-        <span class="error">
-            {{ $errors->first('password') }}
-        </span>
-        @endif
+            class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
 
         <div class="grid grid-cols-2 gap-2 mt-1">
             <label class="pt-4 pl-1 inline-block whitespace-nowrap align-middle">
@@ -37,14 +29,23 @@
                 <img src="{{ url('images/icons/login.png') }}" alt="Login" class="w-6 h-6">
             </button>
         </div>
-        <div class="flex mt-6 mr-2 content-center justify-end">
-            <a class="pt-12 text-sm hover:underline" href="{{ route('register') }}">no account? register here</a>
+
+        <div class="flex mt-6 mr-2 content-center justify-center">
+            <a class="mt-12 text-sm hover:underline" href="{{ route('register') }}">no account? register here</a>
         </div>
-        @if (session('success'))
-        <p class="success">
-            {{ session('success') }}
-        </p>
-        @endif
+
     </form>
+
+    <div class="w-screen h-12 text-sm text-center absolute top-[80%] left-0">
+        @if (session('success'))
+        <p class="success text-green-500"> {{ session('success') }} </p>
+        @endif
+        @if ($errors->has('login'))
+        <p class="error text-red-500"> {{ $errors->first('login') }} </p>
+        @endif
+        @if ($errors->has('password'))
+        <p class="error text-red-500"> {{ $errors->first('password') }} </p>
+        @endif
+    </div>
 </main>
 @endsection
