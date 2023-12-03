@@ -33,14 +33,18 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:150',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'x' => 'nullable|integer',
+            'y' => 'nullable|integer',
+            'width' => 'integer',
+            'height' => 'integer'
         ]);
         if ($request->has('media') && $request->media != null && $request->file('media')->isValid()) {
             if ($user->photo != 'def.jpg' && $user->photo != null) {
                 $this->imageController->delete($user->photo);
             }
             $user->photo = 'profile_' . $user->id . '.' . $request->media->extension();
-            $this->imageController->store($request->media, $user->photo);
+            $this->imageController->store($request->media, $user->photo, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         }
 
         $user->update([

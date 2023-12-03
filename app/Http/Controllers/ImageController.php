@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
 
 class ImageController extends Controller
 {
     static protected $default = 'def.jpg';
     static protected $pathUsers = "public/images/users/";
     static protected $pathPosts = "images/";
+    static protected $profilePictureSize = 100;
+    static protected $postPictureSize = 500;
     protected string $path = "";
     public function __construct(string $type)
     {
@@ -24,12 +27,17 @@ class ImageController extends Controller
     private function getFilePath(string $fileName) {
         return $this->path . $fileName;
     }
-    public function store($media, string $fileName)
+    public function store($media, string $fileName, int $x, int $y, int $width, int $height)
     {
         if ($this->existsFile($fileName)) {
             abort(400);
         }
-        Storage::putFileAs($this->path, $media, $fileName);
+        
+        $media = Image::make($media)->crop($width, $height, $x, $y)
+            ->resize(self::$profilePictureSize, self::$profilePictureSize)
+            ->encode('jpg', 75);
+
+        $media->save(storage_path('app/' . $this->path . $fileName));
     }
     public function delete(string $fileName)
     {
