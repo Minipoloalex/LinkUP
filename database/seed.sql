@@ -51,7 +51,7 @@ CREATE TABLE follows (
 );
 CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(50) UNIQUE,
     description TEXT,
     photo TEXT DEFAULT 'def.jpg',
     created_at DATE DEFAULT CURRENT_DATE NOT NULL,
@@ -59,6 +59,7 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE group_member (
+    id SERIAL,
     id_user INTEGER REFERENCES users(id) ON DELETE CASCADE,
     id_group INTEGER REFERENCES groups(id) ON DELETE CASCADE,
     PRIMARY KEY (id_user, id_group)
