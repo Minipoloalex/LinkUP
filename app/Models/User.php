@@ -29,9 +29,13 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'name',
+        'faculty',
+        'course',
         'email',
         'password',
-        'description',
+        'bio',
+        'is_private',
+        'is_banned',
     ];
 
     /**
@@ -77,9 +81,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(GroupMember::class, 'id_user');
     }
+
+    protected function liked() : HasMany
+    {
+        return $this->hasMany(Liked::class, 'id_user');
+    }
+
+
     public function getProfilePicture()
     {
         $imageController = new ImageController('users');
+
         return $imageController->getFile($this->photo);
     }
     public function followRequestsReceived() : HasMany
@@ -95,8 +107,8 @@ class User extends Authenticatable
         return $this->followRequestsSent()->where('id_user_to', $user->id)->exists();
     }
     public static function search(string $search) {
-        $users = User::whereRaw("tsvectors @@ plainto_tsquery('english', ?)", [$search])
-        ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search])
+        $users = User::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
+        ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
         ->get();
         return $users;
     }

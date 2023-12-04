@@ -23,14 +23,19 @@ class Group extends Model
     ];
     public function members()
     {
-        return $this->belongsToMany(User::class, 'group_members', 'id_group', 'id_member');
+        return $this->belongsToMany(User::class, 'group_member', 'id_group', 'id_user');
     }
     public function owner()
     {
         return $this->belongsTo(User::class, 'id_owner');
     }
-    // public function posts()
-    // {
-    //     return $this->hasMany(Post::class);
-    // }
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'id_group');
+    }
+
+    public function pendingMembers()
+    {
+        return $this->belongsToMany(User::class, 'group_notification', 'id_group', 'id_user');
+    }
 }

@@ -96,3 +96,7 @@ make posts added by Javascript be easier to create there, by decoupling the CSS 
     margin: 1.25rem;
     padding: 1.25rem;
 }
+
+.liked {
+    color: red; /* Change the color to red when the button is liked */
+}

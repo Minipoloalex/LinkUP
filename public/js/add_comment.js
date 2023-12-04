@@ -1,3 +1,5 @@
+import { submitAddPostOrComment } from './post.js';
+
 const commentForm = document.querySelector('form.add-comment');
 if (commentForm != null) {
     commentForm.addEventListener('submit', submitAddComment);
