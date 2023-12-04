@@ -32,6 +32,8 @@ async function fetchPosts(date) {
   return await response.json();
 }
 
+
+
 function getCurrentFormattedTime() {
   const currentDate = new Date();
 
@@ -73,3 +75,5 @@ function createPostFetcher() {
 
 fetchNewPosts();
 createPostFetcher();
+
+const forYouPosts = await fetchForYouPosts();
