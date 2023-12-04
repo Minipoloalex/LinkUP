@@ -140,3 +140,8 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
+
+/* route for for-you.blade.php */
+Route::get('/for-you', function () {
+    return view('pages.foryou');
+})->name('for-you');

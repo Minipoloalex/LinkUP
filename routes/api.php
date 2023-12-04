@@ -22,6 +22,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get(
+        '/posts/followed-users', // Define the endpoint for fetching posts from followed users
+        [ForYouController::class, 'getPostsFromFollowedUsers']
+    )->name('posts.followedUsers');
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/foryou/posts', [ForYouController::class, 'getPostsFromFollowedUsers']);
+    // You can add more routes related to the "For You" functionality here
+});
+
 Route::middleware('web')->group(function () {
     Route::get(
         '/posts/search',        // query parameter
@@ -45,3 +57,5 @@ Route::middleware('web')->group(function () {
         [PostController::class, 'getPostsBeforeDate']
     )->name('posts.beforeDate');
 });
+
+
