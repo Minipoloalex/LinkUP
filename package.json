@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "@tailwindcss/typography": "^0.5.10",
-        "artisan": "^0.1.2"
+        "artisan": "^0.1.2",
+        "sweetalert2": "^11.10.1"
     }
 }

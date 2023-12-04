@@ -18,7 +18,6 @@ class Post extends Model
         'is_private',
         'id_parent',
         'id_created_by',
-        'media',
         'id_group'
     ];
     public function createdBy()
@@ -39,9 +38,9 @@ class Post extends Model
     }
     public function media()
     {
-        if ($this->media == null)
-            return null;
-        return "/post/$this->id/image";
+        if (file_exists("/post/$this->id/image"))
+            return "/post/$this->id/image";
+        return null;
     }
     public function isCreatedByCurrentUser()
     {
@@ -50,14 +49,14 @@ class Post extends Model
     }
     public static function search(string $search)
     {
-        
+
         $posts = DB::select("SELECT * FROM post
                     WHERE tsvectors @@ plainto_tsquery('english', ?)
                     ORDER BY ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search, $search]);
 
-            // WHERE tsvectors @@ to_tsquery('english', plainto_tsquery('english', ?))
-            // ORDER BY ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search, $search]);
-        
+        // WHERE tsvectors @@ to_tsquery('english', plainto_tsquery('english', ?))
+        // ORDER BY ts_rank(tsvectors, plainto_tsquery('english', ?)) DESC", [$search, $search]);
+
         // $posts = DB::select("SELECT * FROM post
         //     WHERE tsvectors @@ to_tsquery('english', ?)
         //     ORDER BY ts_rank(tsvectors, to_tsquery('english', ?)) DESC", [$search, $search]);

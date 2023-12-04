@@ -30,9 +30,13 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'name',
+        'faculty',
+        'course',
         'email',
         'password',
-        'description',
+        'bio',
+        'is_private',
+        'is_banned',
     ];
 
     /**
@@ -78,9 +82,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(GroupMember::class, 'id_user');
     }
+
+    protected function liked() : HasMany
+    {
+        return $this->hasMany(Liked::class, 'id_user');
+    }
+
+
     public function getProfilePicture()
     {
         $imageController = new ImageController('users');
+
         return $imageController->getFile($this->photo);
     }
     public function followRequestsReceived() : HasMany
