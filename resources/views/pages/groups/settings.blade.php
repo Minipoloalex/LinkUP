@@ -16,7 +16,7 @@
                 <div class="flex justify-start items-start h-full">
                     <div class="relative top-0 left-0" id="change-group-photo">
                         <label for="group-photo-input" class="cursor-pointer">
-                            <img src="{{ url('images/groups/icons/' . $group->id . '.jpg') }}" alt="group photo"
+                            <img src="{{ $group->getPicture() }}" alt="group photo"
                                 class="w-16 h-16 rounded-full" id="group-photo-img">
                             <div class="absolute top-0 left-0 w-16 h-16 rounded-full bg-black bg-opacity-50 flex items-center justify-center hidden"
                                 id="group-photo-hover">

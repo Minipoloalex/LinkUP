@@ -17,7 +17,7 @@ use \App\Events\CommentEvent;
 
 class PostController extends Controller
 {
-    private $imageController;
+    private ImageController $imageController;
     public function __construct()
     {
         $this->imageController = new ImageController('posts');

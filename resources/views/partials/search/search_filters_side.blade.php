@@ -19,7 +19,7 @@
                     <input type="radio" id="comments-radio" name="search-type" value="comments">
                     <label for="comments-radio">Comments</label>
                 </li>
-            </div>
+            </ul>
         </section>
     </div>
 </section>

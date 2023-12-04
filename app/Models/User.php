@@ -87,7 +87,6 @@ class User extends Authenticatable
         return $this->hasMany(Liked::class, 'id_user');
     }
 
-
     public function getProfilePicture()
     {
         $imageController = new ImageController('users');
@@ -107,9 +106,8 @@ class User extends Authenticatable
         return $this->followRequestsSent()->where('id_user_to', $user->id)->exists();
     }
     public static function search(string $search) {
-        $users = User::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
+        return User::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
         ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
         ->get();
-        return $users;
     }
 }
