@@ -175,8 +175,11 @@ class UserController extends Controller
         ]);
         $this->authorize('update', User::class);
         $user = Auth::user();
-
-        // check if user is already following
+        if ($user->id == $request->input('id')) {
+            return response()->json([
+                'error' => 'You cannot follow yourself!'
+            ]);
+        }
         $requestTo = User::findOrFail($request->id);
         if ($user->isFollowing($requestTo)) {
             return response()->json([
@@ -194,7 +197,7 @@ class UserController extends Controller
             $request = FollowRequest::create([
                 'id_user_from' => $user->id,
                 'id_user_to' => $requestTo->id,
-                'timestamp' => now()
+                'timestamp' => time(),
             ]);
             $accepted = false;
             $feedback = "Follow request sent to $requestTo->username successfully!";

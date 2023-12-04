@@ -1,4 +1,5 @@
 import { sendAjaxRequest } from "./ajax.js";
+import { hide, show } from "./general_helpers.js";
 
 // JS for network page
 const network = document.querySelector('#network');

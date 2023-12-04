@@ -1,6 +1,6 @@
 import { sendAjaxRequest } from "./ajax.js";
 import { show, hide } from "./general_helpers.js";
-import { decrementCount } from "./network.js";
+import { incrementCount, decrementCount } from "./network.js";
 
 const requestToFollowButton = document.querySelector('#request-follow');
 const sentFollowButton = document.querySelector('#sent-follow');
