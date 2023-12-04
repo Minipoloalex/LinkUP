@@ -25,26 +25,25 @@
     </script>
     <script type="text/javascript" src="{{ mix('node_modules/cropperjs/dist/cropper.js') }}" defer></script>
     <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>    
-    <script type="module" src={{ url('js/feedback.js') }} defer></script>
     <script type="module" src={{ url('js/general_helpers.js') }} defer></script>
+    <script type="module" src={{ url('js/feedback.js') }} defer></script>
     <script type="module" src={{ url('js/ajax.js') }} defer></script>
     <script type="module" src={{ url('js/file_input.js') }} defer></script>
     <script type="module" src={{ url('js/network.js') }} defer></script>
     <script type="module" src={{ url('js/add_follow.js') }} defer></script>
-    <script type="module" src={{ url('js/post_helpers.js') }} defer></script>
-    <script type="module" src={{ url('js/post_render.js') }} defer></script>
-    <script type="module" src={{ url('js/app.js') }} defer></script>
-    <script type="module" src={{ url('js/add_comment.js') }} defer></script>
-    <script type="module" src={{ url('js/delete_post.js') }} defer></script>
+    <script type="module" src={{ url('js/posts/post_helpers.js') }} defer></script>
+    <script type="module" src={{ url('js/posts/post_render.js') }} defer></script>
+    <script type="module" src={{ url('js/posts/add_comment.js') }} defer></script>
+    <script type="module" src={{ url('js/posts/delete_post.js') }} defer></script>
+    <script type="module" src={{ url('js/posts/edit_post.js') }} defer></script>
+    <script type="module" src={{ url('js/posts/add_post.js') }} defer></script>
+    <script type="module" src={{ url('js/posts/like.js') }} defer></script>
     <script type="module" src={{ url('js/search.js') }} defer></script>
-    <script type="module" src={{ url('js/edit_post.js') }} defer></script>
-    <script type="module" src={{ url('js/add_post.js') }} defer></script>
     <script type="module" src={{ url('js/edit_profile.js') }} defer></script>
     <script type="module" src={{ url('js/contact.js') }} defer></script>
     <script type="module" src={{ url('js/notifications.js') }} defer></script>
     <script type="module" src={{ url('js/settings.js') }} defer></script>
     <script type="module" src={{ url('js/group/group.js') }} defer></script>
-    <script type="module" src={{ url('js/like.js') }} defer></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     @vite('resources/css/app.css')

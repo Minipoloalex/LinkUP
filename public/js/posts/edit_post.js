@@ -1,3 +1,6 @@
+import { parseHTML } from "../general_helpers.js";
+import { submitDataPostOrComment } from "./post_helpers.js";
+
 const editPostButtons = document.querySelectorAll('.edit-post');
 editPostButtons.forEach(button => {
     button.addEventListener('click', toggleEditEvent);

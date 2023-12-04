@@ -1,13 +1,11 @@
-
-
-function getTextField(form) {
+export function getTextField(form) {
   return form.querySelector('textarea')
 }
 export async function submitAddPostOrComment(form, data, type) {
   // type = 'post' or 'comment'
   return await submitDataPostOrComment(form, data, `/${type}`, 'post')
 }
-async function submitDataPostOrComment(form, data, url, method) {
+export async function submitDataPostOrComment(form, data, url, method) {
   // includes the file
   const file = form.querySelector('input[type=file]').files;
   if (file.length > 0) {
@@ -35,23 +33,23 @@ async function submitDataPostOrComment(form, data, url, method) {
   }
   return await sendAjaxRequest(method, url, data)
 }
-function removeImageContainer(post) {
+export function removeImageContainer(post) {
   const imageContainer = post.querySelector('.image-container')
   if (imageContainer) {
     imageContainer.remove()
   }
 }
-function incrementCommentCount(post) {
+export function incrementCommentCount(post) {
   changeCommentCount(post, 1)
 }
-function decrementCommentCount(post) {
+export function decrementCommentCount(post) {
   changeCommentCount(post, -1)
 }
 function changeCommentCount(post, value) {
   const nrComments = post.querySelector('.nr-comments')
   nrComments.textContent = parseInt(nrComments.textContent) + value
 }
-async function deleteImage(event) {
+export async function deleteImage(event) {
   event.preventDefault()
   if (confirm('Are you sure you want to delete this image?')) {
     const button = event.currentTarget

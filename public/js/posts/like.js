@@ -1,5 +1,4 @@
-
-import { getCsrfToken } from './ajax.js';
+import { getCsrfToken } from '../ajax.js';
 
 // Function to initialize the like button state based on whether the user has liked the post
 async function initializeLikeButton(postId, likeButton) {
@@ -99,7 +98,6 @@ async function checkLikedStatus(postId) {
 // Function to handle liking or unliking a post asynchronously
 async function likeOrUnlikePost(postId, like) {
     if(like === true){
-
         try {
             const response = await fetch(`/post/${postId}/like`, {
                 method: 'POST',

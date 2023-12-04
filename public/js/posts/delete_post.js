@@ -1,3 +1,6 @@
+import { decrementCommentCount } from "./post_helpers.js";
+import { sendAjaxRequest } from "../ajax.js";
+
 const deletePostButtons = document.querySelectorAll('.delete-post');
 deletePostButtons.forEach(button => {
     button.addEventListener('click', deletePostOrComment);

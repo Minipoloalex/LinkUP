@@ -1,4 +1,5 @@
-import { parseHTML } from './general_helpers.js'
+import { getCsrfToken } from '../ajax.js'
+import { parseHTML } from '../general_helpers.js'
 
 function appendPostsToTimeline (postsHTML) {
   const timeline = document.querySelector('#timeline')
@@ -18,17 +19,16 @@ function prependPostsToTimeline (postsHTML) {
   }
 }
 
-function fetchPosts (date) {
-  const request = new XMLHttpRequest()
-  request.open('GET', `/api/posts/${date}`, false)
-  request.setRequestHeader(
-    'X-CSRF-TOKEN',
-    document.querySelector('meta[name="csrf-token"]').content
-  )
-  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-  request.send()
+async function fetchPosts(date) {
+  const response = await fetch(`/api/posts/${date}`, {
+    method: 'GET',
+    headers: {
+      'X-CSRF-TOKEN': getCsrfToken(),
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  });
 
-  return JSON.parse(request.responseText)
+  return await response.json();
 }
 
 // export function fetchNewPosts() {

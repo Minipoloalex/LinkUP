@@ -1,4 +1,6 @@
-function encodeForAjax(data) {
+import { showFeedback } from "./feedback.js";
+
+export function encodeForAjax(data) {
   if (data == null) return null;
   return Object.keys(data).map(function (k) {
     return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
@@ -9,7 +11,7 @@ export function getCsrfToken() {
   return document.querySelector('meta[name="csrf-token"]').content;
 }
 
-async function handleFeedbackToResponse(response) {
+export async function handleFeedbackToResponse(response) {
   if (response.ok) {
     const data = await response.json();
     if (data.error) {

@@ -1,3 +1,7 @@
+import { submitAddPostOrComment, getTextField } from "./post_helpers.js";
+import { clearFileInputWrapper } from "../file_input.js";
+import { incrementCommentCount } from "./post_helpers.js";
+
 const commentForm = document.querySelector('form.add-comment');
 if (commentForm != null) {
     commentForm.addEventListener('submit', submitAddComment);

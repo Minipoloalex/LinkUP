@@ -1,3 +1,7 @@
+import { encodeForAjax, sendAjaxRequest } from "./ajax.js";
+import { parseHTML } from "./general_helpers.js";
+import { showFeedback } from "./feedback.js";
+
 const resultsContainer = document.querySelector('#search-page #results-container');
 if (resultsContainer) {   // only if on the search page
     const searchForm = getSearchForm();

@@ -1,10 +1,12 @@
+import { show, hide } from "./general_helpers.js";
+
 const fileInputWrappers = document.querySelectorAll('.file-input-wrapper');
 fileInputWrappers.forEach(handlerFileInput);
 
-function getFileInputWrapper(form) {
+export function getFileInputWrapper(form) {
     return form.querySelector('.file-input-wrapper');
 }
-function clearFileInputWrapper(fileInputWrapper) {
+export function clearFileInputWrapper(fileInputWrapper) {
     const removeFileBtn = getRemoveFileBtn(fileInputWrapper);
     removeFileBtn.click();
 }

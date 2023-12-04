@@ -1,3 +1,5 @@
+import { sendAjaxRequest } from "./ajax.js";
+
 // JS for network page
 const network = document.querySelector('#network');
 function getFollowersButton() {
@@ -139,10 +141,10 @@ async function acceptFollowRequest(event) {
             handleEmpty(getFollowRequestsList(network), 'You have received no follow requests');
         });
 }
-function decrementCount(element) {
+export function decrementCount(element) {
     element.textContent = parseInt(element.textContent) - 1;
 }
-function incrementCount(element) {
+export function incrementCount(element) {
     element.textContent = parseInt(element.textContent) + 1;
 }
 
