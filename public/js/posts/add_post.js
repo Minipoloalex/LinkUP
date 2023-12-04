@@ -1,6 +1,8 @@
 import { submitAddPostOrComment, getTextField } from "./post_helpers.js";
 import { clearFileInputWrapper, getFileInputWrapper } from "../file_input.js";
 import { hide, show } from '../general_helpers.js';
+import { prependPostsToTimeline } from "./post_render.js";
+
 
 const addPostOn = document.querySelector('.add-post-on');
 const addPostOff = document.querySelector('.add-post-off');

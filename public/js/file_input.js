@@ -24,7 +24,7 @@ function getRemoveFileBtn(fileInputWrapper) {
 function getUploadFileBtn(fileInputWrapper) {
     return fileInputWrapper.querySelector('.upload-file');
 }
-function handlerFileInput(fileInputWrapper) {
+export function handlerFileInput(fileInputWrapper) {
     const fileInput = fileInputWrapper.querySelector('input[type="file"]');
     const width = fileInputWrapper.querySelector('input[name="width"]');
     const height = fileInputWrapper.querySelector('input[name="height"]');
@@ -82,7 +82,7 @@ function handlerFileInput(fileInputWrapper) {
     cropButton.addEventListener('click', (event) => {
         event.preventDefault();
         if (cropper) {
-            const canvas = cropper.getData(rounded=true);
+            const canvas = cropper.getData(true);
             x.value = canvas.x;
             y.value = canvas.y;
             width.value = canvas.width;

@@ -15,6 +15,7 @@ class PostPolicy
      */
     public function view(?User $user, Post $post): bool
     {
+        Log::debug('User:' . $user);
         if($user === null) {
             return $post->is_private === false;
         }

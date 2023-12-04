@@ -92,7 +92,7 @@ class User extends Authenticatable
     {
         $imageController = new ImageController('users');
 
-        return $imageController->getFile($this->photo);
+        return $imageController->getFile($this->id);
     }
     public function followRequestsReceived() : HasMany
     {

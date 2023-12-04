@@ -1,9 +1,11 @@
+import { getCsrfToken, sendAjaxRequest, handleFeedbackToResponse } from "../ajax.js";
+
 export function getTextField(form) {
-  return form.querySelector('textarea')
+  return form.querySelector('textarea');
 }
 export async function submitAddPostOrComment(form, data, type) {
   // type = 'post' or 'comment'
-  return await submitDataPostOrComment(form, data, `/${type}`, 'post')
+  return await submitDataPostOrComment(form, data, `/${type}`, 'post');
 }
 export async function submitDataPostOrComment(form, data, url, method) {
   // includes the file
@@ -31,34 +33,34 @@ export async function submitDataPostOrComment(form, data, url, method) {
     });
     return handleFeedbackToResponse(response);
   }
-  return await sendAjaxRequest(method, url, data)
+  return await sendAjaxRequest(method, url, data);
 }
 export function removeImageContainer(post) {
   const imageContainer = post.querySelector('.image-container')
   if (imageContainer) {
-    imageContainer.remove()
+    imageContainer.remove();
   }
 }
 export function incrementCommentCount(post) {
-  changeCommentCount(post, 1)
+  changeCommentCount(post, 1);
 }
 export function decrementCommentCount(post) {
-  changeCommentCount(post, -1)
+  changeCommentCount(post, -1);
 }
 function changeCommentCount(post, value) {
-  const nrComments = post.querySelector('.nr-comments')
-  nrComments.textContent = parseInt(nrComments.textContent) + value
+  const nrComments = post.querySelector('.nr-comments');
+  nrComments.textContent = parseInt(nrComments.textContent) + value;
 }
 export async function deleteImage(event) {
-  event.preventDefault()
+  event.preventDefault();
   if (confirm('Are you sure you want to delete this image?')) {
-    const button = event.currentTarget
-    const postId = button.dataset.id
+    const button = event.currentTarget;
+    const postId = button.dataset.id;
 
-    const imageContainer = button.closest('.image-container')
-    const data = await sendAjaxRequest('delete', `/post/${postId}/image`)
+    const imageContainer = button.closest('.image-container');
+    const data = await sendAjaxRequest('delete', `/post/${postId}/image`);
     if (data != null) {
-      imageContainer.remove()
+      imageContainer.remove();
     }
   }
 }

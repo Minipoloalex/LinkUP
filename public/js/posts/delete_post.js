@@ -6,7 +6,7 @@ deletePostButtons.forEach(button => {
     button.addEventListener('click', deletePostOrComment);
 })
 
-async function deletePostOrComment(event) {
+export async function deletePostOrComment(event) {
     if (confirm('Are you sure you want to delete this post?')) {
         const post = event.currentTarget.closest('article');
         const postId = post.dataset.id;

@@ -52,9 +52,8 @@ class PostController extends Controller
 
         $post->save();  // get the post id to make file name unique
 
-        $createdFile = $this->setFileName($request, $post,  $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height')); // TODO
+        $createdFile = $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
-            $post->media = null;
             $post->created_at = $post->freshTimestamp();
         }
         DB::commit();
@@ -97,7 +96,6 @@ class PostController extends Controller
 
         $createdFile = $this->setFileName($request, $comment, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
-            $comment->media = null;
             $post->created_at = $post->freshTimestamp();
         }
         $commentNotification = CommentNotification::where('id_comment', $comment->id)->firstOrFail();
@@ -132,10 +130,12 @@ class PostController extends Controller
         });
         return $filteredPosts;
     }
-    public function searchPosts(Request $request) {
+    public function searchPosts(Request $request)
+    {
         return $this->search($request, 'posts');
     }
-    public function searchComments(Request $request) {
+    public function searchComments(Request $request)
+    {
         return $this->search($request, 'comments');
     }
     /**
@@ -159,15 +159,15 @@ class PostController extends Controller
         $resultsHTML = $this->translatePostsArrayToHTML($filtered);
         return response()->json(['resultsHTML' => $resultsHTML, 'success' => 'Search results retrieved']);
     }
-    private function filterByType($allPosts, string $type) {
+    private function filterByType($allPosts, string $type)
+    {
         if ($type == 'comments') {
             $comments = $allPosts->filter(function ($post) {
                 // has parent post and not created by authenticated user
                 return $post->id_parent !== null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
             })->values();
             return $comments;
-        }
-        else {
+        } else {
             $posts = $allPosts->filter(function ($post) {
                 // no parent post and not created by authenticated user
                 return $post->id_parent === null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
@@ -198,7 +198,7 @@ class PostController extends Controller
         }
         $post = Post::findOrFail($id);
         $request->validate([
-            'content' => 'nullable|max:255',
+            'content' => 'nullable|string|max:255',
             'is_private' => 'nullable|boolean',
             'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
             'x' => 'nullable|int',
@@ -216,7 +216,7 @@ class PostController extends Controller
 
         $hasNewMedia = false;
         if ($request->has('media') && $request->file('media')->isValid()) {
-            $this->deleteFile($post->media);
+            $this->deleteFile($post->id);
             $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
             $hasNewMedia = true;
         }
@@ -244,7 +244,7 @@ class PostController extends Controller
         // Check if the current user is authorized to delete this post.
         $this->authorize('delete', $post);
 
-        $this->deleteFile($post->media);
+        $this->deleteFile($post->id);
 
         // Delete the post and return it as JSON.
         $post->delete();
@@ -256,9 +256,9 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $this->authorize('view', $post);
 
-        $fileName = $post->media;
+        $fileName = str($post->id);
         if (!$this->imageController->existsFile($fileName)) {
-            abort(404);
+            return response()->json(['error' => 'A post image was not found'], 404);
         }
         return $this->imageController->getFileResponse($fileName);
     }
@@ -267,8 +267,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $this->authorize('delete', $post);
 
-        $this->deleteFile($post->media);
-        $post->media = null;
+        $this->deleteFile($post->id);
         $post->save();
         $post->success = 'Post image deleted successfully!';
         return response()->json($post);
@@ -282,19 +281,16 @@ class PostController extends Controller
     private function setFileName(Request $request, Post $post, ?int $x, ?int $y, ?int $width, ?int $height): bool
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
-            $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
+            $fileName = $post->id . '.' . $request->media->extension();
             $this->imageController->store($request->media, $fileName, $x, $y, $width, $height);
-            $post->media = $fileName;
             $post->save();
             return true;
         }
         return false;
     }
-    private function deleteFile(?string $fileName)
+    private function deleteFile(int $postId)
     {
-        if ($fileName != null) {
-            $this->imageController->delete($fileName);
-        }
+        $this->imageController->delete(str($postId));
     }
     /**
      * Get all posts created before a given date.
@@ -304,16 +300,19 @@ class PostController extends Controller
      */
     public function getPostsBeforeDate(string $date): JsonResponse
     {
-        $posts = Post::whereDate('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
+        Log::debug('user: ' . Auth::user());
+        Log::debug('date: ' . $date);
+        $posts = Post::where('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
+        Log::debug('posts: ' . $posts);
 
         $filteredPosts = $posts->filter(function ($post) {
             return policy(Post::class)->view(Auth::user(), $post);
         })->values();
 
-        Log::info($filteredPosts->toJson());
+        Log::info('filtered posts: ' . $filteredPosts->toJson());
 
         $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
-        
+
         return response()->json($postsHTML);
     }
     private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $displayComments = false)
@@ -359,62 +358,53 @@ class PostController extends Controller
      * @param string $id
      * @return JsonResponse
      */
+    public function addLike(Request $request, string $id)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
 
+        Log::info("trying to like post");
 
-        public function addLike(Request $request, string $id)
-        {
-            if (!Auth::check()) {
-                return response()->json(['error' => 'You are not logged in'], 401);
-            }
+        $post = Post::findOrFail($id);
+        $request->validate([
+            'like' => 'required|boolean'
+        ]);
 
-            Log::info("trying to like post");
-        
-            $post = Post::findOrFail($id);
-            $request->validate([
-                'like' => 'required|boolean'
-            ]);
-        
-            $like = $request->input('like');
-            $user = Auth::user();
-        
-            // Check if the user has already liked the post
-            $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
-            Log::info("existing like: $existingLike");
+        $like = $request->input('like');
+        $user = Auth::user();
 
-            if($existingLike == null) { // if its null, we can create a new like
-                Log::info("existing like is null");
-                $liked = new Liked();
-                $liked->id_user = $user->id;
-                $liked->id_post = $post->id;
-                $liked->save();
-                Log::info("User $user->id liked post $post->id");
-            }
-            else { // if its not null
-                Log::info("existing like is not null");
-                Log::info("User $user->id already liked post $post->id");
-            }
+        // Check if the user has already liked the post
+        $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
+        Log::info("existing like: $existingLike");
 
-            //log all users who liked a post
-            $users = Liked::where('id_post', $post->id)->get();
-            Log::info("users who liked post $post->id: $users");
+        if ($existingLike == null) { // if its null, we can create a new like
+            Log::info("existing like is null");
+            $liked = new Liked();
+            $liked->id_user = $user->id;
+            $liked->id_post = $post->id;
+            $liked->save();
+            Log::info("User $user->id liked post $post->id");
+        } else { // if its not null
+            Log::info("existing like is not null");
+            Log::info("User $user->id already liked post $post->id");
+        }
 
-            $post->loadCount('likes'); // Load the count of likes for the post
-            $likeCount = $post->likes()->count();
+        //log all users who liked a post
+        $users = Liked::where('id_post', $post->id)->get();
+        Log::info("users who liked post $post->id: $users");
 
+        $post->loadCount('likes'); // Load the count of likes for the post
+        $likeCount = $post->likes()->count();
 
-
-            $post->success = 'Post updated successfully!';
-
-            
-
-            return response()->json([
-                'likesCount' => $likeCount,
-                'alreadyLiked' => true, // 
-            ]);
+        return response()->json([
+            'likesCount' => $likeCount,
+            'alreadyLiked' => true, // 
+        ]);
 
     }
 
-      /**
+    /**
      * Remove like on a post
      * @param Request $request
      * @param string $id
@@ -423,29 +413,28 @@ class PostController extends Controller
     public function removeLike(Request $request, string $id)
     {
         $user = Auth::user();
-    
+
         if (!$user) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
-    
+
         $post = Post::findOrFail($id);
-    
+
         // Detach the relationship between the user and the post
         $post->likes()->detach($user->id);
         Log::info("User $user->id unliked post $post->id");
         //users who liked a post
         $users = Liked::where('id_post', $post->id)->get();
-    
+
         $post->loadCount('likes');
         $likeCount = $post->likes_count;
-    
-        $post->success = 'Post updated successfully!';
+
         return response()->json([
             'likesCount' => $likeCount,
             'alreadyLiked' => false,
         ]);
     }
-    
+
 
 
     public function likeStatus(Request $request, string $id)
@@ -463,7 +452,4 @@ class PostController extends Controller
 
         return response()->json(['alreadyLiked' => $alreadyLiked]);
     }
-    
-    
-
-    }
+}
