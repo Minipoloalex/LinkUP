@@ -3,19 +3,24 @@ import { getCsrfToken } from './ajax.js';
 
 // Function to initialize the like button state based on whether the user has liked the post
 async function initializeLikeButton(postId, likeButton) {
-    try {
-        const alreadyLiked = await checkLikedStatus(postId);
-        likeButton.setAttribute('data-liked', alreadyLiked);
-        if(alreadyLiked === true){
-            likeButton.style.color = "red";
-        }
-        if(alreadyLiked === false){
-            likeButton.style.color = "black";
-        }
+    if(isAuthenticated === true){
+        try {
+            const alreadyLiked = await checkLikedStatus(postId);
+            likeButton.setAttribute('data-liked', alreadyLiked);
+            if(alreadyLiked === true){
 
-    } catch (error) {
-        console.error('Error initializing like button:', error.message);
+                likeButton.style.color = "red";
+            }
+            if(alreadyLiked === false){
+                likeButton.style.color = "black";
+            }
+
+        } catch (error) {
+            console.error('Error initializing like button:', error.message);
+        }
     }
+    else 
+        likeButton.style.color = "black";
 }
 
 
@@ -23,7 +28,6 @@ async function initializeLikeButton(postId, likeButton) {
 document.addEventListener('click', async function (e) {
 
     if (e.target && e.target.matches('.like-button')) {
-        console.log('clicked');
         e.preventDefault();
         const likeButton = e.target;
         const postId = likeButton.getAttribute('data-id');
@@ -34,7 +38,8 @@ document.addEventListener('click', async function (e) {
             let response;
             if (!alreadyLiked) {
                 response = await likeOrUnlikePost(postId, true); // Like the post
-                likeButton.style.color = "red";
+                if(isAuthenticated === true)
+                    likeButton.style.color = "red";
             } else {
                 response = await likeOrUnlikePost(postId, false); // Unlike the post
                 likeButton.style.color = "black";
@@ -46,10 +51,9 @@ document.addEventListener('click', async function (e) {
 
                 alreadyLiked = response.alreadyLiked;
                 likeButton.setAttribute('data-liked', alreadyLiked);
-                console.log('Post action performed successfully');
             }
         } catch (error) {
-            console.error('Error performing action on post:', error.message);
+            
         }
     }
 });
@@ -98,57 +102,65 @@ async function checkLikedStatus(postId) {
 
 // Function to handle liking or unliking a post asynchronously
 async function likeOrUnlikePost(postId, like) {
-    if(like === true){
-
-        try {
-            const response = await fetch(`/post/${postId}/like`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': getCsrfToken(),
-                },
-                body: JSON.stringify({
-                    like,
-                }),
-            });
-
-            const responseData = await response.json();
-
-            if (!response.ok) {
-                throw new Error('Unable to perform action on the post');
-            }
-
-            return { likesCount: responseData.likesCount, alreadyLiked: responseData.alreadyLiked };
-        } catch (error) {
-            console.error('Error performing action on post:', error.message);
-            throw new Error('Unable to perform action on the post');
-        }
+    if (!isAuthenticated) {
+        // Display a message or redirect the user to the login page
+        return;
     }
-    if(like === false){
+    else{
 
-        try {
-            const response = await fetch(`/post/${postId}/like`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': getCsrfToken(),
-                },
-                body: JSON.stringify({
-                    like,
-                }),
-            });
-
-            const responseData = await response.json();
-
-            if (!response.ok) {
-                throw new Error('Unable to perform action on the post');
-            }
-
-            return { likesCount: responseData.likesCount, alreadyLiked: responseData.alreadyLiked };
-        } catch (error) {
-            console.error('Error performing action on post:', error.message);
-            throw new Error('Unable to perform action on the post');
-        }
-    }
     
+        if(like === true){
+
+            try {
+                const response = await fetch(`/post/${postId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': getCsrfToken(),
+                    },
+                    body: JSON.stringify({
+                        like,
+                    }),
+                });
+
+                const responseData = await response.json();
+
+                if (!response.ok) {
+                    throw new Error('Unable to perform action on the post');
+                }
+
+                return { likesCount: responseData.likesCount, alreadyLiked: responseData.alreadyLiked };
+            } catch (error) {
+                console.error('Error performing action on post:', error.message);
+                throw new Error('Unable to perform action on the post');
+            }
+        }
+        if(like === false){
+
+            try {
+                const response = await fetch(`/post/${postId}/like`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': getCsrfToken(),
+                    },
+                    body: JSON.stringify({
+                        like,
+                    }),
+                });
+
+                const responseData = await response.json();
+
+                if (!response.ok) {
+                    throw new Error('Unable to perform action on the post');
+                }
+
+                return { likesCount: responseData.likesCount, alreadyLiked: responseData.alreadyLiked };
+            } catch (error) {
+                console.error('Error performing action on post:', error.message);
+                throw new Error('Unable to perform action on the post');
+            }
+        }
+        
+    }
 }
