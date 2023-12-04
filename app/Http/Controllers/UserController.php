@@ -19,26 +19,56 @@ class UserController extends Controller
     {
         $this->imageController = new ImageController('users');
     }
-    public function show($username)
+
+    /**
+     * Show the user's profile.
+     * 
+     * @param string $username 
+     */
+    public function showProfile(string $username)
     {
-        $user = User::where('username', $username)->firstOrFail();
+        $user = User::firstOrFail()->where('username', $username)->firstOrFail();
 
         return view('pages.profile', ['user' => $user]);
     }
 
-    public function update(Request $request)
+    /**
+     * Show the user's settings.
+     * 
+     */
+    public function showSettings(Request $request)
+    {
+        $user = Auth::user();
+
+        $activeSection = $request->from ?? 'account'; // default to account section
+
+        return view('pages.settings', ['user' => $user, 'activeSection' => $activeSection]);
+    }
+
+    /**
+     * Update the user's profile.
+     * 
+     * @param Request $request 
+     * @return \Illuminate\Http\RedirectResponse 
+     */
+    public function updateProfile(Request $request)
     {
         $this->authorize('update', User::class);
+        
         $user = Auth::user();
+
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:150',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
-            'x' => 'nullable|int',
-            'y' => 'nullable|int',
-            'width' => 'nullable|int',
-            'height' => 'nullable|int'
+            'name' => ['required', 'string', 'max:255'],
+            'bio' => ['nullable', 'string', 'max:255'],
+            'faculty' => ['required', 'string', 'max:255'],
+            'course' => ['nullable', 'string', 'max:255'],
+            'media' => ['nullable', 'mimes:jpeg,png,jpg,gif,svg', 'max:10240'],
+            'x' => ['nullable', 'int'],
+            'y' => ['nullable', 'int'],
+            'width' => ['nullable', 'int'],
+            'height' => ['nullable', 'int']
         ]);
+
         if ($request->has('media') && $request->media != null && $request->file('media')->isValid()) {
             if ($user->photo != 'def.jpg' && $user->photo != null) {
                 $this->imageController->delete($user->photo);
@@ -49,18 +79,61 @@ class UserController extends Controller
 
         $user->update([
             'name' => $request->name,
-            'description' => $request->description,
+            'bio' => $request->bio,
+            'faculty' => $request->faculty,
+            'course' => $request->course,
             'photo' => $user->photo ?? 'def.jpg'
         ]);
 
-        return redirect()->back()->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile.show', ['username' => $user->username])->with('success', 'Profile updated successfully!');
     }
+
+    /**
+     * Update the user's settings.
+     * 
+     * @param Request $request 
+     * @return \Illuminate\Http\RedirectResponse 
+     */
+    public function updateSettings(Request $request)
+    {
+        $this->authorize('update', User::class);
+
+        $user = Auth::user();
+
+        $request->validate([
+            'username' => ['required', 'string', 'max:15', 'unique:users,username,' . $user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'new_password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'privacy' => ['required', 'string', 'in:public,private'],
+            'current_password' => ['required', 'string'],
+        ]);
+
+        if (!password_verify($request->current_password, $user->password)) {
+            return redirect()->back()->withErrors(['current_password' => 'The given password is incorrect.']);
+        }
+
+        $user->update([
+            'username' => $request->username,
+            'email' => $request->email,
+            'is_private' => $request->privacy === 'private',
+        ]);
+
+        if ($request->new_password) {
+            $user->update([
+                'password' => bcrypt($request->new_password),
+            ]);
+        }
+
+        return redirect()->route('settings.show', ['from' => 'account'])->with('success', 'Settings updated successfully!');
+    }
+
     public function viewProfilePicture(string $id)
     {
         $user = User::findOrFail($id);
         return $this->imageController->getFileResponse($user->photo);
     }
-    public function viewNetworkPage(string $username)
+
+    public function showNetwork(string $username)
     {
         $user = User::where('username', $username)->firstOrFail();
 
@@ -77,6 +150,7 @@ class UserController extends Controller
 
         return response()->json(['success' => "$follower->username removed from follower list successfully!"]);
     }
+
     public function removeFollowing(string $id)
     {
         $this->authorize('update', User::class);
@@ -93,6 +167,7 @@ class UserController extends Controller
 
         return response()->json(['success' => "$following->username removed from following list successfully!"]);
     }
+
     public function requestFollow(Request $request)
     {
         $request->validate([
@@ -133,6 +208,7 @@ class UserController extends Controller
         $requestTo->accepted = $accepted;
         return response()->json($requestTo);
     }
+
     public function cancelRequestToFollow(string $id)
     {
         $this->authorize('update', User::class);

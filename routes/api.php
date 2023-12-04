@@ -34,15 +34,13 @@ Route::middleware('web')->group(function () {
         '/users/search',
         [UserController::class, 'search']
     )->name('users.search');
+    // Route::get(
+    //     'groups/search',
+    //     [GroupController::class, 'search']
+    // )->name('groups.search');
+
+    Route::get(     // define a route for /posts which accepts a GET request with a DATE parameter
+        '/posts/{date}',
+        [PostController::class, 'getPostsBeforeDate']
+    )->name('posts.beforeDate');
 });
-
-// Route::get(
-//     'groups/search',
-//     [GroupController::class, 'search']
-// )->name('groups.search');
-
-// define a route for /posts which accepts a GET request with a DATE parameter
-Route::get(
-    '/posts/{date}',
-    [PostController::class, 'getPostsBeforeDate']
-)->name('posts.beforeDate');

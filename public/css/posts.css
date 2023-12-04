@@ -1,6 +1,3 @@
-/*
-make posts added by Javascript be easier to create there, by decoupling the CSS from the Javascript (Tailwind CSS)
-*/
 .post-info {
     margin: 0.25rem;
     display: flex;
@@ -92,4 +89,8 @@ make posts added by Javascript be easier to create there, by decoupling the CSS 
     background-color: var(--bg-gray-300);
     margin: 1.25rem;
     padding: 1.25rem;
+}
+
+.liked {
+    color: red; /* Change the color to red when the button is liked */
 }
