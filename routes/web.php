@@ -75,7 +75,6 @@ Route::controller(PostController::class)->group(function () {
     Route::post('/post', 'storePost');
     Route::post('/comment', 'storeComment');
 
-    // Route::delete('/comment/{id}', 'delete');
     Route::delete('/post/{id}', 'delete');
     Route::delete('/post/{id}/image', 'deleteImage');
 
@@ -127,6 +126,10 @@ Route::get('/settings', [UserController::class, 'showSettings'])->name('settings
 Route::post('/settings/update', [UserController::class, 'updateSettings'])->name('settings.update');
 
 
+
+Route::get('/search', function(){
+    return view('pages.search');
+})->name('search');
 
 /* route for about us page */
 Route::get('/about', function () {

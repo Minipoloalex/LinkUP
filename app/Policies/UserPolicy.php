@@ -9,16 +9,6 @@ use Illuminate\Support\Facades\Auth;
 class UserPolicy
 {
     /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, User $model): bool
-    {
-        //
-    }
-    /**
-     * Determine whether the user can update the model.
-     */
-    /**
      * Determine whether the user can update the model.
      */
     public function update(?User $user): Response

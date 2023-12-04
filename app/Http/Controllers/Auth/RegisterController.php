@@ -19,7 +19,11 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm(): View
     {
-        return view('auth.register');
+        if (Auth::check()) {
+            return redirect('home')->withSuccess('You are already logged in!');;
+        } else {
+            return view('auth.register');
+        }
     }
 
     /**
@@ -27,6 +31,9 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        if (Auth::check()) {
+            return redirect('home')->withSuccess('You are already logged in!');
+        }
         $request->validate([
             'username' => ['required', 'string', 'max:15', 'unique:users'],
             'faculty' => ['required', 'string', 'max:6'],
@@ -34,7 +41,7 @@ class RegisterController extends Controller
             'password' => ['required', 'confirmed', 'min:8', 'max:255'],
         ]);
 
-        User::create([
+        $user = User::create([
             'username' => $request->username,
             'name' => $request->username,   // Default name is username.
             'faculty' => $request->faculty,
@@ -42,7 +49,9 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return redirect()->route('login')
+        Auth::login($user);
+
+        return redirect()->route('home')
             ->withSuccess('You have successfully registered!');
     }
 }

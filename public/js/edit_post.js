@@ -43,7 +43,8 @@ async function submitEditPost(event) {  // submitted the form
 
     const data = await submitEditPostOrComment(form, {'content': newContent}, postId);
     if (data != null) {
-        const postContentElement = post.querySelector('.post-content');
+        const postBody = post.querySelector('.post-body');
+        const postContentElement = postBody.querySelector('.post-content');
         postContentElement.textContent = newContent;
         toggleEdit(postContentElement, form, textField);
 
@@ -56,7 +57,7 @@ async function submitEditPost(event) {  // submitted the form
             const deleteButton = imageContainer.querySelector('.delete-image');
             deleteButton.addEventListener('click', deleteImage);
 
-            postContentElement.after(imageContainer);
+            postBody.appendChild(imageContainer);
         }
     }
 }

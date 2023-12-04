@@ -10,8 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
-
-// Added to define Eloquent relationships.
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 
@@ -106,5 +105,11 @@ class User extends Authenticatable
     public function requestedToFollow(User $user) : bool
     {
         return $this->followRequestsSent()->where('id_user_to', $user->id)->exists();
+    }
+    public static function search(string $search) {
+        $users = User::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
+        ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
+        ->get();
+        return $users;
     }
 }

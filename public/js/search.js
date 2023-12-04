@@ -1,12 +1,9 @@
-const resultsContainer = document.querySelector('#searchpage #results-container');
+const resultsContainer = document.querySelector('#search-page #results-container');
 if (resultsContainer) {   // only if on the search page
     const searchForm = getSearchForm();
     const searchButton = searchForm.querySelector('button[type="submit"]');
     searchForm.addEventListener('submit', updateSearchResults);
     searchButton.addEventListener('click', updateSearchResults);
-}
-function getSearchForm() {
-    return document.querySelector('#search-form');
 }
 async function updateSearchResults(event) {
     event.preventDefault();
@@ -16,25 +13,39 @@ async function updateSearchResults(event) {
         showFeedback('Please enter text to search');
         return;
     }
-    
-    const data = await sendAjaxRequest('get', `/api/post/search/${searchValue}`);
-    
+    const type = getSearchType();
+    const data = await sendAjaxRequest('get', `/api/${type}/search?${encodeForAjax({query: searchValue})}`);
+    // TODO: Fix this to also include the type
     // Change the URL so the user can share the search results (or save them)
-    const encodedSearchValue = encodeURIComponent(searchValue); // Encode special characters
-    const newUrl = window.location.href.split('?')[0] + '?query=' + encodedSearchValue;
+    // const encodedSearchValue = encodeURIComponent(searchValue); // Encode special characters
+    // const newUrl = window.location.href.split('?')[0] + '?query=' + encodedSearchValue;
 
-    history.replaceState(null, null, newUrl); // Replace current URL without reloading page
-    
+    // history.replaceState(null, null, newUrl); // Replace current URL without reloading page
+
     
     if (data != null) {
         resultsContainer.innerHTML = '';
-        data.postsHTML.forEach(element => {
-            const postHTML = parseHTML(element);
-            resultsContainer.appendChild(postHTML);
+        data.resultsHTML.forEach(element => {
+            const elementHTML = parseHTML(element);
+            resultsContainer.appendChild(elementHTML);
         });
-        if (data.postsHTML.length == 0) {
-            resultsContainer.innerHTML = '<p class="flex justify-center">No results found</p>';
+        if (data.resultsHTML.length == 0) {
+            resultsContainer.appendChild(parseHTML(data.noResultsHTML));
         }
         searchForm.reset();     // clear the search bar
     }
+}
+function getSearchForm() {
+    return document.querySelector('#search-form');
+}
+function getSearchType() {
+    const filters = document.querySelector('#search-page #search-filters');
+    if (filters) {
+        const selected = filters.querySelector('input[name="search-type"]:checked');
+        if (selected) {
+            return selected.getAttribute('value');
+        }
+        showFeedback('Please select something to search for');
+    }
+    return null;
 }

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,15 +21,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// define a route for /posts which accepts a GET request with a DATE parameter
-Route::middleware('web')->get(
-    '/posts/{date}',
-    [PostController::class, 'getPostsBeforeDate']
-)->name('posts.beforeDate');
+Route::middleware('web')->group(function () {
+    Route::get(
+        '/posts/search',        // query parameter
+        [PostController::class, 'searchPosts']
+    )->name('post.search');
+    Route::get(
+        '/comments/search',     // query parameter
+        [PostController::class, 'searchComments']
+    )->name('comment.search');
+    Route::get(
+        '/users/search',
+        [UserController::class, 'search']
+    )->name('users.search');
+    // Route::get(
+    //     'groups/search',
+    //     [GroupController::class, 'search']
+    // )->name('groups.search');
 
-Route::get(
-    '/post/search/{search}',
-    [PostController::class, 'search']
-)->name('post.search');
-
-
+    Route::get(     // define a route for /posts which accepts a GET request with a DATE parameter
+        '/posts/{date}',
+        [PostController::class, 'getPostsBeforeDate']
+    )->name('posts.beforeDate');
+});

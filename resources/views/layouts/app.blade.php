@@ -8,13 +8,23 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    @auth
+        <meta name="user-id" content="{{ Auth::user()->id }}">
+    @endauth
+    <title>{{ config('app.name', 'Laravel') }} @yield('title')</title>
 
     <!-- Styles -->
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <link href="{{ url('css/posts.css') }}" rel="stylesheet">
     <link href="{{ url('css/follow.css') }}" rel="stylesheet">
+    <link href="{{ mix('node_modules/cropperjs/dist/cropper.css')}}" rel="stylesheet">
+
+    <script type="text/javascript">
+        // Fix for Firefox autofocus CSS bug
+        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
+    </script>
+    <script type="text/javascript" src="{{ mix('node_modules/cropperjs/dist/cropper.js') }}" defer></script>
+    <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>    
     <script type="module" src={{ url('js/feedback.js') }} defer></script>
     <script type="module" src={{ url('js/general_helpers.js') }} defer></script>
     <script type="module" src={{ url('js/ajax.js') }} defer></script>
@@ -31,6 +41,7 @@
     <script type="module" src={{ url('js/add_post.js') }} defer></script>
     <script type="module" src={{ url('js/edit_profile.js') }} defer></script>
     <script type="module" src={{ url('js/contact.js') }} defer></script>
+    <script type="module" src={{ url('js/notifications.js') }} defer></script>
     <script type="module" src={{ url('js/settings.js') }} defer></script>
     <script type="module" src={{ url('js/group/group.js') }} defer></script>
     <script type="module" src={{ url('js/like.js') }} defer></script>

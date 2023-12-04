@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommentNotification;
 use App\Models\Post;
 use App\Models\Liked;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Log;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Collection;
+use \App\Events\CommentEvent;
 
 class PostController extends Controller
 {
@@ -32,7 +34,11 @@ class PostController extends Controller
             'content' => 'required|max:255',
             // 'id_group' => 'nullable|exists:groups,id',
             'is_private' => 'nullable|boolean',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
         ]);
         $this->authorize('createPost', Post::class);  // user must be logged in
         DB::beginTransaction();
@@ -46,7 +52,7 @@ class PostController extends Controller
 
         $post->save();  // get the post id to make file name unique
 
-        $createdFile = $this->setFileName($request, $post);
+        $createdFile = $this->setFileName($request, $post,  $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height')); // TODO
         if (!$createdFile) {
             $post->media = null;
             $post->created_at = $post->freshTimestamp();
@@ -68,7 +74,11 @@ class PostController extends Controller
         $request->validate([
             'content' => 'required|max:255',
             'id_parent' => 'required|exists:post,id',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
             // 'id_group' => 'nullable|exists:groups,id'
         ]);
 
@@ -85,11 +95,13 @@ class PostController extends Controller
 
         $comment->save();
 
-        $createdFile = $this->setFileName($request, $comment);
+        $createdFile = $this->setFileName($request, $comment, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
             $comment->media = null;
             $post->created_at = $post->freshTimestamp();
         }
+        $commentNotification = CommentNotification::where('id_comment', $comment->id)->firstOrFail();
+        event(new CommentEvent($commentNotification));
 
         $commentHTML = $this->translatePostToHTML($comment, true, true, false);
         return response()->json(['commentHTML' => $commentHTML, 'success' => 'Comment created successfully!']);
@@ -120,14 +132,48 @@ class PostController extends Controller
         });
         return $filteredPosts;
     }
+    public function searchPosts(Request $request) {
+        return $this->search($request, 'posts');
+    }
+    public function searchComments(Request $request) {
+        return $this->search($request, 'comments');
+    }
     /**
      * Returns the search results for a given query for AJAX requests.
      */
-    public function search(string $search)
+    public function search(Request $request, string $type)
     {
-        $posts = $this->getSearchResults($search);
-        $postsHTML = $this->translatePostsArrayToHTML($posts);
-        return response()->json(['postsHTML' => $postsHTML, 'success' => 'Search results retrieved']);
+        $request->validate([
+            'query' => 'required|string|max:255'
+        ]);
+        $posts = $this->getSearchResults($request->input('query'));
+        $filtered = $this->filterByType($posts, $type);
+        if ($filtered->isEmpty()) {
+            $noResultsHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'noResultsHTML' => $noResultsHTML,
+                'success' => 'No results found',
+                'resultsHTML' => []
+            ]);
+        }
+        $resultsHTML = $this->translatePostsArrayToHTML($filtered);
+        return response()->json(['resultsHTML' => $resultsHTML, 'success' => 'Search results retrieved']);
+    }
+    private function filterByType($allPosts, string $type) {
+        if ($type == 'comments') {
+            $comments = $allPosts->filter(function ($post) {
+                // has parent post and not created by authenticated user
+                return $post->id_parent !== null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
+            })->values();
+            return $comments;
+        }
+        else {
+            $posts = $allPosts->filter(function ($post) {
+                // no parent post and not created by authenticated user
+                return $post->id_parent === null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
+            })->values();
+            return $posts;
+        }
     }
     /**
      * Display the search results page for a given query.
@@ -138,7 +184,7 @@ class PostController extends Controller
             'query' => 'required|max:255'
         ]);
         $posts = $this->getSearchResults($request->input('query'));
-        Log::info($posts->toJson());
+
         return view('pages.search', ['posts' => $posts, 'success' => 'Search results retrieved']);
     }
 
@@ -154,7 +200,11 @@ class PostController extends Controller
         $request->validate([
             'content' => 'nullable|max:255',
             'is_private' => 'nullable|boolean',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4'
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
         ]);
         // media -> can change, add or maintain (null) (cannot delete -> check deleteImage for that)
         $this->authorize('update', $post);
@@ -167,13 +217,13 @@ class PostController extends Controller
         $hasNewMedia = false;
         if ($request->has('media') && $request->file('media')->isValid()) {
             $this->deleteFile($post->media);
-            $this->setFileName($request, $post);
+            $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
             $hasNewMedia = true;
         }
 
         if ($hasNewMedia) {
             $postImageHTML = $this->getPostImageHTML($post);
-            
+
             return response()->json([
                 'postImageHTML' => $postImageHTML,
                 'success' => 'Post updated successfully!',
@@ -229,11 +279,11 @@ class PostController extends Controller
      * @param Post $post
      * @return bool true if the file name was set, false otherwise (if there was no file)
      */
-    private function setFileName(Request $request, Post $post): bool
+    private function setFileName(Request $request, Post $post, ?int $x, ?int $y, ?int $width, ?int $height): bool
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
             $fileName = "media_post_" . $post->id . '.' . $request->media->extension();
-            $this->imageController->store($request->media, $fileName);
+            $this->imageController->store($request->media, $fileName, $x, $y, $width, $height);
             $post->media = $fileName;
             $post->save();
             return true;
@@ -254,8 +304,6 @@ class PostController extends Controller
      */
     public function getPostsBeforeDate(string $date): JsonResponse
     {
-        $date = "2024-01-01"; // TODO: remove this line
-
         $posts = Post::whereDate('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
 
         $filteredPosts = $posts->filter(function ($post) {
@@ -265,6 +313,7 @@ class PostController extends Controller
         Log::info($filteredPosts->toJson());
 
         $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
+        
         return response()->json($postsHTML);
     }
     private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $displayComments = false)
@@ -286,7 +335,7 @@ class PostController extends Controller
      * @param Collection $posts
      * @return Collection HTML code to display the posts
      */
-    private function translatePostsArrayToHTML($posts)
+    private function translatePostsArrayToHTML(Collection $posts)
     {
         $html = $posts->map(function ($post) {
             return $this->translatePostToHTML($post, false, false, false);

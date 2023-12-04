@@ -259,9 +259,9 @@ BEGIN
     -- Update the 'post' table when a user's name or username changes
     UPDATE post
     SET tsvectors = (
-        setweight(to_tsvector('english', post.content), 'A') ||
-        setweight(to_tsvector('english', NEW.name), 'B') ||
-        setweight(to_tsvector('english', NEW.username), 'C')
+        setweight(to_tsvector('portuguese', post.content), 'A') ||
+        setweight(to_tsvector('portuguese', NEW.name), 'B') ||
+        setweight(to_tsvector('portuguese', NEW.username), 'C')
     )
     WHERE id_created_by = NEW.id;
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Post;
 
 class CommentNotification extends Model
 {
@@ -17,12 +18,12 @@ class CommentNotification extends Model
     protected $dates = [
         'timestamp',
     ];
-    // public function userNotified()
-    // {
-    //     return $this->comment()->parent()->createdBy();
-    // }
-    // public function comment()
-    // {
-    //     return $this->belongsTo(Post::class, 'id_comment');
-    // }
+    public function comment()
+    {
+        return $this->belongsTo(Post::class, 'id_comment');
+    }
+    public function userNotified()
+    {
+        return $this->comment->parent->createdBy;
+    }
 }

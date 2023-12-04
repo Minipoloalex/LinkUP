@@ -1,9 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-body {
+:root {
+  --faup-color   : rgb(255 255 255);
+  --ffup-color   : rgb(110  32 160);
+  --fdup-color   : rgb(244  42  65);
+  --icbas-color1 : rgb(255 214   0);
+  --icbas-color2 : rgb(147 191 235);
+  --fbaup-color  : rgb(178 179 181);
+  --fadeup-color : rgb(198 219   0);
+  --fmdup-color  : rgb(255  92   0);
+  --fmdup-color  : rgb(255 214   0);
+  --fpceup-color : rgb(255  92   0);
+  --fcup-color   : rgb(147 191 235);
+  --feup-color   : rgb(159  45  32);
+  --fmup-color   : rgb(255 214   0);
+  --flup-color   : rgb(  0  25 168);
+  --fep-color1   : rgb(244  42  65);
+  --fep-color2   : rgb(255 255 255);
+  --fcnaup-color1: rgb(255 214   0);
+  --fcnaup-color2: rgb(  0 175 138);
+  
   --column-color : rgb(56, 56, 56);
-  --feup-color: #780404;
+  --bg-gray-300: rgb(209 213 219);
+}
 
+body {
   display: flex;
   flex-direction: column;
 }
@@ -62,13 +83,10 @@ a:hover{
   color: var(--feup-color);
 }
 
-<<<<<<< HEAD
-=======
 button:clicked{
   background-color: transparent;
 }
 
->>>>>>> main
 /* when page is same as the link, ref is feup color */
 a:active {
   color: var(--feup-color);
@@ -202,8 +220,6 @@ a:active {
   color: #999;
 }
 
-<<<<<<< HEAD
-=======
 .post-content {
   margin-bottom: 10px;
   display: flex;
@@ -271,7 +287,6 @@ a:active {
   margin-top: 5px;
 }
 
->>>>>>> main
 /* contact page */
 #contactForm textarea:focus, input:focus {
   border-color: transparent;

@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Redirect;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -23,6 +24,11 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
+        $this->renderable(function (\Exception $e) {
+            if ($e->getPrevious() instanceof \Illuminate\Session\TokenMismatchException) {
+                return Redirect::to(url()->previous());
+            };
+        });
         $this->reportable(function (Throwable $e) {
             //
         });
