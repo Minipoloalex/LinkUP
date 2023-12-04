@@ -91,8 +91,8 @@ class User extends Authenticatable
     public function getProfilePicture()
     {
         $imageController = new ImageController('users');
-
-        return $imageController->getFile($this->id);
+        $fileName = $imageController->getFileNameWithExtension(str($this->id));
+        return $imageController->getFile($fileName);
     }
     public function followRequestsReceived() : HasMany
     {

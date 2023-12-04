@@ -40,7 +40,8 @@ class Post extends Model
     public function media() : ?string
     {
         $imageController = new ImageController('posts');
-        if ($imageController->existsFile($this->id)) {
+        $fileName = $imageController->getFileNameWithExtension(str($this->id));
+        if ($imageController->existsFile($fileName)) {
             return "/post/$this->id/image";
         }
         return null;

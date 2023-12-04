@@ -27,19 +27,22 @@ class PostController extends Controller
      */
     public function storePost(Request $request)
     {
+        Log::debug("storePost");
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        Log::debug("Authenticated, going to validate");
         $request->validate([
             'content' => 'required|max:255',
             // 'id_group' => 'nullable|exists:groups,id',
             'is_private' => 'nullable|boolean',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg',
             'x' => 'nullable|int',
             'y' => 'nullable|int',
             'width' => 'nullable|int',
             'height' => 'nullable|int'
         ]);
+        Log::debug("Validated, going to create post");
         $this->authorize('createPost', Post::class);  // user must be logged in
         DB::beginTransaction();
         $post = new Post();
@@ -51,12 +54,13 @@ class PostController extends Controller
         $post->id_created_by = Auth::user()->id;
 
         $post->save();  // get the post id to make file name unique
-
+        Log::debug("Created new post");
         $createdFile = $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
             $post->created_at = $post->freshTimestamp();
         }
         DB::commit();
+        Log::debug('post: ' . $post->toJson());
 
         $postHTML = $this->translatePostToHTML($post, false, false, false);
         return response()->json(['postHTML' => $postHTML, 'success' => 'Post created successfully!']);
@@ -200,7 +204,7 @@ class PostController extends Controller
         $request->validate([
             'content' => 'nullable|string|max:255',
             'is_private' => 'nullable|boolean',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg',
             'x' => 'nullable|int',
             'y' => 'nullable|int',
             'width' => 'nullable|int',
@@ -256,7 +260,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $this->authorize('view', $post);
 
-        $fileName = str($post->id);
+        $fileName = $this->imageController->getFileNameWithExtension(str($post->id));
         if (!$this->imageController->existsFile($fileName)) {
             return response()->json(['error' => 'A post image was not found'], 404);
         }
@@ -281,7 +285,7 @@ class PostController extends Controller
     private function setFileName(Request $request, Post $post, ?int $x, ?int $y, ?int $width, ?int $height): bool
     {
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
-            $fileName = $post->id . '.' . $request->media->extension();
+            $fileName = $this->imageController->getFileNameWithExtension(str($post->id));
             $this->imageController->store($request->media, $fileName, $x, $y, $width, $height);
             $post->save();
             return true;
@@ -290,7 +294,8 @@ class PostController extends Controller
     }
     private function deleteFile(int $postId)
     {
-        $this->imageController->delete(str($postId));
+        $fileName = $this->imageController->getFileNameWithExtension(str($postId));
+        $this->imageController->delete($fileName);
     }
     /**
      * Get all posts created before a given date.
@@ -434,8 +439,6 @@ class PostController extends Controller
             'alreadyLiked' => false,
         ]);
     }
-
-
 
     public function likeStatus(Request $request, string $id)
     {

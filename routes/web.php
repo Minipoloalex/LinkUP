@@ -69,7 +69,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
 
 // Post
 Route::controller(PostController::class)->group(function () {
-    Route::get('/post/{id}', 'show')->name('post');
+    Route::get('/post/{id}', 'show')->name('post.page');
     Route::get('/post/{id}/image', 'viewImage')->name('post.image');
 
     Route::post('/post', 'storePost');
