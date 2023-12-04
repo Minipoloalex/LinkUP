@@ -17,33 +17,33 @@
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <link href="{{ url('css/posts.css') }}" rel="stylesheet">
     <link href="{{ url('css/follow.css') }}" rel="stylesheet">
-    <link href="{{ mix('node_modules/cropperjs/dist/cropper.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
-    <script type="text/javascript" src="{{ mix('node_modules/cropperjs/dist/cropper.js') }}" defer></script>
     <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>    
-    <script type="module" src={{ url('js/general_helpers.js') }} defer></script>
-    <script type="module" src={{ url('js/feedback.js') }} defer></script>
-    <script type="module" src={{ url('js/ajax.js') }} defer></script>
-    <script type="module" src={{ url('js/file_input.js') }} defer></script>
-    <script type="module" src={{ url('js/network.js') }} defer></script>
-    <script type="module" src={{ url('js/add_follow.js') }} defer></script>
-    <script type="module" src={{ url('js/posts/post_helpers.js') }} defer></script>
-    <script type="module" src={{ url('js/posts/post_render.js') }} defer></script>
-    <script type="module" src={{ url('js/posts/add_comment.js') }} defer></script>
-    <script type="module" src={{ url('js/posts/delete_post.js') }} defer></script>
-    <script type="module" src={{ url('js/posts/edit_post.js') }} defer></script>
-    <script type="module" src={{ url('js/posts/add_post.js') }} defer></script>
-    <script type="module" src={{ url('js/posts/like.js') }} defer></script>
-    <script type="module" src={{ url('js/search.js') }} defer></script>
-    <script type="module" src={{ url('js/edit_profile.js') }} defer></script>
-    <script type="module" src={{ url('js/contact.js') }} defer></script>
-    <script type="module" src={{ url('js/notifications.js') }} defer></script>
-    <script type="module" src={{ url('js/settings.js') }} defer></script>
-    <script type="module" src={{ url('js/group/group.js') }} defer></script>
+    <script type="module" src={{ url('js/general_helpers.js') }}></script>
+    <script type="module" src={{ url('js/feedback.js') }}></script>
+    <script type="module" src={{ url('js/ajax.js') }}></script>
+    <script type="module" src={{ url('js/file_input.js') }}></script>
+    <script type="module" src={{ url('js/network.js') }}></script>
+    <script type="module" src={{ url('js/add_follow.js') }}></script>
+    <script type="module" src={{ url('js/posts/post_helpers.js') }}defer></script>
+    <script type="module" src={{ url('js/posts/post_render.js') }}></script>
+    <script type="module" src={{ url('js/posts/add_comment.js') }}></script>
+    <script type="module" src={{ url('js/posts/delete_post.js') }}></script>
+    <script type="module" src={{ url('js/posts/edit_post.js') }}></script>
+    <script type="module" src={{ url('js/posts/add_post.js') }}></script>
+    <script type="module" src={{ url('js/posts/like.js') }}></script>
+    <script type="module" src={{ url('js/search.js') }}></script>
+    <script type="module" src={{ url('js/edit_profile.js') }}></script>
+    <script type="module" src={{ url('js/contact.js') }}></script>
+    <script type="module" src={{ url('js/notifications.js') }}></script>
+    <script type="module" src={{ url('js/settings.js') }}></script>
+    <script type="module" src={{ url('js/group/group.js') }}></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     @vite('resources/css/app.css')

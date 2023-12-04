@@ -7,6 +7,8 @@ use App\Models\User;
 use Auth;
 use \App\Models\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Collection;
 
 class GroupController extends Controller
 {
@@ -156,5 +158,34 @@ class GroupController extends Controller
         $group->delete();
 
         return response('Group deleted', 200);
+    }
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|max:255',
+        ]);
+        $groups = Group::search($request->input('query'));
+        Log::debug("Groups search result: $groups");
+        if ($groups->isEmpty()) {
+            $noResultsHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'noResultsHTML' => $noResultsHTML,
+                'success' => 'No results found',
+                'resultsHTML' => []
+            ]);
+        }
+        $resultsHTML = $this->translateGroupsArrayToHTML($groups);
+        return response()->json(['resultsHTML' => $resultsHTML, 'success' => 'Search results retrieved']);
+    }
+    public function translateGroupsArrayToHTML(Collection $groups)
+    {
+        $html = $groups->map(function ($group) {
+            return $this->translateGroupToHTML($group);
+        });
+        return $html;
+    }
+    public function translateGroupToHTML(Group $group)
+    {
+        return view('partials.search.group', ['group' => $group])->render();
     }
 }

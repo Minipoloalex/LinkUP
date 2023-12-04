@@ -53,11 +53,9 @@ class Post extends Model
     }
     public static function search(string $search)
     {
-        $posts = Post::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
-        ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
-        ->get();
-
-        return $posts;
+        return Post::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
+            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
+            ->get();
     }
     // public function group()
     // {

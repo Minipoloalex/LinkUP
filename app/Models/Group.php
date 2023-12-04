@@ -33,9 +33,17 @@ class Group extends Model
     {
         return $this->hasMany(Post::class, 'id_group');
     }
-
     public function pendingMembers()
     {
         return $this->belongsToMany(User::class, 'group_notification', 'id_group', 'id_user');
+    }
+    public function getPicture()
+    {
+        return null;
+    }
+    public static function search(string $search) {
+        return Group::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
+            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
+            ->get();;
     }
 }
