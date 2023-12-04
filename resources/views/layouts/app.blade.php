@@ -30,7 +30,7 @@
     <script type="module" src={{ url('js/file_input.js') }}></script>
     <script type="module" src={{ url('js/network.js') }}></script>
     <script type="module" src={{ url('js/add_follow.js') }}></script>
-    <script type="module" src={{ url('js/posts/post_helpers.js') }}defer></script>
+    <script type="module" src={{ url('js/posts/post_helpers.js') }}></script>
     <script type="module" src={{ url('js/posts/post_render.js') }}></script>
     <script type="module" src={{ url('js/posts/add_comment.js') }}></script>
     <script type="module" src={{ url('js/posts/delete_post.js') }}></script>

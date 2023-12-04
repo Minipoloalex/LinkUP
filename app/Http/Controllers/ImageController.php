@@ -11,19 +11,30 @@ class ImageController extends Controller
 {
     static protected $default = 'def.jpg';
     static protected $pathUsers = "public/images/users/";
-    static protected $pathPosts = "images/";
-    static protected $profilePictureSize = 100;
-    static protected $postPictureSize = 500;
+    static protected $pathGroups = "public/images/groups/";
+    static protected $pathPosts = "images/";    // private
+    static protected int $profilePictureSize = 100;
+    static protected int $postPictureSize = 500;
     protected string $path = "";
+    protected int $size = 0;
     public string $extension = ".jpg";
     public function __construct(string $type)
     {
-        if ($type == 'users')
+        if ($type == 'users') {
             $this->path = self::$pathUsers;
-        else if ($type == 'posts')
+            $this->size = self::$profilePictureSize;
+        }
+        else if ($type == 'groups') {
+            $this->path = self::$pathGroups;
+            $this->size = self::$profilePictureSize;
+        }
+        else if ($type == 'posts') {
             $this->path = self::$pathPosts;
-        else
+            $this->size = self::$postPictureSize;
+        }
+        else {
             abort(400);
+        }
     }
     private function getFilePath(string $fileName) {
         return $this->path . $fileName;

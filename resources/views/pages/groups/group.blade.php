@@ -21,7 +21,7 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
     <section class="flex flex-col border border-slate-400 mt-1" id="group-content">
         <div class="flex flex-col items-center justify-center h-56 w-full">
             <div class="flex justify-start items-center w-full pl-12">
-                <img src="{{ url('images/groups/icons/' . $group->id . '.jpg') }}" alt="group photo"
+                <img src="{{ $group->getPicture() }}" alt="group photo"
                     class="w-16 h-16 rounded-full">
                 <h1 class="text-2xl font-bold pl-8">{{ $group->name }}</h1>
             </div>

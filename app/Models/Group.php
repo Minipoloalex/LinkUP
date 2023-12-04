@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\ImageController;
 
 class Group extends Model
 {
     use HasFactory;
-
     public $timestamps = false;
-
     protected $fillable = [
         'name',
         'description',
@@ -37,9 +36,11 @@ class Group extends Model
     {
         return $this->belongsToMany(User::class, 'group_notification', 'id_group', 'id_user');
     }
-    public function getPicture()
+    public function getPicture()    
     {
-        return null;
+        $imageController = new ImageController('users');
+        $fileName = $imageController->getFileNameWithExtension(str($this->id));
+        return $imageController->getFile($fileName);
     }
     public static function search(string $search) {
         return Group::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])

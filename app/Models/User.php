@@ -87,7 +87,6 @@ class User extends Authenticatable
         return $this->hasMany(Liked::class, 'id_user');
     }
 
-
     public function getProfilePicture()
     {
         $imageController = new ImageController('users');
