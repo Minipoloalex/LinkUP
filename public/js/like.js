@@ -1,5 +1,5 @@
 
-
+import { getCsrfToken } from './ajax.js';
 
 // Function to initialize the like button state based on whether the user has liked the post
 async function initializeLikeButton(postId, likeButton) {
@@ -21,7 +21,9 @@ async function initializeLikeButton(postId, likeButton) {
 
 // Event delegation for handling post likes or unlikes
 document.addEventListener('click', async function (e) {
+
     if (e.target && e.target.matches('.like-button')) {
+        console.log('clicked');
         e.preventDefault();
         const likeButton = e.target;
         const postId = likeButton.getAttribute('data-id');

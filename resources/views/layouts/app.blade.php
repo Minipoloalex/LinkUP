@@ -9,30 +9,18 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- font awesome -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> -->
-
-
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ url('css/milligram.min.css') }}" rel="stylesheet">
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <link href="{{ url('css/posts.css') }}" rel="stylesheet">
     <link href="{{ url('css/follow.css') }}" rel="stylesheet">
-    <script type="text/javascript">
-        // Fix for Firefox autofocus CSS bug
-        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
-    </script>
-    <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <script type="module" src={{ url('js/general_helpers.js') }} defer></script>
-    <script type="module" src={{ url('js/network.js') }} defer></script>
-    <script type="module" src={{ url('js/add_follow.js') }} defer></script>
-    <script type="module" src={{ url('js/search.js') }} defer></script>
     <script type="module" src={{ url('js/feedback.js') }} defer></script>
+    <script type="module" src={{ url('js/general_helpers.js') }} defer></script>
     <script type="module" src={{ url('js/ajax.js') }} defer></script>
     <script type="module" src={{ url('js/file_input.js') }} defer></script>
+    <script type="module" src={{ url('js/network.js') }} defer></script>
+    <script type="module" src={{ url('js/add_follow.js') }} defer></script>
     <script type="module" src={{ url('js/post_helpers.js') }} defer></script>
     <script type="module" src={{ url('js/post_render.js') }} defer></script>
     <script type="module" src={{ url('js/app.js') }} defer></script>
@@ -43,8 +31,11 @@
     <script type="module" src={{ url('js/add_post.js') }} defer></script>
     <script type="module" src={{ url('js/edit_profile.js') }} defer></script>
     <script type="module" src={{ url('js/contact.js') }} defer></script>
+    <script type="module" src={{ url('js/settings.js') }} defer></script>
     <script type="module" src={{ url('js/group/group.js') }} defer></script>
-    
+    <script type="module" src={{ url('js/like.js') }} defer></script>
+    <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
