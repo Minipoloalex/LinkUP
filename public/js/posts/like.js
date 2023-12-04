@@ -1,5 +1,4 @@
-
-import { getCsrfToken } from './ajax.js';
+import { getCsrfToken } from '../ajax.js';
 
 // Function to initialize the like button state based on whether the user has liked the post
 async function initializeLikeButton(postId, likeButton) {
@@ -102,9 +101,36 @@ async function checkLikedStatus(postId) {
 
 // Function to handle liking or unliking a post asynchronously
 async function likeOrUnlikePost(postId, like) {
+<<<<<<< HEAD:public/js/like.js
     if (!isAuthenticated) {
         // Display a message or redirect the user to the login page
         return;
+=======
+    if(like === true){
+        try {
+            const response = await fetch(`/post/${postId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                },
+                body: JSON.stringify({
+                    like,
+                }),
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                throw new Error('Unable to perform action on the post');
+            }
+
+            return { likesCount: responseData.likesCount, alreadyLiked: responseData.alreadyLiked };
+        } catch (error) {
+            console.error('Error performing action on post:', error.message);
+            throw new Error('Unable to perform action on the post');
+        }
+>>>>>>> d507239e64ea27f39b303c8238ff1e28e7dce819:public/js/posts/like.js
     }
     else{
 

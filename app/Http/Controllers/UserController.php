@@ -70,11 +70,11 @@ class UserController extends Controller
         ]);
 
         if ($request->has('media') && $request->media != null && $request->file('media')->isValid()) {
-            if ($user->photo != 'def.jpg' && $user->photo != null) {
-                $this->imageController->delete($user->photo);
+            $fileName = $this->imageController->getFileNameWithExtension(str($user->id));
+            if ($this->imageController->existsFile($fileName)) {
+                $this->imageController->delete($user);
             }
-            $user->photo = 'profile_' . $user->id . '.' . $request->media->extension();
-            $this->imageController->store($request->media, $user->photo, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
+            $this->imageController->store($request->media, $fileName, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         }
 
         $user->update([
@@ -82,7 +82,6 @@ class UserController extends Controller
             'bio' => $request->bio,
             'faculty' => $request->faculty,
             'course' => $request->course,
-            'photo' => $user->photo ?? 'def.jpg'
         ]);
 
         return redirect()->route('profile.show', ['username' => $user->username])->with('success', 'Profile updated successfully!');
@@ -130,7 +129,8 @@ class UserController extends Controller
     public function viewProfilePicture(string $id)
     {
         $user = User::findOrFail($id);
-        return $this->imageController->getFileResponse($user->photo);
+        $fileName = $this->imageController->getFileNameWithExtension(str($user->id));
+        return $this->imageController->getFileResponse($fileName);
     }
 
     public function showNetwork(string $username)
@@ -175,8 +175,11 @@ class UserController extends Controller
         ]);
         $this->authorize('update', User::class);
         $user = Auth::user();
-
-        // check if user is already following
+        if ($user->id == $request->input('id')) {
+            return response()->json([
+                'error' => 'You cannot follow yourself!'
+            ]);
+        }
         $requestTo = User::findOrFail($request->id);
         if ($user->isFollowing($requestTo)) {
             return response()->json([
@@ -194,7 +197,7 @@ class UserController extends Controller
             $request = FollowRequest::create([
                 'id_user_from' => $user->id,
                 'id_user_to' => $requestTo->id,
-                'timestamp' => now()
+                'timestamp' => time(),
             ]);
             $accepted = false;
             $feedback = "Follow request sent to $requestTo->username successfully!";

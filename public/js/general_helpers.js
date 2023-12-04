@@ -1,16 +1,16 @@
-export function hide (element) {
+export function hide(element) {
   if (element) {
-    element.classList.add('hidden')
+    element.classList.add('hidden');
   }
 }
 
-export function show (element) {
+export function show(element) {
   if (element) {
-    element.classList.remove('hidden')
+    element.classList.remove('hidden');
   }
 }
 
-export function parseHTML (htmlText) {
-  const parser = new DOMParser()
-  return parser.parseFromString(htmlText, 'text/html').body.firstChild
+export function parseHTML(htmlText) {
+  const parser = new DOMParser();
+  return parser.parseFromString(htmlText, 'text/html').body.firstChild;
 }

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ImageController;
 
 class Post extends Model
 {
@@ -36,10 +37,13 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'liked', 'id_post', 'id_user');
     }
-    public function media()
+    public function media() : ?string
     {
-        if (file_exists("/post/$this->id/image"))
+        $imageController = new ImageController('posts');
+        $fileName = $imageController->getFileNameWithExtension(str($this->id));
+        if ($imageController->existsFile($fileName)) {
             return "/post/$this->id/image";
+        }
         return null;
     }
     public function isCreatedByCurrentUser()

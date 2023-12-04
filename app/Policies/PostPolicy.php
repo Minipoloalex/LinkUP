@@ -22,8 +22,6 @@ class PostPolicy
         /*if ($user->isAdmin()) {
             return true; // Admins can view any post
         }*/
-
-        Log::debug("PostPolicy: view: user->id: $user->id, post->id_created_by: $post->id_created_by");
         
         // Check if the user is following the creator of the post
         return $user->isFollowing($post->createdBy) || $post->is_private === false || $user->id === $post->id_created_by;

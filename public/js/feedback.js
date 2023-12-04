@@ -1,3 +1,5 @@
+import { show, hide } from "./general_helpers.js";
+
 const feedbackMessage = document.querySelector('#feedback-message');
 if (feedbackMessage) {
     const closeFeedback = document.querySelector('#dismiss-feedback');
@@ -6,7 +8,7 @@ if (feedbackMessage) {
 function dismissFeedback() {
     hide(feedbackMessage);
 }
-function showFeedback(message) {
+export function showFeedback(message) {
     show(feedbackMessage);
     feedbackMessage.querySelector('#feedback-text').textContent = message;
 }

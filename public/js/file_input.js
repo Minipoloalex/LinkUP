@@ -1,10 +1,12 @@
+import { show, hide } from "./general_helpers.js";
+
 const fileInputWrappers = document.querySelectorAll('.file-input-wrapper');
 fileInputWrappers.forEach(handlerFileInput);
 
-function getFileInputWrapper(form) {
+export function getFileInputWrapper(form) {
     return form.querySelector('.file-input-wrapper');
 }
-function clearFileInputWrapper(fileInputWrapper) {
+export function clearFileInputWrapper(fileInputWrapper) {
     const removeFileBtn = getRemoveFileBtn(fileInputWrapper);
     removeFileBtn.click();
 }
@@ -22,7 +24,7 @@ function getRemoveFileBtn(fileInputWrapper) {
 function getUploadFileBtn(fileInputWrapper) {
     return fileInputWrapper.querySelector('.upload-file');
 }
-function handlerFileInput(fileInputWrapper) {
+export function handlerFileInput(fileInputWrapper) {
     const fileInput = fileInputWrapper.querySelector('input[type="file"]');
     const width = fileInputWrapper.querySelector('input[name="width"]');
     const height = fileInputWrapper.querySelector('input[name="height"]');
@@ -80,7 +82,7 @@ function handlerFileInput(fileInputWrapper) {
     cropButton.addEventListener('click', (event) => {
         event.preventDefault();
         if (cropper) {
-            const canvas = cropper.getData(rounded=true);
+            const canvas = cropper.getData(true);
             x.value = canvas.x;
             y.value = canvas.y;
             width.value = canvas.width;

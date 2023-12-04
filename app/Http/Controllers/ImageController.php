@@ -15,6 +15,7 @@ class ImageController extends Controller
     static protected $profilePictureSize = 100;
     static protected $postPictureSize = 500;
     protected string $path = "";
+    public string $extension = ".jpg";
     public function __construct(string $type)
     {
         if ($type == 'users')
@@ -26,6 +27,9 @@ class ImageController extends Controller
     }
     private function getFilePath(string $fileName) {
         return $this->path . $fileName;
+    }
+    public function getFileNameWithExtension(string $fileName) {
+        return $fileName . $this->extension;
     }
     public function store($media, string $fileName, ?int $x, ?int $y, ?int $width, ?int $height)
     {

@@ -1,7 +1,7 @@
 // Path: public/js/group/group.js
 const Swal = window.swal
 
-function groupPhotoHover () {
+function groupPhotoHover() {
   const groupPhoto = document.getElementById('change-group-photo')
   if (!groupPhoto) return
 
@@ -32,7 +32,7 @@ function groupPhotoHover () {
   })
 }
 
-function deleteGroup (groupId) {
+function deleteGroup(groupId) {
   const url = `/group/${groupId}`
 
   fetch(url, {
@@ -50,7 +50,7 @@ function deleteGroup (groupId) {
     .catch(error => console.error(error))
 }
 
-function addDeleteGroupEvent () {
+function addDeleteGroupEvent() {
   const button = document.getElementById('delete-group')
   if (!button) return
 

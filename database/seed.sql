@@ -140,15 +140,20 @@ BEGIN
     NEW.tsvectors = (
         setweight(to_tsvector('portuguese', NEW.username), 'A') ||
         setweight(to_tsvector('portuguese', NEW.name), 'B') ||
-        setweight(to_tsvector('portuguese', NEW.bio), 'C')
+        setweight(to_tsvector('portuguese', COALESCE(NEW.bio, '')), 'C') || 
+        setweight(to_tsvector('portuguese', COALESCE(NEW.course, '')), 'C') ||
+        setweight(to_tsvector('portuguese', COALESCE(NEW.faculty, '')), 'D')
     );
     END IF;
     IF TG_OP = 'UPDATE' THEN
-        IF (NEW.username <> OLD.username OR NEW.name <> OLD.name OR NEW.bio <> OLD.bio) THEN
+        IF (NEW.username <> OLD.username OR NEW.name <> OLD.name OR NEW.bio <> OLD.bio OR 
+        NEW.course <> OLD.course OR NEW.faculty <> OLD.faculty) THEN
             NEW.tsvectors = (
                 setweight(to_tsvector('portuguese', NEW.username), 'A') ||
                 setweight(to_tsvector('portuguese', NEW.name), 'B') ||
-                setweight(to_tsvector('portuguese', NEW.bio), 'C')
+                setweight(to_tsvector('portuguese', COALESCE(NEW.bio, '')), 'C') || 
+                setweight(to_tsvector('portuguese', COALESCE(NEW.course, '')), 'C') ||
+                setweight(to_tsvector('portuguese', COALESCE(NEW.faculty, '')), 'D')
             );
         END IF;
     END IF;
@@ -182,7 +187,7 @@ BEGIN
     -- Convert the group name into a tsvector with weight 'A'
     -- Concatenate the theme names with weight 'B'
     RETURN setweight(to_tsvector('portuguese', group_name), 'A') ||
-           setweight(to_tsvector('portuguese', description), 'B');
+           setweight(to_tsvector('portuguese', COALESCE(description, '')), 'B');
 END $$
 LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION group_search_update()
@@ -242,10 +247,10 @@ BEGIN
         IF (NEW.content <> OLD.content) THEN    -- updates on post are never to the id_created_by attribute
             SELECT username, name INTO _username, _name FROM users WHERE id = NEW.id_created_by;
             NEW.tsvectors = (
-            setweight(to_tsvector('portuguese', NEW.content), 'A') ||
-            setweight(to_tsvector('portuguese', _username), 'B') ||
-            setweight(to_tsvector('portuguese', _name), 'C')
-        );
+                setweight(to_tsvector('portuguese', NEW.content), 'A') ||
+                setweight(to_tsvector('portuguese', _username), 'B') ||
+                setweight(to_tsvector('portuguese', _name), 'C')
+            );
         END IF;
     END IF;
     RETURN NEW;

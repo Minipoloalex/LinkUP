@@ -1,3 +1,11 @@
+import { submitAddPostOrComment, getTextField } from "./post_helpers.js";
+import { clearFileInputWrapper, handlerFileInput, getFileInputWrapper } from "../file_input.js";
+import { incrementCommentCount } from "./post_helpers.js";
+import { parseHTML } from "../general_helpers.js";
+import { deletePostOrComment } from "./delete_post.js";
+import { toggleEditEvent, submitEditPost } from "./edit_post.js";
+import { deleteImage } from "./post_helpers.js";
+
 const commentForm = document.querySelector('form.add-comment');
 if (commentForm != null) {
     commentForm.addEventListener('submit', submitAddComment);

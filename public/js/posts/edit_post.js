@@ -1,3 +1,9 @@
+import { parseHTML } from "../general_helpers.js";
+import { submitDataPostOrComment, removeImageContainer } from "./post_helpers.js";
+import { getTextField, deleteImage } from "./post_helpers.js";
+import { clearFileInputWrapper, getFileInputWrapper } from "../file_input.js";
+
+
 const editPostButtons = document.querySelectorAll('.edit-post');
 editPostButtons.forEach(button => {
     button.addEventListener('click', toggleEditEvent);
@@ -12,7 +18,7 @@ deleteImageButtons.forEach(button => {
 });
 
 
-function toggleEditEvent(event) {
+export function toggleEditEvent(event) {
     event.preventDefault();
     const post = event.currentTarget.closest('article');
 
@@ -31,7 +37,7 @@ function toggleEdit(content, editForm, textField) {
     }
     editForm.addEventListener('submit', submitEditPost);    // TODO: fix this
 }
-async function submitEditPost(event) {  // submitted the form
+export async function submitEditPost(event) {  // submitted the form
     event.preventDefault();
     const form = event.currentTarget;
 
