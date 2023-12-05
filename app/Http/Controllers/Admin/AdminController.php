@@ -43,16 +43,17 @@ class AdminController extends Controller
     
     public function listUsers()
     {
-        $users = User::all()->sortBy('id');
-    
+        $users = User::paginate(10);
+
         return view('admin.users', ['users' => $users]);
     }
 
     public function listPosts()
     {
-        $posts = Post::all();
+        $posts = Post::paginate(10);
+
         return view('admin.posts', ['posts' => $posts]);
-    }  
+    }
 
     public function banUser($id)
     {
