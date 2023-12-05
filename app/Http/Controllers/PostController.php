@@ -440,6 +440,12 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Check if a user has liked a post
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
     public function likeStatus(Request $request, string $id)
     {
         if (!Auth::check()) {
@@ -454,5 +460,38 @@ class PostController extends Controller
         Log::info("User $user->id already liked post $post->id: $alreadyLiked");
 
         return response()->json(['alreadyLiked' => $alreadyLiked]);
+    }
+
+    /**
+     * Get posts for the For You page
+     */
+    public function forYouPosts()
+    {
+        $user = Auth::user();
+        $usersFollowing = $user->following;
+        $userFollowedByUsersFollowing = [];
+
+        foreach($usersFollowing as $x) {
+            if(!$x->is_private){
+                $userFollowedByUsersFollowing[] = $x->following;
+            }
+        }
+
+        // remove duplicates from userFollowedByUsersFollowing
+        $userFollowedByUsersFollowing = array_unique($userFollowedByUsersFollowing);
+ 
+        $postsForYou = [];
+
+        foreach($userFollowedByUsersFollowing as $user) {
+            $postsForYou[] = $x->posts;
+        }
+
+        /* SORTING POSTS NOT WORKING
+        // sort postsForYou by created_at
+        usort($postsForYou, function($a, $b) {
+            return $a->created_at <=> $b->created_at;
+        });*/
+
+        return response()->json(['posts' => $postsForYou]);
     }
 }

@@ -87,6 +87,11 @@ Route::controller(PostController::class)->group(function () {
     Route::delete('/post/{id}/like', 'removeLike'); // remove like
     Route::get('/post/{id}/like', 'likeStatus');  // get like status
 
+    Route::get('/foryou', 'forYouPosts');
+
+
+
+
 });
 
 // Groups

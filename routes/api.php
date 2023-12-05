@@ -46,6 +46,8 @@ Route::middleware('web')->group(function () {
         [PostController::class, 'getPostsBeforeDate']
     )->name('posts.beforeDate');
 
+    
+
 
 });
 
