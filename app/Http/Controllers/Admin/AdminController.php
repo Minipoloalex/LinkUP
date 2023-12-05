@@ -72,4 +72,12 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users')->with('success', 'User unbanned successfully.');
     }
+
+    public function deletePost($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
+    }
 }

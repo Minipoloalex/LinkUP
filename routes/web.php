@@ -60,6 +60,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::post('/users/{id}/ban', [AdminController::class, 'banUser'])->name('users.ban');
         Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
+        Route::post('/posts/{id}/delete', [AdminController::class, 'deletePost'])->name('posts.delete');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
 
