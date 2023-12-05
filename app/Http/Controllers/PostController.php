@@ -486,6 +486,11 @@ class PostController extends Controller
             $postsForYou[] = $x->posts;
         }
 
+        // remove posts that are comments
+        /*$postsForYou = array_filter($postsForYou, function($post) {
+            return $post->id_parent !== null;
+        });*/
+
         /* SORTING POSTS NOT WORKING
         // sort postsForYou by created_at
         usort($postsForYou, function($a, $b) {
