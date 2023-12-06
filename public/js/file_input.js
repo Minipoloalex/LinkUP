@@ -45,7 +45,6 @@ export function handlerFileInput(fileInputWrapper) {
             const reader = new FileReader();
             reader.onload = function (e) {
                 const imgSource = e.currentTarget.result;
-                console.log("Showing crop swal");
                 showCropSwal(imgSource).then(
                     (result) => {
                         if (result.isConfirmed) {
@@ -121,9 +120,14 @@ async function showCropSwal(imageSrc) {
                 crop: () => {
                     clearTimeout(timeoutId);
                     timeoutId = setTimeout(() => {
-                        const croppedCanvas = cropper.getCroppedCanvas();
-                        const preview = Swal.getPopup().querySelector('#preview');
-                        preview.src = croppedCanvas.toDataURL();
+                        if (cropper) {
+                            const croppedCanvas = cropper.getCroppedCanvas();
+                            const popup = Swal.getPopup();
+                            if (popup) {
+                                const preview = popup.querySelector('#preview');
+                                preview.src = croppedCanvas.toDataURL();
+                            }
+                        }
                     }, 25);
                 },
             });

@@ -7,7 +7,7 @@
     @include('partials.side.navbar')
     <section class="col-span-2 flex flex-grow pt-16 overflow-y-auto scrollbar-hide" id="content">
         <section id="post-section" class="flex flex-col flex-grow w-max max-h-min">
-            @include('partials.post', ['post' => $post, 'displayComments' => true, 'showEdit' => true])
+            @include('partials.post', ['post' => $post, 'displayComments' => true, 'showAddComment' => true, 'showEdit' => true])
         </section>
     </section>
     @include('partials.side.notifications-tab')

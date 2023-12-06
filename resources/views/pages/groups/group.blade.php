@@ -57,7 +57,7 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 
     <section id="posts-section" class="flex flex-col items-center">
         @foreach ($posts as $post)
-        @include('partials.post', ['post' => $post, 'displayComments' => true, 'showEdit' => false])
+        @include('partials.post', ['post' => $post, 'displayComments' => true, 'showAddComment' => false, 'showEdit' => false])
         @endforeach
     </section>
 

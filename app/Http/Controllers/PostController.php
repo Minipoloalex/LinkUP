@@ -100,7 +100,7 @@ class PostController extends Controller
         $commentNotification = CommentNotification::where('id_comment', $comment->id)->firstOrFail();
         event(new CommentEvent($commentNotification));
 
-        $commentHTML = $this->translatePostToHTML($comment, true, true, false);
+        $commentHTML = $this->translatePostToHTML($comment, true, true, false, false);
         return response()->json(['commentHTML' => $commentHTML, 'success' => 'Comment created successfully!']);
     }
     /**
@@ -310,7 +310,7 @@ class PostController extends Controller
 
         return response()->json($postsHTML);
     }
-    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $displayComments = false)
+    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false)
     {
         if ($isComment) {
             return view('partials.comment', ['comment' => $post, 'showEdit' => $showEdit])->render();
@@ -318,6 +318,7 @@ class PostController extends Controller
             return view('partials.post', [
                 'post' => $post,
                 'showEdit' => $showEdit,
+                'showAddComment' => $showAddComment,
                 'displayComments' => $displayComments
             ])->render();
         }
@@ -332,7 +333,7 @@ class PostController extends Controller
     private function translatePostsArrayToHTML(Collection $posts)
     {
         $html = $posts->map(function ($post) {
-            return $this->translatePostToHTML($post, false, false, false);
+            return $this->translatePostToHTML($post, false, false, false, false);
         });
         return $html;
     }
