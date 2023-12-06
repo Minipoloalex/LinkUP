@@ -18,18 +18,18 @@ function groupPhotoHover() {
   const groupPhotoInput = document.getElementById('group-photo-input')
   const groupImg = document.getElementById('group-photo-img')
 
-  groupPhotoInput.addEventListener('change', () => {
-    const file = groupPhotoInput.files[0]
-    const reader = new FileReader()
+  // groupPhotoInput.addEventListener('change', () => {
+  //   const file = groupPhotoInput.files[0]
+  //   const reader = new FileReader()
 
-    reader.onload = () => {
-      groupImg.src = reader.result
-    }
+  //   reader.onload = () => {
+  //     groupImg.src = reader.result
+  //   }
 
-    if (file) {
-      reader.readAsDataURL(file)
-    }
-  })
+  //   if (file) {
+  //     reader.readAsDataURL(file)
+  //   }
+  // })
 }
 
 function deleteGroup(groupId) {

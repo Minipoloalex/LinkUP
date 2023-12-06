@@ -1,7 +1,9 @@
 @extends('layouts.app')
-@include('partials.side.navbar')
+@section('title', 'Group Settings')
+
 
 @section('content')
+@include('partials.side.navbar')
 <main id="group-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-screen pt-24
                             md:pl-16
                             lg:px-56">
@@ -14,16 +16,25 @@
                 @csrf
                 @method('PUT')
                 <div class="flex justify-start items-start h-full">
-                    <div class="relative top-0 left-0" id="change-group-photo">
+                    <div class="file-input-wrapper relative top-0 left-0" id="change-group-photo">
                         <label for="group-photo-input" class="cursor-pointer">
                             <img src="{{ $group->getPicture() }}" alt="group photo"
                                 class="w-16 h-16 rounded-full" id="group-photo-img">
+                            {{-- <div class="rounded-full p-1 absolute -top-1 -right-1 bg-black">
+                                <i class="fas fa-pencil-alt text-white"></i>
+                            </div> --}}
                             <div class="absolute top-0 left-0 w-16 h-16 rounded-full bg-black bg-opacity-50 flex items-center justify-center hidden"
                                 id="group-photo-hover">
                                 <i class="fas fa-camera text-white"></i>
                             </div>
+                            <div class="text-center">Edit</div>
                         </label>
-                        <input type="file" id="group-photo-input" class="hidden">
+                        <input type="file" id="group-photo-input" class="hidden" name="media" accept=".jpg, .jpeg, .png, .gif">
+                        <input type="hidden" name="x">
+                        <input type="hidden" name="y">
+                        <input type="hidden" name="width">
+                        <input type="hidden" name="height">
+                        @include('partials.image_crop_container')
                     </div>
                 </div>
                 <div class="flex flex-col justify-start items-center w-5/6 h-full">

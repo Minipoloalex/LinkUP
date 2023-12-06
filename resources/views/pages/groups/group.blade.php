@@ -11,6 +11,8 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 @endphp
 
 @extends('layouts.app')
+@section('title', 'Group')
+
 @include('partials.side.navbar')
 
 

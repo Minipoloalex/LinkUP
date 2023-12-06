@@ -3,7 +3,6 @@ import { parseHTML } from '../general_helpers.js';
 
 function appendPostsToTimeline(postsHTML) {
   const timeline = document.querySelector('#timeline');
-
   for (const postHTML of postsHTML) {
     const postElement = parseHTML(postHTML);
     timeline.insertBefore(postElement, timeline.lastElementChild);
@@ -12,7 +11,6 @@ function appendPostsToTimeline(postsHTML) {
 
 export function prependPostsToTimeline(postsHTML) {
   const timeline = document.querySelector('#timeline')
-  console.log(postsHTML);
 
   for (const postHTML of postsHTML) {
     const postElement = parseHTML(postHTML);
@@ -45,31 +43,29 @@ function getCurrentFormattedTime() {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-// export function fetchNewPosts() {
 async function fetchNewPosts() {
-  // date must be in format YYYY-MM-DD
+  // date in format YYYY-MM-DD HH:MM:SS
   const date = getCurrentFormattedTime();
   const posts = await fetchPosts(date);
   prependPostsToTimeline(posts);
 }
 
-// export function fetchMorePosts() {
-function fetchMorePosts() {
+async function fetchMorePosts() {
   const timeline = document.querySelector('#timeline');
   const lastPost = timeline.lastElementChild.previousElementSibling; // last element is the fetcher
-  const posts = fetchPosts(lastPost.dataset.postDate);
-  appendPostsToTimeline(posts)
+  const posts = await fetchPosts(lastPost.dataset.postDate);
+  appendPostsToTimeline(posts);
 }
 
-function createPostFetcher() {
+async function createPostFetcher() {
   const fetcher = document.querySelector('#fetcher');
-  const observer = new IntersectionObserver(entries => {
+  const observer = new IntersectionObserver(async (entries) => {
     if (entries[0].isIntersecting) {
-      fetchMorePosts();
+      await fetchMorePosts();
     }
   })
   observer.observe(fetcher);
 }
 
-fetchNewPosts();
-createPostFetcher();
+await fetchNewPosts();
+await createPostFetcher();
