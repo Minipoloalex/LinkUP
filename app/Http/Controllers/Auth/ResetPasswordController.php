@@ -41,13 +41,8 @@ class ResetPasswordController extends Controller
             }
         );
 
-        // if the token is invalid, the user is prompted to request a new one
-        if ($status === Password::INVALID_TOKEN) {
-            return redirect()->route('password.request')->withErrors(['email' => __($status)]);
-        }
-
         return $status === Password::PASSWORD_RESET
                     ? redirect()->route('login')->with(['status' => __($status)])
-                    : back()->withErrors(['email' => __($status)]);
+                    : back()->withErrors(['status' => __($status)]);
     }
 }
