@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\CommentNotification;
 use App\Models\Post;
 use App\Models\Liked;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Policies\PostPolicy;
@@ -318,6 +320,8 @@ class PostController extends Controller
 
         $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
 
+        Log::info('postsHTML: ' . $postsHTML->toJson());
+
         return response()->json($postsHTML);
     }
     private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $displayComments = false)
@@ -465,7 +469,7 @@ class PostController extends Controller
     /**
      * Get posts for the For You page
      */
-    public function forYouPosts()
+    /*public function forYouPosts()
     {
         $user = Auth::user();
         $usersFollowing = $user->following;
@@ -486,6 +490,15 @@ class PostController extends Controller
             $postsForYou[] = $x->posts;
         }
 
+        $filteredPosts = $postsForYou->filter(function ($post) use ($user) {
+            return policy(Post::class)->view($user, $post);
+        })->values();
+        Log::info('hey2');
+        // Translate posts to the desired HTML format
+        $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
+        Log::info('postsHTML: ' . $postsHTML->toJson());
+        return response()->json($postsHTML);
+
         // remove posts that are comments
         /*$postsForYou = array_filter($postsForYou, function($post) {
             return $post->id_parent !== null;
@@ -495,8 +508,55 @@ class PostController extends Controller
         // sort postsForYou by created_at
         usort($postsForYou, function($a, $b) {
             return $a->created_at <=> $b->created_at;
-        });*/
+        });
+        
+    }*/
 
-        return response()->json(['posts' => $postsForYou]);
+    
+
+    public function forYouPosts()
+    {
+        $user = Auth::user();
+        $usersFollowing = $user->following->where('is_private', false)->pluck('id');
+        Log::info('usersFollowing: ' . $usersFollowing->toJson());
+        
+        $usersFollowedByUserFollowing = User::whereIn('id', $usersFollowing)
+            ->with('following')
+            ->get()
+            ->pluck('following')
+            ->flatten()
+            ->pluck('id');
+
+        
+
+        Log::info('usersFollowedByUserFollowing: ' . $usersFollowedByUserFollowing->toJson());
+    
+        $postsForYou = Post::whereIn('id_created_by', $usersFollowedByUserFollowing)
+            ->with('createdBy:id,username')
+            ->withCount('likes')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+
+        $postsForYou = Post::whereNotIn('id_created_by', $usersFollowing)
+            ->whereIn('id_created_by', $usersFollowedByUserFollowing)
+            ->with('createdBy:id,username')
+            ->withCount('likes')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
+    
+        Log::info('postsForYou: ' . $postsForYou->toJson());
+        $filteredPosts = $postsForYou->filter(function ($post) use ($user) {
+            return policy(Post::class)->view($user, $post);
+        });
+    
+        // Translate posts to the desired HTML format
+        $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
+    
+        return response()->json($postsHTML);
     }
+    
+
+
 }

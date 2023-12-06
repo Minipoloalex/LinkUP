@@ -76,4 +76,3 @@ function createPostFetcher() {
 fetchNewPosts();
 createPostFetcher();
 
-const forYouPosts = await fetchForYouPosts();
