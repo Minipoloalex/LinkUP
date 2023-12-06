@@ -32,16 +32,13 @@ class LikeNotification extends Model {
     }
 
     public static function getSomeNotifications(int $user_id, int $limit = 10) {
-        // Get posts to user's posts
+        // Get user posts
         $user_posts = Post::select('id')
-            ->where('id_created_by', $user_id)
-            ->whereNull('id_parent');
+            ->where('id_created_by', $user_id);
 
         // Get like notifications from user's posts
         $like_nots = LikeNotification::select('*')
-            ->joinSub($user_posts, 'p', function ($join) {
-                $join->on('like_notification.id_post', '=', 'p.id');
-            })->join('post', 'like_notification.id_post', '=', 'post.id')
+            ->whereIn('id_post', $user_posts)
             ->orderBy('timestamp', 'desc')->limit($limit)->get();
 
         return $like_nots;

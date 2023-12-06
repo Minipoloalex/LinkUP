@@ -4,7 +4,7 @@
 
 @include('partials.side.navbar')
 
-<main id="homepage" class=" flex flex-col w-full overflow-hidden overflow-y-scroll h-screen pt-36 scrollbar-hide
+<main id="homepage" class=" flex flex-col w-full overflow-clip overflow-y-scroll h-screen pt-36 scrollbar-hide
                             md:pl-16
                             lg:px-56">
 
