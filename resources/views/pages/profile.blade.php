@@ -14,5 +14,4 @@
         </section>
         @include('partials.side.right-tab-profile')
     </main>
-    
 @endsection
