@@ -45,7 +45,6 @@ body {
   position: absolute;
   right: 1rem;
   margin-left: 2rem;
-  color: var(--feup-color);
   transition: opacity 0.2s ease-in-out;
   opacity: 1;
   border: none;
@@ -74,25 +73,9 @@ body {
   border: none;
 }
 
-
-button:hover{
-  color: var(--feup-color);
-}
-
-a:hover{
-  color: var(--feup-color);
-}
-
 button:clicked{
   background-color: transparent;
 }
-
-/* when page is same as the link, ref is feup color */
-a:active {
-  color: var(--feup-color);
-}
-
-
 
 /* Modal Content */
 .modal-content {
@@ -251,10 +234,6 @@ a:active {
   border: none;
 }
 
-.post-actions :hover {
-  color: var(--feup-color);
-}
-
 .post-comments {
   margin-top: 10px;
 }
@@ -290,11 +269,8 @@ a:active {
 /* contact page */
 #contactForm textarea:focus, input:focus {
   border-color: transparent;
-  border-bottom-color: var(--feup-color);
   outline: none;
 }
-
-
 
 /* Responsive styles for the header */
 @media (max-width: 768px) {
@@ -324,7 +300,6 @@ a:active {
     padding: 10px;
 }
 
-
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -344,8 +319,6 @@ a:active {
     font-family: 'Poppins', sans-serif;
 }
 
-
-
 #cropperjs {
   display: block;
   max-width: 100%;
@@ -357,3 +330,4 @@ a:active {
   margin-bottom: 10px;
   border-radius: 100%;
 }
+
