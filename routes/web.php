@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -127,7 +128,7 @@ Route::post('/settings/update', [UserController::class, 'updateSettings'])->name
 
 
 
-Route::get('/search', function(){
+Route::get('/search', function () {
     return view('pages.search');
 })->name('search');
 
@@ -140,3 +141,5 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
+
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications')->middleware('auth');

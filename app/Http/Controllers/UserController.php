@@ -54,7 +54,7 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $this->authorize('update', User::class);
-        
+
         $user = Auth::user();
 
         $request->validate([
