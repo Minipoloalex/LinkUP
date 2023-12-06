@@ -29,7 +29,7 @@
                             </div>
                             <div class="text-center">Edit</div>
                         </label>
-                        <input type="file" id="group-photo-input" class="hidden" name="media" accept=".jpg, .jpeg, .png, .gif">
+                        <input type="file" id="group-photo-input" class="hidden" name="image" accept=".jpg, .jpeg, .png, .gif">
                         <input type="hidden" name="x">
                         <input type="hidden" name="y">
                         <input type="hidden" name="width">

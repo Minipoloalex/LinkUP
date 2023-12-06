@@ -107,7 +107,6 @@ class GroupController extends Controller
 
         $group->pendingMembers()->detach($id_member);
 
-        \Log::info($request->input('accept'));
         if ($request->input('accept') == 'reject') {
             return response('Request rejected', 200);
         }
@@ -121,18 +120,33 @@ class GroupController extends Controller
         $group = Group::findOrFail($id);
 
         $this->authorize('settings', $group);
-
+        Log::debug($request->all());
         $request->validate([
             'name' => 'required|string|max:50',
             'description' => 'nullable|string|max:150',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
         ]);
 
         $group->name = $request->input('name');
         $group->description = $request->input('description');
-
         $group->save();
-
-        return redirect()->route('group', ['id' => $id]);
+        
+        Log::debug("Testing if has image");
+        if ($request->has('image') && $request->image != null && $request->file('image')->isValid()) {
+            Log::debug("Has valid image -> storing");
+            $imageController = new ImageController('groups');
+            $fileName = $imageController->getFileNameWithExtension(str($group->id));
+            if ($imageController->existsFile($fileName)) {
+                $imageController->delete($fileName);
+            }
+            $imageController->store($request->image, $fileName, $request->x, $request->y, $request->width, $request->height);
+        }
+        Log::debug("Group updated");
+        return redirect()->route('group', ['id' => $id])->with('success', 'Group updated');
     }
 
     /**
@@ -165,7 +179,6 @@ class GroupController extends Controller
             'query' => 'required|string|max:255',
         ]);
         $groups = Group::search($request->input('query'));
-        Log::debug("Groups search result: $groups");
         if ($groups->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
