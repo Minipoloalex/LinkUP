@@ -556,6 +556,32 @@ class PostController extends Controller
     
         return response()->json($postsHTML);
     }
+
+    public function followedUsersPosts()
+{
+    $user = Auth::user();
+
+    // Retrieve IDs of users followed by the authenticated user (both private and public)
+    $usersFollowing = $user->following()->pluck('id');
+
+    // Retrieve posts from users followed by the authenticated user (both private and public)
+    $postsFromFollowedUsers = Post::whereIn('id_created_by', $usersFollowing)
+        ->with('createdBy:id,username,profile_picture')
+        ->withCount('likes')
+        ->orderByDesc('created_at')
+        ->limit(10)
+        ->get();
+
+    $filteredPosts = $postsFromFollowedUsers->filter(function ($post) use ($user) {
+        return policy(Post::class)->view($user, $post);
+    });
+
+    // Translate posts to the desired HTML format
+    $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
+
+    return response()->json($postsHTML);
+}
+
     
 
 
