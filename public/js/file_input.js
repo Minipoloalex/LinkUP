@@ -50,8 +50,8 @@ export function handlerFileInput(fileInputWrapper) {
                             y.value = result.value.data.y;
                             width.value = result.value.data.width;
                             height.value = result.value.data.height;
-                            const groupImg = document.getElementById('group-photo-img')
-                            groupImg.src = result.value.preview;
+                            const img = fileInputWrapper.querySelector('.image-preview')
+                            img.src = result.value.preview;
                         }
                         else {
                             fileInput.value = null;

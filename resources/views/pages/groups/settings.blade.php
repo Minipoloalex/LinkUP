@@ -19,7 +19,7 @@
                     <div class="file-input-wrapper relative top-0 left-0" id="change-group-photo">
                         <label for="group-photo-input" class="cursor-pointer">
                             <img src="{{ $group->getPicture() }}" alt="group photo"
-                                class="w-16 h-16 rounded-full" id="group-photo-img">
+                                class="image-preview w-16 h-16 rounded-full">
                             {{-- <div class="rounded-full p-1 absolute -top-1 -right-1 bg-black">
                                 <i class="fas fa-pencil-alt text-white"></i>
                             </div> --}}
@@ -29,12 +29,8 @@
                             </div>
                             <div class="text-center">Edit</div>
                         </label>
-                        <input type="file" id="group-photo-input" class="hidden" name="image" accept=".jpg, .jpeg, .png, .gif">
-                        <input type="hidden" name="x">
-                        <input type="hidden" name="y">
-                        <input type="hidden" name="width">
-                        <input type="hidden" name="height">
-                        @include('partials.image_crop_container')
+                        <input type="file" id="group-photo-input" class="hidden" name="image" accept="image/*">
+                        @include('partials.images_crop_input')
                     </div>
                 </div>
                 <div class="flex flex-col justify-start items-center w-5/6 h-full">
