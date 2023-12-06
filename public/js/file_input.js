@@ -1,6 +1,5 @@
 import { show, hide } from "./general_helpers.js";
 
-
 const fileInputWrappers = document.querySelectorAll('.file-input-wrapper');
 fileInputWrappers.forEach(handlerFileInput);
 
@@ -11,15 +10,17 @@ export function clearFileInputWrapper(fileInputWrapper) {
     const removeFileBtn = getRemoveFileBtn(fileInputWrapper);
     if (removeFileBtn) removeFileBtn.click();
 }
-function clearFileInput(removeFileBtn, uploadFileBtn) {
-    hide(removeFileBtn);
-    show(uploadFileBtn);
-}
 function getRemoveFileBtn(fileInputWrapper) {
     return fileInputWrapper.querySelector('.remove-file');
 }
 function getUploadFileBtn(fileInputWrapper) {
     return fileInputWrapper.querySelector('.upload-file');
+}
+function getImagePreview(fileInputWrapper) {
+    return fileInputWrapper.querySelector('.image-preview');
+}
+function getDataType(fileInputWrapper) {
+    return fileInputWrapper.dataset.type;
 }
 export function handlerFileInput(fileInputWrapper) {
     const fileInput = fileInputWrapper.querySelector('input[type="file"]');
@@ -32,9 +33,11 @@ export function handlerFileInput(fileInputWrapper) {
     const uploadFileBtn = getUploadFileBtn(fileInputWrapper);
 
     const clearFile = () => {
-        clearFileInput(removeFileBtn, uploadFileBtn);
+        fileInput.value = null;
+        hide(removeFileBtn);
+        show(uploadFileBtn);
     }
-    let cropper = null;
+    const type = getDataType(fileInputWrapper);
     fileInput.addEventListener('change', () => {
         if (fileInput.files.length > 0) {
             show(removeFileBtn);
@@ -50,26 +53,41 @@ export function handlerFileInput(fileInputWrapper) {
                             y.value = result.value.data.y;
                             width.value = result.value.data.width;
                             height.value = result.value.data.height;
-                            const img = fileInputWrapper.querySelector('.image-preview')
+
+                            const img = getImagePreview(fileInputWrapper);
                             img.src = result.value.preview;
+
+                            show(removeFileBtn);
+                            hide(uploadFileBtn);
+                            if (type === 'post') {
+                                show(img);
+                            }
                         }
                         else {
-                            fileInput.value = null;
                             clearFile();
+                            if (type === 'post') {
+                                hide(img);
+                            }
                         }
                     }
                 );
             };
             reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            clearFile();
+        } else {    // no files in input
+            if (type === 'post') {
+                hide(getImagePreview(fileInputWrapper));
+            }
+            hide(removeFileBtn);
+            show(uploadFileBtn);
         }
     });
     if (removeFileBtn) {
         removeFileBtn.addEventListener('click', (event) => {
             event.preventDefault();
-            fileInput.value = null;
             clearFile();
+            if (type == 'post') {
+                hide(getImagePreview(fileInputWrapper));
+            }
         });
     }
     if (uploadFileBtn) {
@@ -78,29 +96,16 @@ export function handlerFileInput(fileInputWrapper) {
             fileInput.click();
         });
     }
-    // cropButton.addEventListener('click', (event) => {
-    //     event.preventDefault();
-    //     if (cropper) {
-    //         const canvas = cropper.getData(true);
-    //         x.value = canvas.x;
-    //         y.value = canvas.y;
-    //         width.value = canvas.width;
-    //         height.value = canvas.height;
-            
-    //         hide(cropperContainer);
-    //         hide(cropButton);
-    //     }
-    // });
 }
 
 
 async function showCropSwal(imageSrc) {
     let cropper = null;
-    const res = await Swal.fire({
+    return await Swal.fire({
         title: 'Crop your image',
         html: `
         <div class="flex justify-center">
-            <img id="preview" class="" src="${imageSrc}">
+            <img id="preview" src="${imageSrc}">
         </div>
         <div>
             <img id="cropperjs" src="${imageSrc}">
@@ -124,21 +129,16 @@ async function showCropSwal(imageSrc) {
             });
         },
         preConfirm: () => {
-            console.log(cropper.getData(true));
-            // return cropper.getData(true);
             return {
                 data: cropper.getData(true),
                 preview: (Swal.getPopup().querySelector('#preview')).src,
             };
-            // return (Swal.getPopup().querySelector('#preview')).src
         },
         showCancelButton: true,
         showConfirmButton: true,
         confirmButtonText: 'Crop',
-        // confirmButtonColor: '#ff0000',
+        // confirmButtonColor: '#ff0000',   // TODO: change color
         cancelButtonText: 'Cancel',
         // cancelButtonColor: '#aaa',
     });
-    console.log(res);
-    return res;
 }
