@@ -24,16 +24,6 @@ $username = Auth::user()->username ?? "";
                 </div>
             </a>
         </li>
-        @auth
-            <li class="lg:w-full md:flex md:h-12 md:items-center">
-                <div class="block add-post-on">
-                    <div class="flex w-full items-center justify-center">
-                        <i class="fa-solid fa-plus fa-xl"></i>
-                        <p class="hidden lg:block ml-4">Create</p>
-                    </div>
-                </div>
-            </li>
-        @endauth
         <li class="lg:w-full md:flex md:h-12 md:items-center">
             <a href="{{ $authenticated ? route('home') : route('login') }}">
                 <div class="flex w-full items-center justify-center">
