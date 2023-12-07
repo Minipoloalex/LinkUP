@@ -12,11 +12,16 @@ function getFollowingButton() {
 function getFollowRequestsButton() {
     return network.querySelector('#follow-requests-button');
 }
+function getGroupsButton() {
+    return network.querySelector('#groups-button');
+}
+
 if (network) {
     getFollowersButton().addEventListener('click', showFollowers);
     getFollowingButton().addEventListener('click', showFollowing);
     const followRequestsButton = getFollowRequestsButton();
     if (followRequestsButton) followRequestsButton.addEventListener('click', showFollowRequests);
+    getGroupsButton().addEventListener('click', showGroups);
 
     const deleteFollowingButtons = network.querySelectorAll('.delete-following');
     deleteFollowingButtons.forEach(but => but.addEventListener('click', deleteFollowing));
@@ -40,6 +45,9 @@ function getFollowingList(container) {
 function getFollowRequestsList(container) {
     return container.querySelector('#follow-requests-list');
 }
+function getGroupsList() {
+    return network.querySelector('#groups-list');
+}
 function addActiveClass(element) {
     if (element) element.classList.add('active');
 }
@@ -48,30 +56,47 @@ function removeActiveClass(element) {
 }
 function showFollowers(event) {
     event.preventDefault();
-    show(getFollowersList(network));
-    hide(getFollowingList(network));
-    hide(getFollowRequestsList(network));
     addActiveClass(getFollowersButton());
     removeActiveClass(getFollowingButton());
     removeActiveClass(getFollowRequestsButton());
+    removeActiveClass(getGroupsButton());
+    show(getFollowersList(network));
+    hide(getFollowingList(network));
+    hide(getFollowRequestsList(network));
+    hide(getGroupsList());
 }
 function showFollowing(event) {
     event.preventDefault();
-    hide(getFollowersList(network));
-    show(getFollowingList(network));
-    hide(getFollowRequestsList(network));
     removeActiveClass(getFollowersButton());
     addActiveClass(getFollowingButton());
     removeActiveClass(getFollowRequestsButton());
+    removeActiveClass(getGroupsButton());
+    hide(getFollowersList(network));
+    show(getFollowingList(network));
+    hide(getFollowRequestsList(network));
+    hide(getGroupsList());
 }
 function showFollowRequests(event) {
     event.preventDefault();
-    hide(getFollowersList(network));
-    hide(getFollowingList(network));
-    show(getFollowRequestsList(network));
     removeActiveClass(getFollowersButton());
     removeActiveClass(getFollowingButton());
     addActiveClass(getFollowRequestsButton());
+    removeActiveClass(getGroupsButton());
+    hide(getFollowersList(network));
+    hide(getFollowingList(network));
+    show(getFollowRequestsList(network));
+    hide(getGroupsList());
+}
+function showGroups(event) {
+    event.preventDefault();
+    removeActiveClass(getFollowersButton());
+    removeActiveClass(getFollowingButton());
+    removeActiveClass(getFollowRequestsButton());
+    addActiveClass(getGroupsButton());
+    hide(getFollowersList(network));
+    hide(getFollowingList(network));
+    hide(getFollowRequestsList(network));
+    show(getGroupsList());
 }
 
 // 'remove-follower' or 'remove-following' or 'deny-follow-request' or 'accept-follow-request' or 'cancel-follow-request'

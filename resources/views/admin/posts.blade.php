@@ -3,7 +3,7 @@
 @section('content')
 @foreach($posts as $post)
 
-@include('partials.post', ['post' => $post, 'displayComments' => false, 'showEdit' => false])
+@include('partials.post', ['post' => $post, 'displayComments' => false, 'showAddComment' => false, 'showEdit' => false])
 
 @endforeach
 @endsection

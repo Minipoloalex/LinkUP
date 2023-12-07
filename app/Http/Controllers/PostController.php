@@ -29,22 +29,19 @@ class PostController extends Controller
      */
     public function storePost(Request $request)
     {
-        Log::debug("storePost");
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
-        Log::debug("Authenticated, going to validate");
         $request->validate([
             'content' => 'required|max:255',
             // 'id_group' => 'nullable|exists:groups,id',
             'is_private' => 'nullable|boolean',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg',
+            'media' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg|max:10240',
             'x' => 'nullable|int',
             'y' => 'nullable|int',
             'width' => 'nullable|int',
             'height' => 'nullable|int'
         ]);
-        Log::debug("Validated, going to create post");
         $this->authorize('createPost', Post::class);  // user must be logged in
         DB::beginTransaction();
         $post = new Post();
@@ -56,13 +53,11 @@ class PostController extends Controller
         $post->id_created_by = Auth::user()->id;
 
         $post->save();  // get the post id to make file name unique
-        Log::debug("Created new post");
         $createdFile = $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
             $post->created_at = $post->freshTimestamp();
         }
         DB::commit();
-        Log::debug('post: ' . $post->toJson());
 
         $postHTML = $this->translatePostToHTML($post, false, false, false);
         return response()->json(['postHTML' => $postHTML, 'success' => 'Post created successfully!']);
@@ -79,7 +74,7 @@ class PostController extends Controller
         $request->validate([
             'content' => 'required|max:255',
             'id_parent' => 'required|exists:post,id',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg,mp4',
+            'media' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg,mp4|max:10240',
             'x' => 'nullable|int',
             'y' => 'nullable|int',
             'width' => 'nullable|int',
@@ -107,7 +102,7 @@ class PostController extends Controller
         $commentNotification = CommentNotification::where('id_comment', $comment->id)->firstOrFail();
         event(new CommentEvent($commentNotification));
 
-        $commentHTML = $this->translatePostToHTML($comment, true, true, false);
+        $commentHTML = $this->translatePostToHTML($comment, true, true, false, false);
         return response()->json(['commentHTML' => $commentHTML, 'success' => 'Comment created successfully!']);
     }
     /**
@@ -206,7 +201,7 @@ class PostController extends Controller
         $request->validate([
             'content' => 'nullable|string|max:255',
             'is_private' => 'nullable|boolean',
-            'media' => 'nullable|file|mimes:png,jpg,jpeg,gif,svg',
+            'media' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg',
             'x' => 'nullable|int',
             'y' => 'nullable|int',
             'width' => 'nullable|int',
@@ -307,16 +302,11 @@ class PostController extends Controller
      */
     public function getPostsBeforeDate(string $date): JsonResponse
     {
-        Log::debug('user: ' . Auth::user());
-        Log::debug('date: ' . $date);
         $posts = Post::where('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
-        Log::debug('posts: ' . $posts);
 
         $filteredPosts = $posts->filter(function ($post) {
             return policy(Post::class)->view(Auth::user(), $post);
         })->values();
-
-        Log::info('filtered posts: ' . $filteredPosts->toJson());
 
         $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
 
@@ -324,7 +314,7 @@ class PostController extends Controller
 
         return response()->json($postsHTML);
     }
-    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $displayComments = false)
+    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false)
     {
         if ($isComment) {
             return view('partials.comment', ['comment' => $post, 'showEdit' => $showEdit])->render();
@@ -332,6 +322,7 @@ class PostController extends Controller
             return view('partials.post', [
                 'post' => $post,
                 'showEdit' => $showEdit,
+                'showAddComment' => $showAddComment,
                 'displayComments' => $displayComments
             ])->render();
         }
@@ -346,7 +337,7 @@ class PostController extends Controller
     private function translatePostsArrayToHTML(Collection $posts)
     {
         $html = $posts->map(function ($post) {
-            return $this->translatePostToHTML($post, false, false, false);
+            return $this->translatePostToHTML($post, false, false, false, false);
         });
         return $html;
     }
@@ -373,8 +364,6 @@ class PostController extends Controller
             return response()->json(['error' => 'You are not logged in'], 401);
         }
 
-        Log::info("trying to like post");
-
         $post = Post::findOrFail($id);
         $request->validate([
             'like' => 'required|boolean'
@@ -385,23 +374,15 @@ class PostController extends Controller
 
         // Check if the user has already liked the post
         $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
-        Log::info("existing like: $existingLike");
 
         if ($existingLike == null) { // if its null, we can create a new like
-            Log::info("existing like is null");
             $liked = new Liked();
             $liked->id_user = $user->id;
             $liked->id_post = $post->id;
             $liked->save();
-            Log::info("User $user->id liked post $post->id");
-        } else { // if its not null
-            Log::info("existing like is not null");
-            Log::info("User $user->id already liked post $post->id");
+        } else {
+            // User $user->id already liked post $post->id
         }
-
-        //log all users who liked a post
-        $users = Liked::where('id_post', $post->id)->get();
-        Log::info("users who liked post $post->id: $users");
 
         $post->loadCount('likes'); // Load the count of likes for the post
         $likeCount = $post->likes()->count();
@@ -429,10 +410,8 @@ class PostController extends Controller
 
         $post = Post::findOrFail($id);
 
-        // Detach the relationship between the user and the post
         $post->likes()->detach($user->id);
-        Log::info("User $user->id unliked post $post->id");
-        //users who liked a post
+
         $users = Liked::where('id_post', $post->id)->get();
 
         $post->loadCount('likes');
@@ -460,8 +439,6 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         $alreadyLiked = Liked::where('id_user', $user->id)->where('id_post', $post->id)->exists();
-
-        Log::info("User $user->id already liked post $post->id: $alreadyLiked");
 
         return response()->json(['alreadyLiked' => $alreadyLiked]);
     }

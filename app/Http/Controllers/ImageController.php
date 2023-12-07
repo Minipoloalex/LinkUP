@@ -47,7 +47,7 @@ class ImageController extends Controller
         if ($this->existsFile($fileName)) {
             abort(400);
         }
-        if ($x == null || $y == null || $width == null || $height == null) {
+        if ($x === null || $y === null || $width === null || $height === null) {
             $media = Image::make($media)->resize(self::$profilePictureSize, self::$profilePictureSize)
                 ->encode('jpg', 75);
         }

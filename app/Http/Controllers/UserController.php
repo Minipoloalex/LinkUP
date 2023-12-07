@@ -62,7 +62,7 @@ class UserController extends Controller
             'bio' => ['nullable', 'string', 'max:255'],
             'faculty' => ['required', 'string', 'max:255'],
             'course' => ['nullable', 'string', 'max:255'],
-            'media' => ['nullable', 'mimes:jpeg,png,jpg,gif,svg', 'max:10240'],
+            'media' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:10240'],
             'x' => ['nullable', 'int'],
             'y' => ['nullable', 'int'],
             'width' => ['nullable', 'int'],
@@ -72,7 +72,7 @@ class UserController extends Controller
         if ($request->has('media') && $request->media != null && $request->file('media')->isValid()) {
             $fileName = $this->imageController->getFileNameWithExtension(str($user->id));
             if ($this->imageController->existsFile($fileName)) {
-                $this->imageController->delete($user);
+                $this->imageController->delete($fileName);
             }
             $this->imageController->store($request->media, $fileName, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         }

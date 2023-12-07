@@ -38,7 +38,7 @@ class Group extends Model
     }
     public function getPicture()    
     {
-        $imageController = new ImageController('users');
+        $imageController = new ImageController('groups');
         $fileName = $imageController->getFileNameWithExtension(str($this->id));
         return $imageController->getFile($fileName);
     }

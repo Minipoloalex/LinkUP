@@ -53,9 +53,9 @@
       <p class="p-1 profile-stat-label font-bold">Following</p>
       <p id="following-number" class="p-1 profile-stat-value text-gray-600">{{ $user->following->count() }}</p>
     </a>
-    <div class="text-center flex flex-row border-gray-400 border-solid">
+    <a href="{{ route('profile.network', $user->username) }}" class="text-center flex flex-row border-gray-400 border-solid">
       <p class="p-1 profile-stat-label font-bold">Groups</p>
       <p class="p-1 profile-stat-value text-gray-600">{{ $user->groups->count() }}</p>
-    </div>
+    </a>
   </div>
 </div>
