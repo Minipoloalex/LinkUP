@@ -549,7 +549,7 @@ class PostController extends Controller
         Log::info('postsForYou: ' . $postsForYou->toJson());
         $filteredPosts = $postsForYou->filter(function ($post) use ($user) {
             return policy(Post::class)->view($user, $post);
-        });
+        })->values();
     
         // Translate posts to the desired HTML format
         $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
@@ -557,30 +557,50 @@ class PostController extends Controller
         return response()->json($postsHTML);
     }
 
-    public function followedUsersPosts()
-{
-    $user = Auth::user();
+    /*public function followingPosts()
+    {
+        $user = Auth::user();
+        $usersFollowing = $user->following->pluck('id');
+        Log::info('usersFollowing: ' . $usersFollowing->toJson());
+        
 
-    // Retrieve IDs of users followed by the authenticated user (both private and public)
-    $usersFollowing = $user->following()->pluck('id');
+    
+        $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
+            ->with('createdBy:id,username')
+            ->withCount('likes')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
 
-    // Retrieve posts from users followed by the authenticated user (both private and public)
-    $postsFromFollowedUsers = Post::whereIn('id_created_by', $usersFollowing)
-        ->with('createdBy:id,username,profile_picture')
-        ->withCount('likes')
-        ->orderByDesc('created_at')
-        ->limit(10)
-        ->get();
+       
+    
+        Log::info('postsFollowing: ' . $postsFollowing->toJson());
+        
+        // Translate posts to the desired HTML format
+        $postsHTML = $this->translatePostsArrayToHTML($postsFollowing);
+        Log::info('postsHTML: ' . $postsHTML->toJson());
+        return response()->json(['postsHTML' => $postsHTML]);
+    }*/
 
-    $filteredPosts = $postsFromFollowedUsers->filter(function ($post) use ($user) {
-        return policy(Post::class)->view($user, $post);
-    });
+    public function followingPosts()
+    {
+        $user = Auth::user();
+        $usersFollowing = $user->following->pluck('id');
+        Log::info('usersFollowing: ' . $usersFollowing->toJson());
+        
+        //get posts from users that are followed by the user
+        $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
+            ->with('createdBy:id,username')
+            ->withCount('likes')
+            ->orderByDesc('created_at')
+            ->limit(10)
+            ->get();
 
-    // Translate posts to the desired HTML format
-    $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
-
-    return response()->json($postsHTML);
-}
+        //Translate posts to the desired HTML format
+        $postsHTML = $this->translatePostsArrayToHTML($postsFollowing);
+        Log::info('postsHTML: ' . $postsHTML->toJson());
+        return response()->json($postsHTML);
+    }
 
     
 

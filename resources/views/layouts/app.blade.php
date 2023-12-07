@@ -44,6 +44,7 @@
     <script type="module" src={{ url('js/settings.js') }}></script>
     <script type="module" src={{ url('js/group/group.js') }}></script>
     <script type="module" src={{ url('js/foryou.js') }}></script>
+    <script type="module" src={{ url('js/following.js') }}></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>

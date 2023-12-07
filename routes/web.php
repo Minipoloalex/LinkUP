@@ -87,9 +87,8 @@ Route::controller(PostController::class)->group(function () {
     Route::delete('/post/{id}/like', 'removeLike'); // remove like
     Route::get('/post/{id}/like', 'likeStatus');  // get like status
 
-    Route::get('/foryou', 'forYouPosts');
-
-
+    Route::get('/foryou', 'forYouPosts'); // get for you posts
+    Route::get('/followingGet', 'followingPosts'); // get following posts
 
 
 });
@@ -150,3 +149,8 @@ Route::get('/contact', function () {
 Route::get('/for-you', function () {
     return view('pages.foryou');
 })->name('for-you');
+
+/* route for following.blade.php */
+Route::get('/following', function () {
+    return view('pages.following');
+})->name('following');
