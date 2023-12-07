@@ -144,8 +144,7 @@ Route::post('follow', [UserController::class, 'requestFollow']);
 
 Route::get('/settings', [UserController::class, 'showSettings'])->name('settings.show');
 Route::post('/settings/update', [UserController::class, 'updateSettings'])->name('settings.update');
-
-
+Route::post('/settings/confirm-password', [UserController::class, 'confirmPassword'])->name('settings.confirmPassword');
 
 Route::get('/search', function(){
     return view('pages.search');
