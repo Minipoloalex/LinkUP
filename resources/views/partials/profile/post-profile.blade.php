@@ -1,5 +1,5 @@
 @php
-    $userCanSeePosts =  ($user->id === Auth::user()->id || Auth::user()->isFollowing($user)) || $user->is_private === false;
+    $userCanSeePosts = $user->is_private === false || (Auth::check() && ($user->id === Auth::user()->id || Auth::user()->isFollowing($user)));
 @endphp
 
 @if($userCanSeePosts)
