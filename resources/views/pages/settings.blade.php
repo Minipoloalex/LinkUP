@@ -28,12 +28,7 @@
                         </label>
 
                         <input id="username" type="text" class="form-input w-full focus:outline-none" name="username" value="{{ $user->username }}" required autocomplete="username" autofocus>
-
-                        @error('username')
-                        <p class="text-red-500 text-xs italic mt-4">
-                            {{ $message }}
-                        </p>
-                        @enderror
+                        
                     </div>
 
                     <div class="flex flex-wrap mb-6">
@@ -42,12 +37,6 @@
                         </label>
 
                         <input id="email" type="email" class="form-input w-full focus:outline-none" name="email" value="{{ $user->email }}" required autocomplete="email">
-
-                        @error('email')
-                        <p class="text-red-500 text-xs italic mt-4">
-                            {{ $message }}
-                        </p>
-                        @enderror
                     </div>
 
                     <div class="flex flex-wrap mb-6">
@@ -56,12 +45,6 @@
                         </label>
 
                         <input id="password" type="password" class="form-input w-full focus:outline-none" name="password" autocomplete="password">
-
-                        @error('new_password')
-                        <p class="text-red-500 text-xs italic mt-4">
-                            {{ $message }}
-                        </p>
-                        @enderror
 
                         <p class="text-gray-600 text-xs italic mt-4">
                             Leave blank to keep your current password.
@@ -112,12 +95,6 @@
 
                         <input id="name" type="text" class="form-input w-full focus:outline-none" name="name" value="{{ $user->name }}" required autocomplete="name" autofocus>
 
-                        @error('name')
-                        <p class="text-red-500 text-xs italic mt-4">
-                            {{ $message }}
-                        </p>
-                        @enderror
-
                         <p class="text-gray-600 text-xs italic mt-4">
                             Your name will be displayed on your profile.
                         </p>
@@ -144,13 +121,6 @@
                             <option value="fpceup" @if ($user->faculty == 'fpceup') selected @endif>FPCEUP</option>
                             <option value="icbas" @if ($user->faculty == 'icbas') selected @endif>ICBAS</option>
                         </select>
-
-                        @error('faculty')
-                        <p class="text-red-500 text-xs
-                        italic mt-4">
-                            {{ $message }}
-                        </p>
-                        @enderror
                     </div>
 
                     <div class="flex flex-wrap mb-6"> 
@@ -159,12 +129,6 @@
                         </label>
 
                         <input id="course" type="text" class="form-input w-full" name="course" value="{{ $user->course }}" autocomplete="course">
-
-                        @error('course')
-                        <p class="text-red-500 text-xs italic mt-4">
-                            {{ $message }}
-                        </p>
-                        @enderror
                     </div>
 
                     <div class="flex flex-wrap mb-6">
@@ -173,12 +137,6 @@
                         </label>
 
                         <textarea id="bio" class="form-input w-full resize-none h-16 border-none focus:outline-none" name="bio" autocomplete="bio">{{ $user->bio }}</textarea>
-
-                        @error('bio')
-                        <p class="text-red-500 text-xs italic mt-4">
-                            {{ $message }}
-                        </p>
-                        @enderror
 
                         <p class="text-gray-600 text-xs italic mt-4">
                             Let fellow students know a little about you.
@@ -205,12 +163,6 @@
                             onclick="document.getElementById('media').click()">
                                 Edit
                             </button>
-
-                            @error('media')
-                            <p class="text-red-500 text-xs italic mt-4">
-                                {{ $message }}
-                            </p>
-                            @enderror
                         </div>
                     </div>
                     
@@ -221,10 +173,20 @@
             </div>
         </div>
     </div>
-    
+
     @if (session('success'))
-        <div id="success-message" class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded relative mt-3" role="alert">
-            <span class="block sm:inline">{{ session('success') }}</span>   
+        <div class="w-full max-w-md border-2 border-green-500 mt-6 rounded shadow-md">
+            <div class="flex items-center bg-green-500 text-white text-sm px-4 py-3" role="alert">
+                <i class="fas fa-check-circle fa-fw mr-3"></i>
+                <p>{{ session('success') }}</p>
+            </div>
+        </div>
+    @elseif ($errors->any())
+        <div class="w-full max-w-md border-2 border-red-500 mt-6 rounded shadow-md">
+            <div class="flex items-center bg-red-500 text-white text-sm px-4 py-3" role="alert">
+                <i class="fas fa-exclamation-circle fa-fw mr-3"></i>
+                <p>{{ $errors->first() }}</p>
+            </div>
         </div>
     @endif
 

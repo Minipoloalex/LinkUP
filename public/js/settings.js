@@ -4,8 +4,6 @@ const accountSettingsToggle = document.getElementById('account-settings-toggle')
 const profileSettings = document.getElementById('profile-settings');
 const profileSettingsToggle = document.getElementById('profile-settings-toggle');
 
-const successMessage = document.getElementById('success-message');
-
 const accountSettingsForm = document.getElementById('account-settings-form');
 const accountUpdateButton = document.getElementById('account-update-button');
 
@@ -37,8 +35,6 @@ profileSettingsToggle.addEventListener('click', () => {
     // hide the account settings
     accountSettings.classList.add('hidden');
 
-    // hide the success message shown after updating the account settings
-    successMessage.classList.add('hidden');
 });
 
 // asks for the current password before updating the account settings
@@ -56,7 +52,7 @@ accountUpdateButton.addEventListener('click', (e) => {
         confirmButtonText: 'Update',
         confirmButtonColor: '#3B82F6',
         showLoaderOnConfirm: true,
-
+        
         preConfirm: (password) => {
             return fetch('/settings/confirm-password', {
                 method: 'POST',
