@@ -13,10 +13,9 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 @extends('layouts.app')
 @section('title', 'Group')
 
-@include('partials.side.navbar')
-
 
 @section('content')
+@include('partials.side.navbar')
 <main id="group-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-screen pt-24
                             md:pl-16
                             lg:px-56">

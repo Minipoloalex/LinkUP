@@ -11,7 +11,7 @@ $editable = $showEdit && $post->isCreatedByCurrentUser();
         @if ($editable)
         <div class="edit-delete-post">
             <a href="#" class="edit edit-post">&#9998;</a>
-            <a href="{{ url('home') }}" class="delete delete-post">&#10761;</a>
+            <a href="{{ url('/home') }}" class="delete delete-post">&#10761;</a>
         </div>
         @endif
     </header>
@@ -27,15 +27,15 @@ $editable = $showEdit && $post->isCreatedByCurrentUser();
             @include('partials.post_image', ['post' => $post, 'editable' => $editable])
         @endif
     </div>
+    @php
+        $isLiked = $post->likedByUser();
+        $color = $isLiked ? 'red' : 'black';
+    @endphp
     <div class="post-footer">
         <h3 class="post-likes">
             <button class="like-button mr-1" data-id="{{ $post->id }}"
-                data-liked="{{ $post->liked ? 'true' : 'false' }}">
-                @if($post->liked)
-                &#128148;
-                @else
-                &#10084;
-                @endif
+                data-liked="{{ $isLiked ? 'true' : 'false' }}"> 
+                <i class="fas fa-heart red {{ $color }}"></i>
             </button>
 
             <span class="likes">{{ count($post->likes) }}</span>
