@@ -41,7 +41,7 @@ Route::middleware('web')->group(function () {
     )->name('groups.search');
 
     Route::get(     // define a route for /posts which accepts a GET request with a DATE parameter
-        '/posts/{date}',
-        [PostController::class, 'getPostsBeforeDate']
+        '/posts/timeline',
+        [PostController::class, 'getPostsPublicTimeline']
     )->name('posts.beforeDate');
 });

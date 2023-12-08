@@ -21,7 +21,7 @@
                             lg:px-56">
     <section class="flex overflow-clip overflow-y-auto scrollbar-hide" id="content">
         
-        <section id="timeline" class="flex flex-col w-screen max-h-min overflow-clip">
+        <section id="timeline" class="flex flex-col w-screen max-h-min overflow-clip" data-page="0">
             <!-- Javascript will render posts here -->
             <div id="fetcher"></div>
         </section>

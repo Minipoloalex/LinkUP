@@ -292,23 +292,30 @@ class PostController extends Controller
         $fileName = $this->imageController->getFileNameWithExtension(str($postId));
         $this->imageController->delete($fileName);
     }
+    public function filterPostsSQL($posts) {
+        if (!Auth::check()) {
+            return $posts->where('is_private', false);
+        }
+        return $posts->where('is_private', false)->orWhere('id_created_by', Auth::user()->id)->orWhereIn('id_created_by', Auth::user()->following()->pluck('id'));
+    }
     /**
      * Get all posts created before a given date.
-     * @param string $date
+     * @param Request $request must contain a 'page' int parameter
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function getPostsBeforeDate(string $date): JsonResponse
+    public function getPostsPublicTimeline(Request $request): JsonResponse
     {
-        $posts = Post::where('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
+        $amount = 10;
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        $page = $request->input('page');
+        $posts = Post::where('id_parent', null);
+        $posts = $this->filterPostsSQL($posts)->orderBy('created_at', 'desc')->skip($page * $amount)->take($amount)->get();
 
-        $filteredPosts = $posts->filter(function ($post) {
-            return policy(Post::class)->view(Auth::user(), $post);
-        })->values();
+        $postsHTML = $this->translatePostsArrayToHTML($posts);
 
-        $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
-
-        return response()->json($postsHTML);
+        return response()->json(['resultsHTML' => $postsHTML]);
     }
     private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false)
     {

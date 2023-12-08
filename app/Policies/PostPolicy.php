@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PostPolicy
-{  
+{
     /**
      * Determine whether the user can view the model.
      */
@@ -24,9 +24,8 @@ class PostPolicy
         }*/
         
         // Check if the user is following the creator of the post
-        return $user->isFollowing($post->createdBy) || $post->is_private === false || $user->id === $post->id_created_by;
+        return $post->is_private === false || $user->id === $post->id_created_by || $user->isFollowing($post->createdBy);
     }
-
     /**
      * Determine whether the user can create posts.
      */
