@@ -18,6 +18,7 @@ use \App\Events\CommentEvent;
 class PostController extends Controller
 {
     private ImageController $imageController;
+    private static int $amountPerPage = 10;
     public function __construct()
     {
         $this->imageController = new ImageController('posts');
@@ -118,16 +119,14 @@ class PostController extends Controller
             'post' => $post
         ]);
     }
-    public function getSearchResults(string $search)
+    /**
+     * Returns a query builder with the posts from the given list that are the result of the search query (FTS).
+     * Checks if the user can view them.
+     */
+    public function getSearchResults($posts, string $search, string $type)
     {
-        $posts = Post::search($search);
-        $filteredPosts = $posts->filter(function ($post) {
-            return policy(Post::class)->view(Auth::user(), $post);
-        });
-        $filteredPosts->each(function ($post) {
-            $post->load('createdBy', 'comments', 'likes');
-        });
-        return $filteredPosts;
+        $posts = $this->filterCanView($posts);
+        return Post::search($posts, $search);
     }
     public function searchPosts(Request $request)
     {
@@ -143,11 +142,22 @@ class PostController extends Controller
     public function search(Request $request, string $type)
     {
         $request->validate([
-            'query' => 'required|string|max:255'
+            'query' => 'required|string|max:255',
+            'page' => 'required|int'
         ]);
-        $posts = $this->getSearchResults($request->input('query'));
-        $filtered = $this->filterByType($posts, $type);
-        if ($filtered->isEmpty()) {
+        $page = $request->input('page');
+        
+        // TODO: remove this line
+
+        $posts = $this->filterByType($type);
+        $posts = $this->getSearchResults($posts, $request->input('query'), $type);
+        $posts = $posts->skip($page * self::$amountPerPage)->limit(10);
+        Log::debug($posts->toSQL());
+        $posts = $posts->get();
+
+        // $posts = $posts->slice($page * self::$amountPerPage, self::$amountPerPage)->get();
+        Log::debug("page: $page, posts: $posts");
+        if ($posts->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
                 'noResultsHTML' => $noResultsHTML,
@@ -155,30 +165,37 @@ class PostController extends Controller
                 'resultsHTML' => []
             ]);
         }
-        $resultsHTML = $this->translatePostsArrayToHTML($filtered);
+        $resultsHTML = $this->translatePostsArrayToHTML($posts);
         return response()->json(['resultsHTML' => $resultsHTML, 'success' => 'Search results retrieved']);
     }
-    private function filterByType($allPosts, string $type)
+    private function filterByType(string $type)
     {
         if ($type == 'comments') {
-            $comments = $allPosts->filter(function ($post) {
-                // has parent post and not created by authenticated user
-                return $post->id_parent !== null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
-            })->values();
-            return $comments;
+            return Post::whereNotNull('id_parent');
         } else {
-            $posts = $allPosts->filter(function ($post) {
-                // no parent post and not created by authenticated user
-                return $post->id_parent === null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
-            })->values();
-            return $posts;
+            return Post::whereNull('id_parent');
         }
+        // if ($type == 'comments') {
+        //     $comments = $allPosts->filter(function ($post) {
+        //         // has parent post and not created by authenticated user
+        //         return $post->id_parent !== null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
+        //     })->values();
+        //     return $comments;
+        // } else {
+        //     $posts = $allPosts->filter(function ($post) {
+        //         // no parent post and not created by authenticated user
+        //         return $post->id_parent === null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
+        //     })->values();
+        //     return $posts;
+        // }
+
     }
     /**
      * Display the search results page for a given query.
      */
     public function searchResults(Request $request)
     {
+        // TODO: fix this
         $request->validate([
             'query' => 'required|max:255'
         ]);
@@ -292,11 +309,17 @@ class PostController extends Controller
         $fileName = $this->imageController->getFileNameWithExtension(str($postId));
         $this->imageController->delete($fileName);
     }
-    public function filterPostsSQL($posts) {
+    /**
+     * Returns a query builder with the posts that can be seen by the current user.
+     * Supports non authenticated users.
+     */
+    public function filterCanView($posts) {
         if (!Auth::check()) {
             return $posts->where('is_private', false);
         }
-        return $posts->where('is_private', false)->orWhere('id_created_by', Auth::user()->id)->orWhereIn('id_created_by', Auth::user()->following()->pluck('id'));
+        return $posts->where(function ($query) {
+            $query->where('is_private', false)->orWhere('id_created_by', Auth::user()->id)->orWhereIn('id_created_by', Auth::user()->following()->pluck('users.id'));
+        });
     }
     /**
      * Get all posts created before a given date.
@@ -305,13 +328,12 @@ class PostController extends Controller
      */
     public function getPostsPublicTimeline(Request $request): JsonResponse
     {
-        $amount = 10;
         $request->validate([
             'page' => 'required|int'
         ]);
         $page = $request->input('page');
         $posts = Post::where('id_parent', null);
-        $posts = $this->filterPostsSQL($posts)->orderBy('created_at', 'desc')->skip($page * $amount)->take($amount)->get();
+        $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
 
         $postsHTML = $this->translatePostsArrayToHTML($posts);
 

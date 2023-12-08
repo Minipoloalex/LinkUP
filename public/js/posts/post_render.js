@@ -1,14 +1,26 @@
 import { parseHTML } from '../general_helpers.js';
 import { infiniteScroll } from '../infinite_scroll.js';
 
-
+const timeline = document.querySelector('#timeline');
 export function prependPostsToTimeline(postsHTML) {
-  const timeline = document.querySelector('#timeline')
-
-  for (const postHTML of postsHTML) {
-    const postElement = parseHTML(postHTML);
-    timeline.insertBefore(postElement, timeline.firstChild);
+  if (timeline) {
+    for (const postHTML of postsHTML) {
+      const postElement = parseHTML(postHTML);
+      timeline.insertBefore(postElement, timeline.firstChild);
+    }
+  }
+}
+function appendPostsToTimeline(postsHTML) {
+  if (timeline) {
+    for (const postHTML of postsHTML) {
+      const postElement = parseHTML(postHTML);
+      timeline.insertBefore(postElement, timeline.lastElementChild);
+    }
   }
 }
 
-infiniteScroll(document.querySelector('#timeline'), '/api/posts/timeline');
+if (timeline) {
+  const testIntersectionElement = timeline.querySelector('#fetcher');
+  const action = (data) => appendPostsToTimeline(data.resultsHTML);
+  infiniteScroll(timeline, testIntersectionElement, '/api/posts/timeline', action, action);
+}

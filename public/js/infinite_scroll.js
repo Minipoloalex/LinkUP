@@ -1,35 +1,44 @@
 import { encodeForAjax } from './ajax.js';
 import { parseHTML } from './general_helpers.js';
 
-async function fetchAndLoad(container, url) {
+async function fetchAndLoad(container, url, data, action) {
   const page = container.dataset.page;
-  console.log(encodeForAjax({page: page}));
-
-  const response = await fetch(url + `?page=${page}`, {
+  data.page = page;
+  console.log(data);
+  console.log(encodeForAjax(data));
+  const response = await fetch(url + `?${encodeForAjax(data)}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
   });
-  const data = await response.json();
-  console.log(data);
-  for (const postHTML of data.resultsHTML) {
-    const postElement = parseHTML(postHTML);
-    container.insertBefore(postElement, container.lastElementChild);
-  }
+  const result = await response.json();
+  console.log(result);
+  action(result);
+  
   container.dataset.page = parseInt(page) + 1;
 }
-async function createFetcher(container, url) {
-  await fetchAndLoad(container, url);   // initial loading
 
-  const observer = new IntersectionObserver(async (entries) => {
+let observer = null;
+async function createFetcher(container, testIntersectionElement, url, firstAction, action, data) {
+  await fetchAndLoad(container, url, data, firstAction);   // initial loading
+
+  observer = new IntersectionObserver(async (entries) => {
     if (entries[0].isIntersecting) {
-      await fetchAndLoad(container, url);
+      await fetchAndLoad(container, url, data, action);
     }
   });
-  observer.observe(fetcher);
+  observer.observe(testIntersectionElement);
 }
 
-export async function infiniteScroll(container, url) {
-  createFetcher(container, url);
+export async function infiniteScroll(container, testIntersectionElement, url, firstAction, action, data = {}) {
+  container.dataset.page = 0;
+  destroyFetcher();
+  createFetcher(container, testIntersectionElement, url, firstAction, action, data);
+}
+
+export function destroyFetcher() {
+  if (observer) {
+    observer.disconnect(); // Disconnect the observer if it exists
+  }
 }

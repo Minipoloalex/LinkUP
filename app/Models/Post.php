@@ -60,11 +60,13 @@ class Post extends Model
         // Check if the current authenticated user is the creator of the post
         return Auth::check() && $this->id_created_by === Auth::user()->id;
     }
-    public static function search(string $search)
+    /**
+     * Returns a query builder with the posts that were searched by the given string (Full-text search).
+     */
+    public static function search($postsToSearch, string $search)
     {
-        return Post::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
-            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
-            ->get();
+        return $postsToSearch->whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
+            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search]);
     }
     // public function group()
     // {
