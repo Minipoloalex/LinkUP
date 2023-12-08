@@ -103,6 +103,10 @@ Route::controller(PostController::class)->group(function () {
     Route::delete('/post/{id}/like', 'removeLike'); // remove like
     Route::get('/post/{id}/like', 'likeStatus');  // get like status
 
+    Route::get('/foryou', 'forYouPosts'); // get for you posts
+    Route::get('/followingGet', 'followingPosts'); // get following posts
+
+
 });
 
 // Groups
@@ -156,3 +160,13 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
+
+/* route for for-you.blade.php */
+Route::get('/for-you', function () {
+    return view('pages.foryou');
+})->name('for-you');
+
+/* route for following.blade.php */
+Route::get('/following', function () {
+    return view('pages.following');
+})->name('following');

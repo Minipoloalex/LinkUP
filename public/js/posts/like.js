@@ -1,7 +1,7 @@
 import { getCsrfToken } from '../ajax.js';
 
 // Function to initialize the like button state based on whether the user has liked the post
-async function initializeLikeButton(postId, likeButton) {
+export async function initializeLikeButton(postId, likeButton) {
     if(isAuthenticated === true){
         try {
             const alreadyLiked = await checkLikedStatus(postId);

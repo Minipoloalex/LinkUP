@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::middleware('web')->group(function () {
     Route::get(
         '/posts/search',        // query parameter
@@ -49,4 +50,10 @@ Route::middleware('web')->group(function () {
         '/posts/timeline',
         [PostController::class, 'getPostsPublicTimeline']
     )->name('posts.beforeDate');
+
+    
+
+
 });
+
+
