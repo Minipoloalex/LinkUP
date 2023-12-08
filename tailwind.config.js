@@ -8,15 +8,41 @@ export default {
   ],
   theme: {
     extend: {},
-    colors: {
-      primary: '#000814',
-      secondary: '#001D3D',
-      accent: '#003566',
-      white: '#FFFFFF',
-      black: '#000000',
-      transparent: 'transparent',
-      ...defaultTheme.colors
-    }
+    colors: ({ colors }) => ({
+      inherit: colors.inherit,
+      current: colors.current,
+      transparent: colors.transparent,
+      black: colors.black,
+      white: colors.white,
+      slate: colors.slate,
+      gray: colors.gray,
+      zinc: colors.zinc,
+      neutral: colors.neutral,
+      stone: colors.stone,
+      red: colors.red,
+      orange: colors.orange,
+      amber: colors.amber,
+      yellow: colors.yellow,
+      lime: colors.lime,
+      green: colors.green,
+      emerald: colors.emerald,
+      teal: colors.teal,
+      cyan: colors.cyan,
+      sky: colors.sky,
+      blue: colors.blue,
+      indigo: colors.indigo,
+      violet: colors.violet,
+      purple: colors.purple,
+      fuchsia: colors.fuchsia,
+      pink: colors.pink,
+      rose: colors.rose,
+      dark: {
+        primary: '#333333',
+        secondary: '#FFFFF0',
+        active: '#A58AD6',
+        neutral: '#767F82'
+      }
+    })
   },
   plugins: [],
   darkMode: 'class'
