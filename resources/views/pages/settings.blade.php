@@ -202,16 +202,17 @@
                     Upload a profile picture to make your account more recognizable.
                 </p>    
                 
-                <div class="grid grid-cols-2 gap-4 w-full bg-gray-100 rounded-lg p-6">
+                <div class="file-input-wrapper grid grid-cols-2 gap-4 w-full bg-gray-100 rounded-lg p-6">
                     <div class="flex flex-col items-center justify-center">
-                        <img id="profile-picture-preview" class="w-24 h-24 rounded-full" src="{{ route('profile.photo', ['id' => $user->id]) }}" alt="Profile Picture">
+                        <img class="image-preview w-24 h-24 rounded-full" src="{{ route('profile.photo', ['id' => $user->id]) }}" alt="Profile Picture">
                     </div>
 
                     <div class="flex flex-col items-center justify-center">
                         <input type="file" id="media" name="media" accept="image/*" class="hidden">
+                        @include('partials.images_crop_input')
                         <button id="media-button" type="button" class="border border-gray-400 hover:border-gray-500 bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         onclick="document.getElementById('media').click()">
-                            Upload 
+                            Edit
                         </button>
 
                         @error('media')

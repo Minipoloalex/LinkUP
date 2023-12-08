@@ -110,6 +110,13 @@ CREATE TABLE tag_notification (
     UNIQUE (id_user, id_post)
 );
 
+CREATE TABLE password_reset_tokens (
+    id SERIAL PRIMARY KEY,
+    token VARCHAR(200) UNIQUE NOT NULL,
+    email VARCHAR(200) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_DATE NOT NULL
+);
+
 ------------------------------------------------
 ------------- Performance indices --------------
 ------------------------------------------------

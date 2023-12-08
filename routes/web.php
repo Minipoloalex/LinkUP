@@ -10,6 +10,8 @@ use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminLoginController;
@@ -44,6 +46,20 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
+});
+
+
+// Password recovery
+Route::group(['middleware' => 'guest'], function () {
+    Route::controller(ForgotPasswordController::class)->group(function () {
+        Route::get('/forgot-password', 'showLinkRequestForm')->name('password.request');
+        Route::post('/forgot-password', 'sendResetLinkEmail')->name('password.email');
+    });
+
+    Route::controller(ResetPasswordController::class)->group(function () {
+        Route::get('/reset-password/{token}', 'showResetForm')->name('password.reset');
+        Route::post('/reset-password', 'reset')->name('password.update');
+    });
 });
 
 
@@ -87,6 +103,10 @@ Route::controller(PostController::class)->group(function () {
     Route::post('/post/{id}/like', 'addLike'); // add like
     Route::delete('/post/{id}/like', 'removeLike'); // remove like
     Route::get('/post/{id}/like', 'likeStatus');  // get like status
+
+    Route::get('/foryou', 'forYouPosts'); // get for you posts
+    Route::get('/followingGet', 'followingPosts'); // get following posts
+
 
 });
 
@@ -143,3 +163,12 @@ Route::get('/contact', function () {
 })->name('contact');
 
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications')->middleware('auth');
+/* route for for-you.blade.php */
+Route::get('/for-you', function () {
+    return view('pages.foryou');
+})->name('for-you');
+
+/* route for following.blade.php */
+Route::get('/following', function () {
+    return view('pages.following');
+})->name('following');

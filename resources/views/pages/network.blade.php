@@ -19,6 +19,8 @@
                         <button id="follow-requests-button"
                             class="w-full p-2 border-y-2 border-r-2 after:content-['_Requests']">{{ $user->followRequestsReceived->count() }}</button>
                     @endif
+                    <button id="groups-button"
+                        class="w-full p-2 border-y-2 after:content-['_Groups']">{{ $user->groups->count() }}</button>
                 </header>
                 <div id="followers-list" class="flex flex-col gap-2">
                     @forelse ($user->followers as $follower)
@@ -62,6 +64,16 @@
                         @endforelse
                     </div>
                 @endif
+                <div id="groups-list" class="flex flex-col gap-2 hidden">
+                    @forelse ($user->groups as $groupMember)
+                        @include('partials.network.group_card', [
+                            'group' => $groupMember->group,
+                            // 'user' => $user,
+                        ])
+                    @empty
+                        <p class="empty-list">You are not a member of any group</p>
+                    @endforelse
+                </div>
             </section>
         </section>
         @include('partials.side.notifications-tab')

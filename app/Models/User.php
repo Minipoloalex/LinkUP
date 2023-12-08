@@ -13,8 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Auth\CanResetPassword;
 
-class User extends Authenticatable {
+class User extends Authenticatable implements CanResetPassword
+{
     use HasApiTokens, HasFactory, Notifiable;
 
     // Don't add create and update timestamps in database.
@@ -57,44 +59,55 @@ class User extends Authenticatable {
         'password' => 'hashed',
     ];
 
-    public function posts(): HasMany {
+    public function posts(): HasMany
+    {
         return $this->hasMany(Post::class, 'id_created_by');
     }
 
-    public function followers(): BelongsToMany {
+    public function followers(): BelongsToMany
+    {
         return $this->belongsToMany(User::class, 'follows', 'id_followed', 'id_user')->orderBy('username');
     }
 
-    public function following(): BelongsToMany {
+    public function following(): BelongsToMany
+    {
         return $this->belongsToMany(User::class, 'follows', 'id_user', 'id_followed')->orderBy('username');
     }
-    public function isFollowing(User $user): bool {
+    public function isFollowing(User $user): bool
+    {
         return $this->following()->where('id_followed', $user->id)->exists();
     }
 
-    protected function groups(): HasMany {
+    protected function groups(): HasMany
+    {
         return $this->hasMany(GroupMember::class, 'id_user');
     }
 
-    protected function liked(): HasMany {
+    protected function liked(): HasMany
+    {
         return $this->hasMany(Liked::class, 'id_user');
     }
 
-    public function getProfilePicture() {
+    public function getProfilePicture()
+    {
         $imageController = new ImageController('users');
         $fileName = $imageController->getFileNameWithExtension(str($this->id));
         return $imageController->getFile($fileName);
     }
-    public function followRequestsReceived(): HasMany {
+    public function followRequestsReceived(): HasMany
+    {
         return $this->hasMany(FollowRequest::class, 'id_user_to');
     }
-    public function followRequestsSent(): HasMany {
+    public function followRequestsSent(): HasMany
+    {
         return $this->hasMany(FollowRequest::class, 'id_user_from');
     }
-    public function requestedToFollow(User $user): bool {
+    public function requestedToFollow(User $user): bool
+    {
         return $this->followRequestsSent()->where('id_user_to', $user->id)->exists();
     }
-    public static function search(string $search) {
+    public static function search(string $search)
+    {
         return User::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
             ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
             ->get();

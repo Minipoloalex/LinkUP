@@ -13,7 +13,6 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 @extends('layouts.app')
 @include('partials.side.navbar')
 
-
 @section('content')
 <main id="group-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-screen pt-24
                             md:pl-16
@@ -21,8 +20,7 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
     <section class="flex flex-col border border-slate-400 mt-1" id="group-content">
         <div class="flex flex-col items-center justify-center h-56 w-full">
             <div class="flex justify-start items-center w-full pl-12">
-                <img src="{{ $group->getPicture() }}" alt="group photo"
-                    class="w-16 h-16 rounded-full">
+                <img src="{{ $group->getPicture() }}" alt="group photo" class="w-16 h-16 rounded-full">
                 <h1 class="text-2xl font-bold pl-8">{{ $group->name }}</h1>
             </div>
             <div class="flex justify-start items-center w-full pl-36">
@@ -55,7 +53,8 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 
     <section id="posts-section" class="flex flex-col items-center">
         @foreach ($posts as $post)
-        @include('partials.post', ['post' => $post, 'displayComments' => true, 'showEdit' => false])
+        @include('partials.post', ['post' => $post, 'displayComments' => true, 'showAddComment' => false, 'showEdit' =>
+        false])
         @endforeach
     </section>
 

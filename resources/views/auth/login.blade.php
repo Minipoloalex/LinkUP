@@ -34,6 +34,10 @@
             <a class="mt-12 text-sm hover:underline" href="{{ route('register') }}">no account? register here</a>
         </div>
 
+        <div class="flex mt-6 mr-2 content-center justify-center">
+            <a class="mt-2 text-sm hover:underline" href="{{ route('password.request') }}">forgot your password?</a>
+        </div>
+
     </form>
 
     <div class="w-screen h-12 text-sm text-center absolute top-[80%] left-0">
