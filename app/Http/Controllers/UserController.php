@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
     private ImageController $imageController;
+    private static int $amountPerPage = 10;
 
     public function __construct()
     {
@@ -295,14 +296,11 @@ class UserController extends Controller
     public function search(Request $request)
     {
         $request->validate([
-            'query' => 'required|string|max:255'
+            'query' => 'required|string|max:255',
+            'page' => 'required|int'
         ]);
-        $users = User::search($request->input('query'));
-        if (Auth::check()) {
-            $users = $users->filter(function (User $user) {    // remove self from results
-                return $user->id != Auth::user()->id;
-            })->values();
-        }
+        $page = $request->input('page');
+        $users = User::search($request->input('query'))->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         if ($users->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([

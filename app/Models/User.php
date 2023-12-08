@@ -109,7 +109,6 @@ class User extends Authenticatable implements CanResetPassword
     }
     public static function search(string $search) {
         return User::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
-        ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
-        ->get();
+        ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search]);
     }
 }

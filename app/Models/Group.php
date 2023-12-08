@@ -44,7 +44,6 @@ class Group extends Model
     }
     public static function search(string $search) {
         return Group::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
-            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
-            ->get();;
+            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search]);
     }
 }
