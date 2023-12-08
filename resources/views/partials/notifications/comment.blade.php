@@ -7,7 +7,7 @@ $comment_link = route('post.page', ['id' => $comment->id]);
 $parent_post = $comment->parent;
 @endphp
 
-<div class="h-24 flex items-center w-full">
+<div class="h-full flex items-center w-full">
     <div class="h-24 w-24 flex items-center justify-center">
         <a href="{{ $profile_link }}">
             <img src="{{ $pfp }}" alt="avatar" class="w-12 h-12 rounded-full">
@@ -21,4 +21,5 @@ $parent_post = $comment->parent;
             <h2>commented on your post: {{ $comment->content }}</h2>
         </a>
     </div>
+
 </div>

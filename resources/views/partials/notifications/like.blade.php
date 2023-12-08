@@ -6,7 +6,7 @@ $pfp = $liked_by->getProfilePicture();
 $post_link = route('post.page', ['id' => $post->id]);
 @endphp
 
-<div class="h-24 flex items-center w-full">
+<div class="h-full flex items-center w-full">
     <div class="h-24 w-24 flex items-center justify-center">
         <a href="{{ $profile_link }}">
             <img src="{{ $pfp }}" alt="avatar" class="w-12 h-12 rounded-full">

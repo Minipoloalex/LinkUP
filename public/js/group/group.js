@@ -263,12 +263,10 @@ function addResolveMemberRequestEvents () {
 
     accept.addEventListener('click', () => {
       resolveMemberRequest(group, member_id, request, 'accept')
-      console.log(member_id)
     })
 
     reject.addEventListener('click', () => {
       resolveMemberRequest(group, member_id, request, 'reject')
-      console.log(member_id)
     })
   }
 }
