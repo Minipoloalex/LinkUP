@@ -1,5 +1,6 @@
 import { getCsrfToken } from '../ajax.js';
 import { parseHTML } from '../general_helpers.js';
+import { initializeLikeButton } from './like.js';
 
 function appendPostsToTimeline(postsHTML) {
   const timeline = document.querySelector('#timeline');
@@ -15,7 +16,11 @@ export function prependPostsToTimeline(postsHTML) {
   for (const postHTML of postsHTML) {
     const postElement = parseHTML(postHTML);
     timeline.insertBefore(postElement, timeline.firstChild);
+    const postId = postElement.getAttribute('data-id');
+    const likeButton = postElement.querySelector('.like-button');
+    initializeLikeButton(postId, likeButton);
   }
+  
 }
 
 async function fetchPosts(date) {
