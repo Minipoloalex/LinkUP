@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Collection;
 use \App\Events\CommentEvent;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -147,16 +148,11 @@ class PostController extends Controller
         ]);
         $page = $request->input('page');
         
-        // TODO: remove this line
-
         $posts = $this->filterByType($type);
         $posts = $this->getSearchResults($posts, $request->input('query'), $type);
         $posts = $posts->skip($page * self::$amountPerPage)->limit(10);
-        Log::debug($posts->toSQL());
         $posts = $posts->get();
 
-        // $posts = $posts->slice($page * self::$amountPerPage, self::$amountPerPage)->get();
-        Log::debug("page: $page, posts: $posts");
         if ($posts->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
@@ -460,5 +456,26 @@ class PostController extends Controller
         $alreadyLiked = Liked::where('id_user', $user->id)->where('id_post', $post->id)->exists();
 
         return response()->json(['alreadyLiked' => $alreadyLiked]);
+    }
+
+    public function userPosts(int $id, Request $request)
+    {
+        Log::debug("userPosts");
+        Log::debug($request->all());
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        Log::debug("validated");
+        $page = $request->input('page');
+        
+        $toView = User::findOrFail($id);
+        $this->authorize('viewPosts', $toView);
+        $posts = Post::where('id_created_by', $id);
+        $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')
+            ->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        Log::debug("hello");
+        Log::debug($posts);
+        $postsHTML = $this->translatePostsArrayToHTML($posts);
+        return response()->json(['postsHTML' => $postsHTML]);
     }
 }

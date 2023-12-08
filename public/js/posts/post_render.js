@@ -1,5 +1,5 @@
 import { parseHTML } from '../general_helpers.js';
-import { infiniteScroll } from '../infinite_scroll.js';
+import { infiniteScroll } from '../infinite_scrolling.js';
 
 const timeline = document.querySelector('#timeline');
 export function prependPostsToTimeline(postsHTML) {

@@ -35,5 +35,7 @@ profileSettingsToggle.addEventListener('click', () => {
     accountSettings.classList.add('hidden');
 
     // hide the success message shown after updating the account settings
-    successMessage.classList.add('hidden');
+    if (successMessage) {
+        successMessage.classList.add('hidden');
+    }
 });

@@ -1,5 +1,4 @@
 import { encodeForAjax } from './ajax.js';
-import { parseHTML } from './general_helpers.js';
 
 async function fetchAndLoad(container, url, data, action) {
   const page = container.dataset.page;

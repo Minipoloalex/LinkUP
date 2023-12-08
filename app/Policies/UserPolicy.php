@@ -22,4 +22,8 @@ class UserPolicy
     {
         //
     }
+    public function viewPosts(?User $user, User $toView): bool
+    {
+        return $toView->is_private === false || ($user !== null && ($toView->id === $user->id || $user->isFollowing($toView)));
+    }
 }

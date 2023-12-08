@@ -1,7 +1,7 @@
 import { encodeForAjax, sendAjaxRequest } from "./ajax.js";
 import { parseHTML } from "./general_helpers.js";
 import { showFeedback } from "./feedback.js";
-import { destroyFetcher, infiniteScroll } from "./infinite_scroll.js";
+import { destroyFetcher, infiniteScroll } from "./infinite_scrolling.js";
 
 const resultsContainer = document.querySelector('#search-page #results-container');
 if (resultsContainer) {   // only if on the search page

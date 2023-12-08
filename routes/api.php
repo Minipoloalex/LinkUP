@@ -40,6 +40,11 @@ Route::middleware('web')->group(function () {
         [GroupController::class, 'search']
     )->name('groups.search');
 
+    Route::get(
+        '/profile/{id}/posts',  // page query parameter
+        [PostController::class, 'userPosts']
+    )->where('id', '[0-9]+')->name('profile.posts');
+
     Route::get(     // define a route for /posts which accepts a GET request with a DATE parameter
         '/posts/timeline',
         [PostController::class, 'getPostsPublicTimeline']
