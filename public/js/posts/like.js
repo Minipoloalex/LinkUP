@@ -89,7 +89,7 @@ async function checkLikedStatus(postId) {
         }
 
         const data = await response.json();
-        return data.alreadyLiked; 
+        return data.alreadyLiked;
     } catch (error) {
         console.error('Error checking liked status:', error.message);
         throw new Error('Failed to fetch liked status');

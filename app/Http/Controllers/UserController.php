@@ -261,7 +261,10 @@ class UserController extends Controller
         $sentFrom = User::findOrFail($id);
 
         if (!$sentFrom->requestedToFollow($user)) {
-            return response()->json(["error' => 'You do not have a pending follow request from $sentFrom->username!"]);
+            return response()->json(['error' => "You do not have a pending follow request from $sentFrom->username!"]);
+        }
+        if ($sentFrom->isFollowing($user)) {
+            return response()->json(['error' => "$sentFrom->username is already following you!"]);
         }
 
         DB::beginTransaction();
