@@ -114,7 +114,7 @@ async function generalFollowHandler(event, ajax, titleConfirmMessage, confirmMes
             userArticle.remove();
             action(data);
         }
-    }, confirmButtonText);
+    }, null, confirmButtonText);
 }
 async function deleteFollower(event) {
     return await generalFollowHandler(event,
