@@ -4,12 +4,9 @@
 
 select:focus ~ label,
 select:not([value=""]):valid ~ label {
-  @apply transform;
-  @apply -translate-y-6;
-    @apply text-sm;
+  @apply transform -translate-y-6 text-sm;
 }
 
 select:focus ~ label {
-    @apply text-black;
-    @apply left-0;
-  }
+  @apply text-black left-0;
+}

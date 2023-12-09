@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -62,9 +62,10 @@
 </head>
 
 
-<body>
+<body class="dark:bg-dark-primary dark:text-dark-secondary">
     @include('partials.header')
     @yield('content')
+    @include('partials.side.navbar')
 
     @php
     $isHidden = isset($feedbackMessage) ? '' : 'hidden';

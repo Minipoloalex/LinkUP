@@ -1,36 +1,35 @@
 @php
 $editable = $showEdit && $post->isCreatedByCurrentUser();
 @endphp
-<div class="post-info">
-    <header>
-        <div class="user-date">
-            <img class="user-image rounded-full" src="{{ $post->createdBy->getProfilePicture() }}" alt="User photo">
-            <a class="post-info-user" href="/profile/{{ $post->createdBy->username }}">{{ $post->createdBy->username }}</a>
-            <span class="date">{{ $post->created_at }}</span>
-        </div>
+<div class="flex flex-col gap-4 m-1 post-info">
+    <header class="flex items-center justify-start user-date space-x-2">
+        <img class="w-8 h-8 rounded-full ring-1 ring-dark-neutral" src="{{ $post->createdBy->getProfilePicture() }}"
+            alt="User photo">
+        <a class="" href="/profile/{{ $post->createdBy->username }}">
+            {{ $post->createdBy->username }}
+        </a>
+        <!--<span class="date">{{ $post->created_at }}</span>-->
     </header>
-    <div class='post-body'>
-        <a class="post-link" href="/post/{{ $post->id }}">
-            <p class='post-content'>{{ $post->content }}</p>
+    <div class='text-sm'>
+        <a href="/post/{{ $post->id }}">
+            <p>{{ $post->content }}</p>
         </a>
         @if ($post->media() != null)
-            @include('partials.post_image', ['post' => $post, 'editable' => $editable])
+        @include('partials.post_image', ['post' => $post, 'editable' => $editable])
         @endif
     </div>
-    <div class="post-footer">
-        <h3 class="post-likes">
-            <button class="like-button mr-1" data-id="{{ $post->id }}"
-                data-liked="{{ $post->liked ? 'true' : 'false' }}">
+    <div class="flex justify-between">
+        <h3 class="flex">
+            <button class="like-button" data-id="{{ $post->id }}" data-liked="{{ $post->liked ? 'true' : 'false' }}">
                 @if($post->liked)
                 &#128148;
                 @else
                 &#10084;
                 @endif
             </button>
-
-            <span class="likes">{{ count($post->likes) }}</span>
+            <span class="ml-2">{{ count($post->likes) }}</span>
         </h3>
 
-        <span class="nr-comments">{{ $post->comments->count() }}</span>
+        <span class="nr-comments after:content-['_comments']">{{ $post->comments->count() }}</span>
     </div>
 </div>
