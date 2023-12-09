@@ -96,8 +96,6 @@ Route::controller(PostController::class)->group(function () {
 
     Route::put('/post/{id}', 'update');
 
-    Route::get('/search', 'searchResults');
-
     // Like routes
     Route::post('/post/{id}/like', 'addLike'); // add like
     Route::delete('/post/{id}/like', 'removeLike'); // remove like

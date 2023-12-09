@@ -173,35 +173,7 @@ class PostController extends Controller
         } else {
             return Post::whereNull('id_parent');
         }
-        // if ($type == 'comments') {
-        //     $comments = $allPosts->filter(function ($post) {
-        //         // has parent post and not created by authenticated user
-        //         return $post->id_parent !== null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
-        //     })->values();
-        //     return $comments;
-        // } else {
-        //     $posts = $allPosts->filter(function ($post) {
-        //         // no parent post and not created by authenticated user
-        //         return $post->id_parent === null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
-        //     })->values();
-        //     return $posts;
-        // }
-
     }
-    /**
-     * Display the search results page for a given query.
-     */
-    public function searchResults(Request $request)
-    {
-        // TODO: fix this
-        $request->validate([
-            'query' => 'required|max:255'
-        ]);
-        $posts = $this->getSearchResults($request->input('query'));
-
-        return view('pages.search', ['posts' => $posts, 'success' => 'Search results retrieved']);
-    }
-
     /**
      * Update the specified post in storage.
      */
