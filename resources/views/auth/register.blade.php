@@ -1,23 +1,27 @@
 @extends('layouts.auth')
 
 @section('content')
-<main id="login-page" class="w-screen h-screen flex flex-col items-center justify-center bg-white py-24 mx-auto
-                            lg:w-1/2 lg:border-x lg:border-slate-400">
-    <img src="{{ url('images/logo.png') }}" alt="Link up logo" class="self-center w-48 mt-4">
-    <div class="my-4 text-base font-bold text-center italic">
-        <h1>A rede social da UPorto</h1>
-    </div>
-    <form method="POST" action="{{ route('register') }}" class="col-span-2 flex flex-col flex-grow px-12">
+<main id="register-page" class="py-12 px-4 flex flex-col items-center">
+    <form method="POST" action="{{ route('register') }}" class="flex flex-col justify-center w-64 space-y-8">
         {{ csrf_field() }}
 
-        <label for="username" class="pt-4 pb-2">username</label>
-        <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus
-            class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
+        <div class="relative">
+            <input id="username" name="username" type="text" required class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+                placeholder="username" />
+            <label for="username" class="absolute left-0 -top-3.5 text-sm transition-all peer-placeholder-shown:text-base 
+            dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5 
+            dark:peer-focus:text-dark-active peer-focus:text-sm">
+                Username
+            </label>
+        </div>
 
-        <label for="faculty" class="pt-4 pb-2">faculty</label>
-            <select id="faculty" name="faculty" required 
-                class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
-                <option value="none" disabled selected hidden>select your faculty</option>
+        <div class="relative">
+            <select id="faculty" name="faculty" required class="appearance-none peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active">
+                <option value="" disabled selected hidden></option>
                 <option value="faup">FAUP</option>
                 <option value="fbaup">FBAUP</option>
                 <option value="fcup">FCUP</option>
@@ -33,26 +37,55 @@
                 <option value="fpceup">FPCEUP</option>
                 <option value="icbas">ICBAS</option>
             </select>
-
-        <label for="email" class="pt-4 pb-2">email</label>
-        <input id="email" type="email" name="email" value="{{ old('email') }}" required
-            class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
-
-        <label for="password" class="pt-4 pb-2">password</label>
-        <input id="password" type="password" name="password" required
-            class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
-
-        <label for="password-confirm" class="pt-4 pb-2">confirm password</label>
-        <input id="password-confirm" type="password" name="password_confirmation" required
-            class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
-        <div class="flex justify-end content-center">
-            <button type="submit" class="my-2 pt-3 justify-self-end">
-                <img src="{{ url('images/icons/login.png') }}" alt="Login" class="w-6 h-6">
-            </button>
+            <label for="faculty" class="absolute left-0 top-2.5 duration-200 origin-0
+            dark:peer-focus:text-dark-active peer-focus:text-sm">Faculty</label>
         </div>
-        <div class="flex content-center justify-center text-sm">
-            <a class="mt-12 hover:underline" href="{{ route('login') }}">already have an account? login
-                here</a>
+
+        <div class="relative">
+            <input id="email" name="email" type="text" required class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+                placeholder="email" />
+            <label for="email" class="absolute left-0 -top-3.5 text-sm transition-all
+            peer-placeholder-shown:text-base
+            dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5
+            dark:peer-focus:text-dark-active peer-focus:text-sm">
+                Email
+            </label>
+        </div>
+
+        <div class="relative">
+            <input id="password" name="password" type="password" required value="{{ old('login') }}" class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+                placeholder="password" />
+            <label for="password" class="absolute left-0 -top-3.5 text-sm transition-all peer-placeholder-shown:text-base 
+                dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5 
+                dark:peer-focus:text-dark-active peer-focus:text-sm">
+                Password
+            </label>
+        </div>
+
+        <div class="relative">
+            <input id="password-confirm" name="password_confirmation" type="password" required class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+                placeholder="confirm password" />
+            <label for="password-confirm" class="absolute left-0 -top-3.5 text-sm transition-all peer-placeholder-shown:text-base 
+                dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5 
+                dark:peer-focus:text-dark-active peer-focus:text-sm">
+                Confirm password
+            </label>
+        </div>
+
+        <button type=" submit" class="w-full dark:bg-dark-active rounded-xl h-10">
+            Create Account
+        </button>
+
+        <div class="flex flex-col items-end justify-center">
+            <a class="text-sm text-right dark:hover:text-dark-active" href="{{ route('login') }}">
+                already have an account? <br> login here
+            </a>
         </div>
     </form>
 

@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+select:focus ~ label,
+select:not([value=""]):valid ~ label {
+  @apply transform;
+  @apply -translate-y-6;
+    @apply text-sm;
+}
+
+select:focus ~ label {
+    @apply text-black;
+    @apply left-0;
+  }
