@@ -27,5 +27,5 @@ function appendPostsToTimeline(postsHTML) {
 if (timeline) {
   const testIntersectionElement = timeline.querySelector('#fetcher');
   const action = (data) => appendPostsToTimeline(data.resultsHTML);
-  infiniteScroll(timeline, testIntersectionElement, '/api/posts/timeline', action, action);
+  infiniteScroll(timeline, testIntersectionElement, '/api/posts/timeline', action, action, true, true);
 }

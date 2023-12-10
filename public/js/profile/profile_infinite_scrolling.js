@@ -19,7 +19,7 @@ if (container && testIntersectionElement) {   // only if on the profile page
             destroyFetcher();
         }
     }
-    infiniteScroll(container, testIntersectionElement, `/api/profile/${userId}/posts`, firstAction, action);
+    infiniteScroll(container, testIntersectionElement, `/api/profile/${userId}/posts`, firstAction, action, true, true);
 }
 
 function appendPosts(postsHTML) {

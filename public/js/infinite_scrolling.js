@@ -30,14 +30,18 @@ async function createFetcher(container, testIntersectionElement, url, firstActio
   observer.observe(testIntersectionElement);
 }
 
-export async function infiniteScroll(container, testIntersectionElement, url, firstAction, action, data = {}) {
-  container.dataset.page = 0;
-  destroyFetcher();
+export async function infiniteScroll(container, testIntersectionElement, url, firstAction, action, resetPage = true, destroyPreviousFetcher = true, data = {}) {
+  if (resetPage) {
+    container.dataset.page = 0;
+  }
+  if (destroyPreviousFetcher) {
+    destroyFetcher();
+  }
   createFetcher(container, testIntersectionElement, url, firstAction, action, data);
 }
 
 export function destroyFetcher() {
   if (observer) {
-    observer.disconnect(); // Disconnect the observer if it exists
+    observer.disconnect();
   }
 }

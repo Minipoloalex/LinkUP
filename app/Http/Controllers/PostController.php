@@ -6,6 +6,7 @@ use App\Models\CommentNotification;
 use App\Models\Post;
 use App\Models\Liked;
 use App\Models\User;
+use App\Models\GroupMember;
 
 use \App\Events\CommentEvent;
 
@@ -329,10 +330,10 @@ class PostController extends Controller
      * @param Collection $posts
      * @return Collection HTML code to display the posts
      */
-    private function translatePostsArrayToHTML(Collection $posts)
+    private function translatePostsArrayToHTML(Collection $posts, bool $isComment = false, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false)
     {
-        $html = $posts->map(function ($post) {
-            return $this->translatePostToHTML($post, false, false, false, false);
+        $html = $posts->map(function ($post) use ($isComment, $showEdit, $showAddComment, $displayComments) {
+            return $this->translatePostToHTML($post, $isComment, $showEdit, $showAddComment, $displayComments);
         });
         return $html;
     }
@@ -595,6 +596,32 @@ class PostController extends Controller
     }
 
     
+    public function groupPosts(int $id, Request $request)
+    {
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        $page = $request->input('page');
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
+        
+        // Check if current user is a member of the group
+        $user = Auth::user();
+        $is_member = GroupMember::where('id_group', $id)->where('id_user', $user->id)->exists();
+        if (!$is_member) {
+            return response()->json(['error' => 'You are not a member of this group'], 401);
+        }
 
-
+        $posts = Post::where('id_group', $id)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        if ($posts->isEmpty()) {
+            $noPostsHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'noneHTML' => $noPostsHTML,
+                'elementsHTML' => []
+            ]);
+        }
+        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true);
+        return response()->json(['elementsHTML' => $postsHTML]);
+    }
 }

@@ -9,7 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
+use App\Models\GroupMember;
+
 use Illuminate\Support\Facades\Log;
+
 
 class UserController extends Controller
 {
@@ -314,5 +317,41 @@ class UserController extends Controller
         }
         $usersHTML = $this->translateUsersArrayToHTML($users);
         return response()->json(['resultsHTML' => $usersHTML, 'success' => 'Search results retrieved']);
+    }
+
+    public function groupMembers(int $id, Request $request)
+    {
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        $page = $request->input('page');
+
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
+        Log::debug("page $page");
+        $user = Auth::user();
+
+        $is_member = GroupMember::where('id_group', $id)->where('id_user', $user->id)->exists();
+        if (!$is_member) {
+            return response()->json(['error' => 'You are not a member of this group'], 401);
+        }
+
+        $members = GroupMember::where('id_group', $id)->orderBy('id_user')->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
+        Log::debug($members);
+        $users = $members->map(function ($group_member) {
+            return $group_member->user;
+        });
+        Log::debug($users);
+
+        $membersHTML = $this->translateUsersArrayToHTML($users);
+        if ($users->isEmpty()) {
+            $noMembersHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'noneHTML' => $noMembersHTML,
+                'elementsHTML' => []
+            ]);
+        }
+        return response()->json(['elementsHTML' => $membersHTML]);
     }
 }

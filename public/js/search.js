@@ -62,7 +62,7 @@ async function updateSearchResults(event) {
             appendResults(data.resultsHTML);
         }
     }
-    infiniteScroll(resultsContainer, testIntersectionElement, `/api/${type}/search`, firstAction, action, {
+    infiniteScroll(resultsContainer, testIntersectionElement, `/api/${type}/search`, firstAction, action, true, true, {
         query: searchValue
     });
 

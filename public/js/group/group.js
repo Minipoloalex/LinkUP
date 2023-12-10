@@ -1,16 +1,54 @@
 // Path: public/js/group/group.js
+import { parseHTML } from "../general_helpers.js"
+import { infiniteScroll, destroyFetcher } from "../infinite_scrolling.js"
+import { hide, show } from "../general_helpers.js";
+
 const Swal = window.swal
+
+function insertInSection(htmlArray, section, lastElement) {
+  for (const html of htmlArray) {
+    const element = parseHTML(html);
+    section.insertBefore(element, lastElement);
+  }
+}
+
+function addInfiniteScrollingToSection(section, fetcher, url) {
+  const firstAction = (data) => {
+    insertInSection(data.elementsHTML, section, fetcher);
+    if (data.elementsHTML.length == 0) {
+      const none = parseHTML(data.noneHTML);
+      section.insertBefore(none, fetcher);
+      destroyFetcher();
+    }
+  }
+  const action = (data) => {
+    insertInSection(data.elementsHTML, section, fetcher);
+    if (data.elementsHTML.length == 0) {
+      destroyFetcher();
+    }
+  }
+  infiniteScroll(section, fetcher, url, firstAction, action, false, false);
+}
 
 function toggleSections () {
   const posts = document.getElementById('posts')
   const members = document.getElementById('members')
   const requests = document.getElementById('requests')
-
   if (!posts || !members) return
 
   const posts_section = document.getElementById('posts-section')
   const members_section = document.getElementById('members-section')
   const requests_section = document.getElementById('requests-section')
+
+  const posts_fetcher = posts_section.querySelector('#fetcher-posts')
+  const members_fetcher = members_section.querySelector('#fetcher-members')
+
+  const group_element = document.getElementById('group-id')
+  if (!group_element) return
+  const group_id = group_element.getAttribute('value');
+
+  addInfiniteScrollingToSection(posts_section, posts_fetcher, `/api/group/${group_id}/posts`)
+  addInfiniteScrollingToSection(members_section, members_fetcher, `/api/group/${group_id}/members`)
 
   posts.addEventListener('click', () => {
     posts_section.classList.remove('hidden')
@@ -55,7 +93,7 @@ function addRemoveMemberEvents () {
   if (!group_element) return
 
   const group = group_element.value
-  const members = document.querySelectorAll('#members-section > div')
+  const members = document.querySelectorAll('#members-section > .group-member')
   if (!members) return
 
   for (const member of members) {
