@@ -9,7 +9,10 @@
             <h1 class="text-2xl font-bold">Search for users, groups, posts or comments</h1>
             @include('partials.header.search-bar')
         </header>
-        <div id="results-container"></div>
+        <div>
+            <div id="results-container" data-page="0"></div>
+            <div id="fetcher"></div>
+        </div>
     </section>
     @include('partials.search.search_filters_side')
 </main>

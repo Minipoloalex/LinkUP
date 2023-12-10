@@ -1,5 +1,6 @@
 import { sendAjaxRequest } from "./ajax.js";
 import { hide, show } from "./general_helpers.js";
+import { swalConfirmDelete, parseHTML } from "./general_helpers.js";
 
 // JS for network page
 const network = document.querySelector('#network');
@@ -100,25 +101,27 @@ function showGroups(event) {
 }
 
 // 'remove-follower' or 'remove-following' or 'deny-follow-request' or 'accept-follow-request' or 'cancel-follow-request'
-async function generalFollowHandler(event, ajax, confirmMessage, action) {
+async function generalFollowHandler(event, ajax, titleConfirmMessage, confirmMessage, confirmButtonText, action) {
     event.preventDefault();
     const button = event.currentTarget;
     const userId = button.dataset.id;
     const username = button.dataset.username;
 
-    if (confirm(confirmMessage(username))) {
+    swalConfirmDelete(titleConfirmMessage, confirmMessage(username), async () => {
         const data = await ajax(userId);
         if (data != null) {
             const userArticle = button.closest('article');
             userArticle.remove();
             action(data);
         }
-    }
+    }, null, confirmButtonText);
 }
 async function deleteFollower(event) {
     return await generalFollowHandler(event,
         (userId) => sendAjaxRequest('DELETE', `/follow/follower/${userId}`, null),
+        'Delete follower?',
         (username) => `Are you sure you want to delete ${username} from your follower list?`,
+        'Yes, delete.',
         (data) => {
             decrementCount(getFollowersButton());
             handleEmpty(getFollowersList(network), 'You have no followers');
@@ -128,7 +131,9 @@ async function deleteFollower(event) {
 async function deleteFollowing(event) {
     return await generalFollowHandler(event,
         (userId) => sendAjaxRequest('DELETE', `/follow/following/${userId}`, null),
+        'Stop following?',
         (username) => `Are you sure you want to delete ${username} from your following list?`,
+        'Yes, unfollow.',
         (data) => {
             decrementCount(getFollowingButton());
             handleEmpty(getFollowingList(network), 'You are not following anyone');
@@ -139,7 +144,9 @@ async function deleteFollowing(event) {
 async function denyFollowRequestReceived(event) {
     return await generalFollowHandler(event,
         (userId) => sendAjaxRequest('DELETE', `/follow/request/deny/${userId}`, null),
-        (username) => `Are you sure you want to delete ${username}'s follow request?`,
+        'Deny follow request?',
+        (username) => `Are you sure you want to deny ${username}'s follow request?`,
+        'Yes, deny.',
         (data) => {
             decrementCount(getFollowRequestsButton());
             handleEmpty(getFollowRequestsList(network), 'You have received no follow requests');
@@ -149,21 +156,20 @@ async function denyFollowRequestReceived(event) {
 async function acceptFollowRequest(event) {
     return await generalFollowHandler(event,
         (userId) => sendAjaxRequest('PATCH', `/follow/request/accept/${userId}`, null),
+        'Accept follow request?',
         (username) => `Are you sure you want to accept ${username}'s follow request?`,
+        'Yes, accept.',
         (data) => {
             decrementCount(getFollowRequestsButton());
             incrementCount(getFollowersButton());
             handleRemoveEmpty(getFollowersList(network));
 
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data.userHTML, 'text/html'); // parse HTML received from server
-            const userHTML = doc.body.firstElementChild;
+            const userHTML = parseHTML(data.userHTML);
 
             getFollowersList(network).appendChild(userHTML);    // append to the followers list
-
             const deleteFollowerButton = userHTML.querySelector('.delete-follower');
             deleteFollowerButton.addEventListener('click', deleteFollower);
-            
+        
             handleEmpty(getFollowRequestsList(network), 'You have received no follow requests');
         });
 }

@@ -33,22 +33,29 @@ Route::middleware('web')->group(function () {
         [PostController::class, 'searchComments']
     )->name('comment.search');
     Route::get(
-        '/users/search',
+        '/users/search',        // query parameter
         [UserController::class, 'search']
     )->name('users.search');
     Route::get(
-        '/groups/search',
+        '/groups/search',       // query parameter
         [GroupController::class, 'search']
     )->name('groups.search');
 
+    Route::get(
+        '/profile/{id}/posts',  // page query parameter
+        [PostController::class, 'userPosts']
+    )->where('id', '[0-9]+')->name('profile.posts');
+    Route::get(
+        '/group/{id}/posts', // page query parameter
+        [PostController::class, 'groupPosts']
+    )->where('id', '[0-9]+')->name('group.posts');
+    Route::get(
+        '/group/{id}/members', // page query parameter
+        [UserController::class, 'groupMembers']
+    )->where('id', '[0-9]+')->name('group.members');
+
     Route::get(     // define a route for /posts which accepts a GET request with a DATE parameter
-        '/posts/{date}',
-        [PostController::class, 'getPostsBeforeDate']
+        '/posts/timeline',
+        [PostController::class, 'getPostsPublicTimeline']
     )->name('posts.beforeDate');
-
-    
-
-
 });
-
-

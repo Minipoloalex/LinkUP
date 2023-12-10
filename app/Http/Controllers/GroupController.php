@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 
 class GroupController extends Controller
 {
+    private static int $amountPerPage = 10;
     public function show(string $id)
     {
         if (!Auth::check())
@@ -177,8 +178,10 @@ class GroupController extends Controller
     {
         $request->validate([
             'query' => 'required|string|max:255',
+            'page' => 'required|int'
         ]);
-        $groups = Group::search($request->input('query'));
+        $page = $request->input('page');
+        $groups = Group::search($request->input('query'))->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         if ($groups->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([

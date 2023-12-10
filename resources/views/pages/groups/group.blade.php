@@ -13,10 +13,9 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 @extends('layouts.app')
 @section('title', 'Group')
 
-@include('partials.side.navbar')
-
 
 @section('content')
+@include('partials.side.navbar')
 <main id="group-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-screen pt-24
                             md:pl-16
                             lg:px-56">
@@ -55,16 +54,15 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
         @endif
     </div>
 
-    <section id="posts-section" class="flex flex-col items-center">
-        @foreach ($posts as $post)
-        @include('partials.post', ['post' => $post, 'displayComments' => true, 'showAddComment' => false, 'showEdit' => false])
-        @endforeach
+    <section id="posts-section" data-page="0" class="flex flex-col items-center">
+        <div id="fetcher-posts"></div>
     </section>
 
-    <section id="members-section" class="flex flex-col items-center hidden">
-        @foreach ($members as $member)
+    <section id="members-section" data-page="0" class="flex flex-col items-center hidden">
+        {{-- @foreach ($members as $member)
         @include('partials.group.member', ['member' => $member, 'owner' => $user_is_owner, 'user' => $user])
-        @endforeach
+        @endforeach --}}
+        <div id="fetcher-members"></div>
     </section>
 
     @if($user_is_owner)

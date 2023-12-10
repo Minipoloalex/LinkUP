@@ -41,11 +41,12 @@
     <script type="module" src={{ url('js/posts/add_post.js') }}></script>
     <script type="module" src={{ url('js/posts/like.js') }}></script>
     <script type="module" src={{ url('js/search.js') }}></script>
-    <script type="module" src={{ url('js/edit_profile.js') }}></script>
     <script type="module" src={{ url('js/contact.js') }}></script>
     <script type="module" src={{ url('js/notifications.js') }}></script>
     <script type="module" src={{ url('js/settings.js') }}></script>
     <script type="module" src={{ url('js/group/group.js') }}></script>
+    <script type="module" src={{ url('js/infinite_scrolling.js') }}></script>
+    <script type="module" src={{ url('js/profile/profile_infinite_scrolling.js') }}></script>
     <script type="module" src={{ url('js/foryou.js') }}></script>
     <script type="module" src={{ url('js/following.js') }}></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"

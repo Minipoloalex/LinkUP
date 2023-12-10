@@ -1,5 +1,6 @@
 import { getCsrfToken } from './ajax.js';
 import { parseHTML } from './general_helpers.js';
+import { initializeLikeButton } from './posts/like.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   
@@ -11,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(postHTML);
       const postElement = parseHTML(postHTML);
       timeline.insertBefore(postElement, timeline.lastElementChild);
+      const postId = postElement.getAttribute('data-id');
+        const likeButton = postElement.querySelector('.like-button');
+        initializeLikeButton(postId, likeButton);
     }
   }  
 

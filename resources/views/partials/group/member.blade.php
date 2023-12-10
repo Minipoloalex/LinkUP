@@ -1,5 +1,5 @@
 @php $request ??= false; @endphp
-<div class="flex w-full items-center justify-between p-8 border border-slate-400">
+<div class="group-member flex w-full items-center justify-between p-8 border border-slate-400">
     <a href="{{ url('profile/' . $member->username) }}">
         <div class="flex items-center justify-start">
             <img src="{{ $member->getProfilePicture() }}" alt="user photo"
