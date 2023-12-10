@@ -2,7 +2,7 @@
   @auth
     @if (Auth::user()->id == $user->id)
       <div id="edit-profile" class="flex flex-row-reverse m-4">
-        <a href="{{ route('settings.show', ['from' => 'profile']) }}" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1">
+        <a href="{{ route('profile.edit') }}" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1">
           <i class="fa-solid fa-pen-to-square"></i>
         </a>
       </div>

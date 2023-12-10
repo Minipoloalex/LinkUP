@@ -127,8 +127,10 @@ Route::controller(GroupController::class)->group(function () {
 })->middleware('auth');
 
 // profile page
+Route::get('profile/edit', [UserController::class, 'showEditProfile'])->name('profile.edit');
+Route::post('profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+
 Route::get('/profile/{username}', [UserController::class, 'showProfile'])->name('profile.show');
-Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
 Route::get('profile/photo/{id}', [UserController::class, 'viewProfilePicture'])->name('profile.photo');
 
 Route::get('network/{username}', [UserController::class, 'showNetwork'])->name('profile.network');
@@ -142,8 +144,7 @@ Route::post('follow', [UserController::class, 'requestFollow']);
 
 Route::get('/settings', [UserController::class, 'showSettings'])->name('settings.show');
 Route::post('/settings/update', [UserController::class, 'updateSettings'])->name('settings.update');
-
-
+Route::post('/settings/confirm-password', [UserController::class, 'confirmPassword'])->name('settings.confirmPassword');
 
 Route::get('/search', function(){
     return view('pages.search');

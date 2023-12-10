@@ -38,16 +38,29 @@ class UserController extends Controller
     }
 
     /**
+     * Show the user's edit profile page.
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function showEditProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('pages.edit_profile', ['user' => $user]);
+    }
+
+    /**
      * Show the user's settings.
      * 
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function showSettings(Request $request)
     {
         $user = Auth::user();
 
-        $activeSection = $request->from ?? 'account'; // default to account section
-
-        return view('pages.settings', ['user' => $user, 'activeSection' => $activeSection]);
+        return view('pages.settings', ['user' => $user]);
     }
 
     /**
@@ -107,14 +120,9 @@ class UserController extends Controller
         $request->validate([
             'username' => ['required', 'string', 'max:15', 'unique:users,username,' . $user->id],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'new_password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'privacy' => ['required', 'string', 'in:public,private'],
-            'current_password' => ['required', 'string'],
         ]);
-
-        if (!password_verify($request->current_password, $user->password)) {
-            return redirect()->back()->withErrors(['current_password' => 'The given password is incorrect.']);
-        }
 
         $user->update([
             'username' => $request->username,
@@ -122,13 +130,36 @@ class UserController extends Controller
             'is_private' => $request->privacy === 'private',
         ]);
 
-        if ($request->new_password) {
+        if ($request->password) {
             $user->update([
-                'password' => bcrypt($request->new_password),
+                'password' => bcrypt($request->password),
             ]);
         }
 
-        return redirect()->route('settings.show', ['from' => 'account'])->with('success', 'Settings updated successfully!');
+        return redirect()->route('settings.show')->with('success', 'Settings updated successfully!');
+    }
+
+    /**
+     * Confirm the user's password.
+     * 
+     * @param Request $request 
+     * @return \Illuminate\Http\RedirectResponse 
+     */
+    public function confirmPassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
+        $user = Auth::user();
+
+        Log::info($request->password);
+
+        if (!password_verify($request->password, $user->password)) {
+            return response()->json(['error' => 'The provided password does not match our records.'], 403);
+        }
+            
+        return response()->json(['success' => 'Password verified'], 200);
     }
 
     public function viewProfilePicture(string $id)
