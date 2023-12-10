@@ -23,4 +23,9 @@ class GroupMember extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public static function isMember($user, int $group_id) : bool
+    {
+        return GroupMember::where('id_group', $group_id)->where('id_user', $user->id)->exists();
+    }
 }

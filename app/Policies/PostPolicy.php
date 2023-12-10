@@ -4,6 +4,8 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\GroupMember;
+
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -44,6 +46,9 @@ class PostPolicy
         // return Auth::check() && ($post->is_private === false || $user->id === $post->id_created_by);
 
         // not yet implemented
+        if ($post->id_group !== null) {
+            return GroupMember::isMember($user, $post->id_group);
+        }
         return true;
     }
 

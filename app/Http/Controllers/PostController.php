@@ -46,7 +46,14 @@ class PostController extends Controller
             'height' => 'nullable|int'
         ]);
         $this->authorize('createPost', Post::class);  // user must be logged in
-        DB::beginTransaction();
+        
+        $user = Auth::user();
+        $group_id = $request->input('id_group');
+
+        if ($group_id !== null && !GroupMember::isMember($user, $group_id)) {
+            return response()->json(['error' => 'You are not a member of this group'], );
+        }
+        
         $post = new Post();
 
         $post->content = $request->input('content');
@@ -54,14 +61,13 @@ class PostController extends Controller
             $post->is_private = $request->input('is_private');
         }
         $post->id_created_by = Auth::user()->id;
-        $post->id_group = $request->input('id_group');
+        $post->id_group = $group_id;
 
         $post->save();  // get the post id to make file name unique
         $createdFile = $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
             $post->created_at = $post->freshTimestamp();
         }
-        DB::commit();
 
         $postHTML = $this->translatePostToHTML($post, false, false, false);
         return response()->json(['postHTML' => $postHTML, 'success' => 'Post created successfully!']);
@@ -372,7 +378,7 @@ class PostController extends Controller
         // Check if the user has already liked the post
         $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
 
-        if ($existingLike == null) { // if its null, we can create a new like
+        if ($existingLike === null) { // if its null, we can create a new like
             $liked = new Liked();
             $liked->id_user = $user->id;
             $liked->id_post = $post->id;
