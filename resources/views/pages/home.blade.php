@@ -9,7 +9,7 @@
 
         <section id="timeline" class="flex flex-col w-screen max-h-min overflow-clip">
             <!-- Javascript will render posts here -->
-            <div id="fetcher"></div>
+            <div id="fetcher" class="h-16"></div>
         </section>
     </section>
     <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black z-10" style="opacity: 0.8;"></div>

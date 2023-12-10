@@ -1,17 +1,17 @@
 @extends('layouts.app')
-
-@section('title', 'profile-page')
+@section('title', 'Profile')
 
 @section('content')
-    <main id="homepage" class="grid grid-cols-4 absolute top-32 left-0 w-screen px-64">
-        @include('partials.side.navbar')
-        <section class="col-span-2 flex flex-grow pt-16 overflow-y-auto scrollbar-hide" id="content">
+<main id="homepage" class=" flex flex-col w-screen overflow-clip overflow-y-scroll h-screen
+                            md:pl-16
+                            lg:px-56">
+    <section class="flex flex-grow overflow-y-auto scrollbar-hide" id="content">
         <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black" style="opacity: 0.8;"></div>
-            <section class="user-banner flex-grow h-full">
-                @include('partials.profile.user-banner')
-                @include('partials.profile.post-profile')
-            </section>
+        <section class="flex-grow h-full">
+            @include('partials.profile.user-banner')
+            @include('partials.profile.post-profile')
+            <div id="fetcher" class="h-16"></div>
         </section>
-        @include('partials.side.right-tab-profile')
-    </main>
+    </section>
+</main>
 @endsection

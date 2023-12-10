@@ -39,7 +39,7 @@
         </div>
 
         <button type=" submit" class="w-full dark:bg-dark-active rounded-xl h-10">
-            login
+            Login
         </button>
 
         <div class="flex flex-col items-end justify-center space-y-2">
