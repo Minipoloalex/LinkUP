@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
+use App\Models\Group;
 use App\Models\GroupMember;
 
 use Illuminate\Support\Facades\Log;
@@ -318,7 +319,20 @@ class UserController extends Controller
         $usersHTML = $this->translateUsersArrayToHTML($users);
         return response()->json(['resultsHTML' => $usersHTML, 'success' => 'Search results retrieved']);
     }
+    
 
+    public function translateMembersArrayToHTML($members, $currUser, bool $isOwner)
+    {
+        $membersHTML = $members->map(function ($member) use ($isOwner, $currUser) {
+            $userHTML = view('partials.group.member', [
+                'member' => $member,
+                'owner' => $isOwner,
+                'user' => $currUser->id
+            ])->render();
+            return $userHTML;
+        });
+        return $membersHTML;
+    }
     public function groupMembers(int $id, Request $request)
     {
         $request->validate([
@@ -329,7 +343,6 @@ class UserController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
-        Log::debug("page $page");
         $user = Auth::user();
 
         $is_member = GroupMember::where('id_group', $id)->where('id_user', $user->id)->exists();
@@ -338,13 +351,14 @@ class UserController extends Controller
         }
 
         $members = GroupMember::where('id_group', $id)->orderBy('id_user')->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
-        Log::debug($members);
         $users = $members->map(function ($group_member) {
             return $group_member->user;
         });
-        Log::debug($users);
+        
+        $group = Group::findOrFail($id);
+        $isOwner = $group->id_owner == $user->id;
+        $membersHTML = $this->translateMembersArrayToHTML($users, $user, $isOwner);
 
-        $membersHTML = $this->translateUsersArrayToHTML($users);
         if ($users->isEmpty()) {
             $noMembersHTML = view('partials.search.no_results')->render();
             return response()->json([

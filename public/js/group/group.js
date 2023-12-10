@@ -3,18 +3,23 @@ import { parseHTML } from "../general_helpers.js"
 import { infiniteScroll, destroyFetcher } from "../infinite_scrolling.js"
 import { hide, show } from "../general_helpers.js";
 
-const Swal = window.swal
+// const Swal = window.swal
 
-function insertInSection(htmlArray, section, lastElement) {
+function insertInSection(htmlArray, section, lastElement, attachEventListeners) {
   for (const html of htmlArray) {
     const element = parseHTML(html);
     section.insertBefore(element, lastElement);
+    if (attachEventListeners) {
+      attachEventListeners(element); // add event listeners to newly loaded elements
+    }
   }
 }
 
-function addInfiniteScrollingToSection(section, fetcher, url) {
+function addInfiniteScrollingToSection(section, fetcher, url, attachEventListeners) {
+  const load = (data) => insertInSection(data.elementsHTML, section, fetcher, attachEventListeners);
+
   const firstAction = (data) => {
-    insertInSection(data.elementsHTML, section, fetcher);
+    load(data);
     if (data.elementsHTML.length == 0) {
       const none = parseHTML(data.noneHTML);
       section.insertBefore(none, fetcher);
@@ -22,7 +27,7 @@ function addInfiniteScrollingToSection(section, fetcher, url) {
     }
   }
   const action = (data) => {
-    insertInSection(data.elementsHTML, section, fetcher);
+    load(data);
     if (data.elementsHTML.length == 0) {
       destroyFetcher();
     }
@@ -47,26 +52,28 @@ function toggleSections () {
   if (!group_element) return
   const group_id = group_element.getAttribute('value');
 
-  addInfiniteScrollingToSection(posts_section, posts_fetcher, `/api/group/${group_id}/posts`)
-  addInfiniteScrollingToSection(members_section, members_fetcher, `/api/group/${group_id}/members`)
+  addInfiniteScrollingToSection(posts_section, posts_fetcher, `/api/group/${group_id}/posts`, null)
+  addInfiniteScrollingToSection(members_section, members_fetcher, `/api/group/${group_id}/members`, (loadedMember) => {
+    addRemoveMemberEvents(loadedMember, group_id)
+  })
 
   posts.addEventListener('click', () => {
-    posts_section.classList.remove('hidden')
-    members_section.classList.add('hidden')
-    requests_section.classList.add('hidden')
+    show(posts_section);
+    hide(members_section);
+    hide(requests_section);
   })
 
   members.addEventListener('click', () => {
-    members_section.classList.remove('hidden')
-    posts_section.classList.add('hidden')
-    requests_section.classList.add('hidden')
+    show(members_section);
+    hide(posts_section);
+    hide(requests_section);
   })
 
   if (!requests) return
   requests.addEventListener('click', () => {
-    requests_section.classList.remove('hidden')
-    posts_section.classList.add('hidden')
-    members_section.classList.add('hidden')
+    show(requests_section);
+    hide(posts_section);
+    hide(members_section);
   })
 }
 
@@ -88,39 +95,30 @@ function removeMember (group, member_id, member) {
     .catch(error => console.error(error))
 }
 
-function addRemoveMemberEvents () {
-  const group_element = document.getElementById('group-id')
-  if (!group_element) return
+function addRemoveMemberEvents (member, group_id) {
+  const name = member.querySelector('h1').textContent
+  const button = member.querySelector('.member-remove')
 
-  const group = group_element.value
-  const members = document.querySelectorAll('#members-section > .group-member')
-  if (!members) return
+  if (!button) return;
 
-  for (const member of members) {
-    const name = member.querySelector('h1').textContent
-    const button = member.querySelector('.member-remove')
+  const member_id = button.id
 
-    if (!button) continue
-
-    const member_id = button.id
-
-    button.addEventListener('click', () => {
-      Swal.fire({
-        title: `Remove ${name}?`,
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#ff0000',
-        cancelButtonColor: '#aaa',
-        confirmButtonText: 'Yes, remove.'
-      }).then(result => {
-        if (result.isConfirmed) {
-          Swal.fire('Removed!', `${name} has been removed.`, 'success')
-          removeMember(group, member_id, member)
-        }
-      })
+  button.addEventListener('click', () => {
+    Swal.fire({
+      title: `Remove ${name}?`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ff0000',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yes, remove.'
+    }).then(result => {
+      if (result.isConfirmed) {
+        Swal.fire('Removed!', `${name} has been removed.`, 'success')
+        removeMember(group_id, member_id, member)
+      }
     })
-  }
+  })
 }
 
 function leaveGroup (group) {
@@ -312,8 +310,8 @@ function addResolveMemberRequestEvents () {
 }
 
 toggleSections()
-addRemoveMemberEvents()
 addLeaveGroupEvent()
 addJoinGroupEvent()
 addCancelJoinGroupEvent()
 addResolveMemberRequestEvents()
+// addRemoveMemberEvents -> when loading elements (infinite scrolling)
