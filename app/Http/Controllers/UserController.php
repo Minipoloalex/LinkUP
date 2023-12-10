@@ -33,16 +33,29 @@ class UserController extends Controller
     }
 
     /**
+     * Show the user's edit profile page.
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function showEditProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('pages.edit_profile', ['user' => $user]);
+    }
+
+    /**
      * Show the user's settings.
      * 
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function showSettings(Request $request)
     {
         $user = Auth::user();
 
-        $activeSection = $request->from ?? 'account'; // default to account section
-
-        return view('pages.settings', ['user' => $user, 'activeSection' => $activeSection]);
+        return view('pages.settings', ['user' => $user]);
     }
 
     /**
@@ -118,7 +131,7 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->route('settings.show', ['from' => 'account'])->with('success', 'Settings updated successfully!');
+        return redirect()->route('settings.show')->with('success', 'Settings updated successfully!');
     }
 
     /**
@@ -140,7 +153,7 @@ class UserController extends Controller
         if (!password_verify($request->password, $user->password)) {
             return response()->json(['error' => 'The provided password does not match our records.'], 403);
         }
-
+            
         return response()->json(['success' => 'Password verified'], 200);
     }
 
