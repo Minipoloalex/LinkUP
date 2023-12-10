@@ -5,7 +5,14 @@ import { hide, show } from "../general_helpers.js";
 
 // const Swal = window.swal
 
-function insertInSection(htmlArray, section, lastElement, attachEventListeners) {
+export function prependInPostSection(postElement) {
+  const posts_section = document.getElementById('posts-section');
+  if (posts_section) {
+    posts_section.prepend(postElement);
+  }
+}
+
+function appendInSection(htmlArray, section, lastElement, attachEventListeners) {
   for (const html of htmlArray) {
     const element = parseHTML(html);
     section.insertBefore(element, lastElement);
@@ -16,7 +23,7 @@ function insertInSection(htmlArray, section, lastElement, attachEventListeners) 
 }
 
 function addInfiniteScrollingToSection(section, fetcher, url, attachEventListeners) {
-  const load = (data) => insertInSection(data.elementsHTML, section, fetcher, attachEventListeners);
+  const load = (data) => appendInSection(data.elementsHTML, section, fetcher, attachEventListeners);
 
   const firstAction = (data) => {
     load(data);

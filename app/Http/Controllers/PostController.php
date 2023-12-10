@@ -37,7 +37,7 @@ class PostController extends Controller
         }
         $request->validate([
             'content' => 'required|max:255',
-            // 'id_group' => 'nullable|exists:groups,id',
+            'id_group' => 'nullable|exists:groups,id',
             'is_private' => 'nullable|boolean',
             'media' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg|max:10240',
             'x' => 'nullable|int',
@@ -54,6 +54,7 @@ class PostController extends Controller
             $post->is_private = $request->input('is_private');
         }
         $post->id_created_by = Auth::user()->id;
+        $post->id_group = $request->input('id_group');
 
         $post->save();  // get the post id to make file name unique
         $createdFile = $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
@@ -82,7 +83,6 @@ class PostController extends Controller
             'y' => 'nullable|int',
             'width' => 'nullable|int',
             'height' => 'nullable|int'
-            // 'id_group' => 'nullable|exists:groups,id'
         ]);
 
         $post = Post::find($request->input('id_parent'));
@@ -94,7 +94,8 @@ class PostController extends Controller
         $comment->is_private = $post->is_private;
         $comment->id_created_by = Auth::user()->id;
 
-        $comment->id_parent = $request->input('id_parent');
+        $comment->id_group = $post->id_group;
+        $comment->id_parent = $post->id;
 
         $comment->save();
 
@@ -613,7 +614,7 @@ class PostController extends Controller
             return response()->json(['error' => 'You are not a member of this group'], 401);
         }
 
-        $posts = Post::where('id_group', $id)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        $posts = Post::where('id_group', $id)->whereNull('id_parent')->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         if ($posts->isEmpty()) {
             $noPostsHTML = view('partials.search.no_results')->render();
             return response()->json([
