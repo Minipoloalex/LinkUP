@@ -13,13 +13,13 @@ const groupIdElement = document.getElementById('group-id');
 
 if (addPostOn) {
     addPostOn.addEventListener('click', showAddPostForm);
-    addPostOff.addEventListener('click', hideAddPostForm);
+    addPostOff.addEventListener('click', cleanAddPostForm);
 }
 if (addPostForm) {
     addPostForm.addEventListener('submit', submitAddPost);
 }
 
-async function showAddPostForm(event) {
+function showAddPostForm(event) {
     event.preventDefault();
     show(addPostForm);
     hide(addPostOn);
@@ -27,14 +27,17 @@ async function showAddPostForm(event) {
     show(darkOverlay);
     getTextField(addPostForm).focus();
 }
+function cleanAddPostForm() {
+    addPostForm.reset();
+    clearFileInputWrapper(getFileInputWrapper(addPostForm));
+    hideAddPostForm();
+}
 
 function hideAddPostForm() {
     hide(addPostForm);
     show(addPostOn);
     hide(addPostOff);
-    addPostForm.reset();
-    clearFileInputWrapper(getFileInputWrapper(addPostForm));
-    hide(darkOverlay); // Hide dark overlay
+    hide(darkOverlay);
 }
 
 async function submitAddPost(event) {
@@ -46,6 +49,10 @@ async function submitAddPost(event) {
     if (groupId != null) {
         requestBody.id_group = groupId;
     }
+
+    if (addPostOff) {
+        hideAddPostForm();
+    }
     const data = await submitAddPostOrComment(addPostForm, requestBody, 'post');
     if (data != null) {
         if (groupId != null) {
@@ -55,11 +62,7 @@ async function submitAddPost(event) {
         else {
             prependPostsToTimeline([data.postHTML]);
         }
-
         addPostForm.reset();
         clearFileInputWrapper(getFileInputWrapper(addPostForm));
-        if (addPostOff) {
-            hideAddPostForm();
-        }
     }
 }
