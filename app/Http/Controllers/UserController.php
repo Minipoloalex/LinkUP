@@ -190,7 +190,7 @@ class UserController extends Controller
         $follower = User::findOrFail($id);
         $user->followers()->detach($follower->id);
 
-        return response()->json(['success' => "$follower->username removed from follower list successfully!"]);
+        return response()->json([]);
     }
 
     public function removeFollowing(string $id)
@@ -207,7 +207,7 @@ class UserController extends Controller
         }
         $user->following()->detach($following->id);
 
-        return response()->json(['success' => "$following->username removed from following list successfully!"]);
+        return response()->json([]);
     }
 
     public function requestFollow(Request $request)
@@ -292,7 +292,6 @@ class UserController extends Controller
             ->firstOrFail();
         $followRequest->delete();
 
-        $sentFrom->success = "You denied the follow request from $sentFrom->username";
         return response()->json($sentFrom);
     }
     public function acceptFollowRequest(string $id)
@@ -320,7 +319,7 @@ class UserController extends Controller
             'isMyProfile' => true
         ])->render();
 
-        return response()->json(['userHTML' => $userHTML, 'success' => "You accepted the follow request from $sentFrom->username", 'userId' => $sentFrom->id]);
+        return response()->json(['userHTML' => $userHTML, 'userId' => $sentFrom->id]);
     }
     public function translateUserToHTML(User $user)
     {

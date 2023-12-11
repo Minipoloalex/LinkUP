@@ -286,7 +286,6 @@ class PostController extends Controller
 
         $this->deleteFile($post->id);
         $post->save();
-        $post->success = 'Post image deleted successfully!';
         return response()->json($post);
     }
     /**
