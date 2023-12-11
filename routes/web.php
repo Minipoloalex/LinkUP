@@ -169,6 +169,3 @@ Route::get('/for-you', function () {
 Route::get('/following', function () {
     return view('pages.following');
 })->name('following');
-
-// Mail
-Route::post('/send-email', [MailController::class, 'send']);
