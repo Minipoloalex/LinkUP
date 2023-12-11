@@ -15,7 +15,7 @@ export async function handleFeedbackToResponse(response) {
   if (response.ok) {
     const data = await response.json();
     if (data.error) {
-      showFeedback(data.error);
+      Swal.fire('Error', data.error, 'error');
     }
     else {
       if (data.success) {
