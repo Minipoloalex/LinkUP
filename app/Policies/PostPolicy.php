@@ -41,15 +41,10 @@ class PostPolicy
      */
     public function createComment(User $user, Post $post): bool
     {
-        // if post is in a group, need to check group
-        // if post is private, need to check follower
-        // return Auth::check() && ($post->is_private === false || $user->id === $post->id_created_by);
-
-        // not yet implemented
         if ($post->id_group !== null) {
             return GroupMember::isMember($user, $post->id_group);
         }
-        return true;
+        return $post->is_private == false || $user->id === $post->id_created_by || $user->isFollowing($post->createdBy);
     }
 
     /**
