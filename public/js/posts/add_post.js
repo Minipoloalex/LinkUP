@@ -39,11 +39,14 @@ function hideAddPostForm() {
 
 async function submitAddPost(event) {
     event.preventDefault();
-    const content = getTextField(addPostForm).value;
+    const content = getTextField(addPostForm).value;    
+    const requestBody = { 'content': content };
+
     const groupId = groupIdElement != null ? groupIdElement.getAttribute('value') : null;
-
-    const data = await submitAddPostOrComment(addPostForm, {'content': content, id_group: groupId}, 'post');
-
+    if (groupId != null) {
+        requestBody.id_group = groupId;
+    }
+    const data = await submitAddPostOrComment(addPostForm, requestBody, 'post');
     if (data != null) {
         if (groupId != null) {
             const postElement = parseHTML(data.postHTML);

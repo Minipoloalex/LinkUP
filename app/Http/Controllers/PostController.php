@@ -48,10 +48,9 @@ class PostController extends Controller
         if ($validatedSize !== false) {
             return $validatedSize;
         }
-        
         $request->validate([
             'content' => 'required|max:255',
-            'id_group' => 'nullable|exists:groups,id',
+            'id_group' => 'nullable|int|exists:group,id',
             'is_private' => 'nullable|boolean',
             'media' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg|max:10240',
             'x' => 'nullable|int',
@@ -60,14 +59,14 @@ class PostController extends Controller
             'height' => 'nullable|int'
         ]);
         $this->authorize('createPost', Post::class);  // user must be logged in
-        
+
         $user = Auth::user();
         $group_id = $request->input('id_group');
 
-        if ($group_id !== null && !GroupMember::isMember($user, $group_id)) {
+        
+        if ($group_id !== null && !GroupMember::isMember($user, intval($group_id))) {
             return response()->json(['error' => 'You are not a member of this group']);
         }
-        
         $post = new Post();
 
         $post->content = $request->input('content');
@@ -266,7 +265,7 @@ class PostController extends Controller
 
         // Delete the post and return it as JSON.
         $post->delete();
-        $post->success = 'Post deleted successfully!';
+
         return response()->json($post);
     }
     public function viewImage(string $id)

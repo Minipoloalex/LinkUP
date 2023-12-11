@@ -62,6 +62,7 @@ export async function deleteImage(event) {
     const data = await sendAjaxRequest('delete', `/post/${postId}/image`);
     if (data != null) {
       imageContainer.remove();
+      await Swal.fire('Deleted!', 'Your image has been deleted.', 'success');
     }
   }, null, 'Yes, delete.');
 }

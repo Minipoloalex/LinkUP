@@ -14,10 +14,15 @@ export async function deletePostOrComment(event) {
     const isComment = post.classList.contains('comment');
     const titleText = isComment ? 'Delete Comment?' : 'Delete Post?';
     const descriptionText = 'Are you sure you want to delete this ' + (isComment ? 'comment?' : 'post?');
-    
+    const isDeletedText = isComment ? 'Your comment has been deleted.' : 'Your post has been deleted.';
+
     const confirmAction = async () => {
         const postId = post.dataset.id;
         const isDeleted = deletePost(post, postId, isComment);
+        if (isDeleted) {
+            await Swal.fire('Deleted!', isDeletedText, 'success');
+        }
+
         if (isDeleted && window.location.href.includes(`/post/${postId}`)) {    // post page must redirect
             window.location.href = '/home';
         }
