@@ -2,6 +2,7 @@ import { getCsrfToken } from './ajax.js';
 import { parseHTML } from './general_helpers.js';
 import { initializeLikeButton } from './posts/like.js';
 
+
 document.addEventListener('DOMContentLoaded', () => {
   
   function appendPostsToFollowingTimeline(postsHTML) {

@@ -27,19 +27,14 @@ $editable = $showEdit && $post->isCreatedByCurrentUser();
             @include('partials.post_image', ['post' => $post, 'editable' => $editable])
         @endif
     </div>
-    {{-- @php
-        $isLiked = $post->likedByUser();
-        $color = $isLiked ? 'red' : 'black';
-    @endphp --}}
     <div class="post-footer">
         <h3 class="post-likes">
             <button class="like-button mr-1" data-id="{{ $post->id }}"
-                data-liked="{{ $post->liked ? 'true' : 'false' }}"> 
-                {{-- <i class="fas fa-heart {{ $color }}"></i> --}}
-                @if ($post->liked)
+                data-liked="{{ $post->liked ? 'true' : 'false' }}">
+                @if($post->liked)
                 &#128148;
                 @else
-                &#128151;
+                &#10084;
                 @endif
             </button>
 
@@ -48,4 +43,5 @@ $editable = $showEdit && $post->isCreatedByCurrentUser();
 
         <span class="nr-comments">{{ $post->comments->count() }}</span>
     </div>
+
 </div>
