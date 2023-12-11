@@ -11,24 +11,20 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 @endphp
 
 @extends('layouts.app')
-@section('title', 'Group')
+@section('title', $group->name)
 
 
 @section('content')
 @include('partials.side.navbar')
-<main id="group-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-screen pt-24
+<main id="group-page" class="relative flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)]
                             md:pl-16
                             lg:px-56">
-    <section class="flex flex-col border border-slate-400 mt-1" id="group-content">
-        <div class="flex flex-col items-center justify-center h-56 w-full">
-            <div class="flex justify-start items-center w-full pl-12">
-                <img src="{{ $group->getPicture() }}" alt="group photo"
-                    class="w-16 h-16 rounded-full">
-                <h1 class="text-2xl font-bold pl-8">{{ $group->name }}</h1>
-            </div>
-            <div class="flex justify-start items-center w-full pl-36">
-                <p class="text-lg">{{ $group->description }}</p>
-            </div>
+
+    <section class="flex flex-col min-h-96 items-center justify-center gap-4 py-4" id="group-content">
+        <img src="{{ $group->getPicture() }}" alt="group photo" class="w-32 h-32 rounded-full">
+        <h1 class="text-2xl font-bold">{{ $group->name }}</h1>
+        <div class="flex justify-start items-center w-full px-10">
+            <p class="text-sm">{{ $group->description }}</p>
         </div>
         <div class="h-16 flex w-full items-end justify-end mb-4 px-8">
             @include('partials.components.button', ['id' => $id, 'icon' => $icon, 'color' => $color, 'text' => $text])
@@ -37,18 +33,15 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 
     @if($user_is_member)
 
-    <div class="flex w-full items-center">
-        <div id="posts"
-            class="flex items-center justify-center {{ $width }} h-10 border border-slate-400 cursor-pointer">
+    <div class="flex w-full items-center sticky -top-1 left-0 dark:bg-dark-primary border-b-2 dark:border-dark-neutral">
+        <div id="posts" class="flex items-center justify-center {{ $width }} h-10 cursor-pointer dark:text-dark-active">
             <h1>Posts</h1>
         </div>
-        <div id="members"
-            class="flex items-center justify-center {{ $width }} h-10 border border-slate-400 cursor-pointer">
+        <div id="members" class="flex items-center justify-center {{ $width }} h-10 cursor-pointer">
             <h1>Members</h1>
         </div>
         @if($user_is_owner)
-        <div id="requests"
-            class="flex items-center justify-center {{ $width }} h-10 border border-slate-400 cursor-pointer">
+        <div id="requests" class="flex items-center justify-center {{ $width }} h-10 cursor-pointer">
             <h1>Requests</h1>
         </div>
         @endif
@@ -82,21 +75,6 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
     </section>
 
     @endif
-
-
-    <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black z-10" style="opacity: 0.8;"></div>
-
-    @if(Auth::check())
-    <div id="create-post" class="relative z-20">
-        @include('partials.create_post_form', [
-        'formClass' => 'add-post w-full md:w-2/3 lg:w-1/2 xl:w-1/3 hidden fixed bottom-1/2 left-1/2 transform
-        -translate-x-1/2 bg-gray-200 rounded px-10 py-5',
-        'textPlaceholder' => 'Add a new post', 'buttonText' => 'Create Post', 'contentValue' => ''])
-        <button class="add-post-on rounded px-4 py-2 fixed bottom-5 right-20">Add Post</button>
-        <button class="add-post-off hidden bg-gray-200 rounded px-4 py-2 fixed bottom-5 right-20">Cancel</button>
-    </div>
-    @endif
 </main>
-
 <input type="hidden" id="group-id" value="{{ $group->id }}">
 @endsection

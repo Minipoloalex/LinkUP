@@ -79,6 +79,7 @@
         </p>
         <button id="dismiss-feedback" class="inline absolute right-3 top-1/4">X</button>
     </footer>
+    <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black" style="opacity: 0.8;"></div>
 </body>
 
 </html>
