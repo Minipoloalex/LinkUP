@@ -27,6 +27,15 @@ class PostController extends Controller
     {
         $this->imageController = new ImageController('posts');
     }
+    private function validateSizeImage(Request $request)
+    {
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $image = $request->media;
+            $checkSize = $this->imageController->checkMaxSize($image);
+            return $checkSize;
+        }
+        return false;
+    }
     /**
      * Store a newly created post in the database
      */
@@ -35,6 +44,11 @@ class PostController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            return $validatedSize;
+        }
+        
         $request->validate([
             'content' => 'required|max:255',
             'id_group' => 'nullable|exists:groups,id',
@@ -51,7 +65,7 @@ class PostController extends Controller
         $group_id = $request->input('id_group');
 
         if ($group_id !== null && !GroupMember::isMember($user, $group_id)) {
-            return response()->json(['error' => 'You are not a member of this group'], );
+            return response()->json(['error' => 'You are not a member of this group']);
         }
         
         $post = new Post();
@@ -80,6 +94,10 @@ class PostController extends Controller
     {
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
+        }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            return $validatedSize;
         }
         $request->validate([
             'content' => 'required|max:255',
@@ -190,7 +208,13 @@ class PostController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            Log::debug($validatedSize);
+            return $validatedSize;
+        }
         $post = Post::findOrFail($id);
+
         $request->validate([
             'content' => 'nullable|string|max:255',
             'is_private' => 'nullable|boolean',

@@ -41,7 +41,7 @@ class UserController extends Controller
      * Show the user's edit profile page.
      * 
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showEditProfile(Request $request)
     {
@@ -54,7 +54,7 @@ class UserController extends Controller
      * Show the user's settings.
      * 
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showSettings(Request $request)
     {
@@ -74,7 +74,13 @@ class UserController extends Controller
         $this->authorize('update', User::class);
         
         $user = Auth::user();
-
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $image = $request->media;
+            $checkSize = $this->imageController->checkMaxSize($image);
+            if ($checkSize !== false) {
+                return $checkSize;
+            }
+        }
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:255'],

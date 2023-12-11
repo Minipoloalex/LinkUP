@@ -36,6 +36,13 @@ class ImageController extends Controller
             abort(400);
         }
     }
+    public static function checkMaxSize($image)
+    {
+        if ($image->getSize() > 10000000) { // 10MB
+            return response()->json(['error' => 'The uploaded image exceeds the maximum size limit of 10MB'], 400);
+        }
+        return false;
+    }
     private function getFilePath(string $fileName) {
         return $this->path . $fileName;
     }
@@ -48,13 +55,13 @@ class ImageController extends Controller
             abort(400);
         }
         if ($x === null || $y === null || $width === null || $height === null) {
-            $media = Image::make($media)->resize(self::$profilePictureSize, self::$profilePictureSize)
-                ->encode('jpg', 75);
+            $media = Image::make($media)->resize($this->size, $this->size)
+                ->encode('jpg', 90);
         }
         else {
             $media = Image::make($media)->crop($width, $height, $x, $y)
-                ->resize(self::$profilePictureSize, self::$profilePictureSize)
-                ->encode('jpg', 75);
+                ->resize($this->size, $this->size)
+                ->encode('jpg', 90);
         }
         $media->save(storage_path('app/' . $this->path . $fileName));
     }
