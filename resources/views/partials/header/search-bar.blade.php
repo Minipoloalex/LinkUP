@@ -1,10 +1,13 @@
-<div class="col-span-2 flex content-center flex-wrap justify-center flex-grow">
-    <div class="w-9/12 flex content-center justify-center flex-grow">
-        <form id="search-form" class="flex flex-row content-center justify-center mb-0 border-gray-300 border-solid border
-                             px-2 py-1 rounded-full" action="{{ url('/search') }}" method="GET">
-            <input id="search-text" class="align-middle border-0 focus:outline-none" type="text" name="query">
-            <button class="align-middle" type="submit">
-                <img class="w-6 h-6" src="{{ url('images/search.png') }}" alt="Search">
+<div class="flex content-center flex-wrap justify-center w-3/4 px-2 mt-2">
+    <div class="flex content-center justify-center w-full">
+        <form id="search-form" class="flex content-center justify-center px-2 py-1 rounded-full group"
+            action="{{ url('/search') }}" method="GET">
+            <input id="search-text" class="align-middle border-b-2 dark:border-dark-secondary w-full dark:bg-dark-primary 
+                focus:outline-none group-focus-within:dark:border-dark-active" type="text" name="query">
+            <button
+                class="align-middle border-b-2 dark:border-dark-secondary group-focus-within:dark:border-dark-active"
+                type="submit">
+                <i class="fas fa-search"></i>
             </button>
         </form>
     </div>

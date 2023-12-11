@@ -1,23 +1,22 @@
-<section class="col-span-1 flex content-center justify-center pl-16" id="notifications-tab">
-    <div class="h-full flex py-16 flex-col flex-grow">
+<section class="flex content-center justify-center mt-2">
+    <div class="h-full flex flex-col flex-grow">
         <section id="search-filters">
-            <header><h2 class="text-xl">Search for:</h2></header>
-            <ul class="flex flex-col">
+            <ul class="flex gap-2 w-full px-8 justify-between items-center">
                 <li class="flex gap-2">
-                    <input type="radio" id="users-radio" name="search-type" value="users" checked>
-                    <label for="users-radio">Users</label>
+                    <input type="radio" id="users-radio" name="search-type" value="users" checked class="peer hidden">
+                    <label for="users-radio" class="peer-checked:text-dark-active">Users</label>
                 </li>
                 <li class="flex gap-2">
-                    <input type="radio" id="groups-radio" name="search-type" value="groups">
-                    <label for="groups-radio">Groups</label>
+                    <input type="radio" id="groups-radio" name="search-type" value="groups" class="peer hidden">
+                    <label for="groups-radio" class="peer-checked:text-dark-active">Groups</label>
                 </li>
                 <li class="flex gap-2">
-                    <input type="radio" id="posts-radio" name="search-type" value="posts">
-                    <label for="posts-radio">Posts</label>
+                    <input type="radio" id="posts-radio" name="search-type" value="posts" class="peer hidden">
+                    <label for="posts-radio" class="peer-checked:text-dark-active">Posts</label>
                 </li>
                 <li class="flex gap-2">
-                    <input type="radio" id="comments-radio" name="search-type" value="comments">
-                    <label for="comments-radio">Comments</label>
+                    <input type="radio" id="comments-radio" name="search-type" value="comments" class="peer hidden">
+                    <label for="comments-radio" class="peer-checked:text-dark-active">Comments</label>
                 </li>
             </ul>
         </section>
