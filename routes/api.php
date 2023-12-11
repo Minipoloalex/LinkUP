@@ -55,7 +55,7 @@ Route::middleware('web')->group(function () {
     )->where('id', '[0-9]+')->name('group.members');
 
     Route::get(     // define a route for /posts which accepts a GET request with a DATE parameter
-        '/posts/timeline',
-        [PostController::class, 'getPostsPublicTimeline']
+        '/posts/for-you',
+        [PostController::class, 'getPostsForYou']
     )->name('posts.beforeDate');
 });

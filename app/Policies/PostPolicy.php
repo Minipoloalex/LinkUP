@@ -13,16 +13,16 @@ class PostPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(?User $user, Post $post): bool
+    public static function view(?User $user, Post $post): bool
     {
-        if($user === null) {
+        if ($user === null) {
             return $post->is_private === false;
         }
-    
+
         /*if ($user->isAdmin()) {
             return true; // Admins can view any post
         }*/
-        
+
         // Check if the user is following the creator of the post
         return $post->is_private === false || $user->id === $post->id_created_by || $user->isFollowing($post->createdBy);
     }

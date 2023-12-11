@@ -3,7 +3,7 @@ $authenticated = Auth::check();
 $username = Auth::user()->username ?? "";
 @endphp
 
-<nav class="fixed bottom-0 left-0 w-full h-16 px-6 border-t-2
+<nav class="fixed -bottom-1 left-0 w-full h-16 px-6 border-t-2
     dark:bg-dark-primary dark:border-dark-neutral
     md:top-0 md:left-0 md:h-screen md:w-16 md:flex md:flex-col md:items-center md:justify-center md:gap-8 md:px-0
     lg:top-0 lg:left-0 lg:h-screen lg:w-56 lg:flex lg:flex-col lg:items-center lg:justify-center lg:gap-8 lg:border-0 lg:pl-8"
