@@ -16,9 +16,9 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 
 @section('content')
 @include('partials.side.navbar')
-<main id="group-page" class="relative flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)]
-                            md:pl-16
-                            lg:px-56">
+<main id="group-page" class="   relative flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)]
+                                md:w-full md:h-[calc(100vh-6rem)]
+                                lg:px-56">
 
     <section class="flex flex-col min-h-96 items-center justify-center gap-4 py-4" id="group-content">
         <img src="{{ $group->getPicture() }}" alt="group photo" class="w-32 h-32 rounded-full">
@@ -33,25 +33,26 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 
     @if($user_is_member)
 
-    <div class="flex w-full items-center sticky -top-1 left-0 dark:bg-dark-primary border-b-2 dark:border-dark-neutral">
-        <div id="posts" class="flex items-center justify-center {{ $width }} h-10 cursor-pointer dark:text-dark-active">
+    <div
+        class="flex w-full h-12 items-center sticky -top-[1px] left-0 dark:bg-dark-primary border-b-2 dark:border-dark-neutral">
+        <div id="posts" class="flex items-center justify-center {{ $width }} h-12 cursor-pointer dark:text-dark-active">
             <h1>Posts</h1>
         </div>
-        <div id="members" class="flex items-center justify-center {{ $width }} h-10 cursor-pointer">
+        <div id="members" class="flex items-center justify-center {{ $width }} h-12 cursor-pointer">
             <h1>Members</h1>
         </div>
         @if($user_is_owner)
-        <div id="requests" class="flex items-center justify-center {{ $width }} h-10 cursor-pointer">
+        <div id="requests" class="flex items-center justify-center {{ $width }} h-12 cursor-pointer">
             <h1>Requests</h1>
         </div>
         @endif
     </div>
 
-    <section id="posts-section" data-page="0" class="flex flex-col items-center">
+    <section id="posts-section" data-page="0" class="flex flex-col items-center min-h-full">
         <div id="fetcher-posts"></div>
     </section>
 
-    <section id="members-section" data-page="0" class="flex flex-col items-center hidden">
+    <section id="members-section" data-page="0" class="flex flex-col items-center hidden min-h-full">
         {{-- @foreach ($members as $member)
         @include('partials.group.member', ['member' => $member, 'owner' => $user_is_owner, 'user' => $user])
         @endforeach --}}
@@ -59,11 +60,13 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
     </section>
 
     @if($user_is_owner)
-    <section id="requests-section" class="flex flex-col items-center hidden">
-        @foreach ($group->pendingMembers()->where('type', 'Request')->get() as $member)
+    <section id="requests-section" class="flex flex-col items-center hidden min-h-full">
+        @forelse ($group->pendingMembers()->where('type', 'Request')->get() as $member)
         @include('partials.group.member', ['member' => $member, 'owner' => $user_is_owner,
         'user' => $user, 'request' => true])
-        @endforeach
+        @empty
+        <p class="text-center mt-12">No pending requests</p>
+        @endforelse
     </section>
     @endif
 

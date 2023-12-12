@@ -4,16 +4,17 @@
 
 @section('content')
 
-<main id="edit-profile" class="flex flex-col w-screen h-screen">
+<main id="edit-profile" class="flex flex-col w-screen h-screen
+                                md:w-full md:h-[calc(100vh-6rem)] md:overflow-hidden">
     @if (session('success'))
-    <div class="w-full max-w-md border-2 border-green-500 mb-6 rounded shadow-md">
+    <div class="w-full border-2 border-green-500 mb-6 rounded shadow-md">
         <div class="flex items-center bg-green-500 text-white text-sm px-4 py-3" role="alert">
             <i class="fas fa-check-circle fa-fw mr-3"></i>
             <p>{{ session('success') }}</p>
         </div>
     </div>
     @elseif ($errors->any())
-    <div class="w-full max-w-md border-2 border-red-500 mb-6 rounded shadow-md">
+    <div class="w-full border-2 border-red-500 mb-6 rounded shadow-md">
         <div class="flex items-center bg-red-500 text-white text-sm px-4 py-3" role="alert">
             <i class="fas fa-exclamation-circle fa-fw mr-3"></i>
             <p>{{ $errors->first() }}</p>
@@ -21,7 +22,7 @@
     </div>
     @endif
 
-    <div class="w-full max-w-md">
+    <div class="w-full">
         <div class="relative flex flex-col break-words dark:bg-dark-primary dark:text-dark-secondary">
             <div class="flex justify-between items-center py-3 px-6 mb-0 border-b-2 sticky top-0 left-0
                         dark:border-dark-neutral">
