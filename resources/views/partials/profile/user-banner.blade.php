@@ -46,24 +46,24 @@
             {{ $user->course }}
         </p>
 
-        <p class="profile-bio text-gray-600">{{ $user->bio }}</p>
+        <p class="profile-bio">{{ $user->bio }}</p>
     </div>
 
-    <div class="profile-stats flex flex-row center justify-center mt-6">
+    <div class="profile-stats flex flex-row center justify-between px-4 mt-6">
         <a href="{{ route('profile.network', $user->username) }}"
             class="text-center flex flex-row  border-gray-400 border-solid mb-1">
             <p class="p-1 profile-stat-label font-bold">Followers</p>
-            <p class="p-1 profile-stat-value text-gray-600">{{ $user->followers->count() }}</p>
+            <p class="p-1 profile-stat-value">{{ $user->followers->count() }}</p>
         </a>
         <a href="{{ route('profile.network', $user->username) }}"
             class="text-center flex flex-row border-gray-400 border-solid">
             <p class="p-1 profile-stat-label font-bold">Following</p>
-            <p id="following-number" class="p-1 profile-stat-value text-gray-600">{{ $user->following->count() }}</p>
+            <p id="following-number" class="p-1 profile-stat-value">{{ $user->following->count() }}</p>
         </a>
         <a href="{{ route('profile.network', $user->username) }}"
             class="text-center flex flex-row border-gray-400 border-solid">
             <p class="p-1 profile-stat-label font-bold">Groups</p>
-            <p class="p-1 profile-stat-value text-gray-600">{{ $user->groups->count() }}</p>
+            <p class="p-1 profile-stat-value">{{ $user->groups->count() }}</p>
         </a>
     </div>
 </div>

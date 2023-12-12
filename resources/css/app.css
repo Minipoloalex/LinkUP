@@ -10,3 +10,11 @@ select:not([value=""]):valid ~ label {
 select:focus ~ label {
   @apply text-black left-0;
 }
+
+#network button.active {
+  @apply dark:border-dark-active dark:text-dark-active;
+}
+.empty-list {
+  padding: 0.5rem;
+  text-align: center;
+}
