@@ -41,6 +41,33 @@ class GroupController extends Controller
         ]);
     }
 
+    public function showCreateForm()
+    {
+        if (!Auth::check())
+            return redirect('/login');
+
+        return view('pages.groups.create');
+    }
+
+    public function createGroup(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'description' => 'nullable|string|max:150',
+        ]);
+
+        $group = new Group();
+        $group->name = $request->input('name');
+        $group->description = $request->input('description');
+        $group->id_owner = Auth::user()->id;
+
+        $group->save();
+
+        $group->members()->attach(Auth::user()->id);
+
+        return redirect()->route('group', ['id' => $group->id])->with('success', 'Group created');
+    }
+
     public function settings(string $id)
     {
         $group = Group::findOrFail($id);
