@@ -74,17 +74,18 @@ class User extends Authenticatable implements CanResetPassword
     {
         return $this->belongsToMany(User::class, 'follows', 'id_user', 'id_followed')->orderBy('username');
     }
+    
     public function isFollowing(User $user) : bool
     {
         return $this->following()->where('id_followed', $user->id)->exists();
     }
 
-    protected function groups() : HasMany
+    public function groups() : HasMany
     {
         return $this->hasMany(GroupMember::class, 'id_user');
     }
-
-    protected function liked() : HasMany
+    
+    public function liked() : HasMany
     {
         return $this->hasMany(Liked::class, 'id_user');
     }
@@ -95,18 +96,22 @@ class User extends Authenticatable implements CanResetPassword
         $fileName = $imageController->getFileNameWithExtension(str($this->id));
         return $imageController->getFile($fileName);
     }
+    
     public function followRequestsReceived() : HasMany
     {
         return $this->hasMany(FollowRequest::class, 'id_user_to');
     }
+    
     public function followRequestsSent() : HasMany
     {
         return $this->hasMany(FollowRequest::class, 'id_user_from');
     }
+    
     public function requestedToFollow(User $user) : bool
     {
         return $this->followRequestsSent()->where('id_user_to', $user->id)->exists();
     }
+    
     public static function search(string $search) {
         return User::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
         ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search]);

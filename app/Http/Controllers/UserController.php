@@ -140,6 +140,45 @@ class UserController extends Controller
     }
 
     /**
+     * Delete the user's account.
+     * 
+     * @param Request $request 
+     * @return \Illuminate\Http\RedirectResponse 
+     */
+    public function deleteAccount(Request $request)
+    {
+        $this->authorize('delete', User::class);
+
+        $user = Auth::user();
+
+        $user->update([
+            'username' => 'deleted' . $user->id,
+            'email' => 'deleted' . $user->id . '@deleted.com',
+            'password' => bcrypt('deleted' . $user->id),
+            'name' => 'deleted',
+            'bio' => null,
+            'faculty' => null,
+            'course' => null,
+            'is_private' => true,
+            'is_banned' => true,
+        ]);
+
+        // remove followers and following
+        $user->followers()->detach();
+        $user->following()->detach();
+
+        // remove likes
+        $user->liked()->delete();
+
+        // remove from groups
+        $user->groups()->delete();
+
+        Auth::logout(); 
+
+        return redirect()->route('login')->with('success', 'Account deleted successfully!');
+    }
+
+    /**
      * Confirm the user's password.
      * 
      * @param Request $request 
