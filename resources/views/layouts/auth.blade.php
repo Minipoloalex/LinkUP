@@ -14,6 +14,7 @@
     <!-- Styles -->
     <link href="{{ url('css/milligram.min.css') }}" rel="stylesheet">
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script type="module" src={{ url('js/app.js') }} defer></script>
     <script type="module" src={{ url('js/auth.js') }} defer></script>
     @vite('resources/css/app.css')

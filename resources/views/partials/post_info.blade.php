@@ -4,14 +4,16 @@ $editable = $showEdit && $post->isCreatedByCurrentUser();
 <div class="post-info">
     <header>
         <div class="user-date">
-            <img class="user-image rounded-full" src="{{ $post->createdBy->getProfilePicture() }}" alt="User photo">
-            <a class="post-info-user" href="/profile/{{ $post->createdBy->username }}">{{ $post->createdBy->username }}</a>
+            <a href="{{ route('profile.show', $post->createdBy->username )}}">
+                <img class="user-image rounded-full" src="{{ $post->createdBy->getProfilePicture() }}" alt="User photo">
+            </a>
+            <a class="post-info-user" href="{{ route('profile.show', $post->createdBy->username )}}">{{ $post->createdBy->username }}</a>
             <span class="date">{{ $post->created_at }}</span>
         </div>
         @if ($editable)
         <div class="edit-delete-post">
             <a href="#" class="edit edit-post">&#9998;</a>
-            <a href="{{ url('home') }}" class="delete delete-post">&#10761;</a>
+            <a href="{{ url('/home') }}" class="delete delete-post">&#10761;</a>
         </div>
         @endif
     </header>
@@ -43,4 +45,5 @@ $editable = $showEdit && $post->isCreatedByCurrentUser();
 
         <span class="nr-comments">{{ $post->comments->count() }}</span>
     </div>
+
 </div>

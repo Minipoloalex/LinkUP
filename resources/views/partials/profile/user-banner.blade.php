@@ -2,7 +2,7 @@
   @auth
     @if (Auth::user()->id == $user->id)
       <div id="edit-profile" class="flex flex-row-reverse m-4">
-        <a href="{{ route('settings.show', ['from' => 'profile']) }}" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1">
+        <a href="{{ route('profile.edit') }}" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-full mr-1">
           <i class="fa-solid fa-pen-to-square"></i>
         </a>
       </div>
@@ -53,9 +53,9 @@
       <p class="p-1 profile-stat-label font-bold">Following</p>
       <p id="following-number" class="p-1 profile-stat-value text-gray-600">{{ $user->following->count() }}</p>
     </a>
-    <div class="text-center flex flex-row border-gray-400 border-solid">
+    <a href="{{ route('profile.network', $user->username) }}" class="text-center flex flex-row border-gray-400 border-solid">
       <p class="p-1 profile-stat-label font-bold">Groups</p>
       <p class="p-1 profile-stat-value text-gray-600">{{ $user->groups->count() }}</p>
-    </div>
+    </a>
   </div>
 </div>

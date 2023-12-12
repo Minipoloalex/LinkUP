@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 
 class GroupController extends Controller
 {
+    private static int $amountPerPage = 10;
     public function show(string $id)
     {
         if (!Auth::check())
@@ -107,7 +108,6 @@ class GroupController extends Controller
 
         $group->pendingMembers()->detach($id_member);
 
-        \Log::info($request->input('accept'));
         if ($request->input('accept') == 'reject') {
             return response('Request rejected', 200);
         }
@@ -122,17 +122,38 @@ class GroupController extends Controller
 
         $this->authorize('settings', $group);
 
+        $imageController = new ImageController('groups');
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $image = $request->image;
+            $checkSize = $imageController->checkMaxSize($image);
+            if ($checkSize !== false) {
+                return $checkSize;
+            }
+        }
+
         $request->validate([
             'name' => 'required|string|max:50',
             'description' => 'nullable|string|max:150',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'x' => 'nullable|int',
+            'y' => 'nullable|int',
+            'width' => 'nullable|int',
+            'height' => 'nullable|int'
         ]);
 
         $group->name = $request->input('name');
         $group->description = $request->input('description');
-
         $group->save();
 
-        return redirect()->route('group', ['id' => $id]);
+        if ($request->has('image') && $request->image != null && $request->file('image')->isValid()) {
+            $fileName = $imageController->getFileNameWithExtension(str($group->id));
+            if ($imageController->existsFile($fileName)) {
+                $imageController->delete($fileName);
+            }
+            $imageController->store($request->image, $fileName, $request->x, $request->y, $request->width, $request->height);
+        }
+
+        return redirect()->route('group', ['id' => $id])->with('success', 'Group updated');
     }
 
     /**
@@ -163,9 +184,10 @@ class GroupController extends Controller
     {
         $request->validate([
             'query' => 'required|string|max:255',
+            'page' => 'required|int'
         ]);
-        $groups = Group::search($request->input('query'));
-        Log::debug("Groups search result: $groups");
+        $page = $request->input('page');
+        $groups = Group::search($request->input('query'))->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         if ($groups->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([

@@ -9,11 +9,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
+use App\Models\Group;
+use App\Models\GroupMember;
+
 use Illuminate\Support\Facades\Log;
+
 
 class UserController extends Controller
 {
     private ImageController $imageController;
+    private static int $amountPerPage = 10;
 
     public function __construct()
     {
@@ -33,16 +38,29 @@ class UserController extends Controller
     }
 
     /**
+     * Show the user's edit profile page.
+     * 
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showEditProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        return view('pages.edit_profile', ['user' => $user]);
+    }
+
+    /**
      * Show the user's settings.
      * 
+     * @param Request $request
+    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showSettings(Request $request)
     {
         $user = Auth::user();
 
-        $activeSection = $request->from ?? 'account'; // default to account section
-
-        return view('pages.settings', ['user' => $user, 'activeSection' => $activeSection]);
+        return view('pages.settings', ['user' => $user]);
     }
 
     /**
@@ -56,13 +74,19 @@ class UserController extends Controller
         $this->authorize('update', User::class);
         
         $user = Auth::user();
-
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $image = $request->media;
+            $checkSize = $this->imageController->checkMaxSize($image);
+            if ($checkSize !== false) {
+                return $checkSize;
+            }
+        }
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:255'],
             'faculty' => ['required', 'string', 'max:255'],
             'course' => ['nullable', 'string', 'max:255'],
-            'media' => ['nullable', 'mimes:jpeg,png,jpg,gif,svg', 'max:10240'],
+            'media' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:10240'],
             'x' => ['nullable', 'int'],
             'y' => ['nullable', 'int'],
             'width' => ['nullable', 'int'],
@@ -72,7 +96,7 @@ class UserController extends Controller
         if ($request->has('media') && $request->media != null && $request->file('media')->isValid()) {
             $fileName = $this->imageController->getFileNameWithExtension(str($user->id));
             if ($this->imageController->existsFile($fileName)) {
-                $this->imageController->delete($user);
+                $this->imageController->delete($fileName);
             }
             $this->imageController->store($request->media, $fileName, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         }
@@ -102,14 +126,9 @@ class UserController extends Controller
         $request->validate([
             'username' => ['required', 'string', 'max:15', 'unique:users,username,' . $user->id],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'new_password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'privacy' => ['required', 'string', 'in:public,private'],
-            'current_password' => ['required', 'string'],
         ]);
-
-        if (!password_verify($request->current_password, $user->password)) {
-            return redirect()->back()->withErrors(['current_password' => 'The given password is incorrect.']);
-        }
 
         $user->update([
             'username' => $request->username,
@@ -117,13 +136,36 @@ class UserController extends Controller
             'is_private' => $request->privacy === 'private',
         ]);
 
-        if ($request->new_password) {
+        if ($request->password) {
             $user->update([
-                'password' => bcrypt($request->new_password),
+                'password' => bcrypt($request->password),
             ]);
         }
 
-        return redirect()->route('settings.show', ['from' => 'account'])->with('success', 'Settings updated successfully!');
+        return redirect()->route('settings.show')->with('success', 'Settings updated successfully!');
+    }
+
+    /**
+     * Confirm the user's password.
+     * 
+     * @param Request $request 
+     * @return \Illuminate\Http\RedirectResponse 
+     */
+    public function confirmPassword(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
+        $user = Auth::user();
+
+        Log::info($request->password);
+
+        if (!password_verify($request->password, $user->password)) {
+            return response()->json(['error' => 'The provided password does not match our records.'], 403);
+        }
+            
+        return response()->json(['success' => 'Password verified'], 200);
     }
 
     public function viewProfilePicture(string $id)
@@ -148,7 +190,7 @@ class UserController extends Controller
         $follower = User::findOrFail($id);
         $user->followers()->detach($follower->id);
 
-        return response()->json(['success' => "$follower->username removed from follower list successfully!"]);
+        return response()->json([]);
     }
 
     public function removeFollowing(string $id)
@@ -165,7 +207,7 @@ class UserController extends Controller
         }
         $user->following()->detach($following->id);
 
-        return response()->json(['success' => "$following->username removed from following list successfully!"]);
+        return response()->json([]);
     }
 
     public function requestFollow(Request $request)
@@ -250,7 +292,6 @@ class UserController extends Controller
             ->firstOrFail();
         $followRequest->delete();
 
-        $sentFrom->success = "You denied the follow request from $sentFrom->username";
         return response()->json($sentFrom);
     }
     public function acceptFollowRequest(string $id)
@@ -260,7 +301,10 @@ class UserController extends Controller
         $sentFrom = User::findOrFail($id);
 
         if (!$sentFrom->requestedToFollow($user)) {
-            return response()->json(["error' => 'You do not have a pending follow request from $sentFrom->username!"]);
+            return response()->json(['error' => "You do not have a pending follow request from $sentFrom->username!"]);
+        }
+        if ($sentFrom->isFollowing($user)) {
+            return response()->json(['error' => "$sentFrom->username is already following you!"]);
         }
 
         DB::beginTransaction();
@@ -275,7 +319,7 @@ class UserController extends Controller
             'isMyProfile' => true
         ])->render();
 
-        return response()->json(['userHTML' => $userHTML, 'success' => "You accepted the follow request from $sentFrom->username", 'userId' => $sentFrom->id]);
+        return response()->json(['userHTML' => $userHTML, 'userId' => $sentFrom->id]);
     }
     public function translateUserToHTML(User $user)
     {
@@ -295,14 +339,11 @@ class UserController extends Controller
     public function search(Request $request)
     {
         $request->validate([
-            'query' => 'required|string|max:255'
+            'query' => 'required|string|max:255',
+            'page' => 'required|int'
         ]);
-        $users = User::search($request->input('query'));
-        if (Auth::check()) {
-            $users = $users->filter(function (User $user) {    // remove self from results
-                return $user->id != Auth::user()->id;
-            })->values();
-        }
+        $page = $request->input('page');
+        $users = User::search($request->input('query'))->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         if ($users->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
@@ -313,5 +354,54 @@ class UserController extends Controller
         }
         $usersHTML = $this->translateUsersArrayToHTML($users);
         return response()->json(['resultsHTML' => $usersHTML, 'success' => 'Search results retrieved']);
+    }
+    
+
+    public function translateMembersArrayToHTML($members, $currUser, bool $isOwner)
+    {
+        $membersHTML = $members->map(function ($member) use ($isOwner, $currUser) {
+            $userHTML = view('partials.group.member', [
+                'member' => $member,
+                'owner' => $isOwner,
+                'user' => $currUser->id
+            ])->render();
+            return $userHTML;
+        });
+        return $membersHTML;
+    }
+    public function groupMembers(int $id, Request $request)
+    {
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        $page = $request->input('page');
+
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
+        $user = Auth::user();
+
+        $is_member = GroupMember::where('id_group', $id)->where('id_user', $user->id)->exists();
+        if (!$is_member) {
+            return response()->json(['error' => 'You are not a member of this group'], 401);
+        }
+
+        $members = GroupMember::where('id_group', $id)->orderBy('id_user')->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
+        $users = $members->map(function ($group_member) {
+            return $group_member->user;
+        });
+        
+        $group = Group::findOrFail($id);
+        $isOwner = $group->id_owner == $user->id;
+        $membersHTML = $this->translateMembersArrayToHTML($users, $user, $isOwner);
+
+        if ($users->isEmpty()) {
+            $noMembersHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'noneHTML' => $noMembersHTML,
+                'elementsHTML' => []
+            ]);
+        }
+        return response()->json(['elementsHTML' => $membersHTML]);
     }
 }

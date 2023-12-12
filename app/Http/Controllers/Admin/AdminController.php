@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Admin;
+use App\Http\Controllers\MailController;
 
+use App\Models\Admin;
 use App\Models\User;
 use App\Models\Post;
 
@@ -60,6 +61,11 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->is_banned = true;
         $user->save();
+
+        $subject = 'Account Banned';
+        $view = 'emails.ban';
+
+        MailController::sendEmail($user->name, $user->email, $subject, $view);
 
         return redirect()->route('admin.users')->with('success', 'User banned successfully.');
     }

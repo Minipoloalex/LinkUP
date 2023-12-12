@@ -9,6 +9,8 @@ use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminLoginController;
@@ -43,6 +45,20 @@ Route::controller(LoginController::class)->group(function () {
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
+});
+
+
+// Password recovery
+Route::group(['middleware' => 'guest'], function () {
+    Route::controller(ForgotPasswordController::class)->group(function () {
+        Route::get('/forgot-password', 'showLinkRequestForm')->name('password.request');
+        Route::post('/forgot-password', 'sendResetLinkEmail')->name('password.email');
+    });
+
+    Route::controller(ResetPasswordController::class)->group(function () {
+        Route::get('/reset-password/{token}', 'showResetForm')->name('password.reset');
+        Route::post('/reset-password', 'reset')->name('password.update');
+    });
 });
 
 
@@ -81,12 +97,14 @@ Route::controller(PostController::class)->group(function () {
 
     Route::put('/post/{id}', 'update');
 
-    Route::get('/search', 'searchResults');
-
     // Like routes
     Route::post('/post/{id}/like', 'addLike'); // add like
     Route::delete('/post/{id}/like', 'removeLike'); // remove like
     Route::get('/post/{id}/like', 'likeStatus');  // get like status
+
+    Route::get('/foryou', 'forYouPosts'); // get for you posts
+    Route::get('/followingGet', 'followingPosts'); // get following posts
+
 
 });
 
@@ -110,8 +128,10 @@ Route::controller(GroupController::class)->group(function () {
 })->middleware('auth');
 
 // profile page
+Route::get('profile/edit', [UserController::class, 'showEditProfile'])->name('profile.edit');
+Route::post('profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+
 Route::get('/profile/{username}', [UserController::class, 'showProfile'])->name('profile.show');
-Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
 Route::get('profile/photo/{id}', [UserController::class, 'viewProfilePicture'])->name('profile.photo');
 
 Route::get('network/{username}', [UserController::class, 'showNetwork'])->name('profile.network');
@@ -125,8 +145,7 @@ Route::post('follow', [UserController::class, 'requestFollow']);
 
 Route::get('/settings', [UserController::class, 'showSettings'])->name('settings.show');
 Route::post('/settings/update', [UserController::class, 'updateSettings'])->name('settings.update');
-
-
+Route::post('/settings/confirm-password', [UserController::class, 'confirmPassword'])->name('settings.confirmPassword');
 
 Route::get('/search', function(){
     return view('pages.search');
@@ -141,3 +160,13 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
+
+/* route for for-you.blade.php */
+Route::get('/for-you', function () {
+    return view('pages.foryou');
+})->name('for-you');
+
+/* route for following.blade.php */
+Route::get('/following', function () {
+    return view('pages.following');
+})->name('following');

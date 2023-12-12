@@ -38,13 +38,12 @@ class Group extends Model
     }
     public function getPicture()    
     {
-        $imageController = new ImageController('users');
+        $imageController = new ImageController('groups');
         $fileName = $imageController->getFileNameWithExtension(str($this->id));
         return $imageController->getFile($fileName);
     }
     public static function search(string $search) {
         return Group::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
-            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search])
-            ->get();;
+            ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search]);
     }
 }

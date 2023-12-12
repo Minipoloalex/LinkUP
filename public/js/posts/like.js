@@ -1,13 +1,12 @@
 import { getCsrfToken } from '../ajax.js';
 
 // Function to initialize the like button state based on whether the user has liked the post
-async function initializeLikeButton(postId, likeButton) {
+export async function initializeLikeButton(postId, likeButton) {
     if(isAuthenticated === true){
         try {
             const alreadyLiked = await checkLikedStatus(postId);
             likeButton.setAttribute('data-liked', alreadyLiked);
             if(alreadyLiked === true){
-
                 likeButton.style.color = "red";
             }
             if(alreadyLiked === false){
@@ -25,7 +24,6 @@ async function initializeLikeButton(postId, likeButton) {
 
 // Event delegation for handling post likes or unlikes
 document.addEventListener('click', async function (e) {
-
     if (e.target && e.target.matches('.like-button')) {
         e.preventDefault();
         const likeButton = e.target;
@@ -91,7 +89,7 @@ async function checkLikedStatus(postId) {
         }
 
         const data = await response.json();
-        return data.alreadyLiked; 
+        return data.alreadyLiked;
     } catch (error) {
         console.error('Error checking liked status:', error.message);
         throw new Error('Failed to fetch liked status');
@@ -106,10 +104,7 @@ async function likeOrUnlikePost(postId, like) {
         return;
     }
     else{
-
-    
         if(like === true){
-
             try {
                 const response = await fetch(`/post/${postId}/like`, {
                     method: 'POST',
@@ -160,6 +155,5 @@ async function likeOrUnlikePost(postId, like) {
                 throw new Error('Unable to perform action on the post');
             }
         }
-        
     }
 }
