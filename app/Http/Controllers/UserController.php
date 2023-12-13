@@ -169,12 +169,15 @@ class UserController extends Controller
             'is_banned' => true,
         ]);
 
+        // delete profile picture
+        $fileName = $this->imageController->getFileNameWithExtension(str($user->id));
+        if ($this->imageController->existsFile($fileName)) {
+            $this->imageController->delete($fileName);
+        }
+
         // remove followers and following
         $user->followers()->detach();
         $user->following()->detach();
-
-        // remove likes
-        $user->liked()->delete();
 
         // remove from groups
         $user->groups()->delete();
