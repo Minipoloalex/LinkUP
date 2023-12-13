@@ -48,12 +48,14 @@ class LoginController extends Controller
             return redirect()->intended('/home');
         }
 
-        // attempt to log in as admin
-        if(Auth::guard('admin')->attempt($attemptCredentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/admin/dashboard');
+        // if login of type email failed, attempt to log in as an admin
+        if (filter_var($request->login, FILTER_VALIDATE_EMAIL)) {
+            if (Auth::guard('admin')->attempt($attemptCredentials)) {
+                $request->session()->regenerate();
+                return redirect()->intended('/admin/dashboard');
+            }
         }
-
+            
         return back()->withErrors([
             'login' => 'The provided credentials do not match our records.',
         ])->onlyInput('login');
