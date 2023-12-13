@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ImageController extends Controller
 {
@@ -55,13 +56,16 @@ class ImageController extends Controller
             abort(400);
         }
         if ($x === null || $y === null || $width === null || $height === null) {
-            $media = Image::make($media)->resize($this->size, $this->size)
-                ->encode('jpg', 90);
+            $manager = new ImageManager(new Driver());
+            $media = $manager->read($media)
+                ->resize($this->size, $this->size)
+                ->toJpeg(90);
         }
         else {
-            $media = Image::make($media)->crop($width, $height, $x, $y)
+            $manager = new ImageManager(new Driver());
+            $media = $manager->read($media)->crop($width, $height, $x, $y)
                 ->resize($this->size, $this->size)
-                ->encode('jpg', 90);
+                ->toJpeg(90);
         }
         $media->save(storage_path('app/' . $this->path . $fileName));
     }
