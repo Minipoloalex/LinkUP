@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 
@@ -11,7 +11,7 @@ use App\Http\Controllers\MailController;
 
 use App\Models\Admin;
 use App\Models\User;
-use App\Models\Post;
+use App\Models\Post;\
 
 class AdminController extends Controller
 {

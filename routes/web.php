@@ -12,8 +12,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\AdminController;
 
 
 /*
@@ -64,12 +63,6 @@ Route::group(['middleware' => 'guest'], function () {
 
 // Admin
 Route::prefix('/admin')->name('admin.')->group(function () {
-    Route::redirect('/', '/admin/login');
-
-    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AdminLoginController::class, 'authenticate']);
-    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
-
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
@@ -78,7 +71,6 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
-
     });
 });
 
