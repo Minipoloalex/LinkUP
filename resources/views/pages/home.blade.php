@@ -3,8 +3,7 @@
 @section('content')
 @include('partials.header.timeline-tabs')
 <main id="homepage" class=" flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
-                            md:w-full
-                            lg:px-56">
+                            md:w-full">
 
     <section class="flex overflow-clip overflow-y-auto" id="content">
         <section id="timeline" class="flex flex-col w-screen max-h-min overflow-clip" data-page="0">

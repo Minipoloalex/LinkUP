@@ -81,7 +81,7 @@ function toggleSections () {
   posts.addEventListener('click', () => {
     posts.classList.add('dark:text-dark-active')
     members.classList.remove('dark:text-dark-active')
-    requests.classList.remove('dark:text-dark-active')
+    if (requests) requests.classList.remove('dark:text-dark-active')
     show(posts_section)
     hide(members_section)
     hide(requests_section)
@@ -90,7 +90,7 @@ function toggleSections () {
   members.addEventListener('click', () => {
     posts.classList.remove('dark:text-dark-active')
     members.classList.add('dark:text-dark-active')
-    requests.classList.remove('dark:text-dark-active')
+    if (requests) requests.classList.remove('dark:text-dark-active')
     show(members_section)
     hide(posts_section)
     hide(requests_section)
@@ -100,7 +100,7 @@ function toggleSections () {
   requests.addEventListener('click', () => {
     posts.classList.remove('dark:text-dark-active')
     members.classList.remove('dark:text-dark-active')
-    requests.classList.add('dark:text-dark-active')
+    if (requests) requests.classList.add('dark:text-dark-active')
     show(requests_section)
     hide(posts_section)
     hide(members_section)

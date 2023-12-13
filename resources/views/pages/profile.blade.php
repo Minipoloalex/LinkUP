@@ -7,7 +7,7 @@ Auth::user()->isFollowing($user)));
 @section('title', 'Profile')
 
 @section('content')
-<main id="profile-page" class=" flex flex-col w-screen h-screen
+<main id="profile-page" class=" flex flex-col w-screen
                                 md:w-full">
     <section class="flex flex-grow" id="content">
         <section id="posts-container" data-id="{{ $user->id }}" data-page="0"

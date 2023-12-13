@@ -64,11 +64,12 @@
 
 
 <body class="   dark:bg-dark-primary dark:text-dark-secondary scrollbar-hide
-                md:px-[10vw]">
+                md:px-[10vw]
+                lg:px-[30vw]">
     @include('partials.header')
+    @yield('content')
     @include('partials.side.navbar')
     @include('partials.side.right-tab')
-    @yield('content')
 
     @php
     $isHidden = isset($feedbackMessage) ? '' : 'hidden';

@@ -17,8 +17,7 @@ $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 @section('content')
 @include('partials.side.navbar')
 <main id="group-page" class="   relative flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)]
-                                md:w-full md:h-[calc(100vh-6rem)]
-                                lg:px-56">
+                                md:w-full md:h-[calc(100vh-6rem)]">
 
     <section class="flex flex-col min-h-96 items-center justify-center gap-4 py-4" id="group-content">
         <img src="{{ $group->getPicture() }}" alt="group photo" class="w-32 h-32 rounded-full">
