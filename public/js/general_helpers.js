@@ -12,7 +12,7 @@ export function show(element) {
 
 export function parseHTML(htmlText) {
   const parser = new DOMParser();
-  return parser.parseFromString(htmlText, 'text/html').body.firstChild;
+  return parser.parseFromString(htmlText, 'text/html').body.firstElementChild;
 }
 
 export async function swalConfirmDelete(prompt, descriptionText, action, cancelAction, confirmButtonText = 'Yes, delete.') {

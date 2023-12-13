@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
+    private static int $amountPerPage = 10;
     public function index()
     {
         return view('admin.dashboard');
@@ -47,9 +48,7 @@ class AdminController extends Controller
     
     public function listUsers()
     {
-        $users = User::paginate(10);
-
-        return view('admin.users', ['users' => $users]);
+        return view('admin.users');
     }
 
     public function listPosts()
@@ -129,19 +128,59 @@ class AdminController extends Controller
         }
         return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
     }
-    
-    public function deletePostJS($id)
-    {
-        $post = Post::findOrFail($id);
-        $post->delete();
-
-        return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
-    }
-    
     public function viewPost($id)
     {
         $post = Post::findOrFail($id);
 
         return view('admin.post', ['post' => $post]);
+    }
+    public function searchPosts(Request $request)
+    {
+        $request->validate([
+            'page' => 'required|integer|min:0',
+            'search' => 'required|string|max:255',
+        ]);
+        $page = $request->get('page');
+        $search = $request->get('search');
+        $posts = null;
+        if ($search == '') {
+            $posts = Post::all()->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        }
+        else {
+            $posts = Post::search(Post::all(), $search)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        }
+        
+        // TODO: complete
+        // $htmlArray = $posts->map(function ($post) {    
+        //     return view('admin.post', ['post' => $post])->render();
+        // });
+        // foreach ($posts as $post) {
+        //     $htmlArray[] = view('admin.partials.post', ['post' => $post])->render();
+        // }
+        // return response()->json(['postsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
+        return response()->json();
+    }
+    public function searchUsers(Request $request)
+    {
+        Log::debug($request->all());
+        $request->validate([
+            'page' => 'required|integer|min:0',
+            'query' => 'nullable|string|max:255',
+        ]);
+        $page = $request->get('page');
+        $query = $request->get('query');
+        $users = null;
+        if ($query == null || $query == '') {  
+            $users = User::orderBy('username', 'asc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        }
+        else {
+            $users = User::search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        }
+        Log::debug($users->toJson());
+        $htmlArray = $users->map(function ($user) {    
+            return view('admin.return_json.user_tr', ['user' => $user])->render();
+        });
+        Log::debug($htmlArray);
+        return response()->json(['usersHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
     }
 }
