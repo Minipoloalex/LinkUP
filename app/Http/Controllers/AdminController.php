@@ -11,6 +11,7 @@ use App\Http\Controllers\MailController;
 
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Group;
 use App\Models\Post;
 
 use Illuminate\Support\Facades\Log;
@@ -83,6 +84,26 @@ class AdminController extends Controller
         return redirect()->route('admin.users')->with('success', 'User unbanned successfully.');
     }
 
+    public function listGroups()
+    {
+        $groups = Group::paginate(10);
+
+        return view('admin.groups', ['groups' => $groups]);
+    }
+
+    public function deleteGroup($id)
+    {
+        $group = Group::findOrFail($id);
+
+        // Delete all group posts and remove all members
+        $group->posts()->delete();
+        $group->members()->detach();
+
+        $group->delete();
+
+        return redirect()->route('admin.groups')->with('success', 'Group deleted successfully.');
+    }
+
     public function deletePost($id)
     {
         $post = Post::findOrFail($id);
@@ -96,6 +117,7 @@ class AdminController extends Controller
         }
         return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
     }
+    
     public function deletePostJS($id)
     {
         $post = Post::findOrFail($id);
@@ -103,6 +125,7 @@ class AdminController extends Controller
 
         return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
     }
+    
     public function viewPost($id)
     {
         $post = Post::findOrFail($id);

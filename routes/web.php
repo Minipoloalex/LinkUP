@@ -71,6 +71,8 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
         Route::delete('/post/{id}', [AdminController::class, 'deletePost'])->name('posts.delete');
         Route::get('/post/{id}', [AdminController::class, 'viewPost'])->name('post');
+        Route::get('/groups', [AdminController::class, 'listGroups'])->name('groups');
+        Route::post('/group/{id}/delete', [AdminController::class, 'deleteGroup'])->name('groups.delete');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
     });
