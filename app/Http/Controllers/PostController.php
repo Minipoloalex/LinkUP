@@ -177,7 +177,7 @@ class PostController extends Controller
 
         $posts = $this->filterByType($type);
         $posts = $this->getSearchResults($posts, $request->input('query'), $type);
-        $posts = $posts->skip($page * self::$amountPerPage)->limit(10);
+        $posts = $posts->skip($page * self::$amountPerPage)->limit(self::$amountPerPage);
         $posts = $posts->get();
 
         if ($posts->isEmpty()) {

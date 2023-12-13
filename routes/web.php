@@ -66,6 +66,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
+        Route::get('/api/users', [AdminController::class, 'searchUsers'])->name('api.users');
         Route::post('/users/{id}/ban', [AdminController::class, 'banUser'])->name('users.ban');
         Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
