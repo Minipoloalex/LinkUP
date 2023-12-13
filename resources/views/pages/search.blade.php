@@ -3,7 +3,7 @@
 @section('title', 'Search')
 @section('content')
 <main id="search-page" class="  flex flex-col w-screen overflow-clip overflow-y-scroll relative h-[calc(100vh-10rem)]
-                                md:w-full md:h-[calc(100vh-6rem)]">
+                                lg:w-full lg:h-[calc(100vh-6rem)]">
     <div class="border-b-2 dark:border-dark-neutral dark:bg-dark-primary pb-4 sticky top-0 left-0">
         <section id="search-content" class="flex gap-2">
             <div class="w-full flex p-2">

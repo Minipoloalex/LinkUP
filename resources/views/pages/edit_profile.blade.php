@@ -5,7 +5,7 @@
 @section('content')
 
 <main id="edit-profile" class="flex flex-col w-screen h-screen
-                                md:w-full md:h-[calc(100vh-6rem)] md:overflow-hidden">
+                                lg:w-full lg:h-[calc(100vh-6rem)] lg:overflow-hidden">
     @if (session('success'))
     <div class="w-full border-2 border-green-500 mb-6 rounded shadow-md">
         <div class="flex items-center bg-green-500 text-white text-sm px-4 py-3" role="alert">

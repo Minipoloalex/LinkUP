@@ -1,6 +1,6 @@
-<aside class="  hidden fixed md:flex md:top-0 md:right-0 md:h-screen md:w-[10vw] md:border-l md:dark:border-dark-neutral
-                lg:w-[30vw] lg:pt-[9rem] lg:items-start lg:justify-start lg:pl-4">
-    <div class="hidden lg:flex lg:items-start lg:justify-start lg:w-3/4">
+<aside class="  hidden fixed lg:flex lg:top-0 lg:right-0 lg:h-screen lg:w-[10vw] lg:border-l lg:dark:border-dark-neutral
+                xl:w-[30vw] xl:pt-[9rem] xl:items-start xl:justify-start xl:pl-4">
+    <div class="hidden xl:flex xl:items-start xl:justify-start xl:w-3/4">
         <div class="w-full flex flex-col items-start justify-start gap-8">
             <div class="h-[5vh] w-full">
                 <form id="search-form" class="flex content-center justify-center py-1 rounded-full group"

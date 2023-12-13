@@ -2,7 +2,7 @@
 @section('title', 'About')
 @section('content')
 <main id="aboutUs" class="  flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-6rem)] scrollbar-hide
-                            md:w-full">
+                            lg:w-full">
 
     <section class="flex flex-col flex-grow px-6 pt-12 items-center space-y-4" id="content">
         <div class="flex flex-col items-center justify-center w-2/3 px-2 mb-4 space-y-4">

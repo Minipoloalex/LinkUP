@@ -4,7 +4,7 @@
 
 @section('content')
 <main id="network-page" class=" relative flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)]
-                                md:w-full md:h-[calc(100vh-6rem)]">
+                                lg:w-full lg:h-[calc(100vh-6rem)]">
     <section class="flex overflow-clip overflow-y-auto scrollbar-hide" id="content">
         <section id="network" class="flex flex-col flex-grow w-full h-min">
             @php

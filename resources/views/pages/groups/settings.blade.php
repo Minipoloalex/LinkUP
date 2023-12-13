@@ -5,8 +5,8 @@
 @section('content')
 @include('partials.side.navbar')
 <main id="group-page" class="flex flex-col w-screen h-screen
-                            md:pl-16
-                            lg:px-56">
+                            lg:pl-16
+                            xl:px-56">
 
     <section class="flex flex-col w-full">
         <div class="w-full">

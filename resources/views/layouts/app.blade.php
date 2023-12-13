@@ -64,8 +64,8 @@
 
 
 <body class="   dark:bg-dark-primary dark:text-dark-secondary scrollbar-hide
-                md:px-[10vw]
-                lg:px-[30vw]">
+                lg:px-[10vw]
+                xl:px-[30vw]">
     @include('partials.header')
     @yield('content')
     @include('partials.side.navbar')
