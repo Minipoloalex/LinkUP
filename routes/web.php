@@ -118,11 +118,10 @@ Route::controller(GroupController::class)->group(function () {
     Route::post('/group/{id}/join', 'joinRequest')->name('group.join');
     Route::post('/group/{id}/request/{member_id}', 'resolveRequest')->name('group.resolveRequest');
     Route::post('/group/verify-password', 'verifyPassword')->name('group.verifyPassword');
-    Route::put('/group/{id}/update', 'update')->name('group.update');
-
+    Route::put('/group/{id}/update', 'update')->name('group.update');  
+    Route::post('/group/{id}/change-owner', 'changeOwner')->name('group.changeOwner');
 
     Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
-    Route::put('/group/{id}', 'update')->name('group.update');
 
     Route::delete('/group/{id}', 'delete')->name('group.delete');
     Route::delete('/group/{id}/member/{member_id}', 'deleteMember');

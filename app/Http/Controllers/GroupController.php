@@ -77,6 +77,28 @@ class GroupController extends Controller
         return view('pages.groups.settings', ['group' => $group]);
     }
 
+    public function changeOwner(Request $request, string $id)
+    {
+        $group = Group::findOrFail($id);
+
+        $this->authorize('settings', $group);
+
+        $request->validate([
+            'new_owner' => 'required|int'
+        ]);
+
+        $new_owner = User::findOrFail($request->input('new_owner'));
+
+        if (!$group->members()->where('id_user', $new_owner->id)->exists()) {
+            return response('User is not a member', 403);
+        }
+
+        $group->id_owner = $new_owner->id;
+        $group->save();
+
+        return redirect()->route('group', ['id' => $id])->with('success', 'Owner changed');
+    }
+
     public function deleteMember(string $id, string $id_member)
     {
         if ($id_member == 'self') {
