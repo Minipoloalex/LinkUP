@@ -8,7 +8,7 @@ const isAdmin = document.querySelector('meta[name="is-admin"]') != null;
 const deletePostButtons = document.querySelectorAll('.delete-post');
 if (isAdmin) {
     deletePostButtons.forEach(button => {
-        button.addEventListener('click', (event) => deletePostOrComment(event, (id) => `/admin/post/${id}`, '/admin'));
+        button.addEventListener('click', (event) => deletePostOrComment(event, (id) => `/admin/post/${id}`, '/admin/dashboard'));
     });
 }
 else {
