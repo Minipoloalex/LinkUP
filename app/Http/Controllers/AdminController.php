@@ -68,7 +68,7 @@ class AdminController extends Controller
         $subject = 'Account Banned';
         $view = 'emails.ban';
 
-        if (MailController::sendEmail($user->name, $user->email, $subject, $view)) {
+        if (MailController::sendBanEmail($user->name, $user->email, $subject, $view)) {
             return redirect()->route('admin.users')->with('success', 'User banned successfully.');
         }
 
@@ -95,13 +95,25 @@ class AdminController extends Controller
     {
         $group = Group::findOrFail($id);
 
-        // Delete all group posts and remove all members
+        // delete all group posts and remove all members
         $group->posts()->delete();
         $group->members()->detach();
 
         $group->delete();
 
-        return redirect()->route('admin.groups')->with('success', 'Group deleted successfully.');
+        $owner = $group->owner;
+        if ($owner->name !== 'deleted') {
+            
+            $subject = 'Group Deleted';
+            $view = 'emails.group-deleted';
+            
+            // send email to owner, notifying them that their group was deleted
+            if (MailController::sendGroupDeletedEmail($owner->name, $owner->email, $group->name, $subject, $view)) {
+                return redirect()->route('admin.groups')->with('success', 'Group deleted successfully.');
+            }
+        }
+
+        return redirect()->route('admin.groups')->with('error', 'Group deleted successfully, but email failed to send.');
     }
 
     public function deletePost($id)
