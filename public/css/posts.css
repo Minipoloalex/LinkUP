@@ -21,7 +21,7 @@
     height: 2rem;
 }
 
-.post-info .user-date > a {
+.post-info .user-date > .post-info-user {
     padding: 0.25rem;
     margin-left: 1rem;
 }

@@ -4,7 +4,6 @@ import { initializeLikeButton } from './like.js';
 
 const timeline = document.querySelector('#timeline');
 export function prependPostsToTimeline(postsHTML) {
-
   if (timeline) {
     for (const postHTML of postsHTML) {
       const postElement = parseHTML(postHTML);

@@ -47,13 +47,13 @@ export function handlerFileInput(fileInputWrapper) {
                 const imgSource = e.currentTarget.result;
                 showCropSwal(imgSource, type).then(
                     (result) => {
+                        const img = getImagePreview(fileInputWrapper);
                         if (result.isConfirmed) {
                             x.value = result.value.data.x;
                             y.value = result.value.data.y;
                             width.value = result.value.data.width;
                             height.value = result.value.data.height;
 
-                            const img = getImagePreview(fileInputWrapper);
                             img.src = result.value.preview;
 
                             show(removeFileBtn);

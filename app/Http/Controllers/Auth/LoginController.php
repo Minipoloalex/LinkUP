@@ -42,9 +42,16 @@ class LoginController extends Controller
             'password' => $request->password,
         ];
 
+        // attempt to log in as a normal user
         if (Auth::attempt($attemptCredentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/home');
+        }
+
+        // attempt to log in as admin
+        if(Auth::guard('admin')->attempt($attemptCredentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/admin/dashboard');
         }
 
         return back()->withErrors([

@@ -38,7 +38,7 @@ CREATE TABLE groups (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) UNIQUE,
     description TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     id_owner INTEGER REFERENCES users(id)
 );
 
@@ -52,7 +52,7 @@ CREATE TABLE group_member (
 CREATE TABLE post (
     id SERIAL PRIMARY KEY,
     content TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     is_private BOOLEAN DEFAULT false NOT NULL,
     id_created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
     id_group INTEGER REFERENCES groups(id) ON DELETE CASCADE,
@@ -68,7 +68,7 @@ CREATE TABLE liked (
 
 CREATE TABLE follow_request (
     id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP DEFAULT CURRENT_DATE NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     id_user_to INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     id_user_from INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     UNIQUE (id_user_to, id_user_from),
@@ -77,7 +77,7 @@ CREATE TABLE follow_request (
 
 CREATE TABLE like_notification (
     id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP DEFAULT CURRENT_DATE NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     id_post INTEGER REFERENCES post(id) ON DELETE CASCADE NOT NULL,
     id_user INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     seen BOOLEAN default false NOT NULL,
@@ -86,14 +86,14 @@ CREATE TABLE like_notification (
 
 CREATE TABLE comment_notification (
     id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP DEFAULT CURRENT_DATE NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     seen BOOLEAN DEFAULT FALSE NOT NULL,
     id_comment INTEGER REFERENCES post(id) ON DELETE CASCADE UNIQUE NOT NULL
 );
 
 CREATE TABLE group_notification (
     id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP DEFAULT CURRENT_DATE NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     type group_notification_type NOT NULL,
     seen BOOLEAN default false NOT NULL,
     id_user INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE group_notification (
 
 CREATE TABLE tag_notification (
     id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP DEFAULT CURRENT_DATE NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     seen BOOLEAN default false NOT NULL,
     id_user INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     id_post INTEGER REFERENCES post(id) ON DELETE CASCADE NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE password_reset_tokens (
     id SERIAL PRIMARY KEY,
     token VARCHAR(200) UNIQUE NOT NULL,
     email VARCHAR(200) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_DATE NOT NULL
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 ------------------------------------------------
@@ -306,7 +306,7 @@ CREATE INDEX post_search_idx ON post USING GIST (tsvectors);
 CREATE OR REPLACE FUNCTION like_trigger_function() RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO like_notification (timestamp, id_post, id_user) 
-    VALUES (CURRENT_DATE, NEW.id_post, NEW.id_user);
+    VALUES (CURRENT_TIMESTAMP, NEW.id_post, NEW.id_user);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -339,7 +339,7 @@ EXECUTE FUNCTION unlike_trigger_function();
 CREATE OR REPLACE FUNCTION comment_trigger_function() RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO comment_notification (timestamp, id_comment) 
-    VALUES (CURRENT_DATE, NEW.id);
+    VALUES (CURRENT_TIMESTAMP, NEW.id);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -380,7 +380,7 @@ BEGIN
         -- Insert a tag notification for the mentioned user
         IF mentioned_user_id IS NOT NULL THEN
             INSERT INTO tag_notification (timestamp, id_user, id_post)
-            VALUES (CURRENT_DATE, mentioned_user_id, NEW.id);
+            VALUES (CURRENT_TIMESTAMP, mentioned_user_id, NEW.id);
         END IF;
     END LOOP;
 
