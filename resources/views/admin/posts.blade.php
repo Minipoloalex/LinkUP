@@ -4,7 +4,7 @@
 @foreach($posts as $post)
 
 <div class="flex mt-4 content-center justify-center items-center w-full mx-auto">
-    @include('partials.post', ['post' => $post, 'displayComments' => false, 'showAddComment' => false, 'showEdit' => false])
+    @include('partials.post', ['post' => $post, 'displayComments' => false, 'showAddComment' => false, 'showEdit' => false, 'linkTo' => "{{ route('admin.posts') }}"])
 
     <div class="flex flex-col justify-center items-center w-1/3">
         <form action="{{ route('admin.posts.delete', ['id' => $post->id]) }}" method="POST">

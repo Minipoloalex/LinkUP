@@ -108,7 +108,7 @@ class PostController extends Controller
             'height' => 'nullable|int'
         ]);
 
-        $post = Post::find($request->input('id_parent'));
+        $post = Post::findOrFail($request->input('id_parent'));
         $this->authorize('createComment', $post);
 
         $comment = new Post();

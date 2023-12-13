@@ -77,25 +77,25 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
         Route::post('/posts/{id}/delete', [AdminController::class, 'deletePost'])->name('posts.delete');
+        Route::get('/post/{id}', [AdminController::class, 'viewPost'])->name('post');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
-
     });
 });
 
 
 // Post
 Route::controller(PostController::class)->group(function () {
-    Route::get('/post/{id}', 'show')->name('post.page');
-    Route::get('/post/{id}/image', 'viewImage')->name('post.image');
+    Route::get('/post/{id}', 'show')->name('post.page')->where('id', '[0-9]+');
+    Route::get('/post/{id}/image', 'viewImage')->name('post.image')->where('id', '[0-9]+');
 
     Route::post('/post', 'storePost');
     Route::post('/comment', 'storeComment');
 
-    Route::delete('/post/{id}', 'delete');
-    Route::delete('/post/{id}/image', 'deleteImage');
+    Route::delete('/post/{id}', 'delete')->where('id', '[0-9]+');
+    Route::delete('/post/{id}/image', 'deleteImage')->where('id', '[0-9]+');
 
-    Route::put('/post/{id}', 'update');
+    Route::put('/post/{id}', 'update')->where('id', '[0-9]+');
 
     // Like routes
     Route::post('/post/{id}/like', 'addLike'); // add like

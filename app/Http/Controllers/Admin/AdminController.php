@@ -13,6 +13,8 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\Post;
 
+use Illuminate\Support\Facades\Log;
+
 class AdminController extends Controller
 {
     public function index()
@@ -85,5 +87,11 @@ class AdminController extends Controller
         $post->delete();
 
         return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
+    }
+    public function viewPost($id)
+    {
+        $post = Post::findOrFail($id);
+
+        return view('admin.post', ['post' => $post]);
     }
 }
