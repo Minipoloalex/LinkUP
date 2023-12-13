@@ -76,7 +76,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::post('/users/{id}/ban', [AdminController::class, 'banUser'])->name('users.ban');
         Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
-        Route::post('/posts/{id}/delete', [AdminController::class, 'deletePost'])->name('posts.delete');
+        Route::delete('/post/{id}', [AdminController::class, 'deletePost'])->name('posts.delete');
         Route::get('/post/{id}', [AdminController::class, 'viewPost'])->name('post');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
@@ -86,7 +86,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
 
 // Post
 Route::controller(PostController::class)->group(function () {
-    Route::get('/post/{id}', 'show')->name('post.page')->where('id', '[0-9]+');
+    Route::get('/post/{id}', 'show')->name('post')->where('id', '[0-9]+');
     Route::get('/post/{id}/image', 'viewImage')->name('post.image')->where('id', '[0-9]+');
 
     Route::post('/post', 'storePost');

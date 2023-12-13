@@ -35,7 +35,8 @@ export async function sendAjaxRequest(method, url, data) {
     method: method,
     headers: {
       'X-CSRF-TOKEN': getCsrfToken(),
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
     },
     body: encodeForAjax(data)
   });

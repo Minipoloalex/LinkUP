@@ -10,5 +10,7 @@ function dismissFeedback() {
 }
 export function showFeedback(message) {
     show(feedbackMessage);
-    feedbackMessage.querySelector('#feedback-text').textContent = message;
+    if (feedbackMessage) {
+        feedbackMessage.querySelector('#feedback-text').textContent = message;
+    }
 }

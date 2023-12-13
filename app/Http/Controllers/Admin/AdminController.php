@@ -86,6 +86,19 @@ class AdminController extends Controller
         $post = Post::findOrFail($id);
         $post->delete();
 
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Post deleted successfully.',
+            ]);
+        }
+        return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
+    }
+    public function deletePostJS($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+
         return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
     }
     public function viewPost($id)
