@@ -41,6 +41,33 @@ class GroupController extends Controller
         ]);
     }
 
+    public function showCreateForm()
+    {
+        if (!Auth::check())
+            return redirect('/login');
+
+        return view('pages.groups.create');
+    }
+
+    public function createGroup(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'description' => 'nullable|string|max:150',
+        ]);
+
+        $group = new Group();
+        $group->name = $request->input('name');
+        $group->description = $request->input('description');
+        $group->id_owner = Auth::user()->id;
+
+        $group->save();
+
+        $group->members()->attach(Auth::user()->id);
+
+        return redirect()->route('group', ['id' => $group->id])->with('success', 'Group created');
+    }
+
     public function settings(string $id)
     {
         $group = Group::findOrFail($id);
@@ -48,6 +75,28 @@ class GroupController extends Controller
         $this->authorize('settings', $group);
 
         return view('pages.groups.settings', ['group' => $group]);
+    }
+
+    public function changeOwner(Request $request, string $id)
+    {
+        $group = Group::findOrFail($id);
+
+        $this->authorize('settings', $group);
+
+        $request->validate([
+            'new_owner' => 'required|int'
+        ]);
+
+        $new_owner = User::findOrFail($request->input('new_owner'));
+
+        if (!$group->members()->where('id_user', $new_owner->id)->exists()) {
+            return response('User is not a member', 403);
+        }
+
+        $group->id_owner = $new_owner->id;
+        $group->save();
+
+        return redirect()->route('group', ['id' => $id])->with('success', 'Owner changed');
     }
 
     public function deleteMember(string $id, string $id_member)

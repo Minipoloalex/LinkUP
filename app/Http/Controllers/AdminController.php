@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 
@@ -67,9 +67,11 @@ class AdminController extends Controller
         $subject = 'Account Banned';
         $view = 'emails.ban';
 
-        MailController::sendEmail($user->name, $user->email, $subject, $view);
+        if (MailController::sendEmail($user->name, $user->email, $subject, $view)) {
+            return redirect()->route('admin.users')->with('success', 'User banned successfully.');
+        }
 
-        return redirect()->route('admin.users')->with('success', 'User banned successfully.');
+        return redirect()->route('admin.users')->with('error', 'User banned successfully, but email failed to send.');
     }
 
     public function unbanUser($id)

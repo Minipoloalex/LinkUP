@@ -30,7 +30,7 @@
             <h1 class="text-2xl">Admin Dashboard</h1>
         </div>
         <div class="w-24">
-            <a href="{{ route('admin.logout') }}" class="text-slate-200 hover:text-white">
+            <a href="{{ route('logout') }}" class="text-slate-200 hover:text-white">
                 <img src="{{ url('images/icons/logout.png') }}" alt="Logout" class="w-6">
             </a>
         </div>

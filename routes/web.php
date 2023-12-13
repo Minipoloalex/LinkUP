@@ -12,8 +12,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\AdminController;
 
 
 /*
@@ -64,12 +63,6 @@ Route::group(['middleware' => 'guest'], function () {
 
 // Admin
 Route::prefix('/admin')->name('admin.')->group(function () {
-    Route::redirect('/', '/admin/login');
-
-    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AdminLoginController::class, 'authenticate']);
-    Route::get('/logout', [AdminLoginController::class, 'logout'])->name('logout');
-
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
@@ -110,18 +103,19 @@ Route::controller(PostController::class)->group(function () {
 
 // Groups
 Route::controller(GroupController::class)->group(function () {
+    Route::get('/group/create', 'showCreateForm')->name('group.create');
+    Route::post('/group/create', 'createGroup');
+    
     Route::get('/group/{id}', 'show')->name('group');
     Route::get('/group/{id}/settings', 'settings')->name('group.settings');
 
-    Route::post('/group', 'createGroup')->name('group.create');
     Route::post('/group/{id}/join', 'joinRequest')->name('group.join');
     Route::post('/group/{id}/request/{member_id}', 'resolveRequest')->name('group.resolveRequest');
     Route::post('/group/verify-password', 'verifyPassword')->name('group.verifyPassword');
-    Route::put('/group/{id}/update', 'update')->name('group.update');
-
+    Route::put('/group/{id}/update', 'update')->name('group.update');  
+    Route::post('/group/{id}/change-owner', 'changeOwner')->name('group.changeOwner');
 
     Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
-    Route::put('/group/{id}', 'update')->name('group.update');
 
     Route::delete('/group/{id}', 'delete')->name('group.delete');
     Route::delete('/group/{id}/member/{member_id}', 'deleteMember');
