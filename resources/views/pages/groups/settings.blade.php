@@ -61,15 +61,13 @@
                             <option value="{{ $member->id }}" @if ($member->id == $group->id_owner) selected @endif>{{ $member->username }}</option>
                         @endforeach
                     </select>
-
-                    <div class="flex justify-end items-center w-full ml-8 mt-2">
-                        @include('partials.components.button', ['id' => 'change-owner', 'icon' => 'fas fa-save', 'color'
-                        =>
-                        'green', 'text' => 'Change'])    
-                    </div>
                 </div>
-               
             </form>
+            <div class="flex justify-end items-center w-full">
+                @include('partials.components.button', ['id' => 'change-owner-btn', 'icon' => 'fas fa-save', 'color'
+                =>
+                'green', 'text' => 'Change'])    
+            </div>
         </div>
     </section>
 
