@@ -8466,7 +8466,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "intervention/image": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -1,45 +1,56 @@
 // Path: public/js/group/group.js
-import { parseHTML } from "../general_helpers.js"
-import { infiniteScroll, destroyFetcher } from "../infinite_scrolling.js"
-import { hide, show } from "../general_helpers.js";
+import { parseHTML } from '../general_helpers.js'
+import { infiniteScroll, destroyFetcher } from '../infinite_scrolling.js'
+import { hide, show } from '../general_helpers.js'
 
 // const Swal = window.swal
 
-export function prependInPostSection(postElement) {
-  const posts_section = document.getElementById('posts-section');
+export function prependInPostSection (postElement) {
+  const posts_section = document.getElementById('posts-section')
   if (posts_section) {
-    posts_section.prepend(postElement);
+    posts_section.prepend(postElement)
   }
 }
 
-function appendInSection(htmlArray, section, lastElement, attachEventListeners) {
+function appendInSection (
+  htmlArray,
+  section,
+  lastElement,
+  attachEventListeners
+) {
   for (const html of htmlArray) {
-    const element = parseHTML(html);
-    section.insertBefore(element, lastElement);
+    const element = parseHTML(html)
+    section.insertBefore(element, lastElement)
     if (attachEventListeners) {
-      attachEventListeners(element); // add event listeners to newly loaded elements
+      attachEventListeners(element) // add event listeners to newly loaded elements
     }
   }
 }
 
-function addInfiniteScrollingToSection(section, fetcher, url, attachEventListeners) {
-  const load = (data) => appendInSection(data.elementsHTML, section, fetcher, attachEventListeners);
+function addInfiniteScrollingToSection (
+  section,
+  fetcher,
+  url,
+  attachEventListeners
+) {
+  const load = data =>
+    appendInSection(data.elementsHTML, section, fetcher, attachEventListeners)
 
-  const firstAction = (data) => {
-    load(data);
+  const firstAction = data => {
+    load(data)
     if (data.elementsHTML.length == 0) {
-      const none = parseHTML(data.noneHTML);
-      section.insertBefore(none, fetcher);
-      destroyFetcher();
+      const none = parseHTML(data.noneHTML)
+      section.insertBefore(none, fetcher)
+      destroyFetcher()
     }
   }
-  const action = (data) => {
-    load(data);
+  const action = data => {
+    load(data)
     if (data.elementsHTML.length == 0) {
-      destroyFetcher();
+      destroyFetcher()
     }
   }
-  infiniteScroll(section, fetcher, url, firstAction, action, false, false);
+  infiniteScroll(section, fetcher, url, firstAction, action, false, false)
 }
 
 function toggleSections () {
@@ -57,30 +68,49 @@ function toggleSections () {
 
   const group_element = document.getElementById('group-id')
   if (!group_element) return
-  const group_id = group_element.getAttribute('value');
+  const group_id = group_element.getAttribute('value')
 
-  addInfiniteScrollingToSection(posts_section, posts_fetcher, `/api/group/${group_id}/posts`, null)
-  addInfiniteScrollingToSection(members_section, members_fetcher, `/api/group/${group_id}/members`, (loadedMember) => {
-    addRemoveMemberEvents(loadedMember, group_id)
-  })
+  addInfiniteScrollingToSection(
+    posts_section,
+    posts_fetcher,
+    `/api/group/${group_id}/posts`,
+    null
+  )
+  addInfiniteScrollingToSection(
+    members_section,
+    members_fetcher,
+    `/api/group/${group_id}/members`,
+    loadedMember => {
+      addRemoveMemberEvents(loadedMember, group_id)
+    }
+  )
 
   posts.addEventListener('click', () => {
-    show(posts_section);
-    hide(members_section);
-    hide(requests_section);
+    posts.classList.add('dark:text-dark-active')
+    members.classList.remove('dark:text-dark-active')
+    if (requests) requests.classList.remove('dark:text-dark-active')
+    show(posts_section)
+    hide(members_section)
+    hide(requests_section)
   })
 
   members.addEventListener('click', () => {
-    show(members_section);
-    hide(posts_section);
-    hide(requests_section);
+    posts.classList.remove('dark:text-dark-active')
+    members.classList.add('dark:text-dark-active')
+    if (requests) requests.classList.remove('dark:text-dark-active')
+    show(members_section)
+    hide(posts_section)
+    hide(requests_section)
   })
 
   if (!requests) return
   requests.addEventListener('click', () => {
-    show(requests_section);
-    hide(posts_section);
-    hide(members_section);
+    posts.classList.remove('dark:text-dark-active')
+    members.classList.remove('dark:text-dark-active')
+    if (requests) requests.classList.add('dark:text-dark-active')
+    show(requests_section)
+    hide(posts_section)
+    hide(members_section)
   })
 }
 
@@ -106,7 +136,7 @@ function addRemoveMemberEvents (member, group_id) {
   const name = member.querySelector('h1').textContent
   const button = member.querySelector('.member-remove')
 
-  if (!button) return;
+  if (!button) return
 
   const member_id = button.id
 

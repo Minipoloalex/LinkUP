@@ -1,26 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 :root {
-  --faup-color   : rgb(255 255 255);
-  --ffup-color   : rgb(110  32 160);
-  --fdup-color   : rgb(244  42  65);
-  --icbas-color1 : rgb(255 214   0);
-  --icbas-color2 : rgb(147 191 235);
-  --fbaup-color  : rgb(178 179 181);
-  --fadeup-color : rgb(198 219   0);
-  --fmdup-color  : rgb(255  92   0);
-  --fmdup-color  : rgb(255 214   0);
-  --fpceup-color : rgb(255  92   0);
-  --fcup-color   : rgb(147 191 235);
-  --feup-color   : rgb(159  45  32);
-  --fmup-color   : rgb(255 214   0);
-  --flup-color   : rgb(  0  25 168);
-  --fep-color1   : rgb(244  42  65);
-  --fep-color2   : rgb(255 255 255);
-  --fcnaup-color1: rgb(255 214   0);
-  --fcnaup-color2: rgb(  0 175 138);
-  
-  --column-color : rgb(56, 56, 56);
+  --faup-color: rgb(255 255 255);
+  --ffup-color: rgb(110 32 160);
+  --fdup-color: rgb(244 42 65);
+  --icbas-color1: rgb(255 214 0);
+  --icbas-color2: rgb(147 191 235);
+  --fbaup-color: rgb(178 179 181);
+  --fadeup-color: rgb(198 219 0);
+  --fmdup-color: rgb(255 92 0);
+  --fmdup-color: rgb(255 214 0);
+  --fpceup-color: rgb(255 92 0);
+  --fcup-color: rgb(147 191 235);
+  --feup-color: rgb(159 45 32);
+  --fmup-color: rgb(255 214 0);
+  --flup-color: rgb(0 25 168);
+  --fep-color1: rgb(244 42 65);
+  --fep-color2: rgb(255 255 255);
+  --fcnaup-color1: rgb(255 214 0);
+  --fcnaup-color2: rgb(0 175 138);
+
+  --column-color: rgb(56, 56, 56);
   --bg-gray-300: rgb(209 213 219);
 }
 
@@ -28,7 +28,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-
 
 .search-bar {
   display: flex;
@@ -58,22 +57,23 @@ body {
   background-color: transparent;
   position: relative;
 }
-  
+
 .search-bar input:focus {
   border: 1px solid grey;
 }
-  
+
 /* Hide the search icon when text is entered */
 .search-bar input:not(:empty) ~ #searchIcon {
   opacity: 0;
 }
 
-.search-bar input:focus, .search-bar button:focus {
+.search-bar input:focus,
+.search-bar button:focus {
   outline: none;
   border: none;
 }
 
-button:clicked{
+button:clicked {
   background-color: transparent;
 }
 
@@ -101,7 +101,6 @@ button:clicked{
   cursor: pointer;
 }
 
-
 .edit-profile {
   width: 100%;
   /* put content in center and right of div */
@@ -112,9 +111,7 @@ button:clicked{
   background-color: transparent;
   border: none;
   cursor: pointer;
-
 }
-
 
 .edit-button {
   /* put content in center and right of div */
@@ -127,11 +124,7 @@ button:clicked{
   background-color: transparent;
   border: none;
   cursor: pointer;
-
 }
-
-
-
 
 .name-username {
   /* put content in center and right of div and separate the elements*/
@@ -139,9 +132,6 @@ button:clicked{
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  
-
-
 }
 
 /* name-username first child */
@@ -149,13 +139,11 @@ button:clicked{
   font-weight: bold;
 }
 
-
-.name-username p{
+.name-username p {
   color: white;
   font-size: 2rem;
   margin-right: 1rem;
 }
-
 
 .profile-numbers {
   display: flex;
@@ -192,7 +180,6 @@ button:clicked{
   border-radius: 50%;
   /* cover all the div */
   object-fit: cover;
-  
 }
 
 .post-username {
@@ -207,7 +194,6 @@ button:clicked{
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  
 }
 
 .post-image {
@@ -225,7 +211,6 @@ button:clicked{
 
 .post-actions {
   display: flex;
-
 }
 
 .post-action {
@@ -267,7 +252,8 @@ button:clicked{
 }
 
 /* contact page */
-#contactForm textarea:focus, input:focus {
+#contactForm textarea:focus,
+input:focus {
   border-color: transparent;
   outline: none;
 }
@@ -288,35 +274,28 @@ button:clicked{
     max-width: 200px;
     border-radius: 0.25rem;
   }
-
 }
 
 .post {
-    border-style: solid;
-    border-top-width: 1px;
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-color: #e2e8f0;
-    padding: 10px;
 }
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* For IE, Edge and Firefox */
 .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 #homepage {
-    height: calc(100% - 8rem);
+  height: calc(100% - 8rem);
 }
 
 * {
-    font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 #cropperjs {
@@ -330,4 +309,3 @@ button:clicked{
   margin-bottom: 10px;
   border-radius: 100%;
 }
-

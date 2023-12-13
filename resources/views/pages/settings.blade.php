@@ -3,22 +3,22 @@
 @section('title', 'Settings')
 
 @section('content')
-<main id="settings-page" class="flex flex-col items-center justify-center w-full mt-24">
-    
+<main id="settings-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-screen">
+
     @if (session('success'))
-        <div class="w-full max-w-md border-2 border-green-500 mb-6 rounded shadow-md">
-            <div class="flex items-center bg-green-500 text-white text-sm px-4 py-3" role="alert">
-                <i class="fas fa-check-circle fa-fw mr-3"></i>
-                <p>{{ session('success') }}</p>
-            </div>
+    <div class="w-full max-w-md border-2 border-green-500 mb-6 rounded shadow-md">
+        <div class="flex items-center bg-green-500 text-white text-sm px-4 py-3" role="alert">
+            <i class="fas fa-check-circle fa-fw mr-3"></i>
+            <p>{{ session('success') }}</p>
         </div>
+    </div>
     @elseif ($errors->any())
-        <div class="w-full max-w-md border-2 border-red-500 mb-6 rounded shadow-md">
-            <div class="flex items-center bg-red-500 text-white text-sm px-4 py-3" role="alert">
-                <i class="fas fa-exclamation-circle fa-fw mr-3"></i>
-                <p>{{ $errors->first() }}</p>
-            </div>
+    <div class="w-full max-w-md border-2 border-red-500 mb-6 rounded shadow-md">
+        <div class="flex items-center bg-red-500 text-white text-sm px-4 py-3" role="alert">
+            <i class="fas fa-exclamation-circle fa-fw mr-3"></i>
+            <p>{{ $errors->first() }}</p>
         </div>
+    </div>
     @endif
 
     <div class="w-full max-w-md">
@@ -38,8 +38,9 @@
                         New Username
                     </label>
 
-                    <input id="username" type="text" class="form-input w-full focus:outline-none" name="username" value="{{ $user->username }}" required autocomplete="username" autofocus>
-                    
+                    <input id="username" type="text" class="form-input w-full focus:outline-none" name="username"
+                        value="{{ $user->username }}" required autocomplete="username" autofocus>
+
                 </div>
 
                 <div class="flex flex-wrap mb-6">
@@ -47,7 +48,8 @@
                         New Email Address
                     </label>
 
-                    <input id="email" type="email" class="form-input w-full focus:outline-none" name="email" value="{{ $user->email }}" required autocomplete="email">
+                    <input id="email" type="email" class="form-input w-full focus:outline-none" name="email"
+                        value="{{ $user->email }}" required autocomplete="email">
                 </div>
 
                 <div class="flex flex-wrap mb-6">
@@ -55,7 +57,8 @@
                         New Password
                     </label>
 
-                    <input id="password" type="password" class="form-input w-full focus:outline-none" name="password" autocomplete="password">
+                    <input id="password" type="password" class="form-input w-full focus:outline-none" name="password"
+                        autocomplete="password">
 
                     <p class="text-gray-600 text-xs italic mt-4">
                         Leave blank to keep your current password.
@@ -67,7 +70,8 @@
                         Confirm New Password
                     </label>
 
-                    <input id="password_confirmation" type="password" class="form-input w-full focus:outline-none" name="password_confirmation" autocomplete="password">
+                    <input id="password_confirmation" type="password" class="form-input w-full focus:outline-none"
+                        name="password_confirmation" autocomplete="password">
                 </div>
 
                 <div class="flex flex-wrap">
@@ -85,9 +89,10 @@
                     </p>
                 </div>
             </form>
-    
+
             <div class="flex flex-wrap p-6">
-                <button id="account-update-button" class="bg-gray-200 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded">
+                <button id="account-update-button"
+                    class="bg-gray-200 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded">
                     Update
                 </button>
             </div>

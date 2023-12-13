@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -9,21 +9,22 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @auth
-        <meta name="user-id" content="{{ Auth::user()->id }}">
+    <meta name="user-id" content="{{ Auth::user()->id }}">
     @endauth
     <title>{{ config('app.name', 'Laravel') }} @yield('title')</title>
 
     <!-- Styles -->
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
-    <link href="{{ url('css/posts.css') }}" rel="stylesheet">
-    <link href="{{ url('css/follow.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"
+        integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
-    <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>    
+    <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+    <script type="module" src={{ url('js/app.js') }}></script>
     <script type="module" src={{ url('js/general_helpers.js') }}></script>
     <script type="module" src={{ url('js/feedback.js') }}></script>
     <script type="module" src={{ url('js/ajax.js') }}></script>
@@ -46,11 +47,13 @@
     <script type="module" src={{ url('js/profile/profile_infinite_scrolling.js') }}></script>
     <script type="module" src={{ url('js/foryou.js') }}></script>
     <script type="module" src={{ url('js/following.js') }}></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"
+        integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script>
-        const isAuthenticated = @json(auth()->check());
+        const isAuthenticated = @json(auth() -> check());
     </script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
@@ -58,9 +61,13 @@
 </head>
 
 
-<body>
+<body class="   dark:bg-dark-primary dark:text-dark-secondary scrollbar-hide
+                lg:px-[10vw]
+                xl:px-[30vw]">
     @include('partials.header')
     @yield('content')
+    @include('partials.side.navbar')
+    @include('partials.side.right-tab')
 
     @php
     $isHidden = isset($feedbackMessage) ? '' : 'hidden';
@@ -73,6 +80,7 @@
         </p>
         <button id="dismiss-feedback" class="inline absolute right-3 top-1/4">X</button>
     </footer>
+    <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black" style="opacity: 0.8;"></div>
 </body>
 
 </html>
