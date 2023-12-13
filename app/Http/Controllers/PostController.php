@@ -63,7 +63,7 @@ class PostController extends Controller
         $user = Auth::user();
         $group_id = $request->input('id_group');
 
-        
+
         if ($group_id !== null && !GroupMember::isMember($user, intval($group_id))) {
             return response()->json(['error' => 'You are not a member of this group']);
         }
@@ -359,7 +359,7 @@ class PostController extends Controller
         $followingDistanceTwo = DB::table('follows')
             ->select('id_followed')->whereIn('id_user', function ($query) use ($id) {
                 $query->select('id_followed')->from('follows')->where('id_user', $id);
-            })->where('id_followed', '!=', $id)->whereNotIn('id_followed', function ($query) use ($id) {
+            })->whereNotIn('id_followed', function ($query) use ($id) {
                 $query->select('id_followed')->from('follows')->where('id_user', $id);
             })
             ->distinct()->get()->pluck('id_followed');

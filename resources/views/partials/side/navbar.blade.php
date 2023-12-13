@@ -83,7 +83,7 @@ $username = Auth::user()->username ?? "";
         @auth
         <li class=" w-9 h-9 flex items-center justify-center
                     lg:w-12 lg:h-12 lg:p-1 xl:w-full xl:p-0">
-            <div class="flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center 
+            <div class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center 
                         xl:justify-center xl:items-center">
                 <i class="fa-solid fa-plus fa-xl xl:hidden"></i>
                 <p class="hidden ml-4 xl:block xl:m-0">Create</p>

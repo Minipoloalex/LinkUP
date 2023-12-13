@@ -14,14 +14,12 @@
     <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black z-10" style="opacity: 0.8;"></div>
 
     @auth
-    <!--<div id="create-post" class="relative z-20">
+    <div id="create-post" class="relative z-20">
         @include('partials.create_post_form', [
         'formClass' => 'add-post w-full lg:w-2/3 xl:w-1/2 xl:w-1/3 hidden fixed bottom-1/2 left-1/2 transform
         -translate-x-1/2 bg-gray-200 rounded px-10 py-5',
         'textPlaceholder' => 'Add a new post', 'buttonText' => 'Create Post', 'contentValue' => ''])
-        <button class="add-post-on rounded px-4 py-2 fixed bottom-5 right-20">Add Post</button>
-        <button class="add-post-off hidden bg-gray-200 rounded px-4 py-2 fixed bottom-5 right-20">Cancel</button>
-    </div>-->
+    </div>
     @endauth
 </main>
 @endsection

@@ -15,8 +15,6 @@
 
     <!-- Styles -->
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
-    <link href="{{ url('css/posts.css') }}" rel="stylesheet">
-    <link href="{{ url('css/follow.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"
         integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
