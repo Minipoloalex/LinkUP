@@ -11,7 +11,7 @@ use App\Http\Controllers\MailController;
 
 use App\Models\Admin;
 use App\Models\User;
-use App\Models\Post;\
+use App\Models\Post;
 
 class AdminController extends Controller
 {
@@ -64,9 +64,11 @@ class AdminController extends Controller
         $subject = 'Account Banned';
         $view = 'emails.ban';
 
-        MailController::sendEmail($user->name, $user->email, $subject, $view);
+        if (MailController::sendEmail($user->name, $user->email, $subject, $view)) {
+            return redirect()->route('admin.users')->with('success', 'User banned successfully.');
+        }
 
-        return redirect()->route('admin.users')->with('success', 'User banned successfully.');
+        return redirect()->route('admin.users')->with('error', 'User banned successfully, but email failed to send.');
     }
 
     public function unbanUser($id)
