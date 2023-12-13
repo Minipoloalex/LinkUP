@@ -97,6 +97,31 @@
                 </button>
             </div>
         </div>
+
+        <div class="flex flex-col break-words bg-white border-2 rounded shadow-md mt-6">
+            <div class="flex justify-between items-center bg-gray-200 text-gray-700 py-3 px-6 mb-0">
+                <h1 class="font-semibold">
+                    Delete Account
+                </h1>
+            </div>
+
+            <div class="w-full p-6">
+                <p class="text-gray-700 text-sm">
+                    This action cannot be undone.
+                </p>
+            </div>
+    
+            <div class="flex flex-wrap p-6">
+                <button id="account-delete-button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Delete
+                </button>
+            </div>
+
+            <form id="account-delete-form" method="POST" action="{{ route('settings.delete') }}">
+                @csrf
+                @method('POST')
+            </form>
+        </div>
     </div>
 </main>
 

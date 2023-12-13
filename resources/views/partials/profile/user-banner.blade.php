@@ -40,7 +40,7 @@
         </p>
 
         <p class="mb-4">
-            <i class="fa-solid fa-university"></i>
+            @if ($user->faculty) <i class="fa-solid fa-university"></i> @endif
             {{ $user->faculty }}
             @if ($user->course) <i class="fa-solid fa-graduation-cap"></i> @endif
             {{ $user->course }}
