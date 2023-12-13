@@ -100,8 +100,8 @@ function showGroups(event) {
     show(getGroupsList());
 }
 
-// 'remove-follower' or 'remove-following' or 'deny-follow-request' or 'accept-follow-request' or 'cancel-follow-request'
-async function generalFollowHandler(event, ajax, titleConfirmMessage, confirmMessage, confirmButtonText, action) {
+// 'remove-follower' or 'remove-following' or 'deny-follow-request' or 'accept-follow-request'
+async function generalFollowHandler(event, ajax, titleConfirmMessage, confirmMessage, confirmButtonText, action, actionResultMessageTitle, actionResultMessage) {
     event.preventDefault();
     const button = event.currentTarget;
     const userId = button.dataset.id;
@@ -113,19 +113,22 @@ async function generalFollowHandler(event, ajax, titleConfirmMessage, confirmMes
             const userArticle = button.closest('article');
             userArticle.remove();
             action(data);
+            Swal.fire(actionResultMessageTitle, actionResultMessage(username), 'success');
         }
     }, null, confirmButtonText);
 }
 async function deleteFollower(event) {
     return await generalFollowHandler(event,
         (userId) => sendAjaxRequest('DELETE', `/follow/follower/${userId}`, null),
-        'Delete follower?',
-        (username) => `Are you sure you want to delete ${username} from your follower list?`,
+        'Remove follower?',
+        (username) => `Are you sure you want to remove ${username} from your follower list?`,
         'Yes, delete.',
         (data) => {
             decrementCount(getFollowersButton());
             handleEmpty(getFollowersList(network), 'You have no followers');
-        }
+        },
+        'Removed!',
+        (username) => `${username} has been removed from your followers list.`
     );
 }
 async function deleteFollowing(event) {
@@ -137,7 +140,9 @@ async function deleteFollowing(event) {
         (data) => {
             decrementCount(getFollowingButton());
             handleEmpty(getFollowingList(network), 'You are not following anyone');
-        }
+        },
+        'Unfollowed!',
+        (username) => `You unfollowed ${username}.`
     );
 }
 
@@ -150,7 +155,9 @@ async function denyFollowRequestReceived(event) {
         (data) => {
             decrementCount(getFollowRequestsButton());
             handleEmpty(getFollowRequestsList(network), 'You have received no follow requests');
-        }
+        },
+        'Denied!',
+        (username) => `You denied ${username}'s follow request.`
     );
 }
 async function acceptFollowRequest(event) {
@@ -171,7 +178,10 @@ async function acceptFollowRequest(event) {
             deleteFollowerButton.addEventListener('click', deleteFollower);
         
             handleEmpty(getFollowRequestsList(network), 'You have received no follow requests');
-        });
+        },
+        'Accepted!',
+        (username) => `You accepted ${username}'s follow request.`
+    );
 }
 export function decrementCount(element) {
     element.textContent = parseInt(element.textContent) - 1;

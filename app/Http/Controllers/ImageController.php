@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ImageController extends Controller
 {
@@ -33,8 +34,14 @@ class ImageController extends Controller
             abort(400);
         }
     }
-    private function getFilePath(string $fileName)
+    public static function checkMaxSize($image)
     {
+        if ($image->getSize() > 10000000) { // 10MB
+            return response()->json(['error' => 'The uploaded image exceeds the maximum size limit of 10MB'], 400);
+        }
+        return false;
+    }
+    private function getFilePath(string $fileName) {
         return $this->path . $fileName;
     }
     public function getFileNameWithExtension(string $fileName)
@@ -47,12 +54,16 @@ class ImageController extends Controller
             abort(400);
         }
         if ($x === null || $y === null || $width === null || $height === null) {
-            $media = Image::make($media)->resize(self::$profilePictureSize, self::$profilePictureSize)
-                ->encode('jpg', 75);
-        } else {
-            $media = Image::make($media)->crop($width, $height, $x, $y)
-                ->resize(self::$profilePictureSize, self::$profilePictureSize)
-                ->encode('jpg', 75);
+            $manager = new ImageManager(new Driver());
+            $media = $manager->read($media)
+                ->resize($this->size, $this->size)
+                ->toJpeg(90);
+        }
+        else {
+            $manager = new ImageManager(new Driver());
+            $media = $manager->read($media)->crop($width, $height, $x, $y)
+                ->resize($this->size, $this->size)
+                ->toJpeg(90);
         }
         $media->save(storage_path('app/' . $this->path . $fileName));
     }

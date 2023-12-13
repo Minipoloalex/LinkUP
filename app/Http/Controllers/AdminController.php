@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Admin;
+use App\Http\Controllers\MailController;
 
+use App\Models\Admin;
 use App\Models\User;
 use App\Models\Post;
+
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -43,16 +46,17 @@ class AdminController extends Controller
     
     public function listUsers()
     {
-        $users = User::all()->sortBy('id');
-    
+        $users = User::paginate(10);
+
         return view('admin.users', ['users' => $users]);
     }
 
     public function listPosts()
     {
-        $posts = Post::all();
+        $posts = Post::paginate(10);
+
         return view('admin.posts', ['posts' => $posts]);
-    }  
+    }
 
     public function banUser($id)
     {
@@ -60,7 +64,14 @@ class AdminController extends Controller
         $user->is_banned = true;
         $user->save();
 
-        return redirect()->route('admin.users')->with('success', 'User banned successfully.');
+        $subject = 'Account Banned';
+        $view = 'emails.ban';
+
+        if (MailController::sendEmail($user->name, $user->email, $subject, $view)) {
+            return redirect()->route('admin.users')->with('success', 'User banned successfully.');
+        }
+
+        return redirect()->route('admin.users')->with('error', 'User banned successfully, but email failed to send.');
     }
 
     public function unbanUser($id)
@@ -70,5 +81,32 @@ class AdminController extends Controller
         $user->save();
 
         return redirect()->route('admin.users')->with('success', 'User unbanned successfully.');
+    }
+
+    public function deletePost($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Post deleted successfully.',
+            ]);
+        }
+        return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
+    }
+    public function deletePostJS($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
+    }
+    public function viewPost($id)
+    {
+        $post = Post::findOrFail($id);
+
+        return view('admin.post', ['post' => $post]);
     }
 }

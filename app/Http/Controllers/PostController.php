@@ -27,6 +27,15 @@ class PostController extends Controller
     {
         $this->imageController = new ImageController('posts');
     }
+    private function validateSizeImage(Request $request)
+    {
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $image = $request->media;
+            $checkSize = $this->imageController->checkMaxSize($image);
+            return $checkSize;
+        }
+        return false;
+    }
     /**
      * Store a newly created post in the database
      */
@@ -35,9 +44,13 @@ class PostController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            return $validatedSize;
+        }
         $request->validate([
             'content' => 'required|max:255',
-            // 'id_group' => 'nullable|exists:groups,id',
+            'id_group' => 'nullable|int|exists:group,id',
             'is_private' => 'nullable|boolean',
             'media' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg|max:10240',
             'x' => 'nullable|int',
@@ -46,7 +59,14 @@ class PostController extends Controller
             'height' => 'nullable|int'
         ]);
         $this->authorize('createPost', Post::class);  // user must be logged in
-        DB::beginTransaction();
+
+        $user = Auth::user();
+        $group_id = $request->input('id_group');
+
+        
+        if ($group_id !== null && !GroupMember::isMember($user, intval($group_id))) {
+            return response()->json(['error' => 'You are not a member of this group']);
+        }
         $post = new Post();
 
         $post->content = $request->input('content');
@@ -54,13 +74,13 @@ class PostController extends Controller
             $post->is_private = $request->input('is_private');
         }
         $post->id_created_by = Auth::user()->id;
+        $post->id_group = $group_id;
 
         $post->save();  // get the post id to make file name unique
         $createdFile = $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
             $post->created_at = $post->freshTimestamp();
         }
-        DB::commit();
 
         $postHTML = $this->translatePostToHTML($post, false, false, false);
         return response()->json(['postHTML' => $postHTML, 'success' => 'Post created successfully!']);
@@ -74,6 +94,10 @@ class PostController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            return $validatedSize;
+        }
         $request->validate([
             'content' => 'required|max:255',
             'id_parent' => 'required|exists:post,id',
@@ -82,10 +106,9 @@ class PostController extends Controller
             'y' => 'nullable|int',
             'width' => 'nullable|int',
             'height' => 'nullable|int'
-            // 'id_group' => 'nullable|exists:groups,id'
         ]);
 
-        $post = Post::find($request->input('id_parent'));
+        $post = Post::findOrFail($request->input('id_parent'));
         $this->authorize('createComment', $post);
 
         $comment = new Post();
@@ -94,7 +117,8 @@ class PostController extends Controller
         $comment->is_private = $post->is_private;
         $comment->id_created_by = Auth::user()->id;
 
-        $comment->id_parent = $request->input('id_parent');
+        $comment->id_group = $post->id_group;
+        $comment->id_parent = $post->id;
 
         $comment->save();
 
@@ -183,7 +207,13 @@ class PostController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            Log::debug($validatedSize);
+            return $validatedSize;
+        }
         $post = Post::findOrFail($id);
+
         $request->validate([
             'content' => 'nullable|string|max:255',
             'is_private' => 'nullable|boolean',
@@ -235,7 +265,7 @@ class PostController extends Controller
 
         // Delete the post and return it as JSON.
         $post->delete();
-        $post->success = 'Post deleted successfully!';
+
         return response()->json($post);
     }
     public function viewImage(string $id)
@@ -256,7 +286,6 @@ class PostController extends Controller
 
         $this->deleteFile($post->id);
         $post->save();
-        $post->success = 'Post image deleted successfully!';
         return response()->json($post);
     }
     /**
@@ -410,7 +439,7 @@ class PostController extends Controller
         // Check if the user has already liked the post
         $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
 
-        if ($existingLike == null) { // if its null, we can create a new like
+        if ($existingLike === null) { // if its null, we can create a new like
             $liked = new Liked();
             $liked->id_user = $user->id;
             $liked->id_post = $post->id;
@@ -652,7 +681,7 @@ class PostController extends Controller
             return response()->json(['error' => 'You are not a member of this group'], 401);
         }
 
-        $posts = Post::where('id_group', $id)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        $posts = Post::where('id_group', $id)->whereNull('id_parent')->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         if ($posts->isEmpty()) {
             $noPostsHTML = view('partials.search.no_results')->render();
             return response()->json([

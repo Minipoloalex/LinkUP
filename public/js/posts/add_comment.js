@@ -16,11 +16,15 @@ async function submitAddComment(event) {
     const commentContent = getTextField(commentForm).value;
 
     const post = event.currentTarget.closest('.post');
-    const data = await submitAddPostOrComment(commentForm, {
+    const promise = submitAddPostOrComment(commentForm, {
         content: commentContent,
         id_parent: post.dataset.id
     }, 'comment');
-
+    
+    commentForm.reset();    // already sent data, avoid user sending same comment twice
+    clearFileInputWrapper(getFileInputWrapper(commentForm));
+    
+    const data = await promise;
     if (data != null) {
         const commentsContainer = post.querySelector('.comments-container');
         const commentHTML = parseHTML(data.commentHTML);
@@ -28,9 +32,6 @@ async function submitAddComment(event) {
         addEventListenersToComment(commentHTML);
         commentsContainer.appendChild(commentHTML);
         incrementCommentCount(post);
-
-        commentForm.reset();
-        clearFileInputWrapper(getFileInputWrapper(commentForm));
     }
 }
 function addEventListenersToComment(comment) {

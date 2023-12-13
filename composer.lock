@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7fe34112f276c6c858592e463dcdd8d7",
+    "content-hash": "9eecbd6159ece97892621999332f2438",
     "packages": [
         {
             "name": "brick/math",
@@ -1099,19 +1099,20 @@
         },
         {
             "name": "intervention/image",
-            "version": "dev-master",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "4c1938f0d35e59bf90ba9fef04f375c503516bfd"
+                "reference": "f17fe7bb54ec18d75588f527052069a6e9b5d720"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/4c1938f0d35e59bf90ba9fef04f375c503516bfd",
-                "reference": "4c1938f0d35e59bf90ba9fef04f375c503516bfd",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/f17fe7bb54ec18d75588f527052069a6e9b5d720",
+                "reference": "f17fe7bb54ec18d75588f527052069a6e9b5d720",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "intervention/gif": "^3",
                 "php": "^8.1"
             },
@@ -1120,7 +1121,6 @@
                 "phpstan/phpstan": "^1",
                 "phpunit/phpunit": "^9"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1150,7 +1150,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/master"
+                "source": "https://github.com/Intervention/image/tree/3.0.1"
             },
             "funding": [
                 {
@@ -1162,7 +1162,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-08T13:57:00+00:00"
+            "time": "2023-12-09T10:10:43+00:00"
         },
         {
             "name": "laravel/framework",
@@ -8475,5 +8475,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.2.0"
 }

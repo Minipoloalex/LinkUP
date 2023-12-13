@@ -34,6 +34,68 @@ function deleteGroup(groupId) {
     .catch(error => console.error(error))
 }
 
+function addChangeOwnerEvent() {
+  const button = document.getElementById('change-owner-btn')
+  const form = document.getElementById('change-owner-form')
+  if (!button) return
+
+  button.addEventListener('click', () => {
+    const groupId = document.getElementById('group-id').value
+
+    Swal.fire({
+      title: 'Change owner?',
+      text: 'The new owner will have the same permissions as you.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#ff0000',
+      cancelButtonColor: '#aaa',
+      confirmButtonText: 'Yes, change.'
+    }).then(result => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Enter your password',
+          input: 'password',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Change',
+          confirmButtonColor: '#ff0000',
+          showLoaderOnConfirm: true,
+          preConfirm: password => {
+            const url = '/group/verify-password'
+
+            return fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector(
+                  'meta[name="csrf-token"]'
+                ).content
+              },
+              body: JSON.stringify({ password })
+            })
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error()
+                }
+                return true
+              })
+              .catch(() => {
+                Swal.showValidationMessage('The password is incorrect.')
+              })
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then(result => {
+          if (result.isConfirmed) {
+            form.submit()
+          }
+        })
+      }
+    })
+  })
+}
+
 function addDeleteGroupEvent() {
   const button = document.getElementById('delete-group')
   if (!button) return
@@ -97,3 +159,4 @@ function addDeleteGroupEvent() {
 
 groupPhotoHover()
 addDeleteGroupEvent()
+addChangeOwnerEvent()

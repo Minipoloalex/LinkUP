@@ -49,7 +49,28 @@
     </section>
 
     <section class="flex flex-col mt-4">
-        <h1 class="text-xl text-bold ml-12 mt-4">Change Ownership</h1>
+        <div class="w-full">
+            <h1 class="text-xl text-bold ml-12 mt-4"> Change Ownership </h1>
+            <form id="change-owner-form" action="{{ route('group.changeOwner', ['id' => $group->id]) }}" method="POST"
+                class="flex items-center justify-start w-full pt-4 px-12 h-60">
+                @csrf
+                @method('POST')
+                <div class="flex flex-col justify-start items-center w-5/6 h-full">
+                    <select name="new_owner" id="new-owner"
+                        class="text-lg border-b border-slate-400 w-full my-2 ml-8 px-2">
+                        @foreach ($group->members as $member)
+                        <option value="{{ $member->id }}" @if ($member->id == $group->id_owner) selected @endif>{{
+                            $member->username }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </form>
+            <div class="flex justify-end items-center w-full">
+                @include('partials.components.button', ['id' => 'change-owner-btn', 'icon' => 'fas fa-save', 'color'
+                =>
+                'green', 'text' => 'Change'])
+            </div>
+        </div>
     </section>
 
     <section class="flex flex-col mt-4" id="group-content">

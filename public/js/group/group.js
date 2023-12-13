@@ -5,7 +5,14 @@ import { hide, show } from '../general_helpers.js'
 
 // const Swal = window.swal
 
-function insertInSection (
+export function prependInPostSection (postElement) {
+  const posts_section = document.getElementById('posts-section')
+  if (posts_section) {
+    posts_section.prepend(postElement)
+  }
+}
+
+function appendInSection (
   htmlArray,
   section,
   lastElement,
@@ -27,7 +34,7 @@ function addInfiniteScrollingToSection (
   attachEventListeners
 ) {
   const load = data =>
-    insertInSection(data.elementsHTML, section, fetcher, attachEventListeners)
+    appendInSection(data.elementsHTML, section, fetcher, attachEventListeners)
 
   const firstAction = data => {
     load(data)

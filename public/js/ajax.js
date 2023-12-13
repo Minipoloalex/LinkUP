@@ -15,7 +15,7 @@ export async function handleFeedbackToResponse(response) {
   if (response.ok) {
     const data = await response.json();
     if (data.error) {
-      showFeedback(data.error);
+      Swal.fire('Error', data.error, 'error');
     }
     else {
       if (data.success) {
@@ -35,7 +35,8 @@ export async function sendAjaxRequest(method, url, data) {
     method: method,
     headers: {
       'X-CSRF-TOKEN': getCsrfToken(),
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
     },
     body: encodeForAjax(data)
   });

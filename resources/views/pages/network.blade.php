@@ -64,7 +64,7 @@
                 @endforelse
             </div>
             @endif
-            <div id="groups-list" class="flex flex-col hidden">
+            <div id="groups-list" class="flex flex-col gap-2 hidden">
                 @forelse ($user->groups as $groupMember)
                 @include('partials.network.group_card', [
                 'group' => $groupMember->group,
@@ -73,8 +73,15 @@
                 @empty
                 <p class="empty-list">You are not a member of any group</p>
                 @endforelse
+                @if ($isMyProfile)
+                <a href="{{ route('group.create') }}"
+                    class="flex items-center justify-center w-full h-10 px-4 py-2 mt-4 text-sm font-medium">
+                    Create a group
+                </a>
+                @endif
             </div>
         </section>
+    </section>
     </section>
 </main>
 @endsection

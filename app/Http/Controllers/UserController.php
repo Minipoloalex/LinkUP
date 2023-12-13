@@ -41,7 +41,7 @@ class UserController extends Controller
      * Show the user's edit profile page.
      * 
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showEditProfile(Request $request)
     {
@@ -54,7 +54,7 @@ class UserController extends Controller
      * Show the user's settings.
      * 
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showSettings(Request $request)
     {
@@ -74,7 +74,13 @@ class UserController extends Controller
         $this->authorize('update', User::class);
         
         $user = Auth::user();
-
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $image = $request->media;
+            $checkSize = $this->imageController->checkMaxSize($image);
+            if ($checkSize !== false) {
+                return $checkSize;
+            }
+        }
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:255'],
@@ -184,7 +190,7 @@ class UserController extends Controller
         $follower = User::findOrFail($id);
         $user->followers()->detach($follower->id);
 
-        return response()->json(['success' => "$follower->username removed from follower list successfully!"]);
+        return response()->json([]);
     }
 
     public function removeFollowing(string $id)
@@ -201,7 +207,7 @@ class UserController extends Controller
         }
         $user->following()->detach($following->id);
 
-        return response()->json(['success' => "$following->username removed from following list successfully!"]);
+        return response()->json([]);
     }
 
     public function requestFollow(Request $request)
@@ -286,7 +292,6 @@ class UserController extends Controller
             ->firstOrFail();
         $followRequest->delete();
 
-        $sentFrom->success = "You denied the follow request from $sentFrom->username";
         return response()->json($sentFrom);
     }
     public function acceptFollowRequest(string $id)
@@ -314,7 +319,7 @@ class UserController extends Controller
             'isMyProfile' => true
         ])->render();
 
-        return response()->json(['userHTML' => $userHTML, 'success' => "You accepted the follow request from $sentFrom->username", 'userId' => $sentFrom->id]);
+        return response()->json(['userHTML' => $userHTML, 'userId' => $sentFrom->id]);
     }
     public function translateUserToHTML(User $user)
     {

@@ -1,15 +1,21 @@
-{{-- ['post' => Post Model, 'displayComments' => bool, 'showAddComment' => bool, 'showEdit' => bool] --}}
+{{-- ['post' => Post Model, 'displayComments' => bool, 'showAddComment' => bool, 'showEdit' => bool, 'hasAdminLink' =>
+?bool, 'hasAdminDelete' => ?bool] --}}
+@php
+$hasAdminLink ??= false;
+$hasAdminDelete ??= false;
+@endphp
 <article class="p-2 border-t dark:border-dark-neutral first:border-0 w-full" data-id="{{ $post->id }}">
-    @include('partials.post_info', ['post' => $post, 'showEdit' => $showEdit])
+    @include('partials.post_info', ['post' => $post, 'showEdit' => $showEdit, 'hasAdminLink' => $hasAdminLink,
+    'hasAdminDelete' => $hasAdminDelete])
     @if($displayComments)
     @php
     $comments = $post->comments;
     @endphp
-
     <div class='comments-container'>
         @if ($comments->count() > 0)
         @foreach ($comments as $comment)
-        @include('partials.comment', ['comment' => $comment, 'displayComments' => false, 'showEdit' => $showEdit])
+        @include('partials.comment', ['comment' => $comment, 'displayComments' => false, 'showEdit' => $showEdit,
+        'hasAdminLink' => $hasAdminLink, 'hasAdminDelete' => $hasAdminDelete])
         @endforeach
         @endif
     </div>
