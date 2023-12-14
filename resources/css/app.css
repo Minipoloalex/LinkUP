@@ -18,3 +18,25 @@ select:focus ~ label {
   padding: 0.5rem;
   text-align: center;
 }
+
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-dark-neutral;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-active;
+}
+
+#timeline-tabs div {
+  @apply border-b-2 dark:border-dark-neutral;
+}
+
+#timeline-tabs > .tab-active {
+  @apply border-b-2 dark:border-dark-active;
+}

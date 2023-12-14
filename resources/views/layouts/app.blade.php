@@ -32,7 +32,7 @@
     <script type="module" src={{ url('js/network.js') }}></script>
     <script type="module" src={{ url('js/add_follow.js') }}></script>
     <script type="module" src={{ url('js/posts/post_helpers.js') }}></script>
-    <script type="module" src={{ url('js/posts/post_render.js') }}></script>
+    <script type="module" src={{ url('js/home/home.js') }}></script>
     <script type="module" src={{ url('js/posts/add_comment.js') }}></script>
     <script type="module" src={{ url('js/posts/delete_post.js') }}></script>
     <script type="module" src={{ url('js/posts/edit_post.js') }}></script>
@@ -61,7 +61,7 @@
 </head>
 
 
-<body class="   dark:bg-dark-primary dark:text-dark-secondary scrollbar-hide
+<body class="   dark:bg-dark-primary dark:text-dark-secondary
                 lg:px-[10vw]
                 xl:px-[30vw]">
     @include('partials.header')
