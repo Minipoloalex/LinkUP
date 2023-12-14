@@ -19,13 +19,19 @@
                 </form>
 
             </div>
-            <div class=" h-[30vh] w-full flex flex-col items-start justify-start pl-5 border rounded-md 
+            <div class=" h-[30vh] w-full flex flex-col items-start justify-start border rounded-md
                     dark:border-dark-neutral z-10">
-                Notifications
+                <div class="w-full pl-4 py-1 border-b dark:border-dark-neutral">
+                    <h2>Notifications</h2>
+                </div>
+                <div class="w-full overflow-clip overflow-y-scroll scrollbar-thin">
+                </div>
             </div>
-            <div class=" h-[30vh] w-full flex flex-col items-start justify-start pl-5 border rounded-md 
+            <div class=" h-[30vh] w-full flex flex-col items-start justify-start border rounded-md 
                     dark:border-dark-neutral z-10">
-                Suggestions
+                <div class="w-full pl-4 py-1 border-b dark:border-dark-neutral">
+                    <h2>Suggestions</h2>
+                </div>
             </div>
         </div>
     </div>
