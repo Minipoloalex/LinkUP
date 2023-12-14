@@ -1,6 +1,6 @@
 import { parseHTML } from '../general_helpers.js'
 import { infiniteScroll } from '../infinite_scrolling.js'
-import { initializeLikeButton } from '../posts/like.js'
+import { toggleLike } from '../posts/like.js'
 
 const timeline = document.querySelector('#timeline')
 const for_you_tab = document.querySelector('#for-you-tab')
@@ -19,9 +19,13 @@ function appendPostsToTimeline (postsHTML) {
     for (const postHTML of postsHTML) {
       const postElement = parseHTML(postHTML)
       timeline.insertBefore(postElement, timeline.lastElementChild)
-      const postId = postElement.getAttribute('data-id')
-      const likeButton = postElement.querySelector('.like-button')
-      initializeLikeButton(postId, likeButton)
+      const likeButtons = postElement.querySelectorAll('.like-button')
+      if (!likeButtons) return
+      for (const likeButton of likeButtons) {
+        likeButton.addEventListener('click', async () => {
+          toggleLike(likeButton)
+        })
+      }
     }
   }
 }

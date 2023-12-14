@@ -34,9 +34,17 @@ select:focus ~ label {
 }
 
 #timeline-tabs div {
-  @apply border-b-2 dark:border-dark-neutral;
+  @apply border-b-2 dark:border-dark-neutral cursor-pointer;
 }
 
 #timeline-tabs > .tab-active {
-  @apply border-b-2 dark:border-dark-active;
+  @apply border-b-2 dark:border-dark-active cursor-pointer;
+}
+
+i.liked {
+  @apply text-red-500;
+}
+
+i.unliked {
+  @apply dark:text-dark-neutral;
 }

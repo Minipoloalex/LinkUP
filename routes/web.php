@@ -94,8 +94,7 @@ Route::controller(PostController::class)->group(function () {
     Route::put('/post/{id}', 'update')->where('id', '[0-9]+');
 
     // Like routes
-    Route::post('/post/{id}/like', 'addLike'); // add like
-    Route::delete('/post/{id}/like', 'removeLike'); // remove like
+    Route::post('/post/{id}/like', 'toggleLike'); // add like
     Route::get('/post/{id}/like', 'likeStatus');  // get like status
 
     Route::get('/foryou', 'forYouPosts'); // get for you posts
@@ -108,14 +107,14 @@ Route::controller(PostController::class)->group(function () {
 Route::controller(GroupController::class)->group(function () {
     Route::get('/group/create', 'showCreateForm')->name('group.create');
     Route::post('/group/create', 'createGroup');
-    
+
     Route::get('/group/{id}', 'show')->name('group');
     Route::get('/group/{id}/settings', 'settings')->name('group.settings');
 
     Route::post('/group/{id}/join', 'joinRequest')->name('group.join');
     Route::post('/group/{id}/request/{member_id}', 'resolveRequest')->name('group.resolveRequest');
     Route::post('/group/verify-password', 'verifyPassword')->name('group.verifyPassword');
-    Route::put('/group/{id}/update', 'update')->name('group.update');  
+    Route::put('/group/{id}/update', 'update')->name('group.update');
     Route::post('/group/{id}/change-owner', 'changeOwner')->name('group.changeOwner');
 
     Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
@@ -145,7 +144,7 @@ Route::post('/settings/update', [UserController::class, 'updateSettings'])->name
 Route::post('/settings/delete', [UserController::class, 'deleteAccount'])->name('settings.delete');
 Route::post('/settings/confirm-password', [UserController::class, 'confirmPassword'])->name('settings.confirmPassword');
 
-Route::get('/search', function(){
+Route::get('/search', function () {
     return view('pages.search');
 })->name('search');
 

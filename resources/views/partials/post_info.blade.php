@@ -43,15 +43,14 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
         <h3 class="flex">
             <button class="like-button" data-id="{{ $post->id }}" data-liked="{{ $post->liked ? 'true' : 'false' }}">
                 at if($post->liked) -->
-    {{-- @php
+    @php
     $isLiked = $post->likedByUser();
-    $color = $isLiked ? 'red' : 'black';
-    @endphp --}}
+    $class = $isLiked ? 'fas fa-heart liked' : 'far fa-heart unliked';
+    @endphp
     <div class="flex justify-between">
         <h3 class="flex">
-            <button class="like-button mr-1" data-id="{{ $post->id }}"
-                data-liked="{{ $post->liked ? 'true' : 'false' }}">
-                <i class="far fa-heart dark:text-dark-neutral"></i>
+            <button class="like-button mr-1" data-id="{{ $post->id }}" data-liked="{{ $isLiked ? 'true' : 'false' }}">
+                <i class="{{ $class }}"></i>
             </button>
             <span class="ml-2">{{ count($post->likes) }}</span>
         </h3>
