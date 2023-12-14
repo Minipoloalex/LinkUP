@@ -47,7 +47,7 @@ function buildForYouTimeline () {
 
 function buildFollowingTimeline () {
   const testIntersectionElement = timeline.querySelector('#fetcher')
-  const action = data => prependPostsToTimeline(data.resultsHTML)
+  const action = data => appendPostsToTimeline(data.resultsHTML)
   infiniteScroll(
     timeline,
     testIntersectionElement,
@@ -77,7 +77,6 @@ if (following_tab) {
     following_tab.classList.add('tab-active')
     for_you_tab.classList.remove('tab-active')
     timeline.innerHTML = '<div id="fetcher" class="h-16 lg:h-0"></div>'
-    //buildFollowingTimeline()
-    buildForYouTimeline()
+    buildFollowingTimeline()
   })
 }

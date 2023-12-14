@@ -54,8 +54,13 @@ Route::middleware('web')->group(function () {
         [UserController::class, 'groupMembers']
     )->where('id', '[0-9]+')->name('group.members');
 
-    Route::get(     // define a route for /posts which accepts a GET request with a DATE parameter
+    Route::get(
         '/posts/for-you',
         [PostController::class, 'getPostsForYou']
-    )->name('posts.beforeDate');
+    )->name('posts.for-you');
+
+    Route::get(
+        '/posts/following',
+        [PostController::class, 'getPostsFollowing']
+    )->name('posts.following');
 });
