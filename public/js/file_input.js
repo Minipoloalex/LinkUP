@@ -45,15 +45,15 @@ export function handlerFileInput(fileInputWrapper) {
             const reader = new FileReader();
             reader.onload = function (e) {
                 const imgSource = e.currentTarget.result;
-                showCropSwal(imgSource).then(
+                showCropSwal(imgSource, type).then(
                     (result) => {
+                        const img = getImagePreview(fileInputWrapper);
                         if (result.isConfirmed) {
                             x.value = result.value.data.x;
                             y.value = result.value.data.y;
                             width.value = result.value.data.width;
                             height.value = result.value.data.height;
 
-                            const img = getImagePreview(fileInputWrapper);
                             img.src = result.value.preview;
 
                             show(removeFileBtn);
@@ -98,18 +98,21 @@ export function handlerFileInput(fileInputWrapper) {
 }
 
 
-async function showCropSwal(imageSrc) {
+async function showCropSwal(imageSrc, type) {
     let cropper = null;
     return await Swal.fire({
         title: 'Crop your image',
-        html: `
-        <div class="flex justify-center">
+        html: type == 'post' ?
+        `<div>
+            <img id="cropperjs" src="${imageSrc}">
+        </div>`
+        :
+        `<div class="flex justify-center">
             <img id="preview" src="${imageSrc}">
         </div>
         <div>
             <img id="cropperjs" src="${imageSrc}">
-        </div>
-        `,
+        </div>`,
         willOpen: () => {
             const image = Swal.getPopup().querySelector('#cropperjs');
             let timeoutId;
@@ -125,7 +128,9 @@ async function showCropSwal(imageSrc) {
                             const popup = Swal.getPopup();
                             if (popup) {
                                 const preview = popup.querySelector('#preview');
-                                preview.src = croppedCanvas.toDataURL();
+                                if (preview) {
+                                    preview.src = croppedCanvas.toDataURL();
+                                }
                             }
                         }
                     }, 25);
@@ -135,7 +140,7 @@ async function showCropSwal(imageSrc) {
         preConfirm: () => {
             return {
                 data: cropper.getData(true),
-                preview: (Swal.getPopup().querySelector('#preview')).src,
+                preview: cropper.getCroppedCanvas().toDataURL(),
             };
         },
         showCancelButton: true,

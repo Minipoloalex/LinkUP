@@ -37,7 +37,7 @@ class RegisterController extends Controller
         $request->validate([
             'username' => ['required', 'string', 'max:15', 'unique:users'],
             'faculty' => ['required', 'string', 'max:6'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'unique:admin'], // 'unique:admins' is added to prevent users from registering with an admin's email.
             'password' => ['required', 'confirmed', 'min:8', 'max:255'],
         ]);
 

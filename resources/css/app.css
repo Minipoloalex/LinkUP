@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+select:focus ~ label,
+select:not([value=""]):valid ~ label {
+  @apply transform -translate-y-6 text-sm;
+}
+
+select:focus ~ label {
+  @apply text-black left-0;
+}
+
+#network button.active {
+  @apply dark:border-dark-active dark:text-dark-active;
+}
+.empty-list {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-dark-neutral;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-active;
+}
+
+#timeline-tabs div {
+  @apply border-b-2 dark:border-dark-neutral cursor-pointer;
+}
+
+#timeline-tabs > .tab-active {
+  @apply border-b-2 dark:border-dark-active cursor-pointer;
+}
+
+i.liked {
+  @apply text-red-500;
+}
+
+i.unliked {
+  @apply dark:text-dark-neutral;
+}

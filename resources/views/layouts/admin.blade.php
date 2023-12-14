@@ -8,13 +8,15 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta name="is-admin" content="">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
-    <link href="{{ url('css/posts.css') }}" rel="stylesheet">
-    <script type="module" src={{ url('js/app.js') }} defer></script>
+    <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script type="module" src="{{ url('js/posts/delete_post.js')}}"></script>
+    <script type="module" src="{{ url('js/admin/users.js')}}"></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>
@@ -28,7 +30,7 @@
             <h1 class="text-2xl">Admin Dashboard</h1>
         </div>
         <div class="w-24">
-            <a href="{{ route('admin.logout') }}" class="text-slate-200 hover:text-white">
+            <a href="{{ route('logout') }}" class="text-slate-200 hover:text-white">
                 <img src="{{ url('images/icons/logout.png') }}" alt="Logout" class="w-6">
             </a>
         </div>

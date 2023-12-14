@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -21,7 +21,11 @@
     @vite('resources/js/app.js')
 </head>
 
-<body class="lg:bg-slate-400">
+<body class="dark:bg-dark-primary dark:text-dark-secondary w-screen h-screen py-12">
+    <img src="{{ url('images/logo-dark-mode.png') }}" alt="Link up logo" class="self-center w-48 mt-4">
+    <div class="text-base font-bold text-center">
+        <h1>A rede social da UPorto</h1>
+    </div>
     @yield('content')
 </body>
 

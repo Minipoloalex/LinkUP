@@ -18,8 +18,23 @@ class UserPolicy
         }
         return Response::allow();
     }
-    public function delete(User $user, User $model): bool
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user): Response
     {
-        //
+        if (!Auth::check()) {
+            return Response::deny('You are not logged in', 401);
+        }
+        return Response::allow();
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function viewPosts(?User $user, User $toView): bool
+    {
+        return $toView->is_private === false || ($user !== null && ($toView->id === $user->id || $user->isFollowing($toView)));
     }
 }

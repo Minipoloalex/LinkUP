@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 
 class GroupController extends Controller
 {
+    private static int $amountPerPage = 10;
     public function show(string $id)
     {
         if (!Auth::check())
@@ -40,6 +41,33 @@ class GroupController extends Controller
         ]);
     }
 
+    public function showCreateForm()
+    {
+        if (!Auth::check())
+            return redirect('/login');
+
+        return view('pages.groups.create');
+    }
+
+    public function createGroup(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:50',
+            'description' => 'nullable|string|max:150',
+        ]);
+
+        $group = new Group();
+        $group->name = $request->input('name');
+        $group->description = $request->input('description');
+        $group->id_owner = Auth::user()->id;
+
+        $group->save();
+
+        $group->members()->attach(Auth::user()->id);
+
+        return redirect()->route('group', ['id' => $group->id])->with('success', 'Group created');
+    }
+
     public function settings(string $id)
     {
         $group = Group::findOrFail($id);
@@ -47,6 +75,28 @@ class GroupController extends Controller
         $this->authorize('settings', $group);
 
         return view('pages.groups.settings', ['group' => $group]);
+    }
+
+    public function changeOwner(Request $request, string $id)
+    {
+        $group = Group::findOrFail($id);
+
+        $this->authorize('settings', $group);
+
+        $request->validate([
+            'new_owner' => 'required|int'
+        ]);
+
+        $new_owner = User::findOrFail($request->input('new_owner'));
+
+        if (!$group->members()->where('id_user', $new_owner->id)->exists()) {
+            return response('User is not a member', 403);
+        }
+
+        $group->id_owner = $new_owner->id;
+        $group->save();
+
+        return redirect()->route('group', ['id' => $id])->with('success', 'Owner changed');
     }
 
     public function deleteMember(string $id, string $id_member)
@@ -120,7 +170,16 @@ class GroupController extends Controller
         $group = Group::findOrFail($id);
 
         $this->authorize('settings', $group);
-        Log::debug($request->all());
+
+        $imageController = new ImageController('groups');
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $image = $request->image;
+            $checkSize = $imageController->checkMaxSize($image);
+            if ($checkSize !== false) {
+                return $checkSize;
+            }
+        }
+
         $request->validate([
             'name' => 'required|string|max:50',
             'description' => 'nullable|string|max:150',
@@ -135,17 +194,14 @@ class GroupController extends Controller
         $group->description = $request->input('description');
         $group->save();
 
-        Log::debug("Testing if has image");
         if ($request->has('image') && $request->image != null && $request->file('image')->isValid()) {
-            Log::debug("Has valid image -> storing");
-            $imageController = new ImageController('groups');
             $fileName = $imageController->getFileNameWithExtension(str($group->id));
             if ($imageController->existsFile($fileName)) {
                 $imageController->delete($fileName);
             }
             $imageController->store($request->image, $fileName, $request->x, $request->y, $request->width, $request->height);
         }
-        Log::debug("Group updated");
+
         return redirect()->route('group', ['id' => $id])->with('success', 'Group updated');
     }
 
@@ -177,8 +233,10 @@ class GroupController extends Controller
     {
         $request->validate([
             'query' => 'required|string|max:255',
+            'page' => 'required|int'
         ]);
-        $groups = Group::search($request->input('query'));
+        $page = $request->input('page');
+        $groups = Group::search($request->input('query'))->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         if ($groups->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([

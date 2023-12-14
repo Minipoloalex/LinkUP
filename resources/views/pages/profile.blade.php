@@ -1,17 +1,25 @@
-@extends('layouts.app')
+@php
+$userCanSeePosts = $user->is_private === false || (Auth::check() && ($user->id === Auth::user()->id ||
+Auth::user()->isFollowing($user)));
+@endphp
 
-@section('title', 'profile-page')
+@extends('layouts.app')
+@section('title', 'Profile')
 
 @section('content')
-    <main id="homepage" class="grid grid-cols-4 absolute top-32 left-0 w-screen px-64">
-        @include('partials.side.navbar')
-        <section class="col-span-2 flex flex-grow pt-16 overflow-y-auto scrollbar-hide" id="content">
-        <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black" style="opacity: 0.8;"></div>
-            <section class="user-banner flex-grow h-full">
-                @include('partials.profile.user-banner')
-                @include('partials.profile.post-profile')
-            </section>
+<main id="profile-page" class=" flex flex-col w-screen
+                                lg:w-full">
+    <section class="flex flex-grow" id="content">
+        <section id="posts-container" data-id="{{ $user->id }}" data-page="0"
+            class=" overflow-clip overflow-y-scroll flex-grow h-full scrollbar-hide">
+            @include('partials.profile.user-banner')
+            @if ($userCanSeePosts)
+            <div id="fetcher" class="h-16 lg:h-0"></div>
+            @else
+            <p class="text-center">This user has a private profile.</p>
+            @endif
         </section>
-        @include('partials.side.right-tab-profile')
-    </main>
+    </section>
+    </section>
+</main>
 @endsection

@@ -6,6 +6,9 @@ use App\Models\CommentNotification;
 use App\Models\Post;
 use App\Models\Liked;
 use App\Models\User;
+use App\Models\GroupMember;
+
+use \App\Events\CommentEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,14 +18,23 @@ use Log;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Collection;
-use \App\Events\CommentEvent;
 
 class PostController extends Controller
 {
     private ImageController $imageController;
+    private static int $amountPerPage = 10;
     public function __construct()
     {
         $this->imageController = new ImageController('posts');
+    }
+    private function validateSizeImage(Request $request)
+    {
+        if ($request->hasFile('media') && $request->file('media')->isValid()) {
+            $image = $request->media;
+            $checkSize = $this->imageController->checkMaxSize($image);
+            return $checkSize;
+        }
+        return false;
     }
     /**
      * Store a newly created post in the database
@@ -32,9 +44,13 @@ class PostController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            return $validatedSize;
+        }
         $request->validate([
             'content' => 'required|max:255',
-            // 'id_group' => 'nullable|exists:groups,id',
+            'id_group' => 'nullable|int|exists:group,id',
             'is_private' => 'nullable|boolean',
             'media' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg|max:10240',
             'x' => 'nullable|int',
@@ -43,7 +59,14 @@ class PostController extends Controller
             'height' => 'nullable|int'
         ]);
         $this->authorize('createPost', Post::class);  // user must be logged in
-        DB::beginTransaction();
+
+        $user = Auth::user();
+        $group_id = $request->input('id_group');
+
+
+        if ($group_id !== null && !GroupMember::isMember($user, intval($group_id))) {
+            return response()->json(['error' => 'You are not a member of this group']);
+        }
         $post = new Post();
 
         $post->content = $request->input('content');
@@ -51,13 +74,13 @@ class PostController extends Controller
             $post->is_private = $request->input('is_private');
         }
         $post->id_created_by = Auth::user()->id;
+        $post->id_group = $group_id;
 
         $post->save();  // get the post id to make file name unique
         $createdFile = $this->setFileName($request, $post, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
             $post->created_at = $post->freshTimestamp();
         }
-        DB::commit();
 
         $postHTML = $this->translatePostToHTML($post, false, false, false);
         return response()->json(['postHTML' => $postHTML, 'success' => 'Post created successfully!']);
@@ -71,6 +94,10 @@ class PostController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            return $validatedSize;
+        }
         $request->validate([
             'content' => 'required|max:255',
             'id_parent' => 'required|exists:post,id',
@@ -79,10 +106,9 @@ class PostController extends Controller
             'y' => 'nullable|int',
             'width' => 'nullable|int',
             'height' => 'nullable|int'
-            // 'id_group' => 'nullable|exists:groups,id'
         ]);
 
-        $post = Post::find($request->input('id_parent'));
+        $post = Post::findOrFail($request->input('id_parent'));
         $this->authorize('createComment', $post);
 
         $comment = new Post();
@@ -91,7 +117,8 @@ class PostController extends Controller
         $comment->is_private = $post->is_private;
         $comment->id_created_by = Auth::user()->id;
 
-        $comment->id_parent = $request->input('id_parent');
+        $comment->id_group = $post->id_group;
+        $comment->id_parent = $post->id;
 
         $comment->save();
 
@@ -120,16 +147,14 @@ class PostController extends Controller
             'post' => $post
         ]);
     }
-    public function getSearchResults(string $search)
+    /**
+     * Returns a query builder with the posts from the given list that are the result of the search query (FTS).
+     * Checks if the user can view them.
+     */
+    public function getSearchResults($posts, string $search, string $type)
     {
-        $posts = Post::search($search);
-        $filteredPosts = $posts->filter(function ($post) {
-            return policy(Post::class)->view(Auth::user(), $post);
-        });
-        $filteredPosts->each(function ($post) {
-            $post->load('createdBy', 'comments', 'likes');
-        });
-        return $filteredPosts;
+        $posts = $this->filterCanView($posts);
+        return Post::search($posts, $search);
     }
     public function searchPosts(Request $request)
     {
@@ -145,11 +170,17 @@ class PostController extends Controller
     public function search(Request $request, string $type)
     {
         $request->validate([
-            'query' => 'required|string|max:255'
+            'query' => 'required|string|max:255',
+            'page' => 'required|int'
         ]);
-        $posts = $this->getSearchResults($request->input('query'));
-        $filtered = $this->filterByType($posts, $type);
-        if ($filtered->isEmpty()) {
+        $page = $request->input('page');
+
+        $posts = $this->filterByType($type);
+        $posts = $this->getSearchResults($posts, $request->input('query'), $type);
+        $posts = $posts->skip($page * self::$amountPerPage)->limit(self::$amountPerPage);
+        $posts = $posts->get();
+
+        if ($posts->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
                 'noResultsHTML' => $noResultsHTML,
@@ -157,38 +188,17 @@ class PostController extends Controller
                 'resultsHTML' => []
             ]);
         }
-        $resultsHTML = $this->translatePostsArrayToHTML($filtered);
+        $resultsHTML = $this->translatePostsArrayToHTML($posts);
         return response()->json(['resultsHTML' => $resultsHTML, 'success' => 'Search results retrieved']);
     }
-    private function filterByType($allPosts, string $type)
+    private function filterByType(string $type)
     {
         if ($type == 'comments') {
-            $comments = $allPosts->filter(function ($post) {
-                // has parent post and not created by authenticated user
-                return $post->id_parent !== null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
-            })->values();
-            return $comments;
+            return Post::whereNotNull('id_parent');
         } else {
-            $posts = $allPosts->filter(function ($post) {
-                // no parent post and not created by authenticated user
-                return $post->id_parent === null && (!Auth::check() || $post->id_created_by != Auth::user()->id);
-            })->values();
-            return $posts;
+            return Post::whereNull('id_parent');
         }
     }
-    /**
-     * Display the search results page for a given query.
-     */
-    public function searchResults(Request $request)
-    {
-        $request->validate([
-            'query' => 'required|max:255'
-        ]);
-        $posts = $this->getSearchResults($request->input('query'));
-
-        return view('pages.search', ['posts' => $posts, 'success' => 'Search results retrieved']);
-    }
-
     /**
      * Update the specified post in storage.
      */
@@ -197,7 +207,13 @@ class PostController extends Controller
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
+        $validatedSize = $this->validateSizeImage($request);
+        if ($validatedSize !== false) {
+            Log::debug($validatedSize);
+            return $validatedSize;
+        }
         $post = Post::findOrFail($id);
+
         $request->validate([
             'content' => 'nullable|string|max:255',
             'is_private' => 'nullable|boolean',
@@ -249,7 +265,7 @@ class PostController extends Controller
 
         // Delete the post and return it as JSON.
         $post->delete();
-        $post->success = 'Post deleted successfully!';
+
         return response()->json($post);
     }
     public function viewImage(string $id)
@@ -270,7 +286,6 @@ class PostController extends Controller
 
         $this->deleteFile($post->id);
         $post->save();
-        $post->success = 'Post image deleted successfully!';
         return response()->json($post);
     }
     /**
@@ -295,25 +310,74 @@ class PostController extends Controller
         $this->imageController->delete($fileName);
     }
     /**
-     * Get all posts created before a given date.
-     * @param string $date
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * Returns a query builder with the posts that can be seen by the current user.
+     * Supports non authenticated users.
      */
-    public function getPostsBeforeDate(string $date): JsonResponse
+    public function filterCanView($posts)
     {
-        $posts = Post::where('created_at', '<', $date)->where('id_parent', null)->orderBy('created_at', 'desc')->limit(10)->get();
-
-        $filteredPosts = $posts->filter(function ($post) {
-            return policy(Post::class)->view(Auth::user(), $post);
-        })->values();
-
-        $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
-
-        Log::info('postsHTML: ' . $postsHTML->toJson());
-
-        return response()->json($postsHTML);
+        if (!Auth::check()) {
+            return $posts->where('is_private', false);
+        }
+        return $posts->where(function ($query) {
+            $query->where('is_private', false)->orWhere('id_created_by', Auth::user()->id)->orWhereIn('id_created_by', Auth::user()->following()->pluck('users.id'));
+        });
     }
+    /**
+     * Get all posts created before a given date.
+     * @param Request $request must contain a 'page' int parameter
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getPostsForYou(Request $request): JsonResponse
+    {
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        $page = $request->input('page');
+        $posts = $this->PersonalizedPosts();
+        $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+
+        $postsHTML = $this->translatePostsArrayToHTML($posts);
+
+        return response()->json(['resultsHTML' => $postsHTML]);
+    }
+
+    private function PersonalizedPosts()
+    {
+        $user = Auth::user();
+
+        /* Unauthenticated user sees random public posts */
+        if (!$user) {
+            return Post::where('is_private', false);
+        }
+
+        /* Authenticated user sees posts from users he follows */
+        $following = $user->following->pluck('id');
+        $postsFromFollowing = Post::whereIn('id_created_by', $following)->whereNull('id_parent');
+
+        /* And from users followed by users he follows */
+        $id = $user->id;
+        $followingDistanceTwo = DB::table('follows')
+            ->select('id_followed')->whereIn('id_user', function ($query) use ($id) {
+                $query->select('id_followed')->from('follows')->where('id_user', $id);
+            })->whereNotIn('id_followed', function ($query) use ($id) {
+                $query->select('id_followed')->from('follows')->where('id_user', $id);
+            })
+            ->distinct()->get()->pluck('id_followed');
+
+        $postsFromFollowingDistanceTwo = Post::whereIn('id_created_by', $followingDistanceTwo)->whereNull('id_parent');
+        $postsFromFollowingDistanceTwo = $this->filterCanView($postsFromFollowingDistanceTwo);
+
+        /* And from groups he is a member of */
+        $groups = $user->groups->pluck('id');
+        $postsFromGroups = Post::whereIn('id_group', $groups)->whereNull('id_parent');
+
+        /* Merge all posts */
+        $posts = $postsFromFollowing->union($postsFromFollowingDistanceTwo)->union($postsFromGroups);
+        $posts = $posts->whereNotNull('id_parent');
+
+        return $posts;
+    }
+
     private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false)
     {
         if ($isComment) {
@@ -334,10 +398,10 @@ class PostController extends Controller
      * @param Collection $posts
      * @return Collection HTML code to display the posts
      */
-    private function translatePostsArrayToHTML(Collection $posts)
+    private function translatePostsArrayToHTML(Collection $posts, bool $isComment = false, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false)
     {
-        $html = $posts->map(function ($post) {
-            return $this->translatePostToHTML($post, false, false, false, false);
+        $html = $posts->map(function ($post) use ($isComment, $showEdit, $showAddComment, $displayComments) {
+            return $this->translatePostToHTML($post, $isComment, $showEdit, $showAddComment, $displayComments);
         });
         return $html;
     }
@@ -358,40 +422,33 @@ class PostController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    public function addLike(Request $request, string $id)
+    public function toggleLike(Request $request, string $id)
     {
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
 
         $post = Post::findOrFail($id);
-        $request->validate([
-            'like' => 'required|boolean'
-        ]);
-
-        $like = $request->input('like');
         $user = Auth::user();
 
         // Check if the user has already liked the post
         $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
 
-        if ($existingLike == null) { // if its null, we can create a new like
+        if ($existingLike) {
+            // if post is liked, remove like
+            $post->likes()->detach($user->id);
+        } else {
+            // if post is not liked, add like
             $liked = new Liked();
             $liked->id_user = $user->id;
             $liked->id_post = $post->id;
             $liked->save();
-        } else {
-            // User $user->id already liked post $post->id
         }
 
         $post->loadCount('likes'); // Load the count of likes for the post
         $likeCount = $post->likes()->count();
 
-        return response()->json([
-            'likesCount' => $likeCount,
-            'alreadyLiked' => true, // 
-        ]);
-
+        return response()->json(['count' => $likeCount]);
     }
 
     /**
@@ -443,6 +500,26 @@ class PostController extends Controller
         return response()->json(['alreadyLiked' => $alreadyLiked]);
     }
 
+    public function userPosts(int $id, Request $request)
+    {
+        Log::debug("userPosts");
+        Log::debug($request->all());
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        Log::debug("validated");
+        $page = $request->input('page');
+
+        $toView = User::findOrFail($id);
+        $this->authorize('viewPosts', $toView);
+        $posts = Post::where('id_created_by', $id);
+        $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')
+            ->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        Log::debug("hello");
+        Log::debug($posts);
+        $postsHTML = $this->translatePostsArrayToHTML($posts);
+        return response()->json(['postsHTML' => $postsHTML]);
+    }
     /**
      * Get posts for the For You page
      */
@@ -481,22 +558,22 @@ class PostController extends Controller
             return $post->id_parent !== null;
         });*/
 
-        /* SORTING POSTS NOT WORKING
-        // sort postsForYou by created_at
-        usort($postsForYou, function($a, $b) {
-            return $a->created_at <=> $b->created_at;
-        });
-        
-    }*/
-
+    /* SORTING POSTS NOT WORKING
+    // sort postsForYou by created_at
+    usort($postsForYou, function($a, $b) {
+        return $a->created_at <=> $b->created_at;
+    });
     
+}*/
+
+
 
     public function forYouPosts()
     {
         $user = Auth::user();
         $usersFollowing = $user->following->where('is_private', false)->pluck('id');
         Log::info('usersFollowing: ' . $usersFollowing->toJson());
-        
+
         $usersFollowedByUserFollowing = User::whereIn('id', $usersFollowing)
             ->with('following')
             ->get()
@@ -504,10 +581,10 @@ class PostController extends Controller
             ->flatten()
             ->pluck('id');
 
-        
+
 
         Log::info('usersFollowedByUserFollowing: ' . $usersFollowedByUserFollowing->toJson());
-    
+
         $postsForYou = Post::whereIn('id_created_by', $usersFollowedByUserFollowing)
             ->with('createdBy:id,username')
             ->withCount('likes')
@@ -522,15 +599,15 @@ class PostController extends Controller
             ->orderByDesc('created_at')
             ->limit(10)
             ->get();
-    
+
         Log::info('postsForYou: ' . $postsForYou->toJson());
         $filteredPosts = $postsForYou->filter(function ($post) use ($user) {
             return policy(Post::class)->view($user, $post);
         })->values();
-    
+
         // Translate posts to the desired HTML format
         $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
-    
+
         return response()->json($postsHTML);
     }
 
@@ -564,7 +641,7 @@ class PostController extends Controller
         $user = Auth::user();
         $usersFollowing = $user->following->pluck('id');
         Log::info('usersFollowing: ' . $usersFollowing->toJson());
-        
+
         //get posts from users that are followed by the user
         $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
             ->with('createdBy:id,username')
@@ -579,7 +656,33 @@ class PostController extends Controller
         return response()->json($postsHTML);
     }
 
-    
 
+    public function groupPosts(int $id, Request $request)
+    {
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        $page = $request->input('page');
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
 
+        // Check if current user is a member of the group
+        $user = Auth::user();
+        $is_member = GroupMember::where('id_group', $id)->where('id_user', $user->id)->exists();
+        if (!$is_member) {
+            return response()->json(['error' => 'You are not a member of this group'], 401);
+        }
+
+        $posts = Post::where('id_group', $id)->whereNull('id_parent')->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        if ($posts->isEmpty()) {
+            $noPostsHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'noneHTML' => $noPostsHTML,
+                'elementsHTML' => []
+            ]);
+        }
+        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true);
+        return response()->json(['elementsHTML' => $postsHTML]);
+    }
 }

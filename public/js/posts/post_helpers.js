@@ -1,4 +1,5 @@
 import { getCsrfToken, sendAjaxRequest, handleFeedbackToResponse } from "../ajax.js";
+import { swalConfirmDelete } from "../general_helpers.js";
 
 export function getTextField(form) {
   return form.querySelector('textarea');
@@ -53,14 +54,15 @@ function changeCommentCount(post, value) {
 }
 export async function deleteImage(event) {
   event.preventDefault();
-  if (confirm('Are you sure you want to delete this image?')) {
-    const button = event.currentTarget;
+  const button = event.currentTarget;
+  swalConfirmDelete('Delete Image?', 'Are you sure you want to delete this image?', async () => {
     const postId = button.dataset.id;
 
     const imageContainer = button.closest('.image-container');
     const data = await sendAjaxRequest('delete', `/post/${postId}/image`);
     if (data != null) {
       imageContainer.remove();
+      await Swal.fire('Deleted!', 'Your image has been deleted.', 'success');
     }
-  }
+  }, null, 'Yes, delete.');
 }

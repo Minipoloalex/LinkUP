@@ -2,42 +2,53 @@
 
 @section('content')
 
-<main id="login-page" class="w-screen h-screen flex flex-col items-center justify-center bg-white py-24 mx-auto
-                            lg:w-1/2 lg:border-x lg:border-slate-400">
-    <img src="{{ url('images/logo.png') }}" alt="Link up logo" class="self-center w-48 mt-4">
-    <div class="my-4 text-base font-bold text-center italic">
-        <h1>A rede social da UPorto</h1>
-    </div>
-    <form method="POST" action="{{ route('login') }}" class="col-span-2 flex flex-col flex-grow my-6 justify-center">
+<main id="login-page" class="py-12 px-4 flex flex-col items-center">
+    <form method="POST" action="{{ route('login') }}" class="flex flex-col justify-center w-64 space-y-8">
         {{ csrf_field() }}
 
-        <label for="login" class="pt-4 pb-2">username or email</label>
-        <input id="login" type="text" name="login" value="{{ old('login') }}" required autofocus
-            class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
-
-        <label for="password" class="pt-4 pb-2">password</label>
-        <input id="password" type="password" name="password" required
-            class="py-1 pl-2 border border-solid border-slate-400 rounded-md focus:shadow-sm focus:outline-none focus:shadow-zinc-500">
-
-        <div class="grid grid-cols-2 gap-2 mt-1">
-            <label class="pt-4 pl-1 inline-block whitespace-nowrap align-middle">
-                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}
-                    class="justify-self-start align-middle" />
-                remember me
+        <div class="relative">
+            <input id="login" name="login" type="text" required value="{{ old('login') }}" class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+                placeholder="username or email" />
+            <label for="login" class="absolute left-0 -top-3.5 text-sm transition-all peer-placeholder-shown:text-base 
+            dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5 
+            dark:peer-focus:text-dark-active peer-focus:text-sm">
+                Username or Email
             </label>
-            <button type="submit" class="my-2 pt-2 justify-self-end">
-                <img src="{{ url('images/icons/login.png') }}" alt="Login" class="w-6 h-6">
-            </button>
         </div>
 
-        <div class="flex mt-6 mr-2 content-center justify-center">
-            <a class="mt-12 text-sm hover:underline" href="{{ route('register') }}">no account? register here</a>
+        <div class="relative">
+            <input id="password" name="password" type="password" required value="{{ old('login') }}" class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+                placeholder="password" />
+            <label for="password" class="absolute left-0 -top-3.5 text-sm transition-all peer-placeholder-shown:text-base 
+                dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5 
+                dark:peer-focus:text-dark-active peer-focus:text-sm">
+                Password
+            </label>
         </div>
 
-        <div class="flex mt-6 mr-2 content-center justify-center">
-            <a class="mt-2 text-sm hover:underline" href="{{ route('password.request') }}">forgot your password?</a>
+        <div class="text-sm flex items-center justify-end relative">
+            <label for="remember"> Remember Me </label>
+            <input id="remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} class="
+                    appearance-none w-4 h-4 rounded dark:bg-dark-secondary flex items-center justify-center peer
+                    ml-2 dark:checked:bg-dark-active" />
+            <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
         </div>
 
+        <button type=" submit" class="w-full dark:bg-dark-active rounded-xl h-10">
+            Login
+        </button>
+
+        <div class="flex flex-col items-end justify-center space-y-2">
+            <a class="text-sm dark:hover:text-dark-active" href="{{ route('register') }}">no account?
+                register
+                here</a>
+            <a class="text-sm dark:hover:text-dark-active" href="{{ route('password.request') }}">forgot your
+                password?</a>
+        </div>
     </form>
 
     <div class="w-screen h-12 text-sm text-center absolute top-[80%] left-0">

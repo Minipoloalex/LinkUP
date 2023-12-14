@@ -9,6 +9,10 @@
             <img src="{{ url('images/icons/login.png') }}" alt="Show users" class="w-6">
         </div>
         <div class="flex my-6">
+            <a class="text-xl mr-2 hover:underline" href="{{ route('admin.groups') }}">Manage Groups</a>
+            <img src="{{ url('images/icons/login.png') }}" alt="Show groups" class="w-6">
+        </div>
+        <div class="flex my-6">
             <a class="text-xl mr-2 hover:underline" href="{{ route('admin.posts') }}">Manage Posts</a>
             <img src="{{ url('images/icons/login.png') }}" alt="Show posts" class="w-6">
         </div>

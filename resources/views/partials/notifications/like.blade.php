@@ -3,7 +3,7 @@ $post = $notification->post;
 $liked_by = $notification->likedByUser;
 $profile_link = route('profile.show', ['username' => $liked_by->username]);
 $pfp = $liked_by->getProfilePicture();
-$post_link = route('post.page', ['id' => $post->id]);
+$post_link = route('post', ['id' => $post->id]);
 @endphp
 
 <div class="h-full flex items-center w-full">

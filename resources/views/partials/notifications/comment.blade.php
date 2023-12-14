@@ -3,7 +3,7 @@ $comment = $notification->comment;
 $whoCommented = $notification->whoCommented();
 $pfp = $whoCommented->getProfilePicture();
 $profile_link = route('profile.show', ['username' => $whoCommented->username]);
-$comment_link = route('post.page', ['id' => $comment->id]);
+$comment_link = route('post', ['id' => $comment->id]);
 $parent_post = $comment->parent;
 @endphp
 

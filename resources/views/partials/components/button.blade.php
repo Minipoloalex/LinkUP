@@ -19,14 +19,14 @@ $dataset = implode(' ', $dataset);
 <button id="{{ $id }}" class="{{ $class }} {{ $classes }}" {{ $dataset }}>
     @if ($link)
     <a href="{{ $link }}" class="flex items-center justify-center">
-        @endif
+    @endif
         <i class="{{ $icon }}"></i>
         @if ($text)
-        <div class="ml-4">
+        <span class="ml-4">
             {{ $text }}
-        </div>
+        </span>
         @endif
-        @if ($link)
+    @if ($link)
     </a>
     @endif
 </button>

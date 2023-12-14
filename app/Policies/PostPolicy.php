@@ -4,29 +4,30 @@ namespace App\Policies;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\GroupMember;
+
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PostPolicy
-{  
+{
     /**
      * Determine whether the user can view the model.
      */
-    public function view(?User $user, Post $post): bool
+    public static function view(?User $user, Post $post): bool
     {
-        if($user === null) {
+        if ($user === null) {
             return $post->is_private === false;
         }
-    
+
         /*if ($user->isAdmin()) {
             return true; // Admins can view any post
         }*/
-        
-        // Check if the user is following the creator of the post
-        return $user->isFollowing($post->createdBy) || $post->is_private === false || $user->id === $post->id_created_by;
-    }
 
+        // Check if the user is following the creator of the post
+        return $post->is_private === false || $user->id === $post->id_created_by || $user->isFollowing($post->createdBy);
+    }
     /**
      * Determine whether the user can create posts.
      */
@@ -40,12 +41,10 @@ class PostPolicy
      */
     public function createComment(User $user, Post $post): bool
     {
-        // if post is in a group, need to check group
-        // if post is private, need to check follower
-        // return Auth::check() && ($post->is_private === false || $user->id === $post->id_created_by);
-
-        // not yet implemented
-        return true;
+        if ($post->id_group !== null) {
+            return GroupMember::isMember($user, $post->id_group);
+        }
+        return $post->is_private == false || $user->id === $post->id_created_by || $user->isFollowing($post->createdBy);
     }
 
     /**
