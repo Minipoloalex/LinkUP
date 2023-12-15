@@ -55,7 +55,9 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
             <span class="ml-2">{{ count($post->likes) }}</span>
         </h3>
 
-        <span>{{ $post->comments->count() }} comments</span>
+        <div>
+            <span class="nr-comments mr-1">{{ $post->comments->count() }}</span><span>comments</span>
+        </div>
     </div>
 
 </div>

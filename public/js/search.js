@@ -111,7 +111,9 @@ function updateOnFilterChange () {
 
   for (const filter of filters.querySelectorAll('input[name="search-type"]')) {
     filter.addEventListener('change', () => {
-      searchButton.click()
+      if (getSearchTextElement(searchForm).value != '') {
+        searchButton.click()
+      }
     })
   }
 }
