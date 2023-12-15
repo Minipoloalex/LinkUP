@@ -155,7 +155,6 @@ class AdminController extends Controller
     }
     public function searchUsers(Request $request)
     {
-        Log::debug($request->all());
         $request->validate([
             'page' => 'required|integer|min:0',
             'query' => 'nullable|string|max:255',
@@ -169,9 +168,28 @@ class AdminController extends Controller
         else {
             $users = User::search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
-        Log::debug($users->toJson());
         $htmlArray = $users->map(function ($user) {    
             return view('admin.return_json.user_tr', ['user' => $user])->render();
+        });
+        return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
+    }
+    public function searchGroups(Request $request)
+    {
+        $request->validate([
+            'page' => 'required|integer|min:0',
+            'query' => 'nullable|string|max:255',
+        ]);
+        $page = $request->get('page');
+        $query = $request->get('query');
+        $groups = null;
+        if ($query == null || $query == '') {  
+            $groups = Group::orderBy('name', 'asc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        }
+        else {
+            $groups = Group::search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        }
+        $htmlArray = $groups->map(function ($group) {    
+            return view('admin.return_json.group_tr', ['group' => $group])->render();
         });
         return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
     }
