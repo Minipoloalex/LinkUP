@@ -399,13 +399,13 @@ class UserController extends Controller
     }
     
 
-    public function translateMembersArrayToHTML($members, $currUser, bool $isOwner)
+    public function translateMembersArrayToHTML($members, $currUserId, bool $isOwner)
     {
-        $membersHTML = $members->map(function ($member) use ($isOwner, $currUser) {
+        $membersHTML = $members->map(function ($member) use ($isOwner, $currUserId) {
             $userHTML = view('partials.group.member', [
                 'member' => $member,
                 'owner' => $isOwner,
-                'user' => $currUser->id
+                'user' => $currUserId
             ])->render();
             return $userHTML;
         });
@@ -417,25 +417,30 @@ class UserController extends Controller
             'page' => 'required|int'
         ]);
         $page = $request->input('page');
+        $isAdmin = Auth::guard('admin')->check();
 
-        if (!Auth::check()) {
+        if (!$isAdmin && !Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
-        $user = Auth::user();
 
-        $is_member = GroupMember::where('id_group', $id)->where('id_user', $user->id)->exists();
-        if (!$is_member) {
-            return response()->json(['error' => 'You are not a member of this group'], 401);
+        $user = Auth::user();   // null if admin
+        $userId = $isAdmin ? null : $user->id;
+        if (!$isAdmin) {
+            $is_member = GroupMember::where('id_group', $id)->where('id_user', $userId)->exists();
+            if (!$is_member) {
+                return response()->json(['error' => 'You are not a member of this group'], 401);
+            }
         }
 
         $members = GroupMember::where('id_group', $id)->orderBy('id_user')->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         $users = $members->map(function ($group_member) {
             return $group_member->user;
         });
-        
+
         $group = Group::findOrFail($id);
-        $isOwner = $group->id_owner == $user->id;
-        $membersHTML = $this->translateMembersArrayToHTML($users, $user, $isOwner);
+        $isOwner = $group->id_owner === $userId;
+
+        $membersHTML = $this->translateMembersArrayToHTML($users, $userId, $isOwner);
 
         if ($users->isEmpty()) {
             $noMembersHTML = view('partials.search.no_results')->render();

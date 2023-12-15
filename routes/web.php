@@ -66,17 +66,22 @@ Route::group(['middleware' => 'guest'], function () {
 Route::prefix('/admin')->name('admin.')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
         Route::get('/api/users', [AdminController::class, 'searchUsers'])->name('api.users');
         Route::post('/users/{id}/ban', [AdminController::class, 'banUser'])->name('users.ban');
         Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
+
         Route::get('/posts', [AdminController::class, 'listPosts'])->name('posts');
+        Route::get('/post/{id}', [AdminController::class, 'viewPost'])->name('post');
         Route::get('/api/posts', [AdminController::class, 'searchPosts'])->name('api.posts');
         Route::delete('/post/{id}', [AdminController::class, 'deletePost'])->name('posts.delete');
-        Route::get('/post/{id}', [AdminController::class, 'viewPost'])->name('post');
+
         Route::get('/groups', [AdminController::class, 'listGroups'])->name('groups');
+        Route::get('/group/{id}', [AdminController::class, 'viewGroup'])->name('group');
         Route::get('/api/groups', [AdminController::class, 'searchGroups'])->name('api.posts');
         Route::post('/group/{id}/delete', [AdminController::class, 'deleteGroup'])->name('groups.delete');
+
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
     });

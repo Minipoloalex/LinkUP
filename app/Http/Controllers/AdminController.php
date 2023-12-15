@@ -132,6 +132,12 @@ class AdminController extends Controller
 
         return view('admin.post', ['post' => $post]);
     }
+    public function viewGroup($id)
+    {
+        $group = Group::findOrFail($id);
+
+        return view('admin.group', ['group' => $group]);
+    }
     public function searchPosts(Request $request)
     {
         $request->validate([

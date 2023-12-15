@@ -19,6 +19,9 @@
     <script type="module" src="{{ url('js/admin/users.js')}}"></script>
     <script type="module" src="{{ url('js/admin/posts.js')}}"></script>
     <script type="module" src="{{ url('js/admin/groups.js')}}"></script>
+
+    @stack('scripts')
+
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>

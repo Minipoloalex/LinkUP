@@ -378,16 +378,23 @@ class PostController extends Controller
         return $posts;
     }
 
-    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false)
+    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
     {
         if ($isComment) {
-            return view('partials.comment', ['comment' => $post, 'showEdit' => $showEdit])->render();
+            return view('partials.comment', [
+                'comment' => $post,
+                'showEdit' => $showEdit,
+                'hasAdminLink' => $hasAdminLink,
+                'hasAdminDelete' => $hasAdminDelete
+            ])->render();
         } else {
             return view('partials.post', [
                 'post' => $post,
                 'showEdit' => $showEdit,
                 'showAddComment' => $showAddComment,
-                'displayComments' => $displayComments
+                'displayComments' => $displayComments,
+                'hasAdminLink' => $hasAdminLink,
+                'hasAdminDelete' => $hasAdminDelete
             ])->render();
         }
     }
@@ -398,10 +405,10 @@ class PostController extends Controller
      * @param Collection $posts
      * @return Collection HTML code to display the posts
      */
-    private function translatePostsArrayToHTML(Collection $posts, bool $isComment = false, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false)
+    private function translatePostsArrayToHTML(Collection $posts, bool $isComment = false, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
     {
-        $html = $posts->map(function ($post) use ($isComment, $showEdit, $showAddComment, $displayComments) {
-            return $this->translatePostToHTML($post, $isComment, $showEdit, $showAddComment, $displayComments);
+        $html = $posts->map(function ($post) use ($isComment, $showEdit, $showAddComment, $displayComments, $hasAdminLink, $hasAdminDelete) {
+            return $this->translatePostToHTML($post, $isComment, $showEdit, $showAddComment, $displayComments, $hasAdminLink, $hasAdminDelete);
         });
         return $html;
     }
@@ -663,17 +670,19 @@ class PostController extends Controller
             'page' => 'required|int'
         ]);
         $page = $request->input('page');
-        if (!Auth::check()) {
+        $isAdmin = Auth::guard('admin')->check();
+
+        if (!Auth::check() && !$isAdmin) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
-
-        // Check if current user is a member of the group
-        $user = Auth::user();
-        $is_member = GroupMember::where('id_group', $id)->where('id_user', $user->id)->exists();
-        if (!$is_member) {
-            return response()->json(['error' => 'You are not a member of this group'], 401);
+        if (!$isAdmin) {
+            // Check if current user is a member of the group
+            $user = Auth::user();
+            $is_member = GroupMember::where('id_group', $id)->where('id_user', $user->id)->exists();
+            if (!$is_member) {
+                return response()->json(['error' => 'You are not a member of this group'], 401);
+            }
         }
-
         $posts = Post::where('id_group', $id)->whereNull('id_parent')->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         if ($posts->isEmpty()) {
             $noPostsHTML = view('partials.search.no_results')->render();
@@ -682,7 +691,7 @@ class PostController extends Controller
                 'elementsHTML' => []
             ]);
         }
-        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true);
+        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true, $isAdmin, $isAdmin);
         return response()->json(['elementsHTML' => $postsHTML]);
     }
 }
