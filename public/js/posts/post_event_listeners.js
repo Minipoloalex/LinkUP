@@ -31,11 +31,13 @@ export function addEventListenersToComment(comment) {
 
 export async function addEventListenersToPost(postElement) {
     const deletePostButton = postElement.querySelector('.delete-post');
-    addEventListenerToDeletePostButton(deletePostButton);
+    if (deletePostButton) {
+        addEventListenerToDeletePostButton(deletePostButton);
+    }
 
     const comments = postElement.querySelectorAll('.comment');
     comments.forEach(addEventListenersToComment);
 
-    const likes = postElement.querySelectorAll('.like-button');
-    likes.forEach(addToggleLikeEventListener);
+    const likeButtons = postElement.querySelectorAll('.like-button');
+    likeButtons.forEach(addToggleLikeEventListener);
 }

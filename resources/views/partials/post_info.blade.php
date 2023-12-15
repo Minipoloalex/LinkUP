@@ -29,18 +29,13 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
         @include('partials.create_post_form', ['formClass' => 'edit-post-info hidden', 'textPlaceholder' => 'Edit post',
         'contentValue' => $post->content, 'buttonText' => 'Update Post'])
         @endif
-        {{-- <a class="post-link" href="/post/{{ $post->id }}"> --}}
             <a class="post-link" href="{{ $postLink }}">
                 <p class='post-content'>{{ $post->content }}</p>
             </a>
             @if ($post->media() != null)
-            @include('partials.post_image', ['post' => $post, 'editable' => $editable])
+            @include('partials.post_image', ['post' => $post, 'editable' => $editable, 'linkTo' => $postLink])
             @endif
     </div>
-    <!-- <div class="flex justify-between">
-        <h3 class="flex">
-            <button class="like-button" data-id="{{ $post->id }}" data-liked="{{ $post->liked ? 'true' : 'false' }}">
-                at if($post->liked) -->
     @php
     $isLiked = $post->likedByUser();
     $class = $isLiked ? 'fas fa-heart liked' : 'far fa-heart unliked';
