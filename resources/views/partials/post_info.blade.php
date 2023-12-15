@@ -14,15 +14,13 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
         {{-- <span class="date">{{ $post->created_at }}</span> --}}
         @if ($editable)
         <div class="edit-delete-post">
-            <a href="#" class="text-2xl edit edit-post"><i class="p-2 fas fa-edit"></i></a>
-            <a href="{{ url('/home') }}" class="text-2xl delete delete-post"><i class="p-2 fas fa-trash-alt"></i></a>
+            <button class="text-2xl edit-post"><i class="p-2 fas fa-edit"></i></button>
+            <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
         @endif
         @if ($hasAdminDelete)
         <div class="admin-delete-post">
-            <div class="delete delete-post">
-                <button class="text-2xl"><i class="p-2 fas fa-trash-alt"></i></button>
-            </div>
+            <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
         @endif
     </header>

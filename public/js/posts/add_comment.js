@@ -1,10 +1,8 @@
 import { submitAddPostOrComment, getTextField } from "./post_helpers.js";
-import { clearFileInputWrapper, handlerFileInput, getFileInputWrapper } from "../file_input.js";
+import { clearFileInputWrapper, getFileInputWrapper } from "../file_input.js";
 import { incrementCommentCount } from "./post_helpers.js";
 import { parseHTML } from "../general_helpers.js";
-import { deletePostOrComment } from "./delete_post.js";
-import { toggleEditEvent, submitEditPost } from "./edit_post.js";
-import { deleteImage } from "./post_helpers.js";
+import { addEventListenersToComment } from "./post_event_listeners.js";
 
 const commentForm = document.querySelector('form.add-comment');
 if (commentForm != null) {
@@ -33,21 +31,4 @@ async function submitAddComment(event) {
         commentsContainer.appendChild(commentHTML);
         incrementCommentCount(post);
     }
-}
-function addEventListenersToComment(comment) {
-    const deleteCommentButton = comment.querySelector('.delete-post');
-    deleteCommentButton.addEventListener('click', deletePostOrComment);
-
-    const editCommentButton = comment.querySelector('.edit-post');
-    editCommentButton.addEventListener('click', toggleEditEvent);
-
-    const editCommentField = comment.querySelector('.edit-post-info');
-    editCommentField.addEventListener('submit', submitEditPost);
-
-    const deleteImageButton = comment.querySelector('.delete-image');
-    if (deleteImageButton) {
-        deleteImageButton.addEventListener('click', deleteImage);
-    }
-
-    handlerFileInput(comment.querySelector('.file-input-wrapper'));
 }

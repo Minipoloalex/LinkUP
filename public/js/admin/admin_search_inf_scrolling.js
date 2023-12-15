@@ -1,7 +1,7 @@
 import { getSearchForm, getSearchTextElement } from '../search.js';
 import { infiniteScroll, destroyFetcher } from '../infinite_scrolling.js';
 
-export async function addInfiniteScrollToAdmin(container, testIntersectionElement, url, getElement) {
+export async function addInfiniteScrollToAdmin(container, testIntersectionElement, url, getElement, addEventListeners) {
     const searchForm = getSearchForm();
     const query = {query: getSearchTextElement(searchForm).value};
 
@@ -9,6 +9,7 @@ export async function addInfiniteScrollToAdmin(container, testIntersectionElemen
         for (const html of data.resultsHTML) {
             const element = getElement(html);
             container.appendChild(element);
+            addEventListeners(element);
         }
         if (data.resultsHTML.length == 0) {
             await destroyFetcher();
