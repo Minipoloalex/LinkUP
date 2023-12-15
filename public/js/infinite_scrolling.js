@@ -4,7 +4,6 @@ async function fetchAndLoad (container, url, data, action) {
   const page = container.dataset.page
   data.page = page
   console.log(data)
-  console.log(encodeForAjax(data))
   const response = await fetch(url + `?${encodeForAjax(data)}`, {
     method: 'GET',
     headers: {
@@ -51,9 +50,9 @@ export async function infiniteScroll (
     container.dataset.page = 0
   }
   if (destroyPreviousFetcher) {
-    destroyFetcher()
+    await destroyFetcher()
   }
-  createFetcher(
+  await createFetcher(
     container,
     testIntersectionElement,
     url,
@@ -63,8 +62,8 @@ export async function infiniteScroll (
   )
 }
 
-export function destroyFetcher () {
+export async function destroyFetcher () {
   if (observer) {
-    observer.disconnect()
+    await observer.disconnect()
   }
 }

@@ -3,18 +3,6 @@ import { parseHTML } from './general_helpers.js'
 import { showFeedback } from './feedback.js'
 import { destroyFetcher, infiniteScroll } from './infinite_scrolling.js'
 
-const resultsContainer = document.querySelector(
-  '#search-page #results-container'
-)
-if (resultsContainer) {
-  // only if on the search page
-  const searchForm = getSearchForm()
-  const searchButton = getSearchButton(searchForm)
-
-  searchForm.addEventListener('submit', updateSearchResults)
-  searchButton.addEventListener('click', updateSearchResults)
-  initSearchResults()
-}
 async function initSearchResults () {
   // make the search URLs copiable
   const urlParams = new URLSearchParams(window.location.search)
@@ -37,7 +25,7 @@ async function initSearchResults () {
 async function updateSearchResults (event) {
   event.preventDefault()
   const searchForm = getSearchForm()
-  const searchValue = searchForm.querySelector('#search-text').value
+  const searchValue = getSearchTextElement(searchForm).value
 
   const testIntersectionElement = document.querySelector('#fetcher')
   if (searchValue == '') {
@@ -87,13 +75,13 @@ async function updateSearchResults (event) {
     })
   history.replaceState(null, null, newUrl) // Replace current URL without reloading page
 }
-function getSearchForm () {
+export function getSearchForm () {
   return document.querySelector('#search-form')
 }
 function getSearchButton (searchForm) {
   return searchForm.querySelector('button[type="submit"]')
 }
-function getSearchTextElement (searchForm) {
+export function getSearchTextElement (searchForm) {
   return searchForm.querySelector('#search-text')
 }
 function getSearchTypeElement () {
@@ -127,4 +115,17 @@ function updateOnFilterChange () {
     })
   }
 }
-updateOnFilterChange()
+
+const resultsContainer = document.querySelector(
+  '#search-page #results-container'
+)
+if (resultsContainer) {
+  // only if on the search page
+  const searchForm = getSearchForm()
+  const searchButton = getSearchButton(searchForm)
+
+  searchForm.addEventListener('submit', updateSearchResults)
+  searchButton.addEventListener('click', updateSearchResults)
+  initSearchResults()
+  updateOnFilterChange()
+}

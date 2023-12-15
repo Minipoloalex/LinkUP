@@ -17,6 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script type="module" src="{{ url('js/posts/delete_post.js')}}"></script>
     <script type="module" src="{{ url('js/admin/users.js')}}"></script>
+    <script type="module" src="{{ url('js/admin/posts.js')}}"></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>

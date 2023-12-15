@@ -105,27 +105,22 @@ class AdminController extends Controller
     {
         $request->validate([
             'page' => 'required|integer|min:0',
-            'search' => 'required|string|max:255',
+            'query' => 'nullable|string|max:255',
         ]);
         $page = $request->get('page');
-        $search = $request->get('search');
+        $query = $request->get('query');
         $posts = null;
-        if ($search == '') {
-            $posts = Post::all()->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        if ($query == null || $query == '') {
+            $posts = Post::orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
         else {
-            $posts = Post::search(Post::all(), $search)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+            $posts = Post::search(Post::getModel()->select('*'), $query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
-        
-        // TODO: complete
-        // $htmlArray = $posts->map(function ($post) {    
-        //     return view('admin.post', ['post' => $post])->render();
-        // });
-        // foreach ($posts as $post) {
-        //     $htmlArray[] = view('admin.partials.post', ['post' => $post])->render();
-        // }
-        // return response()->json(['postsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
-        return response()->json();
+    
+        $htmlArray = $posts->map(function ($post) {    
+            return view('admin.partials.post', ['post'=> $post])->render();
+        });
+        return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
     }
     public function searchUsers(Request $request)
     {
@@ -147,7 +142,6 @@ class AdminController extends Controller
         $htmlArray = $users->map(function ($user) {    
             return view('admin.return_json.user_tr', ['user' => $user])->render();
         });
-        Log::debug($htmlArray);
-        return response()->json(['usersHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
+        return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
     }
 }
