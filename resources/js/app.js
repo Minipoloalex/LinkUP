@@ -1,4 +1,5 @@
-import './bootstrap';
-import '../css/app.css';
-import 'sweetalert2';
-import 'cropperjs';
+import './bootstrap'
+import './sweetalert'
+import '../css/app.css'
+import 'sweetalert2'
+import 'cropperjs'

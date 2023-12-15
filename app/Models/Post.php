@@ -45,7 +45,7 @@ class Post extends Model
     {
         if (!Auth::check())
             return false;
-        return $this->likes->where('id_user', Auth::user()->id)->isNotEmpty();
+        return DB::table('liked')->where('id_post', $this->id)->where('id_user', Auth::user()->id)->exists();
     }
     public function media(): ?string
     {

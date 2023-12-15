@@ -20,8 +20,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script type="text/javascript">
-        // Fix for Firefox autofocus CSS bug
-        // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
+        // Fix for Firefox autofocus                     // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#1951
     </script>
     <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
     <script type="module" src={{ url('js/app.js') }}></script>
@@ -32,7 +31,7 @@
     <script type="module" src={{ url('js/network.js') }}></script>
     <script type="module" src={{ url('js/add_follow.js') }}></script>
     <script type="module" src={{ url('js/posts/post_helpers.js') }}></script>
-    <script type="module" src={{ url('js/posts/post_render.js') }}></script>
+    <script type="module" src={{ url('js/home/home.js') }}></script>
     <script type="module" src={{ url('js/posts/add_comment.js') }}></script>
     <script type="module" src={{ url('js/posts/delete_post.js') }}></script>
     <script type="module" src={{ url('js/posts/edit_post.js') }}></script>
@@ -61,7 +60,7 @@
 </head>
 
 
-<body class="   dark:bg-dark-primary dark:text-dark-secondary scrollbar-hide
+<body class="   dark:bg-dark-primary dark:text-dark-secondary
                 lg:px-[10vw]
                 xl:px-[30vw]">
     @include('partials.header')

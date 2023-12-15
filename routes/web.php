@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -73,6 +74,8 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/api/posts', [AdminController::class, 'searchPosts'])->name('api.posts');
         Route::delete('/post/{id}', [AdminController::class, 'deletePost'])->name('posts.delete');
         Route::get('/post/{id}', [AdminController::class, 'viewPost'])->name('post');
+        Route::get('/groups', [AdminController::class, 'listGroups'])->name('groups');
+        Route::post('/group/{id}/delete', [AdminController::class, 'deleteGroup'])->name('groups.delete');
         Route::get('/create', [AdminController::class, 'showCreateForm'])->name('create');
         Route::post('/create', [AdminController::class, 'createAdmin']);
     });
@@ -93,8 +96,7 @@ Route::controller(PostController::class)->group(function () {
     Route::put('/post/{id}', 'update')->where('id', '[0-9]+');
 
     // Like routes
-    Route::post('/post/{id}/like', 'addLike'); // add like
-    Route::delete('/post/{id}/like', 'removeLike'); // remove like
+    Route::post('/post/{id}/like', 'toggleLike'); // add like
     Route::get('/post/{id}/like', 'likeStatus');  // get like status
 
     Route::get('/foryou', 'forYouPosts'); // get for you posts
@@ -107,14 +109,14 @@ Route::controller(PostController::class)->group(function () {
 Route::controller(GroupController::class)->group(function () {
     Route::get('/group/create', 'showCreateForm')->name('group.create');
     Route::post('/group/create', 'createGroup');
-    
+
     Route::get('/group/{id}', 'show')->name('group');
     Route::get('/group/{id}/settings', 'settings')->name('group.settings');
 
     Route::post('/group/{id}/join', 'joinRequest')->name('group.join');
     Route::post('/group/{id}/request/{member_id}', 'resolveRequest')->name('group.resolveRequest');
     Route::post('/group/verify-password', 'verifyPassword')->name('group.verifyPassword');
-    Route::put('/group/{id}/update', 'update')->name('group.update');  
+    Route::put('/group/{id}/update', 'update')->name('group.update');
     Route::post('/group/{id}/change-owner', 'changeOwner')->name('group.changeOwner');
 
     Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
@@ -144,7 +146,7 @@ Route::post('/settings/update', [UserController::class, 'updateSettings'])->name
 Route::post('/settings/delete', [UserController::class, 'deleteAccount'])->name('settings.delete');
 Route::post('/settings/confirm-password', [UserController::class, 'confirmPassword'])->name('settings.confirmPassword');
 
-Route::get('/search', function(){
+Route::get('/search', function () {
     return view('pages.search');
 })->name('search');
 
@@ -158,6 +160,7 @@ Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
 
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications')->middleware('auth');
 /* route for for-you.blade.php */
 Route::get('/for-you', function () {
     return view('pages.foryou');

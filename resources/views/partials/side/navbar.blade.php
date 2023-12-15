@@ -35,7 +35,7 @@ $username = Auth::user()->username ?? "";
         </li>
         <li class="lg:w-12 lg:h-12 xl:w-full">
             <div class="w-full h-full flex items-center justify-center">
-                <a href="{{ $authenticated ? route('home') : route('login') }}" class=" lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center 
+                <a href="{{ $authenticated ? route('notifications') : route('login') }}" class=" lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center 
                             xl:justify-start">
                     <div class="lg:w-8">
                         <i class="fa-solid fa-bell fa-xl"></i>
@@ -83,7 +83,7 @@ $username = Auth::user()->username ?? "";
         @auth
         <li class=" w-9 h-9 flex items-center justify-center
                     lg:w-12 lg:h-12 lg:p-1 xl:w-full xl:p-0">
-            <div class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center 
+            <div class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer 
                         xl:justify-center xl:items-center">
                 <i class="fa-solid fa-plus fa-xl xl:hidden"></i>
                 <p class="hidden ml-4 xl:block xl:m-0">Create</p>

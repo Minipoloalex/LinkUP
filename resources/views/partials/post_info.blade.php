@@ -4,12 +4,14 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
 @endphp
 <div class="flex flex-col gap-4 m-1 post-info">
     <header class="flex items-center justify-start space-x-2">
-        <img class="w-8 h-8 rounded-full ring-1 ring-dark-neutral" src="{{ $post->createdBy->getProfilePicture() }}"
-            alt="User photo">
+        <a href="/profile/{{ $post->createdBy->username }}">
+            <img class="w-8 h-8 rounded-full ring-1 ring-dark-neutral" src="{{ $post->createdBy->getProfilePicture() }}"
+                alt="User photo">
+        </a>
         <a class="" href="/profile/{{ $post->createdBy->username }}">
             {{ $post->createdBy->username }}
         </a>
-        <!--<span class="date">{{ $post->created_at }}</span>-->
+        {{-- <span class="date">{{ $post->created_at }}</span> --}}
         @if ($editable)
         <div class="edit-delete-post">
             <a href="#" class="text-2xl edit edit-post"><i class="p-2 fas fa-edit"></i></a>
@@ -41,15 +43,14 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
         <h3 class="flex">
             <button class="like-button" data-id="{{ $post->id }}" data-liked="{{ $post->liked ? 'true' : 'false' }}">
                 at if($post->liked) -->
-    {{-- @php
+    @php
     $isLiked = $post->likedByUser();
-    $color = $isLiked ? 'red' : 'black';
-    @endphp --}}
+    $class = $isLiked ? 'fas fa-heart liked' : 'far fa-heart unliked';
+    @endphp
     <div class="flex justify-between">
         <h3 class="flex">
-            <button class="like-button mr-1" data-id="{{ $post->id }}"
-                data-liked="{{ $post->liked ? 'true' : 'false' }}">
-                <i class="far fa-heart dark:text-dark-neutral"></i>
+            <button class="like-button mr-1" data-id="{{ $post->id }}" data-liked="{{ $isLiked ? 'true' : 'false' }}">
+                <i class="{{ $class }}"></i>
             </button>
             <span class="ml-2">{{ count($post->likes) }}</span>
         </h3>

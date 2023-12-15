@@ -5,12 +5,18 @@ $bg_hover = 'hover:bg-' . $color . '-700';
 $classes ??= '';
 $link ??= '';
 $class = $bg . ' ' . $bg_hover . ' ';
-$class = $class . 'font-bold text-white py-2 px-4 rounded-full flex items-center justify-center
-' .
-$classes;
+$class = $class . 'font-bold text-white py-2 px-4 rounded-full flex items-center justify-center';
+$data ??= null;
+$dataset = [];
+if ($data) {
+foreach ($data as $key => $value) {
+$dataset[] = 'data-' . $key . '=' . $value;
+}
+}
+$dataset = implode(' ', $dataset);
 @endphp
 
-<button id="{{ $id }}" class="{{ $class }}">
+<button id="{{ $id }}" class="{{ $class }} {{ $classes }}" {{ $dataset }}>
     @if ($link)
     <a href="{{ $link }}" class="flex items-center justify-center">
     @endif

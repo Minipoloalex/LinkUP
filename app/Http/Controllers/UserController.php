@@ -72,7 +72,7 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $this->authorize('update', User::class);
-        
+
         $user = Auth::user();
         if ($request->hasFile('media') && $request->file('media')->isValid()) {
             $image = $request->media;

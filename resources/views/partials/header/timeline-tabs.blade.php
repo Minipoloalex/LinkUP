@@ -1,13 +1,9 @@
-<div class="sticky top-24 left-0 flex w-screen h-12  border-b-2 dark:bg-dark-primary dark:border-dark-neutral
-            lg:w-full">
-    <div class="flex w-1/2 h-full items-center justify-center">
-        <a href="/for-you">
-            <p class="font-bold"> For You </p>
-        </a>
+<div class="sticky top-24 left-0 flex w-screen h-12 dark:bg-dark-primary
+            lg:w-full" id="timeline-tabs">
+    <div id="for-you-tab" class="flex w-1/2 h-full items-center justify-center tab-active">
+        <p class="font-bold"> For You </p>
     </div>
-    <div class="flex w-1/2 h-full items-center justify-center">
-        <a href="/following">
-            <p class="font-bold"> Following </p>
-        </a>
+    <div id="following-tab" class="flex w-1/2 h-full items-center justify-center">
+        <p class="font-bold"> Following </p>
     </div>
 </div>

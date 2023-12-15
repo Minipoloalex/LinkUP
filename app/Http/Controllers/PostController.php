@@ -422,40 +422,33 @@ class PostController extends Controller
      * @param string $id
      * @return JsonResponse
      */
-    public function addLike(Request $request, string $id)
+    public function toggleLike(Request $request, string $id)
     {
         if (!Auth::check()) {
             return response()->json(['error' => 'You are not logged in'], 401);
         }
 
         $post = Post::findOrFail($id);
-        $request->validate([
-            'like' => 'required|boolean'
-        ]);
-
-        $like = $request->input('like');
         $user = Auth::user();
 
         // Check if the user has already liked the post
         $existingLike = Liked::where('id_user', $user->id)->where('id_post', $post->id)->first();
 
-        if ($existingLike === null) { // if its null, we can create a new like
+        if ($existingLike) {
+            // if post is liked, remove like
+            $post->likes()->detach($user->id);
+        } else {
+            // if post is not liked, add like
             $liked = new Liked();
             $liked->id_user = $user->id;
             $liked->id_post = $post->id;
             $liked->save();
-        } else {
-            // User $user->id already liked post $post->id
         }
 
         $post->loadCount('likes'); // Load the count of likes for the post
         $likeCount = $post->likes()->count();
 
-        return response()->json([
-            'likesCount' => $likeCount,
-            'alreadyLiked' => true, // 
-        ]);
-
+        return response()->json(['count' => $likeCount]);
     }
 
     /**

@@ -1,7 +1,7 @@
 import { submitAddPostOrComment, getTextField } from './post_helpers.js'
 import { clearFileInputWrapper, getFileInputWrapper } from '../file_input.js'
 import { hide, show, parseHTML } from '../general_helpers.js'
-import { prependPostsToTimeline } from './post_render.js'
+import { prependPostsToTimeline } from '../home/home.js'
 import { prependInPostSection } from '../group/group.js'
 
 const addPostOn = document.querySelector('.add-post-on')

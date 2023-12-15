@@ -26,4 +26,18 @@ class FollowRequest extends Model
     {
         return $this->belongsTo(User::class, 'id_user_from');
     }
+
+    public function getType()
+    {
+        return 'follow-request';
+    }
+
+    public static function getSomeNotifications(int $user_id, int $limit = 10)
+    {
+        $follow_requests = FollowRequest::select('*')
+            ->where('id_user_to', $user_id)
+            ->orderBy('timestamp', 'desc')->limit($limit)->get();
+
+        return $follow_requests;
+    }
 }
