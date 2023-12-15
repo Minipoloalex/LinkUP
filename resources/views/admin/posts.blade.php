@@ -5,6 +5,4 @@
 <div id="container-admin-posts" data-page="0"></div>
 <div id="fetcher-admin-posts"></div>
 
-{{-- {{ $posts->links() }} --}}
-
 @endsection

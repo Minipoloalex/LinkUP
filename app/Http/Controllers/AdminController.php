@@ -52,9 +52,7 @@ class AdminController extends Controller
 
     public function listPosts()
     {
-        $posts = Post::paginate(10);
-
-        return view('admin.posts', ['posts' => $posts]);
+        return view('admin.posts');
     }
 
     public function banUser($id)
@@ -118,7 +116,7 @@ class AdminController extends Controller
         }
     
         $htmlArray = $posts->map(function ($post) {    
-            return view('admin.partials.post', ['post'=> $post])->render();
+            return view('partials.admin.post', ['post'=> $post])->render();
         });
         return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
     }
