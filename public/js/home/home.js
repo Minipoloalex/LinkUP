@@ -14,6 +14,7 @@ export function prependPostsToTimeline (postsHTML) {
     }
   }
 }
+
 function appendPostsToTimeline (postsHTML) {
   if (timeline) {
     for (const postHTML of postsHTML) {
