@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SuggestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,4 +70,9 @@ Route::middleware('web')->group(function () {
         '/notifications',
         [NotificationController::class, 'getUserNotifications']
     )->name('notifications');
+
+    Route::get(
+        '/suggestions',
+        [SuggestionController::class, 'getUserSuggestions']
+    )->name('suggestions');
 });
