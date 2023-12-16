@@ -41,7 +41,7 @@ function buildForYouTimeline () {
     action,
     action,
     true,
-    true
+    false
   )
 }
 
@@ -55,7 +55,7 @@ function buildFollowingTimeline () {
     action,
     action,
     true,
-    true
+    false
   )
 }
 

@@ -25,7 +25,7 @@ if (container && fetcher) {
     firstAction,
     action,
     true,
-    true
+    false
   )
 }
 
