@@ -318,8 +318,23 @@ class PostController extends Controller
         if (!Auth::check()) {
             return $posts->where('is_private', false);
         }
+        /*
+        (group member or 
+            (group null and 
+                (
+                    not private
+                    or created by me
+                    or creator followed by me
+                )
+            )
+        )
+        */
         return $posts->where(function ($query) {
-            $query->where('is_private', false)->orWhere('id_created_by', Auth::user()->id)->orWhereIn('id_created_by', Auth::user()->following()->pluck('users.id'));
+            $query->where(function ($query) {
+                $query->whereNull('id_group')->where(function ($query) {
+                    $query->where('is_private', false)->orWhere('id_created_by', Auth::user()->id)->orWhereIn('id_created_by', Auth::user()->following()->pluck('users.id'));
+                });
+            })->orWhereIn('id_group', Auth::user()->groups()->pluck('id_group'));
         });
     }
     /**
@@ -373,7 +388,7 @@ class PostController extends Controller
 
         /* Merge all posts */
         $posts = $postsFromFollowing->union($postsFromFollowingDistanceTwo)->union($postsFromGroups);
-        $posts = $posts->whereNotNull('id_parent');
+        $posts = $posts->whereNotNull('id_parent');     // TODO: check this (it does not make sense here)
 
         return $posts;
     }
