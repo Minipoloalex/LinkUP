@@ -319,8 +319,8 @@ class PostController extends Controller
             return $posts->where('is_private', false);
         }
         /*
-        (group member or 
-            (group null and 
+        (group member or
+            (group null and
                 (
                     not private
                     or created by me
@@ -362,9 +362,8 @@ class PostController extends Controller
 
         /* Unauthenticated user sees random public posts */
         if (!$user) {
-            return Post::where('is_private', false);
+            return Post::where('is_private', false)->whereNull('id_group');
         }
-
         /* Authenticated user sees posts from users he follows */
         $following = $user->following->pluck('id');
         $postsFromFollowing = Post::whereIn('id_created_by', $following)->whereNull('id_parent');
@@ -529,7 +528,6 @@ class PostController extends Controller
         $request->validate([
             'page' => 'required|int'
         ]);
-        Log::debug("validated");
         $page = $request->input('page');
 
         $toView = User::findOrFail($id);
@@ -537,8 +535,7 @@ class PostController extends Controller
         $posts = Post::where('id_created_by', $id);
         $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')
             ->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
-        Log::debug("hello");
-        Log::debug($posts);
+
         $postsHTML = $this->translatePostsArrayToHTML($posts);
         return response()->json(['postsHTML' => $postsHTML]);
     }
