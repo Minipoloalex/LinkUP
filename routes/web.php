@@ -70,6 +70,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
         Route::get('/api/users', [AdminController::class, 'searchUsers'])->name('api.users');
         Route::get('/profile/{username}', [AdminController::class, 'viewUser'])->name('user');
+        Route::get('/network/{username}', [AdminController::class, 'viewNetwork'])->name('user.network');
         Route::post('/users/{id}/ban', [AdminController::class, 'banUser'])->name('users.ban');
         Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
 
@@ -117,7 +118,7 @@ Route::controller(GroupController::class)->group(function () {
     Route::get('/group/create', 'showCreateForm')->name('group.create');
     Route::post('/group/create', 'createGroup');
 
-    Route::get('/group/{id}', 'show')->name('group');
+    Route::get('/group/{id}', 'show')->name('group.show');
     Route::get('/group/{id}/settings', 'settings')->name('group.settings');
 
     Route::post('/group/{id}/join', 'joinRequest')->name('group.join');

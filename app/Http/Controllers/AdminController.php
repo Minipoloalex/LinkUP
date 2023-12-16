@@ -144,6 +144,11 @@ class AdminController extends Controller
         
         return view('admin.user', ['user' => $user]);
     }
+    public function viewNetwork($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+        return view('admin.network', ['user' => $user]);
+    }
     public function searchPosts(Request $request)
     {
         $request->validate([
