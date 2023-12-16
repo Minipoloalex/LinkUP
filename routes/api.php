@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,4 +64,9 @@ Route::middleware('web')->group(function () {
         '/posts/following',
         [PostController::class, 'getPostsFollowing']
     )->name('posts.following');
+
+    Route::get(
+        '/notifications',
+        [NotificationController::class, 'getUserNotifications']
+    )->name('notifications');
 });

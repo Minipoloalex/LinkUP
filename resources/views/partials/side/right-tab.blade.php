@@ -24,7 +24,9 @@
                 <div class="w-full pl-4 py-1 border-b dark:border-dark-neutral">
                     <h2>Notifications</h2>
                 </div>
-                <div class="w-full overflow-clip overflow-y-scroll scrollbar-thin">
+                <div id="notifications-home-container" class="w-full overflow-clip overflow-y-scroll scrollbar-thin"
+                    data-page="0">
+                    <div id="notifications-home-fetcher"></div>
                 </div>
             </div>
             <div class=" h-[30vh] w-full flex flex-col items-start justify-start border rounded-md 

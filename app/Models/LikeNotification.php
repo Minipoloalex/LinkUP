@@ -5,7 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LikeNotification extends Model {
+class LikeNotification extends Model
+{
     use HasFactory;
     protected $table = 'like_notification';
     public $timestamps = false;
@@ -17,21 +18,26 @@ class LikeNotification extends Model {
         'id_user',
         'timestamp',
     ];
-    public function post() {
+    public function post()
+    {
         return $this->belongsTo(Post::class, 'id_post');
     }
-    public function userNotified() {
+    public function userNotified()
+    {
         return $this->post()->createdBy();
     }
-    public function likedByUser() {
+    public function likedByUser()
+    {
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function getType() {
+    public function getType()
+    {
         return 'like';
     }
 
-    public static function getSomeNotifications(int $user_id, int $limit = 10) {
+    public static function getSomeNotifications(int $user_id, int $limit = 10)
+    {
         // Get user posts
         $user_posts = Post::select('id')
             ->where('id_created_by', $user_id);
@@ -42,5 +48,13 @@ class LikeNotification extends Model {
             ->orderBy('timestamp', 'desc')->limit($limit)->get();
 
         return $like_nots;
+    }
+
+    public function toHtml()
+    {
+        return view('partials.notifications.like', [
+            'notification' => $this,
+            'home' => true,
+        ])->render();
     }
 }

@@ -24,6 +24,8 @@
     </script>
     <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
     <script type="module" src={{ url('js/app.js') }}></script>
+    <script type="module" src={{ url('js/home/home.js') }}></script>
+    <script type="module" src={{ url('js/home/notifications.js') }}></script>
     <script type="module" src={{ url('js/general_helpers.js') }}></script>
     <script type="module" src={{ url('js/feedback.js') }}></script>
     <script type="module" src={{ url('js/ajax.js') }}></script>
@@ -31,7 +33,6 @@
     <script type="module" src={{ url('js/network.js') }}></script>
     <script type="module" src={{ url('js/add_follow.js') }}></script>
     <script type="module" src={{ url('js/posts/post_helpers.js') }}></script>
-    <script type="module" src={{ url('js/home/home.js') }}></script>
     <script type="module" src={{ url('js/posts/add_comment.js') }}></script>
     <script type="module" src={{ url('js/posts/delete_post.js') }}></script>
     <script type="module" src={{ url('js/posts/edit_post.js') }}></script>
