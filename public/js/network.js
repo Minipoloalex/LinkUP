@@ -1,8 +1,8 @@
 import { sendAjaxRequest } from './ajax.js'
 import { hide, show } from './general_helpers.js'
 import { swalConfirmDelete, parseHTML } from './general_helpers.js'
+import { getUrlParameter, setUrlParameters } from './general_helpers.js'
 
-// JS for network page
 const network = document.querySelector('#network')
 function getFollowersButton () {
   return network.querySelector('#followers-button')
@@ -48,6 +48,7 @@ if (network) {
   acceptFollowRequestButtons.forEach(but =>
     but.addEventListener('click', acceptFollowRequest)
   )
+  initNetworkPage()
 }
 
 function getFollowersList (container) {
@@ -78,6 +79,7 @@ function showFollowers (event) {
   hide(getFollowingList(network))
   hide(getFollowRequestsList(network))
   hide(getGroupsList())
+  setNetworkSectionURL('followers')
 }
 function showFollowing (event) {
   event.preventDefault()
@@ -89,6 +91,7 @@ function showFollowing (event) {
   show(getFollowingList(network))
   hide(getFollowRequestsList(network))
   hide(getGroupsList())
+  setNetworkSectionURL('following')
 }
 function showFollowRequests (event) {
   event.preventDefault()
@@ -100,6 +103,7 @@ function showFollowRequests (event) {
   hide(getFollowingList(network))
   show(getFollowRequestsList(network))
   hide(getGroupsList())
+  setNetworkSectionURL('follow-requests')
 }
 function showGroups (event) {
   event.preventDefault()
@@ -111,6 +115,7 @@ function showGroups (event) {
   hide(getFollowingList(network))
   hide(getFollowRequestsList(network))
   show(getGroupsList())
+  setNetworkSectionURL('groups')
 }
 
 // 'remove-follower' or 'remove-following' or 'deny-follow-request' or 'accept-follow-request'
@@ -250,4 +255,33 @@ function handleRemoveEmpty (container) {
   if (container.firstElementChild.classList.contains('empty-list')) {
     container.firstElementChild.remove()
   }
+}
+
+function getUrlParameterName() {
+  return 'section'
+}
+
+function initNetworkPage () {
+  const section = getUrlParameter(getUrlParameterName())
+  if (section == null) {
+    return
+  }
+  switch (section) {
+    case 'followers':
+      showFollowers(new Event('click'))
+      break
+    case 'following':
+      showFollowing(new Event('click'))
+      break
+    case 'follow-requests':
+      showFollowRequests(new Event('click'))
+      break
+    case 'groups':
+      showGroups(new Event('click'))
+      break
+  }
+}
+function setNetworkSectionURL(sectionName) {
+  const param = getUrlParameterName()
+  setUrlParameters({[param]: sectionName})
 }

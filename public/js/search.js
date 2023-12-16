@@ -1,14 +1,11 @@
-import { encodeForAjax, sendAjaxRequest } from './ajax.js'
-import { parseHTML } from './general_helpers.js'
+import { parseHTML, setUrlParameters, getUrlParameter } from './general_helpers.js'
 import { showFeedback } from './feedback.js'
 import { destroyFetcher, infiniteScroll } from './infinite_scrolling.js'
 
 async function initSearchResults () {
-  // make the search URLs copiable
-  const urlParams = new URLSearchParams(window.location.search)
-  const searchValue = urlParams.get('query')
-  const type = urlParams.get('type')
-  console.log(searchValue, type)
+  // make the search URLs copiable (check them after loading the page)
+  const searchValue = getUrlParameter('query')
+  const type = getUrlParameter('type')
   if (searchValue != null && type != null) {
     const searchForm = getSearchForm()
     getSearchTextElement(searchForm).value = searchValue
@@ -66,14 +63,10 @@ async function updateSearchResults (event) {
   )
 
   // Change the URL so the user can share the search results (or save them)
-  const newUrl =
-    window.location.href.split('?')[0] +
-    '?' +
-    encodeForAjax({
-      query: searchValue,
-      type: type
-    })
-  history.replaceState(null, null, newUrl) // Replace current URL without reloading page
+  setUrlParameters({
+    query: searchValue,
+    type: type
+  })
 }
 export function getSearchForm () {
   return document.querySelector('#search-form')

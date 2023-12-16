@@ -1,3 +1,5 @@
+import { encodeForAjax } from './ajax.js';
+
 export function hide(element) {
   if (element) {
     element.classList.add('hidden');
@@ -33,4 +35,16 @@ export async function swalConfirmDelete(prompt, descriptionText, action, cancelA
     await cancelAction();
   }
   return false;
+}
+
+export function getUrlParameter(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
+export function setUrlParameters(params) {
+  const newUrl =
+    window.location.href.split('?')[0] +
+    '?' + encodeForAjax(params)
+
+  history.replaceState(null, null, newUrl); // Replace current URL without reloading page
 }
