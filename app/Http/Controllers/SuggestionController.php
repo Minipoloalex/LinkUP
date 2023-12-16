@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Group;
 
 class SuggestionController extends Controller
 {
@@ -15,13 +16,22 @@ class SuggestionController extends Controller
 
         $user = auth()->user()->id;
 
-        $suggestions = $this->getSuggestions($user, $page);
-        $suggestions = $suggestions->forPage($page + 1, 2 * self::$pagination)->values();
-        dd($suggestions);
+        $suggestions = $this->getSuggestions($user, $page)->shuffle()->values();
 
         $suggestions = $this->translateSuggestionsArrayToHtml($suggestions);
 
         return response()->json(['suggestions' => $suggestions]);
+    }
+
+    private function translateSuggestionsArrayToHtml($suggestions)
+    {
+        return $suggestions->map(function ($suggestion) {
+            if ($suggestion->type == 'group') {
+                return view('partials.suggestion.group', ['group' => $suggestion])->render();
+            } else {
+                return view('partials.suggestion.user', ['user' => $suggestion])->render();
+            }
+        });
     }
 
     private function getSuggestions(int $user, int $page)
@@ -32,10 +42,12 @@ class SuggestionController extends Controller
                 $query->select('id_followed')->from('follows')->where('id_user', $user);
             })->whereNotIn('id_followed', function ($query) use ($user) {
                 $query->select('id_followed')->from('follows')->where('id_user', $user);
-            })->distinct()->skip($page * self::$pagination)->take(self::$pagination)->get()->pluck('id_followed');
+            })->where('id_followed', '!=', $user)->distinct()->orderBy('id_followed')
+            ->skip($page * self::$pagination)->limit(self::$pagination)->get()->pluck('id_followed');
 
         foreach ($usersSuggestions as $key => $value) {
             $usersSuggestions[$key] = DB::table('users')->where('id', $value)->first();
+            $usersSuggestions[$key]->type = 'user';
         }
 
         // Groups that my 'following' belong to (and I don't)
@@ -44,10 +56,12 @@ class SuggestionController extends Controller
                 $query->select('id_followed')->from('follows')->where('id_user', $user);
             })->whereNotIn('id_group', function ($query) use ($user) {
                 $query->select('id_group')->from('group_member')->where('id_user', $user);
-            })->distinct()->skip($page * self::$pagination)->take(self::$pagination)->get()->pluck('id_group');
+            })->distinct()->orderBy('id_group')
+            ->skip($page * self::$pagination)->limit(self::$pagination)->get()->pluck('id_group');
 
         foreach ($groupsSuggestions as $key => $value) {
             $groupsSuggestions[$key] = DB::table('groups')->where('id', $value)->first();
+            $groupsSuggestions[$key]->type = 'group';
         }
 
         $suggestions = $usersSuggestions->merge($groupsSuggestions);
