@@ -24,6 +24,13 @@ $userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : ro
             <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
         @endif
+        @if ($post->group !== null)
+        @php
+        $group = $post->group;
+        $groupLink = $hasAdminLink ? route('admin.group', $group->id) : route('group.show', $group->id);
+        @endphp
+        <a href="{{ $groupLink }}" class="grow text-right before:content-['From_']">{{ $group->name }}</a>
+        @endif
     </header>
     <div class='post-body text-sm'>
         @if ($editable)
