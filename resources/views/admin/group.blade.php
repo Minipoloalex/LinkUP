@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', $group->name)
+@section('title', 'Group {{$group->name}}')
 
 @push('scripts')
 <script type="module" src="{{ url('js/group/group.js')}}"></script>

@@ -1,14 +1,15 @@
 @php
 $editable = $showEdit && $post->isCreatedByCurrentUser();
 $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post->id);
+$userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : route('profile.show', $post->createdBy->username);
 @endphp
 <div class="flex flex-col gap-4 m-1 post-info">
     <header class="flex items-center justify-start space-x-2">
-        <a href="/profile/{{ $post->createdBy->username }}">
+        <a href="{{ $userLink }}">
             <img class="w-8 h-8 rounded-full ring-1 ring-dark-neutral" src="{{ $post->createdBy->getProfilePicture() }}"
                 alt="User photo">
         </a>
-        <a class="" href="/profile/{{ $post->createdBy->username }}">
+        <a href="{{ $userLink }}">
             {{ $post->createdBy->username }}
         </a>
         {{-- <span class="date">{{ $post->created_at }}</span> --}}
@@ -49,8 +50,7 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
         </h3>
 
         <div>
-            <span class="nr-comments mr-1">{{ $post->comments->count() }}</span><span>comments</span>
+            <span class="nr-comments after:content-['_comments']">{{ $post->comments->count() }}</span>
         </div>
     </div>
-
 </div>

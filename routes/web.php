@@ -69,6 +69,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
 
         Route::get('/users', [AdminController::class, 'listUsers'])->name('users');
         Route::get('/api/users', [AdminController::class, 'searchUsers'])->name('api.users');
+        Route::get('/profile/{username}', [AdminController::class, 'viewUser'])->name('user');
         Route::post('/users/{id}/ban', [AdminController::class, 'banUser'])->name('users.ban');
         Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('users.unban');
 

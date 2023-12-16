@@ -7,6 +7,6 @@ const fetcherGroups = document.querySelector('#fetcher-admin-groups');
 if (groupsContainer && fetcherGroups) {
     const url = '/admin/api/groups';
     const parser = (html) =>  parseHTML(html).querySelector('.group-tr')
-    addInfiniteScrollToAdmin(groupsContainer, fetcherGroups, url, parser, () => {});
+    addInfiniteScrollToAdmin(groupsContainer, fetcherGroups, url, parser, null);
     addEventListenersToSearchForm(groupsContainer, fetcherGroups, url, parser);
 }

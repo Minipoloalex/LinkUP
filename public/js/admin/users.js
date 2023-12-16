@@ -7,6 +7,6 @@ const fetcherUsers = document.querySelector('#fetcher-admin-users');
 if (usersContainer && fetcherUsers) {
     const url = '/admin/api/users';
     const parser = (html) => parseHTML(html).querySelector('.user-tr');
-    addInfiniteScrollToAdmin(usersContainer, fetcherUsers, url, parser);
+    addInfiniteScrollToAdmin(usersContainer, fetcherUsers, url, parser, null);
     addEventListenersToSearchForm(usersContainer, fetcherUsers, url, parser);
 }

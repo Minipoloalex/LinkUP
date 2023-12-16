@@ -138,6 +138,12 @@ class AdminController extends Controller
 
         return view('admin.group', ['group' => $group]);
     }
+    public function viewUser($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+        
+        return view('admin.user', ['user' => $user]);
+    }
     public function searchPosts(Request $request)
     {
         $request->validate([

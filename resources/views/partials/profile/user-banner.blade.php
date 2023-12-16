@@ -1,3 +1,6 @@
+@php
+$isAdmin = Auth::guard('admin')->check();
+@endphp
 <div class="w-full flex flex-col content-center justify-start border-b dark:border-dark-neutral">
     @auth
     @if (Auth::user()->id == $user->id)
@@ -7,7 +10,7 @@
             <i class="fa-solid fa-pen-to-square"></i>
         </a>
     </div>
-    @else
+    @elseif (!$isAdmin)
     <div id="follow-actions" class="flex flex-row-reverse m-4">
         @php
         $follows = Auth::user()->isFollowing($user);
