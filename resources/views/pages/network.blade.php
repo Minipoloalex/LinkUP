@@ -11,16 +11,16 @@
             $isMyProfile = Auth::check() && Auth::user()->id == $user->id;
             @endphp
             <header class="flex flex-row justify-around sticky top-0 left-0 dark:bg-dark-primary">
-                <button id="followers-button" class="w-full p-2 border-2 active">{{
-                    $user->followers->count() }} Followers</button>
-                <button id="following-button" class="w-full p-2 border-y-2 border-r-2">{{
-                    $user->following->count() }} Following</button>
+                <button id="followers-button" class="w-full p-2 border-2 active after:content-['_Followers']">{{
+                    $user->followers->count() }}</button>
+                <button id="following-button" class="w-full p-2 border-y-2 border-r-2 after:content-['_Following']">{{
+                    $user->following->count() }}</button>
                 @if ($isMyProfile)
-                <button id="follow-requests-button" class="w-full p-2 border-y-2 border-r-2">{{
-                    $user->followRequestsReceived->count() }} Requests</button>
+                <button id="follow-requests-button" class="w-full p-2 border-y-2 border-r-2 after:content-['_Requests']">{{
+                    $user->followRequestsReceived->count() }}</button>
                 @endif
-                <button id="groups-button" class="w-full p-2 border-y-2">{{
-                    $user->groups->count() }} Groups</button>
+                <button id="groups-button" class="w-full p-2 border-y-2 after:content-['_Groups']">{{
+                    $user->groups->count() }}</button>
             </header>
             <div id="followers-list" class="flex flex-col">
                 @forelse ($user->followers as $follower)
@@ -67,8 +67,7 @@
             <div id="groups-list" class="flex flex-col gap-2 hidden">
                 @forelse ($user->groups as $groupMember)
                 @include('partials.network.group_card', [
-                'group' => $groupMember->group,
-                // 'user' => $user,
+                    'group' => $groupMember->group,
                 ])
                 @empty
                 <p class="empty-list">You are not a member of any group</p>

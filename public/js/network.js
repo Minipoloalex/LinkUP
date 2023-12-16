@@ -158,7 +158,7 @@ async function deleteFollower (event) {
       `Are you sure you want to remove ${username} from your follower list?`,
     'Yes, delete.',
     data => {
-      decrementCount(getFollowersButton(), 'Followers')
+      decrementCount(getFollowersButton())
       handleEmpty(getFollowersList(network), 'You have no followers')
     },
     'Removed!',
@@ -174,7 +174,7 @@ async function deleteFollowing (event) {
       `Are you sure you want to delete ${username} from your following list?`,
     'Yes, unfollow.',
     data => {
-      decrementCount(getFollowingButton(), 'Following')
+      decrementCount(getFollowingButton())
       handleEmpty(getFollowingList(network), 'You are not following anyone')
     },
     'Unfollowed!',
@@ -190,7 +190,7 @@ async function denyFollowRequestReceived (event) {
     username => `Are you sure you want to deny ${username}'s follow request?`,
     'Yes, deny.',
     data => {
-      decrementCount(getFollowRequestsButton(), 'Requests')
+      decrementCount(getFollowRequestsButton())
       handleEmpty(
         getFollowRequestsList(network),
         'You have received no follow requests'
@@ -209,8 +209,8 @@ async function acceptFollowRequest (event) {
     username => `Are you sure you want to accept ${username}'s follow request?`,
     'Yes, accept.',
     data => {
-      decrementCount(getFollowRequestsButton(), 'Requests')
-      incrementCount(getFollowersButton(), 'Followers')
+      decrementCount(getFollowRequestsButton())
+      incrementCount(getFollowersButton())
       handleRemoveEmpty(getFollowersList(network))
 
       const userHTML = parseHTML(data.userHTML)
@@ -228,13 +228,13 @@ async function acceptFollowRequest (event) {
     username => `You accepted ${username}'s follow request.`
   )
 }
-export function decrementCount (element, text) {
+export function decrementCount (element) {
   const num = parseInt(element.textContent) - 1
-  element.textContent = `${num} ${text}`
+  element.textContent = num
 }
 export function incrementCount (element) {
   const num = parseInt(element.textContent) + 1
-  element.textContent = `${num} ${text}`
+  element.textContent = num
 }
 
 function handleEmpty (container, message) {
