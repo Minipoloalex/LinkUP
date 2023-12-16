@@ -34,6 +34,10 @@
                 <div class="w-full pl-4 py-1 border-b dark:border-dark-neutral">
                     <h2>Suggestions</h2>
                 </div>
+                <div id="suggestions-home-container" class="w-full overflow-clip overflow-y-scroll scrollbar-thin"
+                    data-page="0">
+                    <div id="suggestions-home-fetcher"></div>
+                </div>
             </div>
         </div>
     </div>

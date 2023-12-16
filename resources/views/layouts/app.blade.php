@@ -24,8 +24,6 @@
     </script>
     <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
     <script type="module" src={{ url('js/app.js') }}></script>
-    <script type="module" src={{ url('js/home/home.js') }}></script>
-    <script type="module" src={{ url('js/home/notifications.js') }}></script>
     <script type="module" src={{ url('js/general_helpers.js') }}></script>
     <script type="module" src={{ url('js/feedback.js') }}></script>
     <script type="module" src={{ url('js/ajax.js') }}></script>
@@ -55,6 +53,7 @@
     <script>
         const isAuthenticated = @json(auth() -> check());
     </script>
+    @stack('scripts')
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     @vite('resources/js/sweetalert.js')

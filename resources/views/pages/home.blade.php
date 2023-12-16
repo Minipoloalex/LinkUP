@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('title', 'Home')
+
+@push('scripts')
+<script type="module" src="{{ url('js/home/home.js') }}"></script>
+<script type="module" src="{{ url('js/home/notifications.js') }}"></script>
+<script type="module" src="{{ url('js/home/suggestions.js') }}"></script>
+@endpush
+
 @section('content')
 @include('partials.header.timeline-tabs')
 <main id="homepage" class=" flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
