@@ -13,7 +13,7 @@
                 @include('partials.header.search-bar')
             </div>
         </section>
-        @include('partials.search.search_filters_side')
+        @include('partials.search.search_filters')
     </div>
     <div>
         <div id="results-container" data-page="0"></div>

@@ -316,7 +316,7 @@ class PostController extends Controller
     public function filterCanView($posts)
     {
         if (!Auth::check()) {
-            return $posts->where('is_private', false);
+            return $posts->where('is_private', false)->whereNull('id_group');
         }
         /*
         (group member or

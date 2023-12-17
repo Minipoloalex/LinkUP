@@ -3,6 +3,7 @@
     <div class="hidden xl:flex xl:items-start xl:justify-start xl:w-3/4">
         <div class="w-full flex flex-col items-start justify-start gap-8">
             <div class="h-[5vh] w-full">
+                @if(!request()->is('search'))
                 <form id="search-form" class="flex content-center justify-center py-1 rounded-full group"
                     action="{{ url('/search') }}" method="GET">
                     <input id="search-text" class="align-middle border-b-2 dark:border-dark-secondary w-full dark:bg-dark-primary 
@@ -13,6 +14,7 @@
                         <i class="fas fa-search mr-2"></i>
                     </button>
                 </form>
+                @endif
             </div>
             <div class=" h-[30vh] w-full flex flex-col items-start justify-start pl-5 border rounded-md 
                     dark:border-dark-neutral z-10">

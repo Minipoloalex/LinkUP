@@ -51,9 +51,6 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <script>
-        const isAuthenticated = @json(auth() -> check());
-    </script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
     @vite('resources/js/sweetalert.js')

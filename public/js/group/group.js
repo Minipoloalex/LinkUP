@@ -226,7 +226,7 @@ function joinGroup (group, button) {
         icon.classList.remove('fa-users')
         icon.classList.add('fa-clock-rotate-left')
 
-        const text = new_button.querySelector('div')
+        const text = new_button.querySelector('.button-text')
         text.textContent = 'Pending'
 
         button.parentNode.replaceChild(new_button, button)
@@ -273,7 +273,7 @@ function cancelJoinGroup (group, button) {
         icon.classList.remove('fa-clock-rotate-left')
         icon.classList.add('fa-users')
 
-        const text = new_button.querySelector('div')
+        const text = new_button.querySelector('.button-text')
         text.textContent = 'Join group'
 
         button.parentNode.replaceChild(new_button, button)

@@ -1,8 +1,9 @@
 import { submitAddPostOrComment, getTextField } from './post_helpers.js'
 import { clearFileInputWrapper, getFileInputWrapper } from '../file_input.js'
 import { hide, show, parseHTML } from '../general_helpers.js'
-import { prependPostsToTimeline } from '../home/home.js'
+import { prependPostToTimeline } from '../home/home.js'
 import { prependInPostSection } from '../group/group.js'
+import { addEventListenersToPost } from './post_event_listeners.js'
 
 const addPostOn = document.querySelector('.add-post-on')
 const addPostForm = document.querySelector('form.add-post')
@@ -52,12 +53,13 @@ async function submitAddPost (event) {
   hideAddPostForm()
   const data = await submitAddPostOrComment(addPostForm, requestBody, 'post')
   if (data != null) {
-    if (groupId != null) {
-      const postElement = parseHTML(data.postHTML)
+    const postElement = parseHTML(data.postHTML)
+    if (groupId != null) {  
       prependInPostSection(postElement)
     } else {
-      prependPostsToTimeline([data.postHTML])
+      prependPostToTimeline(postElement)
     }
+    addEventListenersToPost(postElement)
     addPostForm.reset()
     clearFileInputWrapper(getFileInputWrapper(addPostForm))
   }
