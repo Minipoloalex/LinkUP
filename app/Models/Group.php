@@ -42,6 +42,10 @@ class Group extends Model
         $fileName = $imageController->getFileNameWithExtension(str($this->id));
         return $imageController->getFile($fileName);
     }
+    public function isOwner(?User $user)
+    {
+        return $user !== null && $this->id_owner === $user->id;
+    }
     public static function search(string $search) {
         return Group::whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
             ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search]);

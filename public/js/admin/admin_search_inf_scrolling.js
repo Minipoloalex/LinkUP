@@ -9,8 +9,10 @@ function getSearchQuery(searchForm) {
 export async function addInfiniteScrollToAdmin(container, testIntersectionElement, url, getElement, addEventListeners = null) {
     const searchForm = getSearchForm();
     const query = getSearchQuery(searchForm);
-
+    testIntersectionElement.textContent = 'Loading...';
+    let firstEmpty = false;
     const insert = async (data) => {
+        if (firstEmpty) return;
         for (const html of data.resultsHTML) {
             const element = getElement(html);
             container.appendChild(element);
@@ -20,11 +22,16 @@ export async function addInfiniteScrollToAdmin(container, testIntersectionElemen
         }
         if (data.resultsHTML.length == 0) {
             await destroyFetcher();
+            testIntersectionElement.textContent = '';
         }
     }
     const firstAction = async (data) => {
         container.innerHTML = '';
         await insert(data);
+        if (data.resultsHTML.length == 0) {
+            firstEmpty = true;
+            testIntersectionElement.textContent = 'No results found';
+        }
     };
     const action = async (data) => {
         await insert(data);

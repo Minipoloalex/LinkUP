@@ -4,7 +4,7 @@ $group = $notification->group;
 $who = $notification->otherUser()->first();
 $profile_link = route('profile.show', ['username' => $who->username]);
 $pfp = $who->getProfilePicture();
-$group_link = route('group', ['id' => $group->id]);
+$group_link = route('group.show', ['id' => $group->id]);
 @endphp
 
 <div class="h-full flex items-center">

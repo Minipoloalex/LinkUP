@@ -70,7 +70,7 @@ $groupLinkTo = $isAdmin ? 'admin.group' : 'group.show';
                 @endphp
                 @include('partials.network.group_card', [
                     'group' => $group,
-                    'linkTo' => route($groupLinkTo, ['id' => $group->id]),
+                    'linkTo' => route($groupLinkTo, ['id' => $group->id, 'user' => $user]),
                 ])
                 @empty
                 <p class="empty-list">You are not a member of any group</p>
