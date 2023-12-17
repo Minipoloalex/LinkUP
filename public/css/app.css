@@ -251,13 +251,6 @@ button:clicked {
   margin-top: 5px;
 }
 
-/* contact page */
-#contactForm textarea:focus,
-input:focus {
-  border-color: transparent;
-  outline: none;
-}
-
 /* Responsive styles for the header */
 @media (max-width: 768px) {
   main > header {
