@@ -43,8 +43,6 @@
     <script type="module" src={{ url('js/group/group.js') }}></script>
     <script type="module" src={{ url('js/infinite_scrolling.js') }}></script>
     <script type="module" src={{ url('js/profile/profile_infinite_scrolling.js') }}></script>
-    <script type="module" src={{ url('js/foryou.js') }}></script>
-    <script type="module" src={{ url('js/following.js') }}></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"
         integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -79,7 +77,6 @@
         </p>
         <button id="dismiss-feedback" class="inline absolute right-3 top-1/4">X</button>
     </footer>
-    <div id="dark-overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black" style="opacity: 0.8;"></div>
 </body>
 
 </html>
