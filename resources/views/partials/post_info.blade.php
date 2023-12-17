@@ -17,7 +17,14 @@ $userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : ro
         <div class="edit-delete-post">
             <button class="text-2xl edit-post"><i class="p-2 fas fa-edit"></i></button>
             <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
+            <!-- if post is private, show the unlock icon; otherwise, show the lock icon -->
+            @if ($post->is_private)
+                <button class="text-2xl privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-unlock"></i></button>
+            @else
+                <button class="text-2xl privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-lock"></i></button>
+            @endif
         </div>
+
         @endif
         @if ($hasAdminDelete)
         <div class="admin-delete-post">

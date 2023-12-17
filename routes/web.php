@@ -95,6 +95,7 @@ Route::controller(PostController::class)->group(function () {
     Route::get('/post/{id}', 'show')->name('post')->where('id', '[0-9]+');
     Route::get('/post/{id}/image', 'viewImage')->name('post.image')->where('id', '[0-9]+');
 
+    Route::post('/post/{postId}/privacy', 'updatePrivacy');
     Route::post('/post', 'storePost');
     Route::post('/comment', 'storeComment');
 
