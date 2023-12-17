@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 
+use App\Http\Controllers\StaticPageController;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -33,6 +35,12 @@ Route::redirect('/', '/home');
 Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
+
+// Static pages
+Route::controller(StaticPageController::class)->group(function () {
+    Route::get('/about', 'about')->name('about');
+    Route::get('/contact', 'contact')->name('contact');
+});
 
 
 // Authentication
@@ -157,16 +165,6 @@ Route::post('/settings/confirm-password', [UserController::class, 'confirmPasswo
 Route::get('/search', function () {
     return view('pages.search');
 })->name('search');
-
-/* route for about us page */
-Route::get('/about', function () {
-    return view('pages.about');
-})->name('about');
-
-/* route for contact us page */
-Route::get('/contact', function () {
-    return view('pages.contact');
-})->name('contact');
 
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications')->middleware('auth');
 /* route for for-you.blade.php */
