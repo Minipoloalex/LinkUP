@@ -19,13 +19,6 @@ class GroupPolicy
     public function view(?User $user, Group $group): bool
     {
         return true;
-        // $group->load('members');
-
-        // if ($group->members->contains($user) && $user !== null) {
-        //     return true;
-        // }
-
-        // return false;
     }
 
     public function settings(User $user, Group $group): bool

@@ -6,10 +6,15 @@ import { addEventListenersToPost } from '../posts/post_event_listeners.js'
 
 // const Swal = window.swal
 
+export function getNoneElement(section) {
+  return section.querySelector('.none')
+}
 export function prependInPostSection (postElement) {
   const posts_section = document.getElementById('posts-section')
   if (posts_section) {
     posts_section.prepend(postElement)
+    const none = getNoneElement(posts_section)
+    hide(none)
   }
 }
 
@@ -34,21 +39,26 @@ function addInfiniteScrollingToSection (
   url,
   attachEventListeners
 ) {
+  const none = getNoneElement(section)
   const load = data =>
     appendInSection(data.elementsHTML, section, fetcher, attachEventListeners)
 
-  const firstAction = data => {
+  const firstAction = async data => {
     load(data)
     if (data.elementsHTML.length == 0) {
-      const none = parseHTML(data.noneHTML)
-      section.insertBefore(none, fetcher)
-      destroyFetcher()
+      show(none)
+      await destroyFetcher()
+      console.log("destroyed on first")
+    }
+    else {
+      hide(none)
     }
   }
-  const action = data => {
+  const action = async data => {
     load(data)
     if (data.elementsHTML.length == 0) {
-      destroyFetcher()
+      await destroyFetcher()
+      console.log("destroyed on second")
     }
   }
   infiniteScroll(section, fetcher, url, firstAction, action, false, false)

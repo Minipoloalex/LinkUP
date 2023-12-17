@@ -28,12 +28,8 @@ class GroupController extends Controller
 
         $this->authorize('view', $group);
 
-        $posts = $group->posts()->orderBy('created_at', 'desc')->paginate(10);
-
         return view('pages.groups.group', [
             'group' => $group,
-            'posts' => $posts,
-            'members' => $members,
             'user' => $user->id,
             'user_is_member' => $is_member,
             'user_is_owner' => $is_owner,
@@ -103,6 +99,9 @@ class GroupController extends Controller
     {
         if ($id_member == 'self') {
             $id_member = Auth::user()->id;
+        }
+        if (!is_numeric($id_member)) {
+            return response('Invalid member id', 400);
         }
 
         $group = Group::findOrFail($id);

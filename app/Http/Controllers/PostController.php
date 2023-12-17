@@ -697,9 +697,7 @@ class PostController extends Controller
         }
         $posts = Post::where('id_group', $id)->whereNull('id_parent')->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         if ($posts->isEmpty()) {
-            $noPostsHTML = view('partials.search.no_results')->render();
             return response()->json([
-                'noneHTML' => $noPostsHTML,
                 'elementsHTML' => []
             ]);
         }
