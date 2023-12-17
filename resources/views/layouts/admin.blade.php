@@ -9,7 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="is-admin" content="">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} Admin - @yield('title')</title>
 
     <!-- Styles -->
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
@@ -17,6 +17,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script type="module" src="{{ url('js/posts/delete_post.js')}}"></script>
     <script type="module" src="{{ url('js/admin/users.js')}}"></script>
+    <script type="module" src="{{ url('js/admin/posts.js')}}"></script>
+    <script type="module" src="{{ url('js/admin/groups.js')}}"></script>
+
+    @stack('scripts')
+
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
 </head>

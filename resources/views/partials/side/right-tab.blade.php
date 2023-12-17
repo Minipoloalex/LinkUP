@@ -8,7 +8,8 @@
                     action="{{ url('/search') }}" method="GET">
 
                     <input id="search-text" class="align-middle border-b-2 dark:border-dark-secondary w-full dark:bg-dark-primary 
-                focus:outline-none group-focus-within:dark:border-dark-active" type="text" name="query">
+                focus:outline-none group-focus-within:dark:border-dark-active" type="text" name="query"
+                        autocomplete="off">
                     <input type="hidden" name="type" value="users">
                     <button
                         class="align-middle border-b-2 dark:border-dark-secondary group-focus-within:dark:border-dark-active text-2xl"

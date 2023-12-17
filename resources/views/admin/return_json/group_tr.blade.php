@@ -7,7 +7,7 @@
 <body>
     <table>
         <tbody>
-            @include('partials.admin.user_tr', ['user' => $user])
+            @include('partials.admin.group_tr', ['group' => $group])
         </tbody>
     </table>
 </body>

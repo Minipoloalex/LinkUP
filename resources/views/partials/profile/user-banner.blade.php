@@ -1,3 +1,12 @@
+@php
+$isAdmin = Auth::guard('admin')->check();
+function getNetworkLink($isAdmin, $username, $section) {
+    if ($isAdmin) {
+        return route('admin.user.network', ['username' => $username, 'section' => $section]);
+    }
+    return route('profile.network', ['username' => $username, 'section' => $section]);
+}
+@endphp
 <div class="w-full flex flex-col content-center justify-start border-b dark:border-dark-neutral">
     @auth
     @if (Auth::user()->id == $user->id)
@@ -7,7 +16,7 @@
             <i class="fa-solid fa-pen-to-square"></i>
         </a>
     </div>
-    @else
+    @elseif (!$isAdmin)
     <div id="follow-actions" class="flex flex-row-reverse m-4">
         @php
         $follows = Auth::user()->isFollowing($user);
@@ -50,17 +59,17 @@
     </div>
 
     <div class="profile-stats flex flex-row center justify-between px-4 mt-6">
-        <a href="{{ route('profile.network', $user->username) }}"
+        <a href="{{ getNetworkLink($isAdmin, $user->username, 'followers') }}"
             class="text-center flex flex-row  border-gray-400 border-solid mb-1">
             <p class="p-1 profile-stat-label font-bold">Followers</p>
             <p class="p-1 profile-stat-value">{{ $user->followers->count() }}</p>
         </a>
-        <a href="{{ route('profile.network', $user->username) }}"
+        <a href="{{ getNetworkLink($isAdmin, $user->username, 'following') }}"
             class="text-center flex flex-row border-gray-400 border-solid">
             <p class="p-1 profile-stat-label font-bold">Following</p>
             <p id="following-number" class="p-1 profile-stat-value">{{ $user->following->count() }}</p>
         </a>
-        <a href="{{ route('profile.network', $user->username) }}"
+        <a href="{{ getNetworkLink($isAdmin, $user->username, 'groups') }}"
             class="text-center flex flex-row border-gray-400 border-solid">
             <p class="p-1 profile-stat-label font-bold">Groups</p>
             <p class="p-1 profile-stat-value">{{ $user->groups->count() }}</p>

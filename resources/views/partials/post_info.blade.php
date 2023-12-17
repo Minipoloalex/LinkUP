@@ -1,28 +1,27 @@
 @php
 $editable = $showEdit && $post->isCreatedByCurrentUser();
 $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post->id);
+$userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : route('profile.show', $post->createdBy->username);
 @endphp
 <div class="flex flex-col gap-4 m-1 post-info">
     <header class="flex items-center justify-start space-x-2">
-        <a href="/profile/{{ $post->createdBy->username }}">
+        <a href="{{ $userLink }}">
             <img class="w-8 h-8 rounded-full ring-1 ring-dark-neutral" src="{{ $post->createdBy->getProfilePicture() }}"
                 alt="User photo">
         </a>
-        <a class="" href="/profile/{{ $post->createdBy->username }}">
+        <a href="{{ $userLink }}">
             {{ $post->createdBy->username }}
         </a>
         {{-- <span class="date">{{ $post->created_at }}</span> --}}
         @if ($editable)
         <div class="edit-delete-post">
-            <a href="#" class="text-2xl edit edit-post"><i class="p-2 fas fa-edit"></i></a>
-            <a href="{{ url('/home') }}" class="text-2xl delete delete-post"><i class="p-2 fas fa-trash-alt"></i></a>
+            <button class="text-2xl edit-post"><i class="p-2 fas fa-edit"></i></button>
+            <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
         @endif
         @if ($hasAdminDelete)
         <div class="admin-delete-post">
-            <div class="delete delete-post">
-                <button class="text-2xl"><i class="p-2 fas fa-trash-alt"></i></button>
-            </div>
+            <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
         @endif
     </header>
@@ -31,18 +30,13 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
         @include('partials.create_post_form', ['formClass' => 'edit-post-info hidden', 'textPlaceholder' => 'Edit post',
         'contentValue' => $post->content, 'buttonText' => 'Update Post'])
         @endif
-        {{-- <a class="post-link" href="/post/{{ $post->id }}"> --}}
             <a class="post-link" href="{{ $postLink }}">
                 <p class='post-content'>{{ $post->content }}</p>
             </a>
             @if ($post->media() != null)
-            @include('partials.post_image', ['post' => $post, 'editable' => $editable])
+            @include('partials.post_image', ['post' => $post, 'editable' => $editable, 'linkTo' => $postLink])
             @endif
     </div>
-    <!-- <div class="flex justify-between">
-        <h3 class="flex">
-            <button class="like-button" data-id="{{ $post->id }}" data-liked="{{ $post->liked ? 'true' : 'false' }}">
-                at if($post->liked) -->
     @php
     $isLiked = $post->likedByUser();
     $class = $isLiked ? 'fas fa-heart liked' : 'far fa-heart unliked';
@@ -55,7 +49,8 @@ $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post
             <span class="ml-2">{{ count($post->likes) }}</span>
         </h3>
 
-        <span>{{ $post->comments->count() }} comments</span>
+        <div>
+            <span class="nr-comments after:content-['_comments']">{{ $post->comments->count() }}</span>
+        </div>
     </div>
-
 </div>

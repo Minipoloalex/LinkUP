@@ -10,14 +10,13 @@
                 <th>Username</th>
                 <th>Name</th>
                 <th>Email</th>
+                <th></th>
             </tr>
         </thead>
-        <tbody id="container-admin-users" data-page="0">
-        </tbody>
+        <tbody id="container-admin-users" data-page="0"></tbody>
     </table>
     <div id="fetcher-admin-users"></div>
 </div>
 
-{{-- {{ $users->links() }} --}}
 
 @endsection

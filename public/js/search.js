@@ -1,26 +1,11 @@
-import { encodeForAjax, sendAjaxRequest } from './ajax.js'
-import { parseHTML } from './general_helpers.js'
+import { parseHTML, setUrlParameters, getUrlParameter } from './general_helpers.js'
 import { showFeedback } from './feedback.js'
 import { destroyFetcher, infiniteScroll } from './infinite_scrolling.js'
 
-const resultsContainer = document.querySelector(
-  '#search-page #results-container'
-)
-if (resultsContainer) {
-  // only if on the search page
-  const searchForm = getSearchForm()
-  const searchButton = getSearchButton(searchForm)
-
-  searchForm.addEventListener('submit', updateSearchResults)
-  searchButton.addEventListener('click', updateSearchResults)
-  initSearchResults()
-}
 async function initSearchResults () {
-  // make the search URLs copiable
-  const urlParams = new URLSearchParams(window.location.search)
-  const searchValue = urlParams.get('query')
-  const type = urlParams.get('type')
-  console.log(searchValue, type)
+  // make the search URLs copiable (check them after loading the page)
+  const searchValue = getUrlParameter('query')
+  const type = getUrlParameter('type')
   if (searchValue != null && type != null) {
     const searchForm = getSearchForm()
     getSearchTextElement(searchForm).value = searchValue
@@ -37,7 +22,7 @@ async function initSearchResults () {
 async function updateSearchResults (event) {
   event.preventDefault()
   const searchForm = getSearchForm()
-  const searchValue = searchForm.querySelector('#search-text').value
+  const searchValue = getSearchTextElement(searchForm).value
 
   const testIntersectionElement = document.querySelector('#fetcher')
   if (searchValue == '') {
@@ -78,22 +63,18 @@ async function updateSearchResults (event) {
   )
 
   // Change the URL so the user can share the search results (or save them)
-  const newUrl =
-    window.location.href.split('?')[0] +
-    '?' +
-    encodeForAjax({
-      query: searchValue,
-      type: type
-    })
-  history.replaceState(null, null, newUrl) // Replace current URL without reloading page
+  setUrlParameters({
+    query: searchValue,
+    type: type
+  })
 }
-function getSearchForm () {
+export function getSearchForm () {
   return document.querySelector('#search-form')
 }
 function getSearchButton (searchForm) {
   return searchForm.querySelector('button[type="submit"]')
 }
-function getSearchTextElement (searchForm) {
+export function getSearchTextElement (searchForm) {
   return searchForm.querySelector('#search-text')
 }
 function getSearchTypeElement () {
@@ -123,8 +104,23 @@ function updateOnFilterChange () {
 
   for (const filter of filters.querySelectorAll('input[name="search-type"]')) {
     filter.addEventListener('change', () => {
-      searchButton.click()
+      if (getSearchTextElement(searchForm).value != '') {
+        searchButton.click()
+      }
     })
   }
 }
-updateOnFilterChange()
+
+const resultsContainer = document.querySelector(
+  '#search-page #results-container'
+)
+if (resultsContainer) {
+  // only if on the search page
+  const searchForm = getSearchForm()
+  const searchButton = getSearchButton(searchForm)
+
+  searchForm.addEventListener('submit', updateSearchResults)
+  searchButton.addEventListener('click', updateSearchResults)
+  initSearchResults()
+  updateOnFilterChange()
+}

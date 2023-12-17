@@ -1,8 +1,8 @@
 import { sendAjaxRequest } from './ajax.js'
 import { hide, show } from './general_helpers.js'
 import { swalConfirmDelete, parseHTML } from './general_helpers.js'
+import { getUrlParameter, setUrlParameters } from './general_helpers.js'
 
-// JS for network page
 const network = document.querySelector('#network')
 function getFollowersButton () {
   return network.querySelector('#followers-button')
@@ -48,6 +48,7 @@ if (network) {
   acceptFollowRequestButtons.forEach(but =>
     but.addEventListener('click', acceptFollowRequest)
   )
+  initNetworkPage()
 }
 
 function getFollowersList (container) {
@@ -78,6 +79,7 @@ function showFollowers (event) {
   hide(getFollowingList(network))
   hide(getFollowRequestsList(network))
   hide(getGroupsList())
+  setNetworkSectionURL('followers')
 }
 function showFollowing (event) {
   event.preventDefault()
@@ -89,6 +91,7 @@ function showFollowing (event) {
   show(getFollowingList(network))
   hide(getFollowRequestsList(network))
   hide(getGroupsList())
+  setNetworkSectionURL('following')
 }
 function showFollowRequests (event) {
   event.preventDefault()
@@ -100,6 +103,7 @@ function showFollowRequests (event) {
   hide(getFollowingList(network))
   show(getFollowRequestsList(network))
   hide(getGroupsList())
+  setNetworkSectionURL('follow-requests')
 }
 function showGroups (event) {
   event.preventDefault()
@@ -111,6 +115,7 @@ function showGroups (event) {
   hide(getFollowingList(network))
   hide(getFollowRequestsList(network))
   show(getGroupsList())
+  setNetworkSectionURL('groups')
 }
 
 // 'remove-follower' or 'remove-following' or 'deny-follow-request' or 'accept-follow-request'
@@ -158,7 +163,7 @@ async function deleteFollower (event) {
       `Are you sure you want to remove ${username} from your follower list?`,
     'Yes, delete.',
     data => {
-      decrementCount(getFollowersButton(), 'Followers')
+      decrementCount(getFollowersButton())
       handleEmpty(getFollowersList(network), 'You have no followers')
     },
     'Removed!',
@@ -174,7 +179,7 @@ async function deleteFollowing (event) {
       `Are you sure you want to delete ${username} from your following list?`,
     'Yes, unfollow.',
     data => {
-      decrementCount(getFollowingButton(), 'Following')
+      decrementCount(getFollowingButton())
       handleEmpty(getFollowingList(network), 'You are not following anyone')
     },
     'Unfollowed!',
@@ -190,7 +195,7 @@ async function denyFollowRequestReceived (event) {
     username => `Are you sure you want to deny ${username}'s follow request?`,
     'Yes, deny.',
     data => {
-      decrementCount(getFollowRequestsButton(), 'Requests')
+      decrementCount(getFollowRequestsButton())
       handleEmpty(
         getFollowRequestsList(network),
         'You have received no follow requests'
@@ -209,8 +214,8 @@ async function acceptFollowRequest (event) {
     username => `Are you sure you want to accept ${username}'s follow request?`,
     'Yes, accept.',
     data => {
-      decrementCount(getFollowRequestsButton(), 'Requests')
-      incrementCount(getFollowersButton(), 'Followers')
+      decrementCount(getFollowRequestsButton())
+      incrementCount(getFollowersButton())
       handleRemoveEmpty(getFollowersList(network))
 
       const userHTML = parseHTML(data.userHTML)
@@ -228,13 +233,13 @@ async function acceptFollowRequest (event) {
     username => `You accepted ${username}'s follow request.`
   )
 }
-export function decrementCount (element, text) {
+export function decrementCount (element) {
   const num = parseInt(element.textContent) - 1
-  element.textContent = `${num} ${text}`
+  element.textContent = num
 }
 export function incrementCount (element) {
   const num = parseInt(element.textContent) + 1
-  element.textContent = `${num} ${text}`
+  element.textContent = num
 }
 
 function handleEmpty (container, message) {
@@ -250,4 +255,33 @@ function handleRemoveEmpty (container) {
   if (container.firstElementChild.classList.contains('empty-list')) {
     container.firstElementChild.remove()
   }
+}
+
+function getUrlParameterName() {
+  return 'section'
+}
+
+function initNetworkPage () {
+  const section = getUrlParameter(getUrlParameterName())
+  if (section == null) {
+    return
+  }
+  switch (section) {
+    case 'followers':
+      showFollowers(new Event('click'))
+      break
+    case 'following':
+      showFollowing(new Event('click'))
+      break
+    case 'follow-requests':
+      showFollowRequests(new Event('click'))
+      break
+    case 'groups':
+      showGroups(new Event('click'))
+      break
+  }
+}
+function setNetworkSectionURL(sectionName) {
+  const param = getUrlParameterName()
+  setUrlParameters({[param]: sectionName})
 }

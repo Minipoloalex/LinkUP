@@ -6,15 +6,16 @@ import { swalConfirmDelete } from "../general_helpers.js";
 const isAdmin = document.querySelector('meta[name="is-admin"]') != null;
 
 const deletePostButtons = document.querySelectorAll('.delete-post');
-if (isAdmin) {
-    deletePostButtons.forEach(button => {
-        button.addEventListener('click', (event) => deletePostOrComment(event, (id) => `/admin/post/${id}`, '/admin/dashboard'));
-    });
-}
-else {
-    deletePostButtons.forEach(button => {
-        button.addEventListener('click', (event) => deletePostOrComment(event, (id) => `/post/${id}`, '/home'));
-    });
+export function addEventListenerToDeletePostButton(button) {
+    const listener = (url, redirectTo) => {
+        button.addEventListener('click', (event) => deletePostOrComment(event, url, redirectTo));
+    }
+    if (isAdmin) {
+        listener((id) => `/admin/post/${id}`, '/admin/dashboard');
+    }
+    else {
+        listener((id) => `/post/${id}`, '/home');
+    }
 }
 
 export async function deletePostOrComment(event, deleteURL, redirectTo) {
@@ -54,3 +55,5 @@ async function deletePost(post, postId, isComment, deleteURL) {
     }
     return false;
 }
+
+deletePostButtons.forEach(addEventListenerToDeletePostButton);

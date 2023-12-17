@@ -1,6 +1,6 @@
 import { destroyFetcher, infiniteScroll } from '../infinite_scrolling.js'
 import { parseHTML } from '../general_helpers.js'
-import { toggleLike } from '../posts/like.js'
+import { addEventListenersToPost } from '../posts/post_event_listeners.js'
 
 const container = document.querySelector('#profile-page #posts-container')
 const testIntersectionElement = document.querySelector('#fetcher')
@@ -36,12 +36,6 @@ function appendPosts (postsHTML) {
   for (const postHTML of postsHTML) {
     const postElement = parseHTML(postHTML)
     container.insertBefore(postElement, testIntersectionElement)
-    const likeButtons = postElement.querySelectorAll('.like-button')
-    if (!likeButtons) return
-    for (const likeButton of likeButtons) {
-      likeButton.addEventListener('click', async () => {
-        toggleLike(likeButton)
-      })
-    }
+    addEventListenersToPost(postElement)
   }
 }

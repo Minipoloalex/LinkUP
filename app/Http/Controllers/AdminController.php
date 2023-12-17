@@ -53,9 +53,7 @@ class AdminController extends Controller
 
     public function listPosts()
     {
-        $posts = Post::paginate(10);
-
-        return view('admin.posts', ['posts' => $posts]);
+        return view('admin.posts');
     }
 
     public function banUser($id)
@@ -134,35 +132,46 @@ class AdminController extends Controller
 
         return view('admin.post', ['post' => $post]);
     }
+    public function viewGroup($id)
+    {
+        $group = Group::findOrFail($id);
+
+        return view('admin.group', ['group' => $group]);
+    }
+    public function viewUser($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+        
+        return view('admin.user', ['user' => $user]);
+    }
+    public function viewNetwork($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+        return view('admin.network', ['user' => $user]);
+    }
     public function searchPosts(Request $request)
     {
         $request->validate([
             'page' => 'required|integer|min:0',
-            'search' => 'required|string|max:255',
+            'query' => 'nullable|string|max:255',
         ]);
         $page = $request->get('page');
-        $search = $request->get('search');
+        $query = $request->get('query');
         $posts = null;
-        if ($search == '') {
-            $posts = Post::all()->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        if ($query == null || $query == '') {
+            $posts = Post::orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
         else {
-            $posts = Post::search(Post::all(), $search)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+            $posts = Post::search(Post::getModel()->select('*'), $query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
-        
-        // TODO: complete
-        // $htmlArray = $posts->map(function ($post) {    
-        //     return view('admin.post', ['post' => $post])->render();
-        // });
-        // foreach ($posts as $post) {
-        //     $htmlArray[] = view('admin.partials.post', ['post' => $post])->render();
-        // }
-        // return response()->json(['postsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
-        return response()->json();
+    
+        $htmlArray = $posts->map(function ($post) {    
+            return view('partials.admin.post', ['post'=> $post])->render();
+        });
+        return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
     }
     public function searchUsers(Request $request)
     {
-        Log::debug($request->all());
         $request->validate([
             'page' => 'required|integer|min:0',
             'query' => 'nullable|string|max:255',
@@ -176,11 +185,29 @@ class AdminController extends Controller
         else {
             $users = User::search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
-        Log::debug($users->toJson());
         $htmlArray = $users->map(function ($user) {    
             return view('admin.return_json.user_tr', ['user' => $user])->render();
         });
-        Log::debug($htmlArray);
-        return response()->json(['usersHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
+        return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
+    }
+    public function searchGroups(Request $request)
+    {
+        $request->validate([
+            'page' => 'required|integer|min:0',
+            'query' => 'nullable|string|max:255',
+        ]);
+        $page = $request->get('page');
+        $query = $request->get('query');
+        $groups = null;
+        if ($query == null || $query == '') {  
+            $groups = Group::orderBy('name', 'asc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        }
+        else {
+            $groups = Group::search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        }
+        $htmlArray = $groups->map(function ($group) {    
+            return view('admin.return_json.group_tr', ['group' => $group])->render();
+        });
+        return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
     }
 }

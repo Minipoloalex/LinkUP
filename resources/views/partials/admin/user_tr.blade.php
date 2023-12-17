@@ -1,8 +1,18 @@
+@php $linkTo = route('admin.user', ['username' => $user->username]) @endphp
 <tr class="user-tr">
-    <td>{{ $user->id }}</td>
-    <td>{{ $user->username }}</td>
-    <td>{{ $user->name }}</td>
-    <td>{{ $user->email }}</td>
+    <td>
+        <a href="{{ $linkTo }}">{{ $user->id }}</a> {{-- Do not place the link outside of the <td> element. --}}
+    </td>
+    <td>
+        <a href="{{ $linkTo }}">{{ $user->username }}</a>
+    </td>
+    <td>
+        <a href="{{ $linkTo }}">{{ $user->name }}</a>
+    </td>
+    <td>
+        <a href="{{ $linkTo }}">{{ $user->email }}</a>
+    </td>
+    
     <td>
         @if($user->is_banned)
         <form action="{{ route('admin.users.unban', $user->id) }}" method="POST">

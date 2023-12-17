@@ -1,5 +1,5 @@
 <div class="image-container">
-    <a class="post-link" href="{{ route('post', ['id' => $post->id]) }}">
+    <a class="post-link" href="{{ $linkTo }}">
         <img src="{{ route('post.image', ['id' => $post->id, 'date' => time()]) }}" alt="A post image">
     </a>
     @if ($editable)

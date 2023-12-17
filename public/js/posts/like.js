@@ -1,6 +1,12 @@
 import { getCsrfToken } from '../ajax.js'
 
-export async function toggleLike (button) {
+export async function addToggleLikeEventListener (button) {
+  button.addEventListener('click', async () => {
+    toggleLike(button)
+  })
+}
+
+async function toggleLike (button) {
   const icon = button.querySelector('i')
   if (icon.classList.contains('liked')) {
     icon.classList.remove('liked')

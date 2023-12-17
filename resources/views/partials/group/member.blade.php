@@ -1,6 +1,10 @@
-@php $request ??= false; @endphp
+@php
+$request ??= false;
+$linkTo = Auth::guard('admin')->check() ? url("/admin/profile/$member->username") : url("/profile/$member->username");
+@endphp
+
 <div class="group-member flex w-full items-center justify-between p-8 border border-slate-400">
-    <a href="{{ url('profile/' . $member->username) }}">
+    <a href="{{ $linkTo }}">
         <div class="flex items-center justify-start">
             <img src="{{ $member->getProfilePicture() }}" alt="user photo"
                 class="w-16 h-16 rounded-full">
@@ -8,7 +12,7 @@
         </div>
     </a>
     <div class="self-end flex items-center h-full">
-        @if($owner && $member->id != $user)
+        @if($owner && $member->id !== $user)
 
         @if($request)
         {{-- If request is set we want buttons to accept or reject the request --}}
