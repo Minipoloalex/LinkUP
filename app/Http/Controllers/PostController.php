@@ -546,7 +546,12 @@ class PostController extends Controller
 
         $toView = User::findOrFail($id);
         $this->authorize('viewPosts', $toView);
-        $posts = Post::where('id_created_by', $id);
+        $posts = Post::where('id_created_by', $id)
+                 ->where(function ($query) {
+                     $query->where('is_private', 0) // Filter for public posts
+                     ->orWhere('id_created_by', Auth::user()->id); // ; // Include user's own private posts
+                 });
+
         $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')
             ->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         Log::debug("hello");
@@ -720,5 +725,23 @@ class PostController extends Controller
         }
         $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true, $isAdmin, $isAdmin);
         return response()->json(['elementsHTML' => $postsHTML]);
+    }
+
+    public function updatePrivacy(Request $request, $postId)
+    {
+        // Fetch the post
+        $post = Post::findOrFail($postId);
+
+        // Check if the authenticated user can edit the post (customize this logic as per your requirements)
+        if ($request->user()->id !== $post->createdBy->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        //current privacy 
+        Log::info('current privacy: ' . $post->is_private);
+        // Toggle the post's privacy
+        $post->is_private = !$post->is_private;
+        $post->save();
+        Log::info('new privacy: ' . $post->is_private);
+        return response()->json(['message' => 'Privacy updated', 'is_private' => $post->is_private]);
     }
 }
