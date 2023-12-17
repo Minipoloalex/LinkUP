@@ -1,6 +1,6 @@
 @php
 $group = App\Models\Group::find($group->id);
-$group_link = route('group', ['id' => $group->id]);
+$group_link = route('group.show', ['id' => $group->id]);
 $gp = $group->getPicture();
 if (isset($group->description) && strlen($group->description) > 30) $group->description = substr($group->description, 0,
 30) . '...';
