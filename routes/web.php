@@ -39,9 +39,8 @@ Route::get('/home', function () {
 // Static pages
 Route::controller(StaticPageController::class)->group(function () {
     Route::get('/about', 'about')->name('about');
-    Route::get('/contact', 'contact')->name('contact');
+    Route::get('/features', 'features')->name('features');
 });
-
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {

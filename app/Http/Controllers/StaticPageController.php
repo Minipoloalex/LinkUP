@@ -9,8 +9,8 @@ class StaticPageController extends Controller
         return view('pages.about');
     }
 
-    public function contact()
+    public function features()
     {
-        return view('pages.contact');
+        return view('pages.features');
     }
 }
