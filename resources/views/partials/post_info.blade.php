@@ -17,14 +17,14 @@ $post->createdBy->username);
         @if ($editable || $showGroupOwnerDelete)
         <div class="edit-delete-post">
             @if ($editable)
-            <button class="text-2xl edit-post"><i class="p-2 fas fa-edit"></i></button>
+            <button class="edit-post"><i class="p-2 fas fa-edit"></i></button>
             @endif
-            <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
+            <button class="delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
             <!-- if post is private, show the unlock icon; otherwise, show the lock icon -->
             @if ($post->is_private)
-                <button class="text-2xl privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-unlock"></i></button>
+                <button class="privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-unlock"></i></button>
             @else
-                <button class="text-2xl privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-lock"></i></button>
+                <button class="privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-lock"></i></button>
             @endif
         </div>
 
