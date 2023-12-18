@@ -65,7 +65,7 @@ class GroupController extends Controller
 
         $group->members()->attach(Auth::user()->id);
 
-        return redirect()->route('group', ['id' => $group->id])->with('success', 'Group created');
+        return redirect()->route('group.show', ['id' => $group->id])->with('success', 'Group created');
     }
 
     public function settings(string $id)
