@@ -2,7 +2,7 @@
 $editable = $showEdit && $post->isCreatedByCurrentUser();
 $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post->id);
 $userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username)
-                            : route('profile.show', $post->createdBy->username);
+: route('profile.show', $post->createdBy->username);
 $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
 @endphp
 <div class="flex flex-col gap-4 m-1 post-info">
@@ -19,9 +19,10 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
         <div class="edit-delete-post">
             @if ($editable)
             <button class="edit-post"><i class="p-2 fas fa-edit"></i></button>
-                @if ($post->id_group === null)
-                <button class="privacy-post-button" data-post-id="{{ $post->id }}"><i class="p-2 fas {{ $icon }}"></i></button>
-                @endif
+            @if ($post->id_group === null)
+            <button class="privacy-post-button" data-post-id="{{ $post->id }}"><i
+                    class="p-2 fas {{ $icon }}"></i></button>
+            @endif
             @endif
             <button class="delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
@@ -55,10 +56,12 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
     @php
     $isLiked = $post->likedByUser();
     $class = $isLiked ? 'fas fa-heart liked' : 'far fa-heart unliked';
+    $authenticated = Auth::check();
     @endphp
     <div class="flex justify-between">
         <h3 class="flex">
-            <button class="like-button mr-1" data-id="{{ $post->id }}" data-liked="{{ $isLiked ? 'true' : 'false' }}">
+            <button class="{{ $authenticated ? 'like-button' : '' }} mr-1" data-id="{{ $post->id }}"
+                data-liked="{{ $isLiked ? 'true' : 'false' }}">
                 <i class="{{ $class }}"></i>
             </button>
             <span class="ml-2">{{ count($post->likes) }}</span>
