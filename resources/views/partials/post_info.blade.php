@@ -13,9 +13,11 @@ $userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : ro
             {{ $post->createdBy->username }}
         </a>
         {{-- <span class="date">{{ $post->created_at }}</span> --}}
-        @if ($editable)
+        @if ($editable || $showGroupOwnerDelete)
         <div class="edit-delete-post">
+            @if ($editable)
             <button class="text-2xl edit-post"><i class="p-2 fas fa-edit"></i></button>
+            @endif
             <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
         @endif

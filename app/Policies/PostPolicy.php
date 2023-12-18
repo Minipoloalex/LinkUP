@@ -20,11 +20,9 @@ class PostPolicy
         if ($user === null) {
             return $post->is_private === false;
         }
-
-        /*if ($user->isAdmin()) {
-            return true; // Admins can view any post
-        }*/
-
+        if ($post->id_group !== null) {
+            return GroupMember::isMember($user, $post->id_group);
+        }
         // Check if the user is following the creator of the post
         return $post->is_private === false || $user->id === $post->id_created_by || $user->isFollowing($post->createdBy);
     }
@@ -60,6 +58,6 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
-        return $user->id === $post->id_created_by;
+        return $user->id === $post->id_created_by || $user->id == $post->group->id_owner;
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Liked;
 use App\Models\User;
 use App\Models\GroupMember;
+use App\Models\Group;
 
 use \App\Events\CommentEvent;
 
@@ -255,7 +256,6 @@ class PostController extends Controller
      */
     public function delete(Request $request, string $id)
     {
-        // Find the post.
         $post = Post::find($id);
 
         // Check if the current user is authorized to delete this post.
@@ -392,12 +392,13 @@ class PostController extends Controller
         return $posts;
     }
 
-    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
+    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $showGroupOwnerDelete = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
     {
         if ($isComment) {
             return view('partials.comment', [
                 'comment' => $post,
                 'showEdit' => $showEdit,
+                'showGroupOwnerDelete' => $showGroupOwnerDelete,
                 'hasAdminLink' => $hasAdminLink,
                 'hasAdminDelete' => $hasAdminDelete
             ])->render();
@@ -407,6 +408,7 @@ class PostController extends Controller
                 'showEdit' => $showEdit,
                 'showAddComment' => $showAddComment,
                 'displayComments' => $displayComments,
+                'showGroupOwnerDelete' => $showGroupOwnerDelete,
                 'hasAdminLink' => $hasAdminLink,
                 'hasAdminDelete' => $hasAdminDelete
             ])->render();
@@ -419,10 +421,10 @@ class PostController extends Controller
      * @param Collection $posts
      * @return Collection HTML code to display the posts
      */
-    private function translatePostsArrayToHTML(Collection $posts, bool $isComment = false, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
+    private function translatePostsArrayToHTML(Collection $posts, bool $isComment = false, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $showGroupOwnerDelete = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
     {
-        $html = $posts->map(function ($post) use ($isComment, $showEdit, $showAddComment, $displayComments, $hasAdminLink, $hasAdminDelete) {
-            return $this->translatePostToHTML($post, $isComment, $showEdit, $showAddComment, $displayComments, $hasAdminLink, $hasAdminDelete);
+        $html = $posts->map(function ($post) use ($isComment, $showEdit, $showAddComment, $displayComments, $showGroupOwnerDelete, $hasAdminLink, $hasAdminDelete) {
+            return $this->translatePostToHTML($post, $isComment, $showEdit, $showAddComment, $displayComments, $showGroupOwnerDelete, $hasAdminLink, $hasAdminDelete);
         });
         return $html;
     }
@@ -701,7 +703,8 @@ class PostController extends Controller
                 'elementsHTML' => []
             ]);
         }
-        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true, $isAdmin, $isAdmin);
+        $showGroupOwnerDelete = Auth::check() && Group::findOrFail($id)->id_owner === Auth::user()->id;
+        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true, $showGroupOwnerDelete, $isAdmin, $isAdmin);
         return response()->json(['elementsHTML' => $postsHTML]);
     }
 }

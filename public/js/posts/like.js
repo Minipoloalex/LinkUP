@@ -34,3 +34,9 @@ async function toggleLike (button) {
       likeCount.textContent = data.count
     })
 }
+
+const posts = document.querySelectorAll('.post')
+posts.forEach(post => {
+  const likeButtons = post.querySelectorAll('.like-button')
+  likeButtons.forEach(addToggleLikeEventListener)
+})
