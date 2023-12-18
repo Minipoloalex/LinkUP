@@ -9,6 +9,7 @@
 
 @section('content')
 @include('partials.header.timeline-tabs')
+
 <main id="homepage" class=" flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
                             lg:w-full">
 

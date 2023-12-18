@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Post;
 
-class PostLikeEvent implements ShouldBroadcast
+class LikeEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,7 +20,7 @@ class PostLikeEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(LikeNotification $likeNotification, string $message)
+    public function __construct(LikeNotification $likeNotification)
     {
         $this->likeNotification = $likeNotification;
     }

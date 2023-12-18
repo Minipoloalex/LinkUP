@@ -1,7 +1,8 @@
 @php
 $editable = $showEdit && $post->isCreatedByCurrentUser();
 $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post->id);
-$userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : route('profile.show', $post->createdBy->username);
+$userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : route('profile.show',
+$post->createdBy->username);
 @endphp
 <div class="flex flex-col gap-4 m-1 post-info">
     <header class="flex items-center justify-start space-x-2">
@@ -30,12 +31,12 @@ $userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : ro
         @include('partials.create_post_form', ['formClass' => 'edit-post-info hidden', 'textPlaceholder' => 'Edit post',
         'contentValue' => $post->content, 'buttonText' => 'Update Post'])
         @endif
-            <a class="post-link" href="{{ $postLink }}">
-                <p class='post-content'>{{ $post->content }}</p>
-            </a>
-            @if ($post->media() != null)
-            @include('partials.post_image', ['post' => $post, 'editable' => $editable, 'linkTo' => $postLink])
-            @endif
+        <a class="post-link" href="{{ $postLink }}">
+            <p class='post-content'>{{ $post->content }}</p>
+        </a>
+        @if ($post->media() != null)
+        @include('partials.post_image', ['post' => $post, 'editable' => $editable, 'linkTo' => $postLink])
+        @endif
     </div>
     @php
     $isLiked = $post->likedByUser();

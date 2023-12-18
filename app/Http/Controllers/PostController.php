@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommentNotification;
+use App\Models\LikeNotification;
 use App\Models\Post;
 use App\Models\Liked;
 use App\Models\User;
 use App\Models\GroupMember;
 
 use \App\Events\CommentEvent;
+use App\Events\LikeEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -477,6 +479,12 @@ class PostController extends Controller
             $liked->id_user = $user->id;
             $liked->id_post = $post->id;
             $liked->save();
+
+            // Send notification unless self-liked
+            if ($post->id_created_by !== $user->id) {
+                $likeNotification = LikeNotification::where('id_user', $user->id)->where('id_post', $post->id)->firstOrFail();
+                event(new LikeEvent($likeNotification));
+            }
         }
 
         $post->loadCount('likes'); // Load the count of likes for the post

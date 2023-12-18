@@ -24,7 +24,7 @@ class LikeNotification extends Model
     }
     public function userNotified()
     {
-        return $this->post()->createdBy();
+        return $this->post->createdBy;
     }
     public function likedByUser()
     {

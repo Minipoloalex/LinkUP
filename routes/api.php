@@ -75,4 +75,14 @@ Route::middleware('web')->group(function () {
         '/suggestions',
         [SuggestionController::class, 'getUserSuggestions']
     )->name('suggestions');
+
+    Route::get(
+        '/users/picture/{id}',
+        [UserController::class, 'getProfilePicture']
+    )->name('users.picture');
+
+    Route::get(
+        '/users/{id}',
+        [UserController::class, 'getUserObject']
+    )->name('users.object');
 });
