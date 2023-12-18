@@ -22,7 +22,7 @@ $dataset = implode(' ', $dataset);
     @endif
         <i class="{{ $icon }}"></i>
         @if ($text)
-        <span class="ml-4">
+        <span class="button-text ml-4">
             {{ $text }}
         </span>
         @endif

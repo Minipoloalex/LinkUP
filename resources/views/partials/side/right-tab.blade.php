@@ -2,44 +2,44 @@
                 xl:w-[30vw] xl:pt-[9rem] xl:items-start xl:justify-start xl:pl-4">
     <div class="hidden xl:flex xl:items-start xl:justify-start xl:w-3/4">
         <div class="w-full flex flex-col items-start justify-start gap-8">
-            <div class="h-[5vh] w-full">
-
+            @auth
+            <div class="h-[5vh] self-center">
+                @if(!request()->is('search'))
                 <form id="search-home" class="flex content-center justify-center py-1 rounded-full group"
                     action="{{ url('/search') }}" method="GET">
-
-                    <input id="search-text" class="align-middle border-b-2 dark:border-dark-secondary w-full dark:bg-dark-primary 
-                focus:outline-none group-focus-within:dark:border-dark-active" type="text" name="query"
-                        autocomplete="off">
+                    <div
+                        class="rounded-full bg-transparent h-10 flex items-center justify-center border-2 border-dark-active">
+                        <i class="fas fa-search text-white ml-3"></i>
+                        <input id="search-text" class="align-middle w-full bg-transparent ml-2 mr-3 text-white font-normal text-sm
+                    focus:outline-none" type="text" name="query" placeholder="Search" autocomplete="off">
+                    </div>
                     <input type="hidden" name="type" value="users">
-                    <button
-                        class="align-middle border-b-2 dark:border-dark-secondary group-focus-within:dark:border-dark-active text-2xl"
-                        type="submit">
-                        <i class="fas fa-search mr-2"></i>
-                    </button>
-
                 </form>
-
+                @endif
             </div>
-            <div id="notifications-tab" class=" h-[30vh] w-full flex flex-col items-start justify-start border rounded-md
-                    dark:border-dark-neutral z-10">
-                <div class="w-full pl-4 py-1 border-b dark:border-dark-neutral">
-                    <h2>Notifications</h2>
-                </div>
-                <div id="notifications-home-container" class="w-full overflow-clip overflow-y-scroll scrollbar-thin"
+
+            <div id="notifications-tab"
+                class=" h-[30vh] w-full flex flex-col items-center justify-start mt-8 mb-4 z-10 rounded-md">
+                <a href="{{ route('notifications') }}" class="w-3/4 pl-4 py-3 border-b-2 dark:border-dark-active ">
+                    <h2><i class="fas fa-bell mr-2"></i>Notifications</h2>
+                </a>
+                <div id="notifications-home-container"
+                    class="w-3/4 overflow-clip overflow-y-scroll scrollbar-hide border dark:border-dark-neutral"
                     data-page="0">
                     <div id="notifications-home-fetcher"></div>
                 </div>
             </div>
-            <div class=" h-[30vh] w-full flex flex-col items-start justify-start border rounded-md 
-                    dark:border-dark-neutral z-10">
-                <div class="w-full pl-4 py-1 border-b dark:border-dark-neutral">
-                    <h2>Suggestions</h2>
+            <div class=" h-[30vh] w-full flex flex-col items-center justify-start z-10">
+                <div class="w-3/4 pl-4 py-3 border-b-2 dark:border-dark-active">
+                    <h2><i class="fas fa-users mr-2"></i>Suggestions</h2>
                 </div>
-                <div id="suggestions-home-container" class="w-full overflow-clip overflow-y-scroll scrollbar-thin"
+                <div id="suggestions-home-container"
+                    class="w-3/4 overflow-clip overflow-y-scroll scrollbar-hide border dark:border-dark-neutral"
                     data-page="0">
                     <div id="suggestions-home-fetcher"></div>
                 </div>
             </div>
+            @endauth
         </div>
     </div>
 </aside>

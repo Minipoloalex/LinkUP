@@ -15,7 +15,7 @@ if (searchbarRight) {
 async function initSearchResults () {
   // make the search URLs copiable (check them after loading the page)
   const searchValue = getUrlParameter('query')
-  const type = getUrlParameter('type')
+  const type = getUrlParameter('type') ?? 'users'
   if (searchValue != null && type != null) {
     const searchForm = getSearchForm()
     getSearchTextElement(searchForm).value = searchValue

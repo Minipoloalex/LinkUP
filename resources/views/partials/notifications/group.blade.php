@@ -6,6 +6,7 @@ $profile_link = route('profile.show', ['username' => $who->username]);
 $pfp = $who->getProfilePicture();
 $group_link = route('group', ['id' => $group->id]);
 $seen = $notification->seen;
+
 @endphp
 
 <div class="flex items-center w-full h-14 p-1 border-t dark:border-dark-neutral first:border-0"
@@ -21,10 +22,10 @@ $seen = $notification->seen;
         </a>
     </div>
     <div class="flex flex-col items-start justify-center h-12 ml-2 text-xs">
-        <a href="{{ $profile_link }}" class="font-bold flex items-center dark:text-dark-active">
+        <a href="{{ $profile_link }}" class="flex items-center dark:text-dark-active">
             <h2>{{ $who->username }}</h2>
         </a>
-        <a href="{{ $group_link }}" class="font-bold">
+        <a href="{{ $group_link }}">
             <h2>wants to join {{ $group->name }}</h2>
         </a>
     </div>

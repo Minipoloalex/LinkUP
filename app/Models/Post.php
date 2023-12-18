@@ -69,8 +69,8 @@ class Post extends Model
         return $postsToSearch->whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search])
             ->orderByRaw("ts_rank(tsvectors, plainto_tsquery('portuguese', ?)) DESC", [$search]);
     }
-    // public function group()
-    // {
-    //     return $this->belongsTo(Group::class, 'id_group');
-    // }
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'id_group');
+    }
 }

@@ -49,10 +49,12 @@ $isAdmin ??= false;
         </div>
 
         <section id="posts-section" data-page="0" class="flex flex-col items-center min-h-full">
+            <div class="none hidden mt-12">No posts found for this group</div>
             <div id="fetcher-posts"></div>
         </section>
 
         <section id="members-section" data-page="0" class="flex flex-col items-center hidden min-h-full">
+            <div class="none hidden mt-12">No members found for this group</div>
             <div id="fetcher-members"></div>
         </section>
 

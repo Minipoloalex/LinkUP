@@ -3,7 +3,8 @@ $isMyProfile = Auth::check() && Auth::user()->id == $user->id;
 $isAdmin = Auth::guard('admin')->check();
 $userLinkTo = $isAdmin ? route('admin.user', ['username' => $user->username])
 : route('profile.show', ['username' => $user->username]);
-$groupLinkTo = $isAdmin ? 'admin.group' : 'group.show';
+$groupLinkTo = $isAdmin ? 'admin.group'
+: 'group.show';
 @endphp
 <main id="network-page" class=" relative flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
                                 lg:w-full lg:h-[calc(100vh-6rem)]">

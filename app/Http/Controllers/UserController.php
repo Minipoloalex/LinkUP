@@ -432,7 +432,13 @@ class UserController extends Controller
             }
         }
 
-        $members = GroupMember::where('id_group', $id)->orderBy('id_user')->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
+        $members = GroupMember::join('users', 'id_user', '=', 'users.id')
+        ->where('id_group', $id)
+        ->orderBy('username')
+        ->skip($page * self::$amountPerPage)
+        ->take(self::$amountPerPage)
+        ->get();
+
         $users = $members->map(function ($group_member) {
             return $group_member->user;
         });
@@ -445,7 +451,6 @@ class UserController extends Controller
         if ($users->isEmpty()) {
             $noMembersHTML = view('partials.search.no_results')->render();
             return response()->json([
-                'noneHTML' => $noMembersHTML,
                 'elementsHTML' => []
             ]);
         }

@@ -6,20 +6,27 @@
 
 @section('title', 'Search')
 @section('content')
-<main id="search-page" class="  flex flex-col w-screen overflow-clip overflow-y-scroll relative h-[calc(100vh-10rem)]
+<main id="search-page" class="  flex flex-col w-screen overflow-clip overflow-y-scroll scrollbar-hide relative h-[calc(100vh-10rem)]
                                 lg:w-full lg:h-[calc(100vh-6rem)]">
-    <div class="border-b-2 dark:border-dark-neutral dark:bg-dark-primary pb-4 sticky top-0 left-0">
+    <div class="border-b-2 dark:border-dark-neutral dark:bg-dark-primary mt-4 sticky">
         <section id="search-content" class="flex gap-2">
             <div class="w-full flex p-2">
-                <header class="flex w-1/4 items-center justify-center">
-                    <h1 class="text-xl font-bold text-center mt-2">Search:</h1>
-                </header>
-                @include('partials.header.search-bar')
+                <div class="h-[5vh] w-full flex flex-col justify-center">
+                    <form id="search-form" class="self-center flex content-center justify-center py-1 rounded-full group"
+                        action="{{ url('/search') }}" method="GET">
+                        <div class="rounded-full bg-transparent h-10 flex items-center justify-center border-2 border-dark-active">
+                            <i class="fas fa-search text-white ml-3"></i>    
+                        <input id="search-text" class="align-middle w-full bg-transparent ml-2 mr-3 text-white font-normal text-sm
+                        focus:outline-none" type="text" name="query" placeholder="Search"
+                                autocomplete="off">
+                        </div>
+                    </form>
+                </div>
             </div>
         </section>
-        @include('partials.search.search_filters_side')
+        @include('partials.search.search_filters')
     </div>
-    <div>
+    <div class="overflow-y-scroll">
         <div id="results-container" data-page="0"></div>
         <div id="fetcher"></div>
     </div>

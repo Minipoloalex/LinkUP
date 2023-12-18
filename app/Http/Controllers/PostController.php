@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Liked;
 use App\Models\User;
 use App\Models\GroupMember;
+use App\Models\Group;
 
 use \App\Events\CommentEvent;
 use App\Events\LikeEvent;
@@ -145,8 +146,11 @@ class PostController extends Controller
         // Check if the current user can see (show) the post.
         $this->authorize('view', $post);
 
+        $parent = Post::where('id', $post->id_parent)->first();
+
         return view('pages.post', [
-            'post' => $post
+            'post' => $post,
+            'parent' => $parent
         ]);
     }
     /**
@@ -257,7 +261,6 @@ class PostController extends Controller
      */
     public function delete(Request $request, string $id)
     {
-        // Find the post.
         $post = Post::find($id);
 
         // Check if the current user is authorized to delete this post.
@@ -318,10 +321,25 @@ class PostController extends Controller
     public function filterCanView($posts)
     {
         if (!Auth::check()) {
-            return $posts->where('is_private', false);
+            return $posts->where('is_private', false)->whereNull('id_group');
         }
+        /*
+        (group member or
+            (group null and
+                (
+                    not private
+                    or created by me
+                    or creator followed by me
+                )
+            )
+        )
+        */
         return $posts->where(function ($query) {
-            $query->where('is_private', false)->orWhere('id_created_by', Auth::user()->id)->orWhereIn('id_created_by', Auth::user()->following()->pluck('users.id'));
+            $query->where(function ($query) {
+                $query->whereNull('id_group')->where(function ($query) {
+                    $query->where('is_private', false)->orWhere('id_created_by', Auth::user()->id)->orWhereIn('id_created_by', Auth::user()->following()->pluck('users.id'));
+                });
+            })->orWhereIn('id_group', Auth::user()->groups()->pluck('id_group'));
         });
     }
 
@@ -376,9 +394,8 @@ class PostController extends Controller
 
         /* Unauthenticated user sees random public posts */
         if (!$user) {
-            return Post::where('is_private', false);
+            return Post::where('is_private', false)->whereNull('id_group');
         }
-
         /* Authenticated user sees posts from users he follows */
         $following = $user->following->pluck('id');
         $postsFromFollowing = Post::whereIn('id_created_by', $following)->whereNull('id_parent');
@@ -402,17 +419,18 @@ class PostController extends Controller
 
         /* Merge all posts */
         $posts = $postsFromFollowing->union($postsFromFollowingDistanceTwo)->union($postsFromGroups);
-        $posts = $posts->whereNotNull('id_parent');
+        $posts = $posts->whereNotNull('id_parent');     // TODO: check this (it does not make sense here)
 
         return $posts;
     }
 
-    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
+    private function translatePostToHTML(Post $post, bool $isComment, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $showGroupOwnerDelete = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
     {
         if ($isComment) {
             return view('partials.comment', [
                 'comment' => $post,
                 'showEdit' => $showEdit,
+                'showGroupOwnerDelete' => $showGroupOwnerDelete,
                 'hasAdminLink' => $hasAdminLink,
                 'hasAdminDelete' => $hasAdminDelete
             ])->render();
@@ -422,6 +440,7 @@ class PostController extends Controller
                 'showEdit' => $showEdit,
                 'showAddComment' => $showAddComment,
                 'displayComments' => $displayComments,
+                'showGroupOwnerDelete' => $showGroupOwnerDelete,
                 'hasAdminLink' => $hasAdminLink,
                 'hasAdminDelete' => $hasAdminDelete
             ])->render();
@@ -434,10 +453,10 @@ class PostController extends Controller
      * @param Collection $posts
      * @return Collection HTML code to display the posts
      */
-    private function translatePostsArrayToHTML(Collection $posts, bool $isComment = false, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
+    private function translatePostsArrayToHTML(Collection $posts, bool $isComment = false, bool $showEdit = false, bool $showAddComment = false, bool $displayComments = false, bool $showGroupOwnerDelete = false, bool $hasAdminLink = false, bool $hasAdminDelete = false)
     {
-        $html = $posts->map(function ($post) use ($isComment, $showEdit, $showAddComment, $displayComments, $hasAdminLink, $hasAdminDelete) {
-            return $this->translatePostToHTML($post, $isComment, $showEdit, $showAddComment, $displayComments, $hasAdminLink, $hasAdminDelete);
+        $html = $posts->map(function ($post) use ($isComment, $showEdit, $showAddComment, $displayComments, $showGroupOwnerDelete, $hasAdminLink, $hasAdminDelete) {
+            return $this->translatePostToHTML($post, $isComment, $showEdit, $showAddComment, $displayComments, $showGroupOwnerDelete, $hasAdminLink, $hasAdminDelete);
         });
         return $html;
     }
@@ -549,7 +568,6 @@ class PostController extends Controller
         $request->validate([
             'page' => 'required|int'
         ]);
-        Log::debug("validated");
         $page = $request->input('page');
 
         $toView = User::findOrFail($id);
@@ -562,8 +580,7 @@ class PostController extends Controller
 
         $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')
             ->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
-        Log::debug("hello");
-        Log::debug($posts);
+
         $postsHTML = $this->translatePostsArrayToHTML($posts);
         return response()->json(['postsHTML' => $postsHTML]);
     }
@@ -725,13 +742,12 @@ class PostController extends Controller
         }
         $posts = Post::where('id_group', $id)->whereNull('id_parent')->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         if ($posts->isEmpty()) {
-            $noPostsHTML = view('partials.search.no_results')->render();
             return response()->json([
-                'noneHTML' => $noPostsHTML,
                 'elementsHTML' => []
             ]);
         }
-        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true, $isAdmin, $isAdmin);
+        $showGroupOwnerDelete = Auth::check() && Group::findOrFail($id)->id_owner === Auth::user()->id;
+        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true, $showGroupOwnerDelete, $isAdmin, $isAdmin);
         return response()->json(['elementsHTML' => $postsHTML]);
     }
 

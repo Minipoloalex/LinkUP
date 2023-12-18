@@ -1,11 +1,11 @@
 import { decrementCommentCount } from "./post_helpers.js";
 import { sendAjaxRequest } from "../ajax.js";
 import { swalConfirmDelete } from "../general_helpers.js";
-
+import { show } from "../general_helpers.js";
+import { getNoneElement } from "../group/group.js";
 
 const isAdmin = document.querySelector('meta[name="is-admin"]') != null;
 
-const deletePostButtons = document.querySelectorAll('.delete-post');
 export function addEventListenerToDeletePostButton(button) {
     const listener = (url, redirectTo) => {
         button.addEventListener('click', (event) => deletePostOrComment(event, url, redirectTo));
@@ -25,12 +25,16 @@ export async function deletePostOrComment(event, deleteURL, redirectTo) {
     const isComment = post.classList.contains('comment');
     const titleText = isComment ? 'Delete Comment?' : 'Delete Post?';
     const descriptionText = 'Are you sure you want to delete this ' + (isComment ? 'comment?' : 'post?');
-    const isDeletedText = isComment ? 'Your comment has been deleted.' : 'Your post has been deleted.';
+    const isDeletedText = isComment ? 'This comment has been deleted.' : 'This post has been deleted.';
 
     const confirmAction = async () => {
         const postId = post.dataset.id;
-        const isDeleted = deletePost(post, postId, isComment, deleteURL);
+        const postsContainer = post.parentElement;
+        const isDeleted = await deletePost(post, postId, isComment, deleteURL);
         if (isDeleted) {
+            if (postsContainer.querySelector('.post') == null) {
+                show(getNoneElement(postsContainer));
+            }
             await Swal.fire('Deleted!', isDeletedText, 'success');
         }
 
@@ -56,4 +60,5 @@ async function deletePost(post, postId, isComment, deleteURL) {
     return false;
 }
 
+const deletePostButtons = document.querySelectorAll('.delete-post');
 deletePostButtons.forEach(addEventListenerToDeletePostButton);

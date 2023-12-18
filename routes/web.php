@@ -48,11 +48,11 @@ Route::get('/search', function () {
 })->name('search');
 
 // Authentication
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::group(['middleware' => 'guest'], function () {
     Route::controller(LoginController::class)->group(function () {
         Route::get('/login', 'showLoginForm')->name('login');
         Route::post('/login', 'authenticate');
-        Route::get('/logout', 'logout')->name('logout');
     });
 
     Route::controller(RegisterController::class)->group(function () {

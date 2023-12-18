@@ -6,11 +6,17 @@ const timeline = document.querySelector('#timeline')
 const for_you_tab = document.querySelector('#for-you-tab')
 const following_tab = document.querySelector('#following-tab')
 
+export function prependPostToTimeline(postElement) {
+  if (timeline) {
+    timeline.insertBefore(postElement, timeline.firstChild)
+  }
+}
+
 export function prependPostsToTimeline (postsHTML) {
   if (timeline) {
     for (const postHTML of postsHTML) {
       const postElement = parseHTML(postHTML)
-      timeline.insertBefore(postElement, timeline.firstChild)
+      prependPostToTimeline(postElement)
     }
   }
 }
@@ -22,9 +28,7 @@ function appendPostsToTimeline (postsHTML) {
       timeline.insertBefore(postElement, timeline.lastElementChild)
       const likeButtons = postElement.querySelectorAll('.like-button')
       if (!likeButtons) return
-      for (const likeButton of likeButtons) {
-        addToggleLikeEventListener(likeButton)
-      }
+      likeButtons.forEach(addToggleLikeEventListener)
     }
   }
 }

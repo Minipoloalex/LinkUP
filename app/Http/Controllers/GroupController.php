@@ -28,13 +28,8 @@ class GroupController extends Controller
 
         $this->authorize('view', $group);
 
-        $posts = $group->posts()->orderBy('created_at', 'desc')->paginate(10);
-
         return view('pages.groups.group', [
             'group' => $group,
-            'posts' => $posts,
-            'members' => $members,
-            'user' => $user->id,
             'user_is_member' => $is_member,
             'user_is_owner' => $is_owner,
             'user_is_pending' => $is_pending,
@@ -96,13 +91,16 @@ class GroupController extends Controller
         $group->id_owner = $new_owner->id;
         $group->save();
 
-        return redirect()->route('group', ['id' => $id])->with('success', 'Owner changed');
+        return redirect()->route('group.show', ['id' => $id])->with('success', 'Owner changed');
     }
 
     public function deleteMember(string $id, string $id_member)
     {
         if ($id_member == 'self') {
             $id_member = Auth::user()->id;
+        }
+        if (!is_numeric($id_member)) {
+            return response('Invalid member id', 400);
         }
 
         $group = Group::findOrFail($id);
@@ -202,7 +200,7 @@ class GroupController extends Controller
             $imageController->store($request->image, $fileName, $request->x, $request->y, $request->width, $request->height);
         }
 
-        return redirect()->route('group', ['id' => $id])->with('success', 'Group updated');
+        return redirect()->route('group.show', ['id' => $id])->with('success', 'Group updated');
     }
 
     /**
@@ -245,18 +243,18 @@ class GroupController extends Controller
                 'resultsHTML' => []
             ]);
         }
-        $resultsHTML = $this->translateGroupsArrayToHTML($groups);
+        $resultsHTML = $this->translateGroupsArrayToHTML($groups, Auth::user());
         return response()->json(['resultsHTML' => $resultsHTML, 'success' => 'Search results retrieved']);
     }
-    public function translateGroupsArrayToHTML(Collection $groups)
+    public function translateGroupsArrayToHTML(Collection $groups, ?User $user)
     {
-        $html = $groups->map(function ($group) {
-            return $this->translateGroupToHTML($group);
+        $html = $groups->map(function ($group) use ($user) {
+            return $this->translateGroupToHTML($group, $group->isOwner($user));
         });
         return $html;
     }
-    public function translateGroupToHTML(Group $group)
+    public function translateGroupToHTML(Group $group, bool $isOwner = false)
     {
-        return view('partials.search.group', ['group' => $group])->render();
+        return view('partials.search.group', ['group' => $group, 'isOwner' => $isOwner])->render();
     }
 }

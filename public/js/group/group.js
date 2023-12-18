@@ -4,12 +4,18 @@ import { infiniteScroll, destroyFetcher } from '../infinite_scrolling.js'
 import { hide, show } from '../general_helpers.js'
 import { addEventListenersToPost } from '../posts/post_event_listeners.js'
 
-// const Swal = window.swal
+let membersFetcher = null
+let postsFetcher = null
 
+export function getNoneElement(section) {
+  return section.querySelector('.none')
+}
 export function prependInPostSection (postElement) {
   const posts_section = document.getElementById('posts-section')
   if (posts_section) {
     posts_section.prepend(postElement)
+    const none = getNoneElement(posts_section)
+    hide(none)
   }
 }
 
@@ -28,30 +34,34 @@ function appendInSection (
   }
 }
 
-function addInfiniteScrollingToSection (
+async function addInfiniteScrollingToSection (
   section,
-  fetcher,
+  testIntersectionElement,
   url,
-  attachEventListeners
+  attachEventListeners,
+  fetcher
 ) {
+  const none = getNoneElement(section)
   const load = data =>
-    appendInSection(data.elementsHTML, section, fetcher, attachEventListeners)
+    appendInSection(data.elementsHTML, section, testIntersectionElement, attachEventListeners)
 
-  const firstAction = data => {
+  const firstAction = async data => {
     load(data)
     if (data.elementsHTML.length == 0) {
-      const none = parseHTML(data.noneHTML)
-      section.insertBefore(none, fetcher)
-      destroyFetcher()
+      show(none)
+      await destroyFetcher(fetcher)
+    }
+    else {
+      hide(none)
     }
   }
-  const action = data => {
+  const action = async data => {
     load(data)
     if (data.elementsHTML.length == 0) {
-      destroyFetcher()
+      await destroyFetcher(fetcher)
     }
   }
-  infiniteScroll(section, fetcher, url, firstAction, action, false, false)
+  fetcher = await infiniteScroll(section, testIntersectionElement, url, firstAction, action, false, false)
 }
 
 function toggleSections () {
@@ -75,7 +85,8 @@ function toggleSections () {
     posts_section,
     posts_fetcher,
     `/api/group/${group_id}/posts`,
-    addEventListenersToPost
+    addEventListenersToPost,
+    postsFetcher
   )
   addInfiniteScrollingToSection(
     members_section,
@@ -83,7 +94,8 @@ function toggleSections () {
     `/api/group/${group_id}/members`,
     loadedMember => {
       addRemoveMemberEvents(loadedMember, group_id)
-    }
+    },
+    membersFetcher
   )
 
   posts.addEventListener('click', () => {
@@ -226,7 +238,7 @@ function joinGroup (group, button) {
         icon.classList.remove('fa-users')
         icon.classList.add('fa-clock-rotate-left')
 
-        const text = new_button.querySelector('div')
+        const text = new_button.querySelector('.button-text')
         text.textContent = 'Pending'
 
         button.parentNode.replaceChild(new_button, button)
@@ -273,7 +285,7 @@ function cancelJoinGroup (group, button) {
         icon.classList.remove('fa-clock-rotate-left')
         icon.classList.add('fa-users')
 
-        const text = new_button.querySelector('div')
+        const text = new_button.querySelector('.button-text')
         text.textContent = 'Join group'
 
         button.parentNode.replaceChild(new_button, button)

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="flex flex-col px-6 py-4 content-center justify-center items-center">
-    <h2 class="text-xl">Welcome, {{ auth()->user()->name }}</h2>
+    <h2 class="text-xl">Welcome, {{ Auth::guard('admin')->name }}</h2>
     <div class="my-10">
         <div class="flex my-6">
             <a class="text-xl mr-2 hover:underline" href="{{ route('admin.users') }}">Manage Users</a>

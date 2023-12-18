@@ -164,7 +164,6 @@ class AdminController extends Controller
         else {
             $posts = Post::search(Post::getModel()->select('*'), $query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
-    
         $htmlArray = $posts->map(function ($post) {    
             return view('partials.admin.post', ['post'=> $post])->render();
         });

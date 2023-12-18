@@ -9,6 +9,10 @@ export function addEventListenersToComment(comment) {
     if (deleteCommentButton) {
         addEventListenerToDeletePostButton(comment.querySelector('.delete-post'));
     }
+    const likeButton = comment.querySelector('.like-button');
+    if (likeButton) {
+        addToggleLikeEventListener(likeButton);
+    }
     
     const editCommentButton = comment.querySelector('.edit-post');
     if (editCommentButton) {
