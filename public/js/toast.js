@@ -6,10 +6,14 @@ const toastImage = document.getElementById('toast-image')
 const toastUsername = document.getElementById('toast-username')
 const toastMessage = document.getElementById('toast-message')
 
+const translate = 'translate-y-16'
+toast.classList.remove(translate)
+
 const openToast = () => {
   if (window.open) return
   window.open = true
-  toast.classList.add('translate-y-16')
+  toast.classList.remove('invisible')
+  toast.classList.add(translate)
 
   clearTimeout(timer)
 
@@ -21,7 +25,7 @@ const openToast = () => {
 
 const closeToast = () => {
   window.open = false
-  toast.classList.remove('translate-y-16')
+  toast.classList.remove(translate)
 }
 
 export function pushNotification (data) {

@@ -146,7 +146,7 @@ $username = Auth::user()->username ?? "";
 
 <!-- Mobile Sidebar -->
 <div id="mobile-sidebar" class="fixed top-[6rem] -left-[70vw] w-[70vw] h-screen dark:bg-dark-primary border-r-2 dark:border-dark-neutral 
-                                overflow-y-auto scrollbar-hide
+                                overflow-y-auto scrollbar-hide translate-x-[70vw] invisible
                                 transition-all ease-linear duration-200 z-[1] lg:hidden">
 
     <ul class="w-full flex flex-col items-center justify-center py-12">
