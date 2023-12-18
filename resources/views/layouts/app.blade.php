@@ -33,13 +33,13 @@
     <script type="module" src="{{ url('js/feedback.js') }}"></script>
     <script type="module" src="{{ url('js/file_input.js') }}"></script>
     <script type="module" src="{{ url('js/add_follow.js') }}"></script>
+    <script type="module" src="{{ url('js/notifications.js') }}"></script>
     <script type="module" src="{{ url('js/posts/post_helpers.js') }}"></script>
     <script type="module" src="{{ url('js/posts/add_comment.js') }}"></script>
     <script type="module" src="{{ url('js/posts/delete_post.js') }}"></script>
     <script type="module" src="{{ url('js/posts/edit_post.js') }}"></script>
     <script type="module" src="{{ url('js/posts/add_post.js') }}"></script>
     <script type="module" src="{{ url('js/posts/like.js') }}"></script>
-    <script type="module" src="{{ url('js/notifications.js') }}"></script>
     <script type="module" src="{{ url('js/group/group.js') }}"></script>
     <script type="module" src="{{ url('js/home/notifications.js') }}"></script>
     <script type="module" src="{{ url('js/home/suggestions.js') }}"></script>
