@@ -58,24 +58,24 @@ $username = Auth::user()->username ?? "";
 
         <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
             <div class="flex items-center w-full justify-center">
-                <a href="{{ $authenticated ? route('settings.show') : route('login') }}"
-                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
-                    <div class="lg:w-8">
-                        <i class="fa-solid fa-gear fa-xl"></i>
-                    </div>
-                    <p class="hidden xl:block ml-4">Settings</p>
-                </a>
-            </div>
-        </li>
-
-        <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
-            <div class="flex items-center w-full justify-center">
                 <a href="{{ $authenticated ? route('profile.network', ['username' => $username]) : route('login') }}"
                     class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
                     <div class="lg:w-8">
                         <i class="fa-solid fa-globe fa-xl"></i>
                     </div>
                     <p class="hidden xl:block ml-4">Network</p>
+                </a>
+            </div>
+        </li>
+
+        <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
+            <div class="flex items-center w-full justify-center">
+                <a href="{{ $authenticated ? route('settings.show') : route('login') }}"
+                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                    <div class="lg:w-8">
+                        <i class="fa-solid fa-gear fa-xl"></i>
+                    </div>
+                    <p class="hidden xl:block ml-4">Settings</p>
                 </a>
             </div>
         </li>
@@ -103,12 +103,12 @@ $username = Auth::user()->username ?? "";
                     </a>
                 </div>
             </li>
-            
+
             <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
                 <div class="lg:flex lg:items-center lg:w-full lg:justify-center">
                     <a href="{{ route('features') }}"
-                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
-                    <div class="lg:w-8">
+                        class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                        <div class="lg:w-8">
                             <i class="fa-regular fa-star fa-xl"></i>
                         </div>
                         <p class="hidden xl:block xl:ml-4">Features</p>
