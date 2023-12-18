@@ -63,6 +63,7 @@
     @include('partials.header')
     @yield('content')
     @include('partials.side.navbar')
+
     @include('partials.side.right-tab')
 
     @php

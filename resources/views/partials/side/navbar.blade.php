@@ -22,6 +22,7 @@ $username = Auth::user()->username ?? "";
                 </a>
             </div>
         </li>
+
         <li class="lg:w-12 lg:h-12 xl:w-full">
             <div class="flex w-full h-full items-center justify-center">
                 <a href="{{ route('search') }}" class=" lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center 
@@ -33,6 +34,8 @@ $username = Auth::user()->username ?? "";
                 </a>
             </div>
         </li>
+
+        @auth
         <li class="lg:w-12 lg:h-12 xl:w-full">
             <div class="w-full h-full flex items-center justify-center">
                 <a href="{{ $authenticated ? route('notifications') : route('login') }}" class=" lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center 
@@ -80,7 +83,7 @@ $username = Auth::user()->username ?? "";
             </div>
         </li>
 
-        @auth
+        
         <li class=" w-9 h-9 flex items-center justify-center
                     lg:w-12 lg:h-12 lg:p-1 xl:w-full xl:p-0">
             <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer 
@@ -95,26 +98,38 @@ $username = Auth::user()->username ?? "";
         @endauth
 
         <div class="hidden lg:flex lg:flex-col lg:flex-grow lg:items-center lg:justify-end pb-8">
+            <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full mb-16">
+                <div class="flex items-center w-full justify-center">
+                    <a href="{{ $authenticated ? route('logout') : route('login') }}"
+                        class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                        <div class="lg:w-8">
+                            <i class="fa-solid @if($authenticated) right-from-bracket fa-sign-out-alt @else fa-sign-in-alt @endif fa-xl"></i>
+                        </div>
+                        <p class="hidden xl:block ml-4">@if($authenticated) Logout @else Login @endif</p>
+                    </a>
+                </div>
+            </li>
+
             <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
-                <div class="lg:flex lg:items-center lg:w-full lg:justify-center">
+                <div class="flex items-center w-full justify-center">
                     <a href="{{ route('about') }}"
                         class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
                         <div class="lg:w-8">
                             <i class="fa-regular fa-circle-question fa-xl"></i>
                         </div>
-                        <p class="hidden xl:block xl:ml-4">About</p>
+                        <p class="hidden xl:block ml-4">About</p>
                     </a>
                 </div>
             </li>
-            
+
             <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
-                <div class="lg:flex lg:items-center lg:w-full lg:justify-center">
-                    <a href="{{ route('features') }}"
-                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
-                    <div class="lg:w-8">
+                <div class="flex items-center w-full justify-center">
+                    <a href="{{ route('about') }}"
+                        class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                        <div class="lg:w-8">
                             <i class="fa-regular fa-star fa-xl"></i>
                         </div>
-                        <p class="hidden xl:block xl:ml-4">Features</p>
+                        <p class="hidden xl:block ml-4">Features</p>
                     </a>
                 </div>
             </li>

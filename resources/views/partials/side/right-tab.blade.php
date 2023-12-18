@@ -2,6 +2,7 @@
                 xl:w-[30vw] xl:pt-[9rem] xl:items-start xl:justify-start xl:pl-4">
     <div class="hidden xl:flex xl:items-start xl:justify-start xl:w-3/4">
         <div class="w-full flex flex-col items-start justify-start gap-8">
+            @auth
             <div class="h-[5vh] w-full">
                 @if(!request()->is('search'))
                 <form id="search-home" class="flex content-center justify-center py-1 rounded-full group"
@@ -20,6 +21,7 @@
                 </form>
                 @endif
             </div>
+            
             <div class=" h-[30vh] w-full flex flex-col items-start justify-start border rounded-md
                     dark:border-dark-neutral z-10">
                 <div class="w-full pl-4 py-1 border-b dark:border-dark-neutral">
@@ -40,6 +42,7 @@
                     <div id="suggestions-home-fetcher"></div>
                 </div>
             </div>
+            @endauth
         </div>
     </div>
 </aside>
