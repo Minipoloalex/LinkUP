@@ -15,10 +15,10 @@
                     <form id="search-form" class="self-center flex content-center justify-center py-1 rounded-full group"
                         action="{{ url('/search') }}" method="GET">
                         <div class="rounded-full bg-transparent h-10 flex items-center justify-center border-2 border-dark-active">
-                            <i class="fas fa-search text-white ml-3"></i>    
-                        <input id="search-text" class="align-middle w-full bg-transparent ml-2 mr-3 text-white font-normal text-sm
-                        focus:outline-none" type="text" name="query" placeholder="Search"
-                                autocomplete="off">
+                            <button type="submit"><i class="fas fa-search text-white ml-3"></i></button>
+                            <input id="search-text" class="align-middle w-full bg-transparent ml-2 mr-3 text-white font-normal text-sm
+                            focus:outline-none" type="text" name="query" placeholder="Search"
+                                    autocomplete="off">
                         </div>
                     </form>
                 </div>
