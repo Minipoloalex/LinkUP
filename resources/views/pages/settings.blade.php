@@ -12,14 +12,14 @@
                             lg:w-full">
 
     @if (session('success'))
-    <div class="w-full border-2 border-green-500 mb-6 rounded shadow-md">
+    <div class="w-full border-2 border-green-500 mb-6 rounded">
         <div class="flex items-center bg-green-500 text-white text-sm px-4 py-3" role="alert">
             <i class="fas fa-check-circle fa-fw mr-3"></i>
             <p>{{ session('success') }}</p>
         </div>
     </div>
     @elseif ($errors->any())
-    <div class="w-full border-2 border-red-500 mb-6 rounded shadow-md">
+    <div class="w-full border-2 border-red-500 mb-6 rounded">
         <div class="flex items-center bg-red-500 text-white text-sm px-4 py-3" role="alert">
             <i class="fas fa-exclamation-circle fa-fw mr-3"></i>
             <p>{{ $errors->first() }}</p>
@@ -28,7 +28,7 @@
     @endif
 
     <div class="w-full">
-        <div class="flex flex-col break-words rounded shadow-md">
+        <div class="flex flex-col break-words rounded">
             <div class="flex justify-between items-center py-3 px-6 mb-0">
                 <h1 class="font-semibold">
                     Account Settings
@@ -75,8 +75,9 @@
                     </p>
                 </div>
 
-                <div class="flex flex-wrap mb-6">
-                    <label for="password_confirmation" class="block  text-sm font-bold mb-1">
+                <div class="flex flex-wrap mb-6 group">
+                    <label for="password_confirmation"
+                        class="block  text-sm font-bold mb-1 group-focus-within:dark:text-dark-active">
                         Confirm New Password
                     </label>
 
@@ -85,12 +86,13 @@
                         name="password_confirmation" autocomplete="password">
                 </div>
 
-                <div class="flex flex-wrap">
-                    <label for="privacy" class="block  text-sm font-bold mb-1">
+                <div class="flex flex-wrap group">
+                    <label for="privacy" class="block  text-sm font-bold mb-1 group-focus-within:dark:text-dark-active">
                         Privacy
                     </label>
 
-                    <select id="privacy" class="form-input w-full focus:outline-none dark:bg-dark-primary"
+                    <select id="privacy"
+                        class="form-input w-full focus:outline-none dark:bg-dark-primary border-b dark:border-dark-secondary"
                         name="privacy" required>
                         <option value="public" @if (!$user->is_private) selected @endif>Public</option>
                         <option value="private" @if ($user->is_private) selected @endif>Private</option>
