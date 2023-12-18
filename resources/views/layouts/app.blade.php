@@ -64,6 +64,7 @@
     @yield('content')
     @include('partials.side.navbar')
     @include('partials.side.right-tab')
+    @include('partials.post.add-post-modal', ['group' => $group ?? null])
 
     @php
     $isHidden = isset($feedbackMessage) ? '' : 'hidden';

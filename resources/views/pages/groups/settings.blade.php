@@ -3,7 +3,7 @@
 
 
 @section('content')
-@include('partials.side.navbar')
+
 <main id="group-page" class="flex flex-col w-screen h-screen
                             lg:pl-16
                             xl:px-56">

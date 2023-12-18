@@ -84,13 +84,10 @@ $username = Auth::user()->username ?? "";
         <li class=" w-9 h-9 flex items-center justify-center
                     lg:w-12 lg:h-12 lg:p-1 xl:w-full xl:p-0">
             <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer 
-                        xl:justify-center xl:items-center hidden ml-4 xl:block xl:m-0">
-                Create
-            </button>   {{-- This button is hidden on mobile devices --}}
-            <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer 
-                        xl:justify-center xl:items-center xl:hidden">
-                <i class="fa-solid fa-plus fa-xl"></i>
-            </button>   {{-- This button is hidden on desktop devices --}}
+                        xl:justify-center xl:items-center">
+                <span class="hidden ml-4 xl:block xl:m-0">Create</span> {{-- This is hidden on mobile devices --}}
+                <i class="fa-solid fa-plus fa-xl xl:hidden"></i> {{--This is hidden on desktop devices --}}
+            </button>   
         </li>
         @endauth
 

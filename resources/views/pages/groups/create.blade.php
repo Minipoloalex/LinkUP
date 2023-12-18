@@ -8,7 +8,6 @@
                             lg:pl-16
                             xl:px-56">
 
-    @include('partials.side.navbar')
 
     <section id="group" class="w-full mt-24">
         <div class="flex flex-col w-full mb-16">

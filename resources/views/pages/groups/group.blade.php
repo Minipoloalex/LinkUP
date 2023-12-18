@@ -2,7 +2,7 @@
 @section('title', $group->name)
 
 @section('content')
-@include('partials.side.navbar')
+
 @include('partials.group.group_page', [
     'group' => $group,
     'isAdmin' => false,

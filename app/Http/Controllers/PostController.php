@@ -53,7 +53,7 @@ class PostController extends Controller
         }
         $request->validate([
             'content' => 'required|max:255',
-            'id_group' => 'nullable|int|exists:group,id',
+            'id_group' => 'nullable|int|exists:groups,id',
             'is_private' => 'nullable|boolean',
             'media' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg|max:10240',
             'x' => 'nullable|int',
@@ -65,7 +65,6 @@ class PostController extends Controller
 
         $user = Auth::user();
         $group_id = $request->input('id_group');
-
 
         if ($group_id !== null && !GroupMember::isMember($user, intval($group_id))) {
             return response()->json(['error' => 'You are not a member of this group']);
@@ -84,8 +83,15 @@ class PostController extends Controller
         if (!$createdFile) {
             $post->created_at = $post->freshTimestamp();
         }
-
-        $postHTML = $this->translatePostToHTML($post, false, false, false);
+        $postHTML = "";
+        if ($group_id !== null) {
+            $isOwner = $user->id == Group::findOrFail($group_id)->id_owner;
+            $postHTML = $this->translatePostToHTML($post, false, false, false, true, $isOwner, false, false);
+        }
+        else {
+            $postHTML = $this->translatePostToHTML($post, false, false, false);
+        }
+        
         return response()->json(['postHTML' => $postHTML, 'success' => 'Post created successfully!']);
     }
 

@@ -1,10 +1,18 @@
 {{--
-['formClass' => string, 'type' => string, 'textPlaceholder' => string, 'buttonText' => string, 'contentValue' => string]
+['formClass' => string, 'type' => string, 'textPlaceholder' => string, 'buttonText' => string, 'contentValue' => string,
+'headerText' => ?string]
 --}}
-
+@php
+$headerText ??= null;
+@endphp
 <form
     class="{{$formClass}} relative add-post flex flex-col w-full rounded-md dark:bg-dark-primary border-2 dark:border-dark-neutral p-5 z-30 gap-2 pointer-events-auto">
-    <div data-type="post" class="file-input-wrapper">
+    <section data-type="post" class="file-input-wrapper">
+        @if ($headerText !== null)
+        <header>
+            <h2 class="mb-4">{{ $headerText }}</h2>
+        </header>
+        @endif
         <textarea name="content" required placeholder="{{ $textPlaceholder }}"
             class="dark:bg-dark-primary border dark:border-dark-neutral outline-dark-active w-full h-[10vh] p-2 pb-8 resize-none text-sm">{{ $contentValue }}</textarea>
         <div class="w-full flex justify-center">
@@ -17,11 +25,10 @@
             </div>
         </div>
         <div class="flex justify-between items-center">
-            <button type="submit"
+            <button type="submit"   {{-- MUST BE FIRST ON THE HTML --}}
                 class="order-last dark:bg-dark-active dark:text-dark-secondary rounded-full py-2 px-6">
                 {{ $buttonText }}
             </button>
-            {{-- MUST BE FIRST ON THE HTML --}}
             <div class="flex">
                 <button class="upload-file ml-1 -mt-4 dark:bg-dark-primary dark:text-dark-active">
                     <i class="fas fa-image text-2xl"></i>
@@ -30,5 +37,5 @@
                 @include('partials.images_crop_input')
             </div>
         </div>
-    </div>
+    </section>
 </form>

@@ -10,6 +10,8 @@ $width = $user_is_owner ? 'w-1/3' : 'w-1/2';
 $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
 
 $isAdmin ??= false;
+$owner = $group->owner;
+$userLinkTo = $isAdmin ? route('admin.user', $owner->username) : route('profile.show', $owner->username);
 @endphp
 
 <main id="group-page" class="   relative flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
@@ -19,8 +21,9 @@ $isAdmin ??= false;
         <section class="flex flex-col min-h-96 items-center justify-center gap-4 py-4" id="group-content">
             <img src="{{ $group->getPicture() }}" alt="group photo" class="w-32 h-32 rounded-full">
             <h1 class="text-2xl font-bold">{{ $group->name }}</h1>
-            <div class="flex justify-start items-center w-full px-10">
+            <div class="flex flex-col justify-center items-start w-full px-10">
                 <p class="text-sm">{{ $group->description }}</p>
+                <a href="{{ $userLinkTo }}" class="text-sm before:content-['Owner:_']">{{ $group->owner->username }}</a>
             </div>
             @if (!$isAdmin)
             <div class="h-16 flex w-full items-end justify-end mb-4 px-8">
