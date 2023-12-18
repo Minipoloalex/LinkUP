@@ -2,6 +2,7 @@ import { parseHTML } from "../general_helpers.js";
 import { submitDataPostOrComment, removeImageContainer } from "./post_helpers.js";
 import { getTextField, deleteImage } from "./post_helpers.js";
 import { clearFileInputWrapper, getFileInputWrapper } from "../file_input.js";
+import { sendAjaxRequest } from "../ajax.js";
 
 
 const editPostButtons = document.querySelectorAll('.edit-post');
@@ -35,7 +36,7 @@ function toggleEdit(content, editForm, textField) {
     if (!editForm.classList.contains('hidden')) {
         textField.focus();
     }
-    editForm.addEventListener('submit', submitEditPost);    // TODO: fix this
+    editForm.addEventListener('submit', submitEditPost);
 }
 export async function submitEditPost(event) {  // submitted the form
     event.preventDefault();
@@ -74,47 +75,30 @@ async function submitEditPostOrComment(form, data, postId) {
     return await submitDataPostOrComment(form, data, `/post/${postId}`, 'post');
 }
 
-// Function to handle changing post privacy
-function togglePostPrivacy(postId, isPrivate) {
-    // Send an AJAX request to update the post's privacy status
-    fetch(`/post/${postId}/privacy`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        },
-        body: JSON.stringify({ is_private: isPrivate })
-    })
-    .then(response => {
-        if (response.ok) {
-            // Assuming you have an icon element in your HTML representing privacy status
-            const privacyIcon = document.querySelector(`#privacy-icon-${postId}`);
-            // Toggle between lock and unlock icons based on the updated privacy status
-            if (isPrivate) {
-                privacyIcon.classList.remove('fa-unlock');
-                privacyIcon.classList.add('fa-lock');
-            } else {
-                privacyIcon.classList.remove('fa-lock');
-                privacyIcon.classList.add('fa-unlock');
-            }
+async function togglePostPrivacy(privacyIcon, postId) {
+    const data = await sendAjaxRequest('PATCH', `/post/${postId}/privacy`)
+    if (data != null) {
+        const isPrivate = data.is_private;
+        if (isPrivate) {
+            privacyIcon.classList.remove('fa-unlock');
+            privacyIcon.classList.add('fa-lock');
         } else {
-            console.error('Failed to update privacy status');
+            privacyIcon.classList.remove('fa-lock');
+            privacyIcon.classList.add('fa-unlock');
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        const description = isPrivate ? 'Post set to private' : 'Post set to public';
+        await Swal.fire('Post privacy updated', description, 'success');
+    }
 }
 
 // Event listener for clicking on the privacy icon
-document.querySelectorAll('.privacy-post').forEach(icon => {
-    icon.addEventListener('click', function() {
-        const postId = this.dataset.postId; // Replace with how you're storing post IDs
-        console.log(postId);
-        const isPrivate = this.classList.contains('fa-lock'); // Check the current privacy status
-        console.log(this.classList);
-        console.log(isPrivate);
-        togglePostPrivacy(postId, !isPrivate); // Toggle the privacy status
-    });
+document.querySelectorAll('.privacy-post-button').forEach(icon => {
+    icon.addEventListener('click', togglePrivacyEventListener);
 });
-
+export async function togglePrivacyEventListener(event) {
+    event.preventDefault();
+    const button = event.currentTarget;
+    const postId = button.dataset.postId;
+    const privacyIcon = button.querySelector('i');
+    await togglePostPrivacy(privacyIcon, postId);
+}

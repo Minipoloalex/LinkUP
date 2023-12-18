@@ -1,5 +1,5 @@
 import { addEventListenerToDeletePostButton } from "./delete_post.js";
-import { toggleEditEvent, submitEditPost } from "./edit_post.js";
+import { toggleEditEvent, submitEditPost, togglePrivacyEventListener } from "./edit_post.js";
 import { deleteImage } from "./post_helpers.js";
 import { handlerFileInput } from "../file_input.js";
 import { addToggleLikeEventListener } from "./like.js";
@@ -13,7 +13,11 @@ export function addEventListenersToComment(comment) {
     if (likeButton) {
         addToggleLikeEventListener(likeButton);
     }
-    
+    const privacyButton = comment.querySelector('.privacy-post-button');
+    if (privacyButton) {
+        privacyButton.addEventListener('click', togglePrivacyEventListener);
+    }
+
     const editCommentButton = comment.querySelector('.edit-post');
     if (editCommentButton) {
         editCommentButton.addEventListener('click', toggleEditEvent);

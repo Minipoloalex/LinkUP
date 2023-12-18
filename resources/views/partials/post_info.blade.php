@@ -1,8 +1,9 @@
 @php
 $editable = $showEdit && $post->isCreatedByCurrentUser();
 $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post->id);
-$userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : route('profile.show',
-$post->createdBy->username);
+$userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username)
+                            : route('profile.show', $post->createdBy->username);
+$icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
 @endphp
 <div class="flex flex-col gap-4 m-1 post-info">
     <header class="flex items-center justify-start space-x-2">
@@ -18,14 +19,11 @@ $post->createdBy->username);
         <div class="edit-delete-post">
             @if ($editable)
             <button class="text-2xl edit-post"><i class="p-2 fas fa-edit"></i></button>
+                @if ($post->id_group === null)
+                <button class="text-2xl privacy-post-button" data-post-id="{{ $post->id }}"><i class="p-2 fas {{ $icon }}"></i></button>
+                @endif
             @endif
             <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
-            <!-- if post is private, show the unlock icon; otherwise, show the lock icon -->
-            @if ($post->is_private)
-                <button class="text-2xl privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-unlock"></i></button>
-            @else
-                <button class="text-2xl privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-lock"></i></button>
-            @endif
         </div>
 
         @endif

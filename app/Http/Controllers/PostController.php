@@ -754,21 +754,25 @@ class PostController extends Controller
         return response()->json(['elementsHTML' => $postsHTML]);
     }
 
-    public function updatePrivacy(Request $request, $postId)
+    public function updatePrivacy(string $postId)
     {
-        // Fetch the post
+        if (!Auth::check()) {
+            return response()->json(['error' => 'You are not logged in'], 401);
+        }
         $post = Post::findOrFail($postId);
 
-        // Check if the authenticated user can edit the post (customize this logic as per your requirements)
-        if ($request->user()->id !== $post->createdBy->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+        $user = Auth::user();
+        if ($user->id !== $post->createdBy->id) {
+            return response()->json(['error' => 'You cannot edit this post!'], 403);
         }
-        //current privacy 
-        Log::info('current privacy: ' . $post->is_private);
-        // Toggle the post's privacy
+        $this->authorize('update', $post);
+
+        if ($post->id_group !== null) {
+            return response()->json(['error' => 'Posts in a group are always visible to the members. Post privacy is irrelevant.'], 400);
+        }
+
         $post->is_private = !$post->is_private;
         $post->save();
-        Log::info('new privacy: ' . $post->is_private);
         return response()->json(['message' => 'Privacy updated', 'is_private' => $post->is_private]);
     }
 }

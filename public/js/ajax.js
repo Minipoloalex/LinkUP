@@ -25,7 +25,16 @@ export async function handleFeedbackToResponse(response) {
     }
   }
   else {
-    showFeedback(response.statusText);
+    if (response.status < 500) {
+      response.json().then(data => {
+        if (data.error) {
+          Swal.fire('Error', data.error, 'error');
+        }
+      }).catch(error => {
+        console.error(error);
+      });
+    }
+    else showFeedback(response.statusText);
   }
   return null;
 }
