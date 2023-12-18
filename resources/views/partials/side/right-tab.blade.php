@@ -3,21 +3,17 @@
     <div class="hidden xl:flex xl:items-start xl:justify-start xl:w-3/4">
         <div class="w-full flex flex-col items-start justify-start gap-8">
             @auth
-            <div class="h-[5vh] w-full">
+            <div class="h-[5vh] self-center">
                 @if(!request()->is('search'))
                 <form id="search-home" class="flex content-center justify-center py-1 rounded-full group"
                     action="{{ url('/search') }}" method="GET">
-
-                    <input id="search-text" class="align-middle border-b-2 dark:border-dark-secondary w-full dark:bg-dark-primary 
-                focus:outline-none group-focus-within:dark:border-dark-active" type="text" name="query"
-                        autocomplete="off">
+                    <div class="rounded-full bg-gray-200 h-10 flex items-center justify-center">
+                        <i class="fas fa-search text-gray-500 ml-3"></i>    
+                    <input id="search-text" class="align-middle w-full bg-transparent ml-2 mr-3 text-gray-500
+                    focus:outline-none" type="text" name="query" placeholder="Search"
+                            autocomplete="off">
+                    </div>
                     <input type="hidden" name="type" value="users">
-                    <button
-                        class="align-middle border-b-2 dark:border-dark-secondary group-focus-within:dark:border-dark-active text-2xl"
-                        type="submit">
-                        <i class="fas fa-search mr-2"></i>
-                    </button>
-
                 </form>
                 @endif
             </div>
