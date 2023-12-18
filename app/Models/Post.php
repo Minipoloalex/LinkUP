@@ -16,6 +16,7 @@ class Post extends Model
     protected $table = 'post';
     protected $fillable = [
         'content',
+        'created_at',
         'is_private',
         'id_parent',
         'id_created_by',

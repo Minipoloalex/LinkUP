@@ -11,10 +11,10 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
             <img class="w-8 h-8 rounded-full ring-1 ring-dark-neutral" src="{{ $post->createdBy->getProfilePicture() }}"
                 alt="User photo">
         </a>
-        <a href="{{ $userLink }}">
-            {{ $post->createdBy->username }}
-        </a>
-        {{-- <span class="date">{{ $post->created_at }}</span> --}}
+        <div class="flex flex-col">
+            <a href="{{ $userLink }}">&commat;{{ $post->createdBy->username }}</a>
+            <span class="text-xs text-gray-300">{{ date('H:i · d M Y', strtotime($post->created_at)) }}</span>
+        </div>
         @if ($editable || $showGroupOwnerDelete)
         <div class="edit-delete-post">
             @if ($editable)
