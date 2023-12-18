@@ -4,7 +4,8 @@ async function fetchAndLoad (container, url, data, action) {
   const page = container.dataset.page
   data.page = page
   console.log(data)
-  const response = await fetch(url + `?${encodeForAjax(data)}`, {
+  const query = (url.includes('?') ? '&' : '?') + encodeForAjax(data)
+  const response = await fetch(url + query, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'

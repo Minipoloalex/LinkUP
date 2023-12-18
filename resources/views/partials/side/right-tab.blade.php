@@ -20,7 +20,7 @@
                 </form>
 
             </div>
-            <div class=" h-[30vh] w-full flex flex-col items-start justify-start border rounded-md
+            <div id="notifications-tab" class=" h-[30vh] w-full flex flex-col items-start justify-start border rounded-md
                     dark:border-dark-neutral z-10">
                 <div class="w-full pl-4 py-1 border-b dark:border-dark-neutral">
                     <h2>Notifications</h2>

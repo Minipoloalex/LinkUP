@@ -42,7 +42,7 @@ class CommentNotification extends Model
         return 'comment';
     }
 
-    public static function getSomeNotifications(int $user_id, int $limit = 10)
+    public static function getNotifications(int $user_id)
     {
         // Get comments to user's posts
         $user_comments = Post::select('id')
@@ -58,16 +58,16 @@ class CommentNotification extends Model
             ->joinSub($user_comments, 'p', function ($join) {
                 $join->on('comment_notification.id_comment', '=', 'p.id');
             })->join('post', 'comment_notification.id_comment', '=', 'post.id')
-            ->orderBy('timestamp', 'desc')->limit($limit)->get();
+            ->orderBy('timestamp', 'desc')->get();
 
         return $comment_nots;
     }
 
-    public function toHtml()
+    public function toHtml($home = true)
     {
         return view('partials.notifications.comment', [
             'notification' => $this,
-            'home' => true,
+            'home' => $home,
         ])->render();
     }
 }

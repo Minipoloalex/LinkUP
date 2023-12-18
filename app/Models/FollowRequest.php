@@ -32,20 +32,20 @@ class FollowRequest extends Model
         return 'follow-request';
     }
 
-    public static function getSomeNotifications(int $user_id, int $limit = 10)
+    public static function getNotifications(int $user_id)
     {
         $follow_requests = FollowRequest::select('*')
             ->where('id_user_to', $user_id)
-            ->orderBy('timestamp', 'desc')->limit($limit)->get();
+            ->orderBy('timestamp', 'desc')->get();
 
         return $follow_requests;
     }
 
-    public function toHtml()
+    public function toHtml($home = true)
     {
         return view('partials.notifications.follow-request', [
             'notification' => $this,
-            'home' => true,
+            'home' => $home,
         ])->render();
     }
 }

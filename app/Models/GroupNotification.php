@@ -54,29 +54,29 @@ class GroupNotification extends Model
         return 'group';
     }
 
-    public static function getSomeNotifications(int $user_id, int $limit = 10)
+    public static function getNotifications(int $user_id)
     {
         $group_requests = GroupNotification::select('*')
             ->join('groups', 'group_notification.id_group', '=', 'groups.id')
             ->where('groups.id_owner', $user_id)
             ->where('group_notification.type', GroupNotificationType::REQUEST)
-            ->orderBy('timestamp', 'desc')->limit($limit)->get();
+            ->orderBy('timestamp', 'desc')->get();
 
         $group_invitations = GroupNotification::select('*')
             ->join('groups', 'group_notification.id_group', '=', 'groups.id')
             ->where('group_notification.id_user', $user_id)
             ->where('group_notification.type', GroupNotificationType::INVITATION)
-            ->orderBy('timestamp', 'desc')->limit($limit)->get();
+            ->orderBy('timestamp', 'desc')->get();
 
         $group_notifications = $group_requests->merge($group_invitations);
         return $group_notifications;
     }
 
-    public function toHtml()
+    public function toHtml($home = true)
     {
         return view('partials.notifications.group', [
             'notification' => $this,
-            'home' => true,
+            'home' => $home,
         ])->render();
     }
 }
