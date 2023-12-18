@@ -45,6 +45,7 @@ class LikeNotification extends Model
         // Get like notifications from user's posts
         $like_nots = LikeNotification::select('*')
             ->whereIn('id_post', $user_posts)
+            ->where('id_user', '!=', $user_id)
             ->orderBy('timestamp', 'desc')->get();
 
         return $like_nots;
