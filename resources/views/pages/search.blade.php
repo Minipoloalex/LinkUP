@@ -8,7 +8,7 @@
 @section('content')
 <main id="search-page" class="  flex flex-col w-screen overflow-clip overflow-y-scroll scrollbar-hide relative h-[calc(100vh-10rem)]
                                 lg:w-full lg:h-[calc(100vh-6rem)]">
-    <div class="border-b-2 dark:border-dark-neutral dark:bg-dark-primary mt-4 sticky">
+    <div class="dark:bg-dark-primary mt-4 sticky">
         <section id="search-content" class="flex gap-2">
             <div class="w-full flex p-2">
                 <div class="h-[5vh] w-full flex flex-col justify-center">
