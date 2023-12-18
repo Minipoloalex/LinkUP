@@ -30,7 +30,6 @@ class GroupController extends Controller
 
         return view('pages.groups.group', [
             'group' => $group,
-            'user' => $user->id,
             'user_is_member' => $is_member,
             'user_is_owner' => $is_owner,
             'user_is_pending' => $is_pending,

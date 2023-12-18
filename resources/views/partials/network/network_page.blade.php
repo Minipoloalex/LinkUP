@@ -3,7 +3,8 @@ $isMyProfile = Auth::check() && Auth::user()->id == $user->id;
 $isAdmin = Auth::guard('admin')->check();
 $userLinkTo = $isAdmin ? route('admin.user', ['username' => $user->username])
                     : route('profile.show', ['username' => $user->username]);
-$groupLinkTo = $isAdmin ? 'admin.group' : 'group.show';
+$groupLinkTo = $isAdmin ? 'admin.group'
+                        : 'group.show';
 @endphp
 <main id="network-page" class=" relative flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)]
                                 lg:w-full lg:h-[calc(100vh-6rem)]">
@@ -70,7 +71,7 @@ $groupLinkTo = $isAdmin ? 'admin.group' : 'group.show';
                 @endphp
                 @include('partials.network.group_card', [
                     'group' => $group,
-                    'linkTo' => route($groupLinkTo, ['id' => $group->id, 'user' => $user]),
+                    'linkTo' => route($groupLinkTo, ['id' => $group->id])
                 ])
                 @empty
                 <p class="empty-list">You are not a member of any group</p>
