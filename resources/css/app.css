@@ -44,6 +44,9 @@ select:focus ~ label {
 #timeline-tabs > .tab-active {
   @apply border-b-2 dark:border-dark-active cursor-pointer;
 }
+#timeline-tabs > .tab-active > .tab-text {
+  @apply dark:text-dark-active;
+}
 
 i.liked {
   @apply text-red-500;
@@ -51,4 +54,8 @@ i.liked {
 
 i.unliked {
   @apply dark:text-dark-neutral;
+}
+
+#group-page .tab-active {
+  @apply dark:text-dark-active dark:border-dark-active;
 }

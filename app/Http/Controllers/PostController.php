@@ -467,6 +467,14 @@ class PostController extends Controller
         });
         return $html;
     }
+    public function getLinkToPost(Post $post)
+    {
+        $isAdmin = Auth::guard('admin')->check();
+        if ($isAdmin) {
+            return route('admin.post', $post->id);
+        }
+        return route('post', $post->id);
+    }
     /**
      * Returns the HTML code to display the image of a post. The post must have an image.
      * Used in the edit post, so this image is always editable (can be deleted).
@@ -474,7 +482,11 @@ class PostController extends Controller
      */
     private function getPostImageHTML(Post $post)
     {
-        return view('partials.post_image', ['post' => $post, 'editable' => true])->render();
+        return view('partials.post_image', [
+            'post' => $post,
+            'editable' => true,
+            'linkTo' => $this->getLinkToPost($post)
+        ])->render();
     }
 
     /**

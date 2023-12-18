@@ -99,18 +99,18 @@ function toggleSections () {
   )
 
   posts.addEventListener('click', () => {
-    posts.classList.add('dark:text-dark-active')
-    members.classList.remove('dark:text-dark-active')
-    if (requests) requests.classList.remove('dark:text-dark-active')
+    posts.classList.add('tab-active')
+    members.classList.remove('tab-active')
+    if (requests) requests.classList.remove('tab-active')
     show(posts_section)
     hide(members_section)
     hide(requests_section)
   })
 
   members.addEventListener('click', () => {
-    posts.classList.remove('dark:text-dark-active')
-    members.classList.add('dark:text-dark-active')
-    if (requests) requests.classList.remove('dark:text-dark-active')
+    posts.classList.remove('tab-active')
+    members.classList.add('tab-active')
+    if (requests) requests.classList.remove('tab-active')
     show(members_section)
     hide(posts_section)
     hide(requests_section)
@@ -118,9 +118,9 @@ function toggleSections () {
 
   if (!requests) return
   requests.addEventListener('click', () => {
-    posts.classList.remove('dark:text-dark-active')
-    members.classList.remove('dark:text-dark-active')
-    if (requests) requests.classList.add('dark:text-dark-active')
+    posts.classList.remove('tab-active')
+    members.classList.remove('tab-active')
+    if (requests) requests.classList.add('tab-active')
     show(requests_section)
     hide(posts_section)
     hide(members_section)

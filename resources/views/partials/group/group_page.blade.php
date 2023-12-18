@@ -36,18 +36,23 @@ $userLinkTo = $isAdmin ? route('admin.user', $owner->username) : route('profile.
         @if($user_is_member || $isAdmin)
 
         <div
-            class="flex w-full h-12 items-center sticky -top-[1px] left-0 dark:bg-dark-primary border-b-2 dark:border-dark-neutral">
-            <div id="posts"
-                class="flex items-center justify-center {{ $width }} h-12 cursor-pointer dark:text-dark-active">
-                <h1>Posts</h1>
-            </div>
-            <div id="members" class="flex items-center justify-center {{ $width }} h-12 cursor-pointer">
-                <h1>Members</h1>
-            </div>
+            class="flex w-full h-12 items-center sticky -top-[1px] left-0 dark:bg-dark-primary">
+            <button id="posts"
+                class="flex items-center justify-center {{ $width }} h-12 cursor-pointer
+                border-b-2 dark:border-dark-neutral tab-active">
+                <h3>Posts</h3>
+            </button>
+            <button id="members"
+                class="flex items-center justify-center {{ $width }} h-12 cursor-pointer
+                border-b-2 dark:border-dark-neutral">
+                <h3>Members</h3>
+            </button>
             @if($user_is_owner)
-            <div id="requests" class="flex items-center justify-center {{ $width }} h-12 cursor-pointer">
-                <h1>Requests</h1>
-            </div>
+            <button id="requests"
+                class="flex items-center justify-center {{ $width }} h-12 cursor-pointer border-b-2
+                border-b-2 dark:border-dark-neutral">
+                <h3>Requests</h3>
+            </button>
             @endif
         </div>
 
