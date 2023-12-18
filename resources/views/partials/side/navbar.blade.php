@@ -3,7 +3,7 @@ $authenticated = Auth::check();
 $username = Auth::user()->username ?? "";
 @endphp
 
-<nav id="navbar" class=" fixed -bottom-2 left-0 w-full h-16 px-6 border-t-2 dark:bg-dark-primary dark:border-dark-neutral pb-2
+<nav id="navbar" class=" fixed -bottom-2 left-0 w-full h-16 px-6 border-t-2 dark:bg-dark-primary dark:border-dark-neutral pb-2 z-[2]
             lg:h-screen lg:px-1 lg:w-[10vw] lg:top-0 lg:left-0 lg:border-0 lg:border-r
             xl:w-[30vw] xl:flex xl:justify-end">
 
@@ -11,7 +11,7 @@ $username = Auth::user()->username ?? "";
                 lg:flex lg:flex-col lg:gap-4 lg:p-0 lg:pt-[9rem]
                 xl:w-1/3 xl:items-start xl:justify-start xl:min-w-fit xl:mr-4">
 
-        <li class="lg:w-12 lg:h-12 xl:w-full">
+        <li class="hidden lg:block lg:w-12 lg:h-12 xl:w-full">
             <div class="flex w-full h-full items-center justify-center">
                 <a href="{{ route('home') }}" class="   lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center
                                                         xl:justify-start">
@@ -20,6 +20,12 @@ $username = Auth::user()->username ?? "";
                     </div>
                     <p class="hidden xl:block ml-4">Home</p>
                 </a>
+            </div>
+        </li>
+
+        <li id="mobile-show-sidebar" class="block lg:hidden">
+            <div class="block w-full h-full items-center justify-center">
+                <i class="fa-solid fa-bars fa-xl"></i>
             </div>
         </li>
 
@@ -136,3 +142,123 @@ $username = Auth::user()->username ?? "";
         </div>
     </ul>
 </nav>
+
+
+<!-- Mobile Sidebar -->
+<div id="mobile-sidebar" class="fixed top-[6rem] -left-[70vw] w-[70vw] h-screen dark:bg-dark-primary border-r-2 dark:border-dark-neutral 
+                                overflow-y-auto scrollbar-hide
+                                transition-all ease-linear duration-200 z-[1] lg:hidden">
+
+    <ul class="w-full flex flex-col items-center justify-center py-12">
+
+        <li class="block h-12 w-2/3">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{ route('home') }}" class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i class="fa-solid fa-house fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">Home</p>
+                </a>
+            </div>
+        </li>
+
+        <li class="block h-12 w-2/3">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{ route('search') }}" class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i class="fa-solid fa-search fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">Search</p>
+                </a>
+            </div>
+        </li>
+
+        @auth
+        <li class="block h-12 w-2/3">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{ $authenticated ? route('notifications') : route('login') }}"
+                    class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i class="fa-solid fa-bell fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">Notifications</p>
+                </a>
+            </div>
+        </li>
+        @endauth
+
+        <li class="block h-12 w-2/3">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{  $authenticated ? url('/profile/' . $username) : route('login') }}"
+                    class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i class="fa-solid fa-user fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">Profile</p>
+                </a>
+            </div>
+        </li>
+
+        <li class="block h-12 w-2/3">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{ $authenticated ? route('profile.network', ['username' => $username]) : route('login') }}"
+                    class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i class="fa-solid fa-globe fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">Network</p>
+                </a>
+            </div>
+        </li>
+
+        <li class="block h-12 w-2/3">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{ $authenticated ? route('settings.show') : route('login') }}"
+                    class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i class="fa-solid fa-gear fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">Settings</p>
+                </a>
+            </div>
+        </li>
+
+        <div class="flex flex-col w-full flex-grow items-center justify-end pb-8">
+            <li class="block h-12 w-2/3">
+                <div class="flex w-full h-full items-center justify-center">
+                    <a href="{{ route('about') }}" class="h-full w-full flex items-center justify-start">
+                        <div class="w-8">
+                            <i class="fa-regular fa-circle-question fa-xl"></i>
+                        </div>
+                        <p class="block ml-4">About</p>
+                    </a>
+                </div>
+            </li>
+
+            <li class="block h-12 w-2/3">
+                <div class="flex w-full h-full items-center justify-center">
+                    <a href="{{ route('features') }}" class="h-full w-full flex items-center justify-start">
+                        <div class="w-8">
+                            <i class="fa-regular fa-star fa-xl"></i>
+                        </div>
+                        <p class="block ml-4">Features</p>
+                    </a>
+                </div>
+            </li>
+
+            <li class="block h-12 w-2/3">
+                <div class="flex w-full h-full items-center justify-center">
+                    <a href="{{ $authenticated ? route('logout') : route('login') }}"
+                        class="h-full w-full flex items-center justify-start">
+                        <div class="w-8">
+                            <i
+                                class="fa-solid {{ $authenticated ? 'right-from-bracket fa-sign-out-alt' : 'fa-sign-in-alt' }} fa-xl"></i>
+                        </div>
+                        <p class="block ml-4">{{ $authenticated ? 'Logout' : 'Login' }}</p>
+                    </a>
+                </div>
+            </li>
+        </div>
+    </ul>
+
+</div>
