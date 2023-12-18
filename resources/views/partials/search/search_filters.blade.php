@@ -1,4 +1,4 @@
-<section class="flex content-center justify-center mt-2">
+<section class="flex content-center justify-center my-4">
     <div class="h-full flex flex-col flex-grow">
         <section id="search-filters">
             <ul class="flex gap-2 w-full px-8 justify-between items-center">
