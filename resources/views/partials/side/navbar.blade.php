@@ -84,11 +84,11 @@ $username = Auth::user()->username ?? "";
         </li>
 
         
-        <li class=" w-9 h-9 flex items-center justify-center
+        <li class=" w-9 h-9 flex items-center justify-center mt-4
                     lg:w-12 lg:h-12 lg:p-1 xl:w-full xl:p-0">
             <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer 
                         xl:justify-center xl:items-center hidden ml-4 xl:block xl:m-0">
-                Create
+                    New Post
             </button>   {{-- This button is hidden on mobile devices --}}
             <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer 
                         xl:justify-center xl:items-center xl:hidden">
@@ -98,7 +98,7 @@ $username = Auth::user()->username ?? "";
         @endauth
 
         <div class="hidden lg:flex lg:flex-col lg:flex-grow lg:items-center lg:justify-end pb-8">
-            <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full mb-16">
+            <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full mb-12">
                 <div class="flex items-center w-full justify-center">
                     <a href="{{ $authenticated ? route('logout') : route('login') }}"
                         class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">

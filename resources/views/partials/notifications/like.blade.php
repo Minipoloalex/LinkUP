@@ -24,10 +24,10 @@ $seen = $notification->seen;
         </a>
     </div>
     <div class="flex flex-col items-start justify-center h-12 ml-2 text-xs">
-        <a href="{{ $profile_link }}" class="font-bold flex items-center dark:text-dark-active">
+        <a href="{{ $profile_link }}" class="flex items-center dark:text-dark-active">
             <h2>{{ $liked_by->username }}</h2>
         </a>
-        <a href="{{ $post_link }}" class="font-bold">
+        <a href="{{ $post_link }}">
             <h2>liked your post: {{ $post->content }}</h2>
         </a>
     </div>

@@ -25,10 +25,10 @@ $seen = $notification->seen;
         </a>
     </div>
     <div class="flex flex-col items-start justify-center h-12 ml-2 text-xs">
-        <a href="{{ $profile_link }}" class="font-bold flex items-center dark:text-dark-active">
+        <a href="{{ $profile_link }}" class="flex items-center dark:text-dark-active">
             <h2>{{ $who->username }}</h2>
         </a>
-        <a href="{{ $group_link }}" class="font-bold">
+        <a href="{{ $group_link }}">
             <h2>wants to join {{ $group->name }}</h2>
         </a>
     </div>
