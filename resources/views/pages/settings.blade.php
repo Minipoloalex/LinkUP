@@ -2,6 +2,11 @@
 
 @section('title', 'Settings')
 
+@push('scripts')
+<script type="module" src="{{ url('js/settings.js') }}"></script>
+@endpush
+
+
 @section('content')
 <main id="settings-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-screen">
 
@@ -110,9 +115,10 @@
                     This action cannot be undone.
                 </p>
             </div>
-    
+
             <div class="flex flex-wrap p-6">
-                <button id="account-delete-button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button id="account-delete-button"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Delete
                 </button>
             </div>

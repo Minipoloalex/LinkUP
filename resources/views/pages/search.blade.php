@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('scripts')
+<script type="module" src="{{ url('js/search.js') }}"></script>
+@endpush
+
 @section('title', 'Search')
 @section('content')
 <main id="search-page" class="  flex flex-col w-screen overflow-clip overflow-y-scroll relative h-[calc(100vh-10rem)]
