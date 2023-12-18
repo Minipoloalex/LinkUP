@@ -282,8 +282,9 @@ class PostController extends Controller
     public function viewImage(string $id)
     {
         $post = Post::findOrFail($id);
-        $this->authorize('view', $post);
-
+        if (!Auth::guard('admin')->check()) {
+            $this->authorize('view', $post);
+        }
         $fileName = $this->imageController->getFileNameWithExtension(str($post->id));
         if (!$this->imageController->existsFile($fileName)) {
             return response()->json(['error' => 'A post image was not found'], 404);
@@ -569,23 +570,21 @@ class PostController extends Controller
 
     public function userPosts(int $id, Request $request)
     {
-        Log::debug("userPosts");
-        Log::debug($request->all());
         $request->validate([
             'page' => 'required|int'
         ]);
         $page = $request->input('page');
 
         $toView = User::findOrFail($id);
-        $this->authorize('viewPosts', $toView);
-        $posts = Post::where('id_created_by', $id)
-                 ->where(function ($query) {
-                     $query->where('is_private', 0) // Filter for public posts
-                     ->orWhere('id_created_by', Auth::user()->id); // ; // Include user's own private posts
-                 });
+        
+        $isAdmin = Auth::guard('admin')->check();
+        $posts = Post::where('id_created_by', $id);
+        if (!$isAdmin) {
+            $this->authorize('viewPosts', $toView);
+            $posts = $this->filterCanView($posts);
+        }
 
-        $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')
-            ->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+        $posts = $posts->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
 
         $postsHTML = $this->translatePostsArrayToHTML($posts);
         return response()->json(['postsHTML' => $postsHTML]);
