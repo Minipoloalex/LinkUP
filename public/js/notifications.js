@@ -63,30 +63,42 @@ async function getUser (id) {
 const userId = getUserId()
 
 if (userId) {
-  Pusher.logToConsole = true // TODO remove this for production
-
   const pusher = new Pusher(pusherAppKey, {
     cluster: pusherCluster,
     encrypted: true,
-    authEndpoint: '/broadcasting/auth',
-    debug: true // TODO remove this for production
+    authEndpoint: '/broadcasting/auth'
   })
 
   const channel = pusher.subscribe(`private-user.${userId}`)
 
-  channel.bind('notification-comment', function (data) {
-    console.log('Received notification-comment')
-    console.log(data)
+  channel.bind('notification-comment', async notification => {
+    const data = notification.commentNotification
+
+    const link = `/post/${data.comment.id}`
+    const user = await getUser(data.comment.id_created_by)
+    const image = await getImageUrl(user.id)
+    const username = user.username
+    const message = 'commented on your post.'
+
+    console.log({ link, image, username, message })
+
+    pushNotification({ link, image, username, message })
   })
 
-  channel.bind('notification-followrequest', function (data) {
-    console.log('Received notification-followrequest')
-    console.log(data)
+  channel.bind('notification-followrequest', async notification => {
+    const data = notification.followRequest
+
+    const link = `/profile/${data.id_user_from}`
+    const user = await getUser(data.id_user_from)
+    const image = await getImageUrl(user.id)
+    const username = user.username
+    const message = 'sent you a follow request.'
+
+    pushNotification({ link, image, username, message })
   })
 
   channel.bind('notification-like', async notification => {
     const data = notification.likeNotification
-    console.log(data)
 
     const link = `/post/${data.post.id}`
     const user = await getUser(data.id_user)
@@ -97,7 +109,9 @@ if (userId) {
     pushNotification({ link, image, username, message })
   })
 
-  channel.bind('notification-group', function (data) {
+  channel.bind('notification-group', async notification => {
+    // TODO
+    const data = notification.groupNotification
     console.log(data)
   })
 
