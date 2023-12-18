@@ -40,4 +40,12 @@ class FollowRequest extends Model
 
         return $follow_requests;
     }
+
+    public function toHtml()
+    {
+        return view('partials.notifications.follow-request', [
+            'notification' => $this,
+            'home' => true,
+        ])->render();
+    }
 }

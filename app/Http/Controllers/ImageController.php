@@ -41,7 +41,8 @@ class ImageController extends Controller
         }
         return false;
     }
-    private function getFilePath(string $fileName) {
+    private function getFilePath(string $fileName)
+    {
         return $this->path . $fileName;
     }
     public function getFileNameWithExtension(string $fileName)
@@ -58,8 +59,7 @@ class ImageController extends Controller
             $media = $manager->read($media)
                 ->resize($this->size, $this->size)
                 ->toJpeg(90);
-        }
-        else {
+        } else {
             $manager = new ImageManager(new Driver());
             $media = $manager->read($media)->crop($width, $height, $x, $y)
                 ->resize($this->size, $this->size)

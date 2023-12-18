@@ -1,7 +1,8 @@
 @php
 $editable = $showEdit && $post->isCreatedByCurrentUser();
 $postLink = $hasAdminLink ? route('admin.post', $post->id) : route('post', $post->id);
-$userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : route('profile.show', $post->createdBy->username);
+$userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : route('profile.show',
+$post->createdBy->username);
 @endphp
 <div class="flex flex-col gap-4 m-1 post-info">
     <header class="flex items-center justify-start space-x-2">
@@ -19,7 +20,14 @@ $userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : ro
             <button class="text-2xl edit-post"><i class="p-2 fas fa-edit"></i></button>
             @endif
             <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
+            <!-- if post is private, show the unlock icon; otherwise, show the lock icon -->
+            @if ($post->is_private)
+                <button class="text-2xl privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-unlock"></i></button>
+            @else
+                <button class="text-2xl privacy-post" data-post-id="{{ $post->id }}"><i class="p-2 fas fa-lock"></i></button>
+            @endif
         </div>
+
         @endif
         @if ($hasAdminDelete)
         <div class="admin-delete-post">
@@ -39,12 +47,12 @@ $userLink = $hasAdminLink ? route('admin.user', $post->createdBy->username) : ro
         @include('partials.create_post_form', ['formClass' => 'edit-post-info hidden', 'textPlaceholder' => 'Edit post',
         'contentValue' => $post->content, 'buttonText' => 'Update Post'])
         @endif
-            <a class="post-link" href="{{ $postLink }}">
-                <p class='post-content'>{{ $post->content }}</p>
-            </a>
-            @if ($post->media() != null)
-            @include('partials.post_image', ['post' => $post, 'editable' => $editable, 'linkTo' => $postLink])
-            @endif
+        <a class="post-link" href="{{ $postLink }}">
+            <p class='post-content'>{{ $post->content }}</p>
+        </a>
+        @if ($post->media() != null)
+        @include('partials.post_image', ['post' => $post, 'editable' => $editable, 'linkTo' => $postLink])
+        @endif
     </div>
     @php
     $isLiked = $post->likedByUser();
