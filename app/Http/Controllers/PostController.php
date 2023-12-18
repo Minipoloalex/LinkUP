@@ -143,8 +143,11 @@ class PostController extends Controller
         // Check if the current user can see (show) the post.
         $this->authorize('view', $post);
 
+        $parent = Post::where('id', $post->id_parent)->first();
+
         return view('pages.post', [
-            'post' => $post
+            'post' => $post,
+            'parent' => $parent
         ]);
     }
     /**
