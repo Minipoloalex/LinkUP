@@ -133,7 +133,7 @@ class PostController extends Controller
 
         $createdFile = $this->setFileName($request, $comment, $request->input('x'), $request->input('y'), $request->input('width'), $request->input('height'));
         if (!$createdFile) {
-            $post->created_at = $post->freshTimestamp();
+            $comment->created_at = $post->freshTimestamp();
         }
         $commentNotification = CommentNotification::where('id_comment', $comment->id)->firstOrFail();
         event(new CommentEvent($commentNotification));

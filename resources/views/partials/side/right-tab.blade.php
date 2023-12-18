@@ -9,7 +9,7 @@
                     action="{{ url('/search') }}" method="GET">
                     <div
                         class="rounded-full bg-transparent h-10 flex items-center justify-center border-2 border-dark-active">
-                        <i class="fas fa-search text-white ml-3"></i>
+                        <button type="submit"><i class="fas fa-search text-white ml-3"></i></button>
                         <input id="search-text" class="align-middle w-full bg-transparent ml-2 mr-3 text-white font-normal text-sm
                     focus:outline-none" type="text" name="query" placeholder="Search" autocomplete="off">
                     </div>

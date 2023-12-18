@@ -12,7 +12,7 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
                 alt="User photo">
         </a>
         <div class="flex flex-col">
-            <a href="{{ $userLink }}">&commat;{{ $post->createdBy->username }}</a>
+            <a class="before:content-['@']" href="{{ $userLink }}">{{ $post->createdBy->username }}</a>
             <span class="text-xs text-gray-300">{{ date('H:i · d M Y', strtotime($post->created_at)) }}</span>
         </div>
         @if ($editable || $showGroupOwnerDelete)
