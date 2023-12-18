@@ -17,7 +17,7 @@ async function fetchAndLoad (container, url, data, action) {
   container.dataset.page = parseInt(page) + 1
 }
 
-let observer = null
+let observers = []
 async function createFetcher (
   container,
   testIntersectionElement,
@@ -28,12 +28,14 @@ async function createFetcher (
 ) {
   await fetchAndLoad(container, url, data, firstAction) // initial loading
 
-  observer = new IntersectionObserver(async entries => {
+  const observer = new IntersectionObserver(async entries => {
     if (entries[0].isIntersecting) {
       await fetchAndLoad(container, url, data, action)
     }
   })
   observer.observe(testIntersectionElement)
+  observers.push(observer)
+  return observer
 }
 
 export async function infiniteScroll (
@@ -50,9 +52,11 @@ export async function infiniteScroll (
     container.dataset.page = 0
   }
   if (destroyPreviousFetcher) {
-    await destroyFetcher()
+    observers.forEach(async observer => {
+      await observer.disconnect()
+    })
   }
-  await createFetcher(
+  return await createFetcher(
     container,
     testIntersectionElement,
     url,
@@ -62,7 +66,7 @@ export async function infiniteScroll (
   )
 }
 
-export async function destroyFetcher () {
+export async function destroyFetcher (observer) {
   if (observer) {
     await observer.disconnect()
   }

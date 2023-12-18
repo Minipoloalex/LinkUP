@@ -4,7 +4,8 @@ import { infiniteScroll, destroyFetcher } from '../infinite_scrolling.js'
 import { hide, show } from '../general_helpers.js'
 import { addEventListenersToPost } from '../posts/post_event_listeners.js'
 
-// const Swal = window.swal
+let membersFetcher = null
+let postsFetcher = null
 
 export function getNoneElement(section) {
   return section.querySelector('.none')
@@ -33,22 +34,22 @@ function appendInSection (
   }
 }
 
-function addInfiniteScrollingToSection (
+async function addInfiniteScrollingToSection (
   section,
-  fetcher,
+  testIntersectionElement,
   url,
-  attachEventListeners
+  attachEventListeners,
+  fetcher
 ) {
   const none = getNoneElement(section)
   const load = data =>
-    appendInSection(data.elementsHTML, section, fetcher, attachEventListeners)
+    appendInSection(data.elementsHTML, section, testIntersectionElement, attachEventListeners)
 
   const firstAction = async data => {
     load(data)
     if (data.elementsHTML.length == 0) {
       show(none)
-      await destroyFetcher()
-      console.log("destroyed on first")
+      await destroyFetcher(fetcher)
     }
     else {
       hide(none)
@@ -57,11 +58,10 @@ function addInfiniteScrollingToSection (
   const action = async data => {
     load(data)
     if (data.elementsHTML.length == 0) {
-      await destroyFetcher()
-      console.log("destroyed on second")
+      await destroyFetcher(fetcher)
     }
   }
-  infiniteScroll(section, fetcher, url, firstAction, action, false, false)
+  fetcher = await infiniteScroll(section, testIntersectionElement, url, firstAction, action, false, false)
 }
 
 function toggleSections () {
@@ -85,7 +85,8 @@ function toggleSections () {
     posts_section,
     posts_fetcher,
     `/api/group/${group_id}/posts`,
-    addEventListenersToPost
+    addEventListenersToPost,
+    postsFetcher
   )
   addInfiniteScrollingToSection(
     members_section,
@@ -93,7 +94,8 @@ function toggleSections () {
     `/api/group/${group_id}/members`,
     loadedMember => {
       addRemoveMemberEvents(loadedMember, group_id)
-    }
+    },
+    membersFetcher
   )
 
   posts.addEventListener('click', () => {
