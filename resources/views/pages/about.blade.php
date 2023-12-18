@@ -11,41 +11,46 @@
     <section id="vision" class="flex flex-col mx-12 mb-8 space-y-4">
         <h2 class="text-2xl font-bold">Our Vision</h2>
         <p class="text-sm">
-            LINK UP is an innovative social network designed exclusively for the students of the University of Porto. 
+            LINK UP is an innovative social network designed exclusively for the students of the University of Porto.
         </p>
         <p class="text-sm">
-            The motivation behind the project is to make a positive impact on the university ecosystem. 
-            LINK UP aims to strengthen the sense of community within the institution by providing a dedicated platform for students and staff to connect. 
+            The motivation behind the project is to make a positive impact on the university ecosystem.
+            LINK UP aims to strengthen the sense of community within the institution by providing a dedicated platform
+            for students and staff to connect.
         </p>
     </section>
 
     <section id="team" class="flex flex-col mx-12 mb-8 space-y-4">
         <h2 class="text-2xl font-bold">Our Team</h2>
-        <p class="text-sm"> 
+        <p class="text-sm">
             LINK UP is currently being developed by a small team of students from FEUP.
         </p>
-        <div class="grid grid-cols-4 gap-4 px-8 pt-8">
+        <div class="grid grid-cols-4 gap-4 lg:px-8 pt-8">
             <div class="flex flex-col items-center">
-                <img class="w-32 h-32 rounded-full" src="{{ asset('images/team/domingos.jpg') }}" alt="Bruno">
+                <img class="w-16 h-16 lg:w-32 lg:h-32 rounded-full" src="{{ asset('images/team/domingos.jpg') }}"
+                    alt="Bruno">
                 <p class="text-sm font-bold mt-4 mb-1">Domingos Santos</p>
                 <p class="text-sm">Developer</p>
             </div>
             <div class="flex flex-col items-center">
-                <img class="w-32 h-32 rounded-full" src="{{ asset('images/team/duarte.jpg') }}" alt="Bruno">
+                <img class="w-16 h-16 lg:w-32 lg:h-32 rounded-full" src="{{ asset('images/team/duarte.jpg') }}"
+                    alt="Bruno">
                 <p class="text-sm font-bold mt-4 mb-1">Duarte Gonçalves</p>
                 <p class="text-sm">Developer</p>
             </div>
             <div class="flex flex-col items-center">
-                <img class="w-32 h-32 rounded-full" src="{{ asset('images/team/felix.jpg') }}" alt="Bruno">
+                <img class="w-16 h-16 lg:w-32 lg:h-32 rounded-full" src="{{ asset('images/team/felix.jpg') }}"
+                    alt="Bruno">
                 <p class="text-sm font-bold mt-4 mb-1">Félix Martins</p>
                 <p class="text-sm">Developer</p>
             </div>
             <div class="flex flex-col items-center">
-                <img class="w-32 h-32 rounded-full" src="{{ asset('images/team/marco.jpg') }}" alt="Bruno">
+                <img class="w-16 h-16 lg:w-32 lg:h-32 rounded-full" src="{{ asset('images/team/marco.jpg') }}"
+                    alt="Bruno">
                 <p class="text-sm font-bold mt-4 mb-1">Marco Vilas Boas</p>
                 <p class="text-sm">Developer</p>
                 <p class="text-sm">SCRUM Master</p>
-            </div> 
+            </div>
         </div>
     </section>
 
