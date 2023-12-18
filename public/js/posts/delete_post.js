@@ -25,7 +25,7 @@ export async function deletePostOrComment(event, deleteURL, redirectTo) {
     const isComment = post.classList.contains('comment');
     const titleText = isComment ? 'Delete Comment?' : 'Delete Post?';
     const descriptionText = 'Are you sure you want to delete this ' + (isComment ? 'comment?' : 'post?');
-    const isDeletedText = isComment ? 'Your comment has been deleted.' : 'Your post has been deleted.';
+    const isDeletedText = isComment ? 'This comment has been deleted.' : 'This post has been deleted.';
 
     const confirmAction = async () => {
         const postId = post.dataset.id;
