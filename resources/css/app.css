@@ -23,6 +23,10 @@ select:focus ~ label {
   @apply w-2;
 }
 
+.scrollbar-thin::-webkit-scrollbar {
+  @apply w-1;
+}
+
 /* Track */
 ::-webkit-scrollbar-track {
   @apply bg-dark-neutral;

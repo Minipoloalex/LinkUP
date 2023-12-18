@@ -54,7 +54,7 @@ class UserController extends Controller
      * Show the user's settings.
      * 
      * @param Request $request
-    * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showSettings(Request $request)
     {
@@ -182,7 +182,7 @@ class UserController extends Controller
         // remove from groups
         $user->groups()->delete();
 
-        Auth::logout(); 
+        Auth::logout();
 
         return redirect()->route('login')->with('success', 'Account deleted successfully!');
     }
@@ -206,7 +206,7 @@ class UserController extends Controller
         if (!password_verify($request->password, $user->password)) {
             return response()->json(['error' => 'The provided password does not match our records.'], 403);
         }
-            
+
         return response()->json(['success' => 'Password verified'], 200);
     }
 
@@ -397,7 +397,7 @@ class UserController extends Controller
         $usersHTML = $this->translateUsersArrayToHTML($users);
         return response()->json(['resultsHTML' => $usersHTML, 'success' => 'Search results retrieved']);
     }
-    
+
 
     public function translateMembersArrayToHTML($members, $currUserId, bool $isOwner)
     {
@@ -455,5 +455,17 @@ class UserController extends Controller
             ]);
         }
         return response()->json(['elementsHTML' => $membersHTML]);
+    }
+
+    public function getProfilePicture(string $id)
+    {
+        $path = User::findOrFail($id)->getProfilePicture();
+        return response()->json(['path' => $path]);
+    }
+
+    public function getUserObject(string $id)
+    {
+        $user = User::findOrFail($id);
+        return response()->json($user);
     }
 }

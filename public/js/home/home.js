@@ -28,9 +28,7 @@ function appendPostsToTimeline (postsHTML) {
       timeline.insertBefore(postElement, timeline.lastElementChild)
       const likeButtons = postElement.querySelectorAll('.like-button')
       if (!likeButtons) return
-      for (const likeButton of likeButtons) {
-        addToggleLikeEventListener(likeButton)
-      }
+      likeButtons.forEach(addToggleLikeEventListener)
     }
   }
 }
@@ -45,15 +43,13 @@ function buildForYouTimeline () {
     action,
     action,
     true,
-    true
+    false
   )
 }
 
 function buildFollowingTimeline () {
   const testIntersectionElement = timeline.querySelector('#fetcher')
-  const action = data => {
-    prependPostsToTimeline(data.resultsHTML)
-  }
+  const action = data => appendPostsToTimeline(data.resultsHTML)
   infiniteScroll(
     timeline,
     testIntersectionElement,
@@ -61,7 +57,7 @@ function buildFollowingTimeline () {
     action,
     action,
     true,
-    true
+    false
   )
 }
 
@@ -83,7 +79,6 @@ if (following_tab) {
     following_tab.classList.add('tab-active')
     for_you_tab.classList.remove('tab-active')
     timeline.innerHTML = '<div id="fetcher" class="h-16 lg:h-0"></div>'
-    //buildFollowingTimeline()
-    buildForYouTimeline()
+    buildFollowingTimeline()
   })
 }

@@ -1,68 +1,81 @@
-import { getCsrfToken, sendAjaxRequest, handleFeedbackToResponse } from "../ajax.js";
-import { swalConfirmDelete } from "../general_helpers.js";
+import {
+  getCsrfToken,
+  sendAjaxRequest,
+  handleFeedbackToResponse
+} from '../ajax.js'
+import { swalConfirmDelete } from '../general_helpers.js'
 
-export function getTextField(form) {
-  return form.querySelector('textarea');
+export function getTextField (form) {
+  return form.querySelector('textarea')
 }
-export async function submitAddPostOrComment(form, data, type) {
+export async function submitAddPostOrComment (form, data, type) {
   // type = 'post' or 'comment'
-  return await submitDataPostOrComment(form, data, `/${type}`, 'post');
+  return await submitDataPostOrComment(form, data, `/${type}`, 'post')
 }
-export async function submitDataPostOrComment(form, data, url, method) {
+export async function submitDataPostOrComment (form, data, url, method) {
   // includes the file
-  const file = form.querySelector('input[type=file]').files;
+  const file = form.querySelector('input[type=file]').files
+  console.log(file)
+
   if (file.length > 0) {
-    const formData = new FormData();
+    const formData = new FormData()
     for (const key in data) {
-      formData.append(key, data[key]);
+      formData.append(key, data[key])
     }
-    formData.append('media', file[0]);
-    const x = form.querySelector('input[name="x"]');
-    const y = form.querySelector('input[name="y"]');
-    const width = form.querySelector('input[name="width"]');
-    const height = form.querySelector('input[name="height"]');
-    formData.append('x', x.value);
-    formData.append('y', y.value);
-    formData.append('width', width.value);
-    formData.append('height', height.value);
+    formData.append('media', file[0])
+    const x = form.querySelector('input[name="x"]')
+    const y = form.querySelector('input[name="y"]')
+    const width = form.querySelector('input[name="width"]')
+    const height = form.querySelector('input[name="height"]')
+    formData.append('x', x.value)
+    formData.append('y', y.value)
+    formData.append('width', width.value)
+    formData.append('height', height.value)
     const response = await fetch(url, {
       method: method,
       headers: {
-        'X-CSRF-TOKEN': getCsrfToken(),
+        'X-CSRF-TOKEN': getCsrfToken()
       },
       body: formData
-    });
-    return handleFeedbackToResponse(response);
+    })
+    console.log(response)
+    return handleFeedbackToResponse(response)
   }
-  return await sendAjaxRequest(method, url, data);
+  return await sendAjaxRequest(method, url, data)
 }
-export function removeImageContainer(post) {
+export function removeImageContainer (post) {
   const imageContainer = post.querySelector('.image-container')
   if (imageContainer) {
-    imageContainer.remove();
+    imageContainer.remove()
   }
 }
-export function incrementCommentCount(post) {
-  changeCommentCount(post, 1);
+export function incrementCommentCount (post) {
+  changeCommentCount(post, 1)
 }
-export function decrementCommentCount(post) {
-  changeCommentCount(post, -1);
+export function decrementCommentCount (post) {
+  changeCommentCount(post, -1)
 }
-function changeCommentCount(post, value) {
-  const nrComments = post.querySelector('.nr-comments');
-  nrComments.textContent = parseInt(nrComments.textContent) + value;
+function changeCommentCount (post, value) {
+  const nrComments = post.querySelector('.nr-comments')
+  nrComments.textContent = parseInt(nrComments.textContent) + value
 }
-export async function deleteImage(event) {
-  event.preventDefault();
-  const button = event.currentTarget;
-  swalConfirmDelete('Delete Image?', 'Are you sure you want to delete this image?', async () => {
-    const postId = button.dataset.id;
+export async function deleteImage (event) {
+  event.preventDefault()
+  const button = event.currentTarget
+  swalConfirmDelete(
+    'Delete Image?',
+    'Are you sure you want to delete this image?',
+    async () => {
+      const postId = button.dataset.id
 
-    const imageContainer = button.closest('.image-container');
-    const data = await sendAjaxRequest('delete', `/post/${postId}/image`);
-    if (data != null) {
-      imageContainer.remove();
-      await Swal.fire('Deleted!', 'Your image has been deleted.', 'success');
-    }
-  }, null, 'Yes, delete.');
+      const imageContainer = button.closest('.image-container')
+      const data = await sendAjaxRequest('delete', `/post/${postId}/image`)
+      if (data != null) {
+        imageContainer.remove()
+        await Swal.fire('Deleted!', 'Your image has been deleted.', 'success')
+      }
+    },
+    null,
+    'Yes, delete.'
+  )
 }

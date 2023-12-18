@@ -8,6 +8,7 @@ import { addEventListenersToPost } from './post_event_listeners.js'
 const addPostOn = document.querySelector('.add-post-on')
 const addPostForm = document.querySelector('form.add-post')
 const darkOverlay = document.getElementById('dark-overlay')
+const wrapper = document.getElementById('create-post')
 
 const groupIdElement = document.getElementById('group-id')
 
@@ -17,16 +18,18 @@ if (addPostOn) {
 
 function showAddPostForm (event) {
   event.preventDefault()
+  show(wrapper)
   show(addPostForm)
   show(darkOverlay)
-  if (addPostForm) {
-    addPostForm.addEventListener('submit', submitAddPost)
-  }
   if (darkOverlay) {
     darkOverlay.addEventListener('click', cleanAddPostForm)
   }
+  if (addPostForm) {
+    addPostForm.addEventListener('submit', submitAddPost)
+  }
   getTextField(addPostForm).focus()
 }
+
 function cleanAddPostForm () {
   addPostForm.reset()
   clearFileInputWrapper(getFileInputWrapper(addPostForm))
@@ -37,6 +40,7 @@ function hideAddPostForm () {
   hide(addPostForm)
   show(addPostOn)
   hide(darkOverlay)
+  hide(wrapper)
 }
 
 async function submitAddPost (event) {
@@ -52,6 +56,8 @@ async function submitAddPost (event) {
 
   hideAddPostForm()
   const data = await submitAddPostOrComment(addPostForm, requestBody, 'post')
+  console.log(data)
+
   if (data != null) {
     const postElement = parseHTML(data.postHTML)
     if (groupId != null) {  
