@@ -1,3 +1,7 @@
+import { destroyFetcher, infiniteScroll } from '../infinite_scrolling.js'
+import { parseHTML } from '../general_helpers.js'
+import { addEventListenersToPost } from '../posts/post_event_listeners.js'
+
 function resolveMemberRequest (group, member_id, element, accept) {
   const url = `/group/${group}/request/${member_id}`
 
@@ -90,3 +94,8 @@ function addFollowRequestEvents () {
 
 addResolveMemberRequestEvents()
 addFollowRequestEvents()
+
+const notificationsTab = document.getElementById('notifications-tab')
+if (notificationsTab) {
+  notificationsTab.classList.add('hidden')
+}

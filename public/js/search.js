@@ -1,6 +1,16 @@
-import { parseHTML, setUrlParameters, getUrlParameter } from './general_helpers.js'
+import {
+  parseHTML,
+  setUrlParameters,
+  getUrlParameter
+} from './general_helpers.js'
 import { showFeedback } from './feedback.js'
 import { destroyFetcher, infiniteScroll } from './infinite_scrolling.js'
+
+const searchbarRight = document.querySelector('#search-home')
+
+if (searchbarRight) {
+  searchbarRight.classList.add('hidden')
+}
 
 async function initSearchResults () {
   // make the search URLs copiable (check them after loading the page)

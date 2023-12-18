@@ -163,7 +163,7 @@ class UserController extends Controller
             'password' => bcrypt('deleted' . $user->id),
             'name' => 'deleted',
             'bio' => null,
-            'faculty' => null,
+            'faculty' => $user->faculty,
             'course' => null,
             'is_private' => true,
             'is_banned' => true,

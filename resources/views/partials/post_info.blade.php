@@ -18,12 +18,12 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
         @if ($editable || $showGroupOwnerDelete)
         <div class="edit-delete-post">
             @if ($editable)
-            <button class="text-2xl edit-post"><i class="p-2 fas fa-edit"></i></button>
+            <button class="edit-post"><i class="p-2 fas fa-edit"></i></button>
                 @if ($post->id_group === null)
-                <button class="text-2xl privacy-post-button" data-post-id="{{ $post->id }}"><i class="p-2 fas {{ $icon }}"></i></button>
+                <button class="privacy-post-button" data-post-id="{{ $post->id }}"><i class="p-2 fas {{ $icon }}"></i></button>
                 @endif
             @endif
-            <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
+            <button class="delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
 
         @endif

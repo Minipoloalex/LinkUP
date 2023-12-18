@@ -9,7 +9,7 @@ const toastMessage = document.getElementById('toast-message')
 const openToast = () => {
   if (window.open) return
   window.open = true
-  toast.classList.add('translate-y-20')
+  toast.classList.add('translate-y-16')
 
   clearTimeout(timer)
 
@@ -21,10 +21,8 @@ const openToast = () => {
 
 const closeToast = () => {
   window.open = false
-  toast.classList.remove('translate-y-20')
+  toast.classList.remove('translate-y-16')
 }
-
-toast.addEventListener('click', closeToast)
 
 export function pushNotification (data) {
   const { link, image, username, message } = data

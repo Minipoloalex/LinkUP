@@ -13,7 +13,7 @@ $hasAdminDelete ??= false;
     @php
     $comments = $post->comments;
     @endphp
-    <div class='comments-container'>
+    <div class='comments-container py-4'>
         @if ($comments->count() > 0)
         @foreach ($comments as $comment)
         @include('partials.comment', ['comment' => $comment, 'displayComments' => false, 'showEdit' => $showEdit,
@@ -26,7 +26,7 @@ $hasAdminDelete ??= false;
     @auth
     @if ($showAddComment)
     @include('partials.create_post_form', ['formClass' => 'add-comment rounded px-10 py-5 bg-gray-300',
-    'textPlaceholder' => 'Add a new comment', 'buttonText' => 'Create Comment', 'contentValue' => ''])
+    'textPlaceholder' => 'Add a new comment', 'buttonText' => 'Comment', 'contentValue' => ''])
     @endif
     @endauth
 </article>

@@ -22,7 +22,9 @@
 </head>
 
 <body class="dark:bg-dark-primary dark:text-dark-secondary w-screen h-screen py-12">
-    <img src="{{ url('images/logo-dark-mode.png') }}" alt="Link up logo" class="self-center w-48 mt-4">
+    <a href="{{ route('home') }}" class="flex justify-center">
+        <img src="{{ url('images/logo-dark-mode.png') }}" alt="Link up logo" class="self-center w-48 mt-4">
+    </a>
     <div class="text-base font-bold text-center">
         <h1>A rede social da UPorto</h1>
     </div>

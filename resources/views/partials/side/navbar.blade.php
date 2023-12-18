@@ -22,6 +22,7 @@ $username = Auth::user()->username ?? "";
                 </a>
             </div>
         </li>
+
         <li class="lg:w-12 lg:h-12 xl:w-full">
             <div class="flex w-full h-full items-center justify-center">
                 <a href="{{ route('search') }}" class=" lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center 
@@ -33,6 +34,8 @@ $username = Auth::user()->username ?? "";
                 </a>
             </div>
         </li>
+
+        @auth
         <li class="lg:w-12 lg:h-12 xl:w-full">
             <div class="w-full h-full flex items-center justify-center">
                 <a href="{{ $authenticated ? route('notifications') : route('login') }}" class=" lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center 
@@ -44,6 +47,8 @@ $username = Auth::user()->username ?? "";
                 </a>
             </div>
         </li>
+        @endauth
+
         <li class="lg:w-12 lg:h-12 xl:w-full">
             <div class="w-full h-full flex items-center justify-center">
                 <a href="{{  $authenticated ? url('/profile/' . $username) : route('login') }}"
@@ -52,18 +57,6 @@ $username = Auth::user()->username ?? "";
                         <i class="fa-solid fa-user fa-xl"></i>
                     </div>
                     <p class="hidden xl:block ml-4">Profile</p>
-                </a>
-            </div>
-        </li>
-
-        <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
-            <div class="flex items-center w-full justify-center">
-                <a href="{{ $authenticated ? route('settings.show') : route('login') }}"
-                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
-                    <div class="lg:w-8">
-                        <i class="fa-solid fa-gear fa-xl"></i>
-                    </div>
-                    <p class="hidden xl:block ml-4">Settings</p>
                 </a>
             </div>
         </li>
@@ -80,38 +73,63 @@ $username = Auth::user()->username ?? "";
             </div>
         </li>
 
+        <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
+            <div class="flex items-center w-full justify-center">
+                <a href="{{ $authenticated ? route('settings.show') : route('login') }}"
+                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                    <div class="lg:w-8">
+                        <i class="fa-solid fa-gear fa-xl"></i>
+                    </div>
+                    <p class="hidden xl:block ml-4">Settings</p>
+                </a>
+            </div>
+        </li>
+
         @auth
         <li class=" w-9 h-9 flex items-center justify-center
                     lg:w-12 lg:h-12 lg:p-1 xl:w-full xl:p-0">
-            <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer 
+            <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer
                         xl:justify-center xl:items-center">
-                <span class="hidden ml-4 xl:block xl:m-0">Create</span> {{-- This is hidden on mobile devices --}}
+                <span class="hidden ml-4 xl:block xl:m-0">New Post</span> {{-- This is hidden on mobile devices --}}
                 <i class="fa-solid fa-plus fa-xl xl:hidden"></i> {{--This is hidden on desktop devices --}}
-            </button>   
+            </button>
         </li>
         @endauth
 
         <div class="hidden lg:flex lg:flex-col lg:flex-grow lg:items-center lg:justify-end pb-8">
+            <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full mb-12">
+                <div class="flex items-center w-full justify-center">
+                    <a href="{{ $authenticated ? route('logout') : route('login') }}"
+                        class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                        <div class="lg:w-8">
+                            <i
+                                class="fa-solid {{ $authenticated ? 'right-from-bracket fa-sign-out-alt' : 'fa-sign-in-alt' }} fa-xl"></i>
+                        </div>
+                        <p class="hidden xl:block ml-4">{{ $authenticated ? 'Logout' : 'Login' }}</p>
+                    </a>
+                </div>
+            </li>
+
             <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
-                <div class="lg:flex lg:items-center lg:w-full lg:justify-center">
+                <div class="flex items-center w-full justify-center">
                     <a href="{{ route('about') }}"
                         class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
                         <div class="lg:w-8">
                             <i class="fa-regular fa-circle-question fa-xl"></i>
                         </div>
-                        <p class="hidden xl:block xl:ml-4">About</p>
+                        <p class="hidden xl:block ml-4">About</p>
                     </a>
                 </div>
             </li>
-            
+
             <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
                 <div class="lg:flex lg:items-center lg:w-full lg:justify-center">
                     <a href="{{ route('features') }}"
-                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
-                    <div class="lg:w-8">
+                        class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                        <div class="lg:w-8">
                             <i class="fa-regular fa-star fa-xl"></i>
                         </div>
-                        <p class="hidden xl:block xl:ml-4">Features</p>
+                        <p class="hidden xl:block ml-4">Features</p>
                     </a>
                 </div>
             </li>

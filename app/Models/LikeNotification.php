@@ -36,7 +36,7 @@ class LikeNotification extends Model
         return 'like';
     }
 
-    public static function getSomeNotifications(int $user_id, int $limit = 10)
+    public static function getNotifications(int $user_id)
     {
         // Get user posts
         $user_posts = Post::select('id')
@@ -45,16 +45,16 @@ class LikeNotification extends Model
         // Get like notifications from user's posts
         $like_nots = LikeNotification::select('*')
             ->whereIn('id_post', $user_posts)
-            ->orderBy('timestamp', 'desc')->limit($limit)->get();
+            ->orderBy('timestamp', 'desc')->get();
 
         return $like_nots;
     }
 
-    public function toHtml()
+    public function toHtml($home = true)
     {
         return view('partials.notifications.like', [
             'notification' => $this,
-            'home' => true,
+            'home' => $home,
         ])->render();
     }
 }

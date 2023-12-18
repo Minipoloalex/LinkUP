@@ -9,7 +9,9 @@ function getUserId () {
 }
 
 async function getImageUrl (id) {
-  const url = `api/users/picture/${id}`
+  const scheme = window.location.protocol + '//'
+  const host = window.location.host + '/'
+  const url = scheme + host + `api/users/picture/${id}`
 
   const path = fetch(url, {
     method: 'GET',
@@ -34,7 +36,9 @@ async function getImageUrl (id) {
 }
 
 async function getUser (id) {
-  const url = `api/users/${id}`
+  const scheme = window.location.protocol + '//'
+  const host = window.location.host + '/'
+  const url = scheme + host + `api/users/${id}`
 
   const user = fetch(url, {
     method: 'GET',
@@ -55,8 +59,6 @@ async function getUser (id) {
       console.error(`Fetch error: ${error.message}`)
     })
 
-  console.log('getUser')
-  console.log(user)
   return user
 }
 
@@ -90,6 +92,7 @@ if (userId) {
 
     const link = `/profile/${data.id_user_from}`
     const user = await getUser(data.id_user_from)
+    console.log(user)
     const image = await getImageUrl(user.id)
     const username = user.username
     const message = 'sent you a follow request.'

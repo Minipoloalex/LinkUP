@@ -3,8 +3,6 @@
 
 @push('scripts')
 <script type="module" src="{{ url('js/home/home.js') }}"></script>
-<script type="module" src="{{ url('js/home/notifications.js') }}"></script>
-<script type="module" src="{{ url('js/home/suggestions.js') }}"></script>
 @endpush
 
 @section('content')
