@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SuggestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,8 +56,33 @@ Route::middleware('web')->group(function () {
         [UserController::class, 'groupMembers']
     )->where('id', '[0-9]+')->name('group.members');
 
-    Route::get(     // define a route for /posts which accepts a GET request with a DATE parameter
+    Route::get(
         '/posts/for-you',
         [PostController::class, 'getPostsForYou']
-    )->name('posts.beforeDate');
+    )->name('posts.for-you');
+
+    Route::get(
+        '/posts/following',
+        [PostController::class, 'getPostsFollowing']
+    )->name('posts.following');
+
+    Route::get(
+        '/notifications',
+        [NotificationController::class, 'getUserNotifications']
+    )->name('notifications');
+
+    Route::get(
+        '/suggestions',
+        [SuggestionController::class, 'getUserSuggestions']
+    )->name('suggestions');
+
+    Route::get(
+        '/users/picture/{id}',
+        [UserController::class, 'getProfilePicture']
+    )->name('users.picture');
+
+    Route::get(
+        '/users/{id}',
+        [UserController::class, 'getUserObject']
+    )->name('users.object');
 });

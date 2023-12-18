@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommentNotification;
+use App\Models\LikeNotification;
 use App\Models\Post;
 use App\Models\Liked;
 use App\Models\User;
 use App\Models\GroupMember;
 
 use \App\Events\CommentEvent;
+use App\Events\LikeEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -337,6 +339,33 @@ class PostController extends Controller
             })->orWhereIn('id_group', Auth::user()->groups()->pluck('id_group'));
         });
     }
+
+    public function FollowingPosts()
+    {
+        return Post::whereIn('id_created_by', Auth::user()->following()->pluck('users.id'))->whereNull('id_parent');
+    }
+
+    public function getPostsFollowing(Request $request): JsonResponse
+    {
+        $request->validate([
+            'page' => 'required|int'
+        ]);
+        $page = $request->input('page');
+        $posts = $this->FollowingPosts();
+        $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+
+        if ($posts->isEmpty()) {
+            $noPostsHTML = view('partials.search.no_results')->render();
+            return response()->json([
+                'noneHTML' => $noPostsHTML,
+                'elementsHTML' => []
+            ]);
+        }
+
+        $postsHTML = $this->translatePostsArrayToHTML($posts);
+        return response()->json(['resultsHTML' => $postsHTML]);
+    }
+
     /**
      * Get all posts created before a given date.
      * @param Request $request must contain a 'page' int parameter
@@ -464,6 +493,12 @@ class PostController extends Controller
             $liked->id_user = $user->id;
             $liked->id_post = $post->id;
             $liked->save();
+
+            // Send notification unless self-liked
+            if ($post->id_created_by !== $user->id) {
+                $likeNotification = LikeNotification::where('id_user', $user->id)->where('id_post', $post->id)->firstOrFail();
+                event(new LikeEvent($likeNotification));
+            }
         }
 
         $post->loadCount('likes'); // Load the count of likes for the post
@@ -532,7 +567,12 @@ class PostController extends Controller
 
         $toView = User::findOrFail($id);
         $this->authorize('viewPosts', $toView);
-        $posts = Post::where('id_created_by', $id);
+        $posts = Post::where('id_created_by', $id)
+                 ->where(function ($query) {
+                     $query->where('is_private', 0) // Filter for public posts
+                     ->orWhere('id_created_by', Auth::user()->id); // ; // Include user's own private posts
+                 });
+
         $posts = $this->filterCanView($posts)->orderBy('created_at', 'desc')
             ->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
 
@@ -655,25 +695,25 @@ class PostController extends Controller
         return response()->json(['postsHTML' => $postsHTML]);
     }*/
 
-    public function followingPosts()
-    {
-        $user = Auth::user();
-        $usersFollowing = $user->following->pluck('id');
-        Log::info('usersFollowing: ' . $usersFollowing->toJson());
+    // public function followingPosts()
+    // {
+    //     $user = Auth::user();
+    //     $usersFollowing = $user->following->pluck('id');
+    //     Log::info('usersFollowing: ' . $usersFollowing->toJson());
 
-        //get posts from users that are followed by the user
-        $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
-            ->with('createdBy:id,username')
-            ->withCount('likes')
-            ->orderByDesc('created_at')
-            ->limit(10)
-            ->get();
+    //     //get posts from users that are followed by the user
+    //     $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
+    //         ->with('createdBy:id,username')
+    //         ->withCount('likes')
+    //         ->orderByDesc('created_at')
+    //         ->limit(10)
+    //         ->get();
 
-        //Translate posts to the desired HTML format
-        $postsHTML = $this->translatePostsArrayToHTML($postsFollowing);
-        Log::info('postsHTML: ' . $postsHTML->toJson());
-        return response()->json($postsHTML);
-    }
+    //     //Translate posts to the desired HTML format
+    //     $postsHTML = $this->translatePostsArrayToHTML($postsFollowing);
+    //     Log::info('postsHTML: ' . $postsHTML->toJson());
+    //     return response()->json($postsHTML);
+    // }
 
 
     public function groupPosts(int $id, Request $request)
@@ -705,5 +745,23 @@ class PostController extends Controller
         }
         $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, true, $isAdmin, $isAdmin);
         return response()->json(['elementsHTML' => $postsHTML]);
+    }
+
+    public function updatePrivacy(Request $request, $postId)
+    {
+        // Fetch the post
+        $post = Post::findOrFail($postId);
+
+        // Check if the authenticated user can edit the post (customize this logic as per your requirements)
+        if ($request->user()->id !== $post->createdBy->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        //current privacy 
+        Log::info('current privacy: ' . $post->is_private);
+        // Toggle the post's privacy
+        $post->is_private = !$post->is_private;
+        $post->save();
+        Log::info('new privacy: ' . $post->is_private);
+        return response()->json(['message' => 'Privacy updated', 'is_private' => $post->is_private]);
     }
 }

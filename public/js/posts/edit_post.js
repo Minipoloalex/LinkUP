@@ -73,3 +73,48 @@ async function submitEditPostOrComment(form, data, postId) {
     data._method = 'put';
     return await submitDataPostOrComment(form, data, `/post/${postId}`, 'post');
 }
+
+// Function to handle changing post privacy
+function togglePostPrivacy(postId, isPrivate) {
+    // Send an AJAX request to update the post's privacy status
+    fetch(`/post/${postId}/privacy`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ is_private: isPrivate })
+    })
+    .then(response => {
+        if (response.ok) {
+            // Assuming you have an icon element in your HTML representing privacy status
+            const privacyIcon = document.querySelector(`#privacy-icon-${postId}`);
+            // Toggle between lock and unlock icons based on the updated privacy status
+            if (isPrivate) {
+                privacyIcon.classList.remove('fa-unlock');
+                privacyIcon.classList.add('fa-lock');
+            } else {
+                privacyIcon.classList.remove('fa-lock');
+                privacyIcon.classList.add('fa-unlock');
+            }
+        } else {
+            console.error('Failed to update privacy status');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Event listener for clicking on the privacy icon
+document.querySelectorAll('.privacy-post').forEach(icon => {
+    icon.addEventListener('click', function() {
+        const postId = this.dataset.postId; // Replace with how you're storing post IDs
+        console.log(postId);
+        const isPrivate = this.classList.contains('fa-lock'); // Check the current privacy status
+        console.log(this.classList);
+        console.log(isPrivate);
+        togglePostPrivacy(postId, !isPrivate); // Toggle the privacy status
+    });
+});
+

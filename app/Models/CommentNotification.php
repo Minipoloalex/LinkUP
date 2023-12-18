@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Post;
 
-class CommentNotification extends Model {
+class CommentNotification extends Model
+{
     use HasFactory;
     protected $table = 'comment_notification';
     public $timestamps = false;
@@ -17,26 +18,32 @@ class CommentNotification extends Model {
     protected $dates = [
         'timestamp',
     ];
-    public function comment() {
+    public function comment()
+    {
         return $this->belongsTo(Post::class, 'id_comment');
     }
-    public function userNotified() {
+    public function userNotified()
+    {
         return $this->comment->parent->createdBy;
     }
 
-    public function belongingToUser(int $user_id) {
+    public function belongingToUser(int $user_id)
+    {
         return $this->userNotified()->id == $user_id;
     }
 
-    public function whoCommented() {
+    public function whoCommented()
+    {
         return $this->comment->createdBy;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return 'comment';
     }
 
-    public static function getSomeNotifications(int $user_id, int $limit = 10) {
+    public static function getSomeNotifications(int $user_id, int $limit = 10)
+    {
         // Get comments to user's posts
         $user_comments = Post::select('id')
             ->whereIn('id_parent', function ($query) use ($user_id) {
@@ -54,5 +61,13 @@ class CommentNotification extends Model {
             ->orderBy('timestamp', 'desc')->limit($limit)->get();
 
         return $comment_nots;
+    }
+
+    public function toHtml()
+    {
+        return view('partials.notifications.comment', [
+            'notification' => $this,
+            'home' => true,
+        ])->render();
     }
 }

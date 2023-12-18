@@ -99,7 +99,19 @@ $username = Auth::user()->username ?? "";
                         <div class="lg:w-8">
                             <i class="fa-regular fa-circle-question fa-xl"></i>
                         </div>
-                        <p class="hidden xl:block xl:ml-4">About us</p>
+                        <p class="hidden xl:block xl:ml-4">About</p>
+                    </a>
+                </div>
+            </li>
+            
+            <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
+                <div class="lg:flex lg:items-center lg:w-full lg:justify-center">
+                    <a href="{{ route('features') }}"
+                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                    <div class="lg:w-8">
+                            <i class="fa-regular fa-star fa-xl"></i>
+                        </div>
+                        <p class="hidden xl:block xl:ml-4">Features</p>
                     </a>
                 </div>
             </li>

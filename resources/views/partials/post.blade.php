@@ -4,7 +4,7 @@
 $hasAdminLink ??= false;
 $hasAdminDelete ??= false;
 @endphp
-<article class="p-2 border-t dark:border-dark-neutral first:border-0 w-full" data-id="{{ $post->id }}">
+<article class="post p-2 border-t dark:border-dark-neutral first:border-0 w-full" data-id="{{ $post->id }}">
     @include('partials.post_info', ['post' => $post, 'showEdit' => $showEdit, 'hasAdminLink' => $hasAdminLink,
     'hasAdminDelete' => $hasAdminDelete])
     @if($displayComments)
