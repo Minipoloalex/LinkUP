@@ -29,7 +29,7 @@ if (container && fetcher) {
   )
 }
 
-function appendNotifications (notifications) {
+async function appendNotifications (notifications) {
   for (const notification of notifications) {
     const notificationElement = parseHTML(notification)
     container.insertBefore(notificationElement, fetcher)

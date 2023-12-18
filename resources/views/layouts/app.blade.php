@@ -29,6 +29,7 @@
     <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
 
     <script type="module" src="{{ url('js/app.js') }}"></script>
+    <script type="module" src="{{ url('js/toast.js') }}" defer></script>
     <script type="module" src="{{ url('js/feedback.js') }}"></script>
     <script type="module" src="{{ url('js/file_input.js') }}"></script>
     <script type="module" src="{{ url('js/add_follow.js') }}"></script>

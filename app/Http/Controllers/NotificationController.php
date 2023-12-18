@@ -42,8 +42,16 @@ class NotificationController extends Controller
 
         $notifications = $this->getNotifications();
         $notifications = $notifications->forPage($page + 1, 10)->values();
-        $notifications = $this->translateNotificationsArrayToHtml($notifications);
 
-        return response()->json(['notifications' => $notifications]);
+
+        $notificationsHTML = $this->translateNotificationsArrayToHtml($notifications);
+
+        // mark notifications as seen as they are sent to the user
+        foreach ($notifications as $notification) {
+            $notification->seen = true;
+            $notification->save();
+        }
+
+        return response()->json(['notifications' => $notificationsHTML]);
     }
 }

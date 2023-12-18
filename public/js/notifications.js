@@ -55,8 +55,6 @@ async function getUser (id) {
       console.error(`Fetch error: ${error.message}`)
     })
 
-  console.log('getUser')
-  console.log(user)
   return user
 }
 
