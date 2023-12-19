@@ -215,9 +215,9 @@ class AdminController extends Controller
         $query = $request->get('query');
         $users = null;
         if ($query == null || $query == '') {
-            $users = User::orderBy('username', 'asc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+            $users = User::where('is_deleted', false)->orderBy('username', 'asc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         } else {
-            $users = User::search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
+            $users = User::where('is_deleted', false)->search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
         $htmlArray = $users->map(function ($user) {
             return view('admin.return_json.user_tr', ['user' => $user])->render();
