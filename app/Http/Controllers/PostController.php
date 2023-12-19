@@ -87,11 +87,10 @@ class PostController extends Controller
         if ($group_id !== null) {
             $isOwner = $user->id == Group::findOrFail($group_id)->id_owner;
             $postHTML = $this->translatePostToHTML($post, false, false, false, true, $isOwner, false, false);
-        }
-        else {
+        } else {
             $postHTML = $this->translatePostToHTML($post, false, false, false);
         }
-        
+
         return response()->json(['postHTML' => $postHTML, 'success' => 'Post created successfully!']);
     }
 
@@ -401,11 +400,15 @@ class PostController extends Controller
 
         /* Unauthenticated user sees random public posts */
         if (!$user) {
-            return Post::where('is_private', false)->whereNull('id_group');
+            return Post::where('is_private', false)->whereNull('id_group')->whereNull('id_parent');
         }
         /* Authenticated user sees posts from users he follows */
         $following = $user->following->pluck('id');
         $postsFromFollowing = Post::whereIn('id_created_by', $following)->whereNull('id_parent');
+
+        if (count($following) < 8) {
+            return $postsFromFollowing->union(Post::where('is_private', false)->whereNull('id_group')->whereNull('id_parent'));
+        }
 
         /* And from users followed by users he follows */
         $id = $user->id;
@@ -588,7 +591,7 @@ class PostController extends Controller
         $page = $request->input('page');
 
         $toView = User::findOrFail($id);
-        
+
         $isAdmin = Auth::guard('admin')->check();
         $posts = Post::where('id_created_by', $id);
         if (!$isAdmin) {

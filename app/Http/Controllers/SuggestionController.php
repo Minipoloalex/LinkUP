@@ -45,6 +45,12 @@ class SuggestionController extends Controller
             })->where('id_followed', '!=', $user)->distinct()->orderBy('id_followed')
             ->skip($page * self::$pagination)->limit(self::$pagination)->get()->pluck('id_followed');
 
+        // If there are no users that my 'following' follow, get users that I don't follow
+        if ($usersSuggestions->isEmpty()) {
+            $usersSuggestions = DB::table('users')->where('id', '!=', $user)->orderBy('id')
+                ->skip($page * self::$pagination)->limit(self::$pagination)->get()->pluck('id');
+        }
+
         foreach ($usersSuggestions as $key => $value) {
             $usersSuggestions[$key] = DB::table('users')->where('id', $value)->first();
             $usersSuggestions[$key]->type = 'user';
@@ -58,6 +64,12 @@ class SuggestionController extends Controller
                 $query->select('id_group')->from('group_member')->where('id_user', $user);
             })->distinct()->orderBy('id_group')
             ->skip($page * self::$pagination)->limit(self::$pagination)->get()->pluck('id_group');
+
+        // If there are no groups that my 'following' belong to, get groups that I don't belong to
+        if ($groupsSuggestions->isEmpty()) {
+            $groupsSuggestions = DB::table('groups')->where('id', '!=', $user)->orderBy('id')
+                ->skip($page * self::$pagination)->limit(self::$pagination)->get()->pluck('id');
+        }
 
         foreach ($groupsSuggestions as $key => $value) {
             $groupsSuggestions[$key] = DB::table('groups')->where('id', $value)->first();
