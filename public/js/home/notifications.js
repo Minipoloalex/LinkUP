@@ -1,5 +1,6 @@
 import { destroyFetcher, infiniteScroll } from '../infinite_scrolling.js'
 import { parseHTML } from '../general_helpers.js'
+import { addFollowRequestEvents } from '../notifications/notifications.js'
 
 const container = document.querySelector('#notifications-home-container')
 const fetcher = document.querySelector('#notifications-home-fetcher')
@@ -33,5 +34,9 @@ async function appendNotifications (notifications) {
   for (const notification of notifications) {
     const notificationElement = parseHTML(notification)
     container.insertBefore(notificationElement, fetcher)
+
+    if (notificationElement.dataset.type == 'follow-request') {
+      addFollowRequestEvents(notificationElement)
+    }
   }
 }

@@ -2,10 +2,11 @@
 $user = $notification->userRequesting()->first();
 $profile_link = route('profile.show', ['username' => $user->username]);
 $pfp = $user->getProfilePicture();
+$type = $notification->getType();
 @endphp
 
 <div class="flex items-center w-full h-14 p-1 border-t dark:border-dark-neutral first:border-0"
-    data-id="{{ $notification->id }}">
+    data-id="{{ $notification->id }}" data-type="{{ $type }}">
     <div class="h-12 w-1 flex items-center justify-center">
         <div class="h-1 w-1 rounded-full dark:bg-dark-active unseen"></div>
     </div>
@@ -20,11 +21,13 @@ $pfp = $user->getProfilePicture();
         </a>
         <h2>wants to follow you.</h2>
     </div>
-    <div class="flex flex-grow items-center justify-end gap-2">
-        <button id="fa{{ $user->id }}" class="w-8 h-8 rounded-full dark:bg-dark-active" data-user="{{ $user->id }}">
+    <div class="flex flex-grow items-center justify-end gap-2 mr-4">
+        <button id="fa{{ $user->id }}" class="follow-accept w-8 h-8 rounded-full dark:bg-dark-active"
+            data-user="{{ $user->id }}">
             <i class="fa-solid fa-check"></i>
         </button>
-        <button id="fr{{ $user->id }}" class="w-8 h-8 rounded-full dark:bg-dark-neutral" data-user="{{ $user->id }}">
+        <button id="fr{{ $user->id }}" class="follow-reject w-8 h-8 rounded-full dark:bg-dark-neutral"
+            data-user="{{ $user->id }}">
             <i class="fa-solid fa-times"></i>
         </button>
     </div>
