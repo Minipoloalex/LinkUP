@@ -7,7 +7,7 @@ import { addEventListenersToPost } from '../posts/post_event_listeners.js'
 let membersFetcher = null
 let postsFetcher = null
 
-export function getNoneElement(section) {
+export function getNoneElement (section) {
   return section.querySelector('.none')
 }
 export function prependInPostSection (postElement) {
@@ -43,15 +43,19 @@ async function addInfiniteScrollingToSection (
 ) {
   const none = getNoneElement(section)
   const load = data =>
-    appendInSection(data.elementsHTML, section, testIntersectionElement, attachEventListeners)
+    appendInSection(
+      data.elementsHTML,
+      section,
+      testIntersectionElement,
+      attachEventListeners
+    )
 
   const firstAction = async data => {
     load(data)
     if (data.elementsHTML.length == 0) {
       show(none)
       await destroyFetcher(fetcher)
-    }
-    else {
+    } else {
       hide(none)
     }
   }
@@ -61,7 +65,15 @@ async function addInfiniteScrollingToSection (
       await destroyFetcher(fetcher)
     }
   }
-  fetcher = await infiniteScroll(section, testIntersectionElement, url, firstAction, action, false, false)
+  fetcher = await infiniteScroll(
+    section,
+    testIntersectionElement,
+    url,
+    firstAction,
+    action,
+    false,
+    false
+  )
 }
 
 function toggleSections () {
@@ -229,14 +241,8 @@ function joinGroup (group, button) {
       if (data.status === 200) {
         const new_button = button.cloneNode(true)
         new_button.id = 'pending-group'
-        new_button.classList.remove('bg-blue-500')
-        new_button.classList.remove('hover:bg-blue-700')
-        new_button.classList.add('bg-yellow-500')
-        new_button.classList.add('hover:bg-yellow-700')
-
-        const icon = new_button.querySelector('i')
-        icon.classList.remove('fa-users')
-        icon.classList.add('fa-clock-rotate-left')
+        new_button.classList.remove('dark:bg-dark-active')
+        new_button.classList.add('dark:bg-dark-neutral')
 
         const text = new_button.querySelector('.button-text')
         text.textContent = 'Pending'
@@ -276,17 +282,11 @@ function cancelJoinGroup (group, button) {
       if (data.status === 200) {
         const new_button = button.cloneNode(true)
         new_button.id = 'join-group'
-        new_button.classList.remove('bg-yellow-500')
-        new_button.classList.remove('hover:bg-yellow-700')
-        new_button.classList.add('bg-blue-500')
-        new_button.classList.add('hover:bg-blue-700')
-
-        const icon = new_button.querySelector('i')
-        icon.classList.remove('fa-clock-rotate-left')
-        icon.classList.add('fa-users')
+        new_button.classList.remove('dark:bg-dark-neutral')
+        new_button.classList.add('dark:bg-dark-active')
 
         const text = new_button.querySelector('.button-text')
-        text.textContent = 'Join group'
+        text.textContent = 'Join Group'
 
         button.parentNode.replaceChild(new_button, button)
         addJoinGroupEvent()

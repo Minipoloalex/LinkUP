@@ -22,11 +22,11 @@ $type = $notification->getType();
         <h2>wants to follow you.</h2>
     </div>
     <div class="flex flex-grow items-center justify-end gap-2">
-        <button id="fa{{ $user->id }}" class="follow-accept w-8 h-8 rounded-full dark:bg-dark-active"
+        <button id="fa{{ $user->id }}" class="follow-accept w-6 h-6 rounded-full dark:bg-dark-active"
             data-user="{{ $user->id }}">
             <i class="fa-solid fa-check"></i>
         </button>
-        <button id="fr{{ $user->id }}" class="follow-reject w-8 h-8 rounded-full dark:bg-dark-neutral"
+        <button id="fr{{ $user->id }}" class="follow-reject w-6 h-6 rounded-full dark:bg-dark-neutral"
             data-user="{{ $user->id }}">
             <i class="fa-solid fa-times"></i>
         </button>

@@ -1,6 +1,6 @@
 @php
 $icon = 'fas text-base ' . $icon;
-$bg = 'bg-' . $color . '-500';
+$bg = 'bg-' . $color;
 $bg_hover = 'hover:bg-' . $color . '-700';
 $classes ??= '';
 $link ??= '';
@@ -19,14 +19,14 @@ $dataset = implode(' ', $dataset);
 <button id="{{ $id }}" class="{{ $class }} {{ $classes }}" {{ $dataset }}>
     @if ($link)
     <a href="{{ $link }}" class="flex items-center justify-center">
-    @endif
+        @endif
         <i class="{{ $icon }}"></i>
         @if ($text)
         <span class="button-text ml-4">
             {{ $text }}
         </span>
         @endif
-    @if ($link)
+        @if ($link)
     </a>
     @endif
 </button>
