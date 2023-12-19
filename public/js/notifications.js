@@ -89,10 +89,9 @@ if (userId) {
 
   channel.bind('notification-followrequest', async notification => {
     const data = notification.followRequest
-
-    const link = `/profile/${data.id_user_from}`
     const user = await getUser(data.id_user_from)
-    console.log(user)
+
+    const link = `/profile/${user.username}`
     const image = await getImageUrl(user.id)
     const username = user.username
     const message = 'sent you a follow request.'

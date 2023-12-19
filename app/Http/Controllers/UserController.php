@@ -277,11 +277,15 @@ class UserController extends Controller
         }
         $feedback = '';
         $accepted = true;
+
+        // time must pe in psql timestamp format
+        $time = date('Y-m-d H:i:s', time());
+
         if ($requestTo->is_private) {   // request to follow
             $request = FollowRequest::create([
                 'id_user_from' => $user->id,
                 'id_user_to' => $requestTo->id,
-                'timestamp' => time(),
+                'timestamp' => $time,
             ]);
             $accepted = false;
             $feedback = "Follow request sent to $requestTo->username successfully!";
@@ -433,11 +437,11 @@ class UserController extends Controller
         }
 
         $members = GroupMember::join('users', 'id_user', '=', 'users.id')
-        ->where('id_group', $id)
-        ->orderBy('username')
-        ->skip($page * self::$amountPerPage)
-        ->take(self::$amountPerPage)
-        ->get();
+            ->where('id_group', $id)
+            ->orderBy('username')
+            ->skip($page * self::$amountPerPage)
+            ->take(self::$amountPerPage)
+            ->get();
 
         $users = $members->map(function ($group_member) {
             return $group_member->user;
