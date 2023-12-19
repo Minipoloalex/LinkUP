@@ -21,7 +21,7 @@ $type = $notification->getType();
         </a>
         <h2>wants to follow you.</h2>
     </div>
-    <div class="flex flex-grow items-center justify-end gap-2 mr-4">
+    <div class="flex flex-grow items-center justify-end gap-2">
         <button id="fa{{ $user->id }}" class="follow-accept w-8 h-8 rounded-full dark:bg-dark-active"
             data-user="{{ $user->id }}">
             <i class="fa-solid fa-check"></i>

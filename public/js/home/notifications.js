@@ -35,7 +35,7 @@ async function appendNotifications (notifications) {
     const notificationElement = parseHTML(notification)
     container.insertBefore(notificationElement, fetcher)
 
-    if (notificationElement.dataset.type == 'follow-request') {
+    if (notificationElement.dataset.type === 'follow-request') {
       addFollowRequestEvents(notificationElement)
     }
   }

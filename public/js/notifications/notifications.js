@@ -1,3 +1,9 @@
+const notificationsTab = document.getElementById('notifications-tab')
+const container = document.querySelector('section#notifications-home-container')
+if (notificationsTab && container) {
+  notificationsTab.classList.add('hidden')
+}
+
 function resolveMemberRequest (group, member_id, element, accept) {
   const url = `/group/${group}/request/${member_id}`
 
@@ -90,8 +96,3 @@ export function addFollowRequestEvents (notification) {
 }
 
 addResolveMemberRequestEvents()
-
-const notificationsTab = document.getElementById('notifications-tab')
-if (notificationsTab) {
-  notificationsTab.classList.add('hidden')
-}
