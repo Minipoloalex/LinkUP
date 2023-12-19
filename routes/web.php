@@ -162,3 +162,8 @@ Route::controller(AdminController::class)->group(function () {
     Route::post('/admin/create', 'createAdmin');
 
 })->middleware('auth:admin');
+
+// Ban appeal
+Route::get('/ban-appeal', function () {
+    return view('pages.ban-appeal');
+})->name('ban-appeal');

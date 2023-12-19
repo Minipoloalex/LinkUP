@@ -13,6 +13,11 @@
             <p class="mb-4">Hi {{ $mailData['name'] }},</p>
             <p class="mb-4">We are sorry to inform you that your account has been banned.</p>
             <p class="mb-4">Please contact us for more information.</p>
+
+            <p class="mt-8 mb-4">If you believe this is a mistake, please submit a 
+                <a href="{{ route('ban-appeal') }}" class="inline-block text-blue-500 hover:text-blue-600">ban appeal</a>.
+            </p>    
+
             <p class="mt-8 mb-4">Best regards,</p>
             <p>The LINK UP team</p>
         </div>

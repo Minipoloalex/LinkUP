@@ -17,7 +17,7 @@ class CheckIsBanned
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            return redirect('/login')->with('error', 'Your account has been banned.');
+            return redirect('/login')->with('error', 'Your account has been banned. Check your email for more information.');
         }
 
         return $next($request);
