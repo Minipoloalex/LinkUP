@@ -15,6 +15,9 @@
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script type="module" src="{{ url('js/app.js') }}"></script>
+    <script type="module" src="{{ url('js/toast.js') }}"></script>
+    <script type="module" src="{{ url('js/feedback.js') }}"></script>
     <script type="module" src="{{ url('js/posts/delete_post.js')}}"></script>
     <script type="module" src="{{ url('js/admin/users.js')}}"></script>
     <script type="module" src="{{ url('js/admin/posts.js')}}"></script>
@@ -41,6 +44,8 @@
         </div>
     </header>
     @yield('content')
+
+    @include('partials.feedback')
 </body>
 
 </html>
