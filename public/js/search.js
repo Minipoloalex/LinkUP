@@ -5,6 +5,7 @@ import {
 } from './general_helpers.js'
 import { showFeedback } from './feedback.js'
 import { destroyFetcher, infiniteScroll } from './infinite_scrolling.js'
+import { addEventListenersToPost } from './posts/post_event_listeners.js'
 
 const searchbarRight = document.querySelector('#search-home')
 
@@ -44,19 +45,23 @@ async function updateSearchResults (event) {
   if (type == null) {
     return
   }
+  let attachEventListeners = null
+  if (type == 'posts' || type == 'comments') {
+    attachEventListeners = addEventListenersToPost
+  }
   const firstAction = data => {
     resultsContainer.innerHTML = ''
     if (data.resultsHTML.length == 0) {
       resultsContainer.appendChild(parseHTML(data.noResultsHTML))
     } else {
-      appendResults(data.resultsHTML)
+      appendResults(data.resultsHTML, attachEventListeners)
     }
   }
   const action = data => {
     if (data.resultsHTML.length == 0) {
       destroyFetcher()
     } else {
-      appendResults(data.resultsHTML)
+      appendResults(data.resultsHTML, attachEventListeners)
     }
   }
   infiniteScroll(
@@ -101,10 +106,13 @@ function getSearchType () {
   }
   return null
 }
-function appendResults (results) {
+function appendResults (results, attachEventListeners = null) {
   results.forEach(result => {
     const resultHTML = parseHTML(result)
     resultsContainer.appendChild(resultHTML)
+    if (attachEventListeners) {
+      attachEventListeners(resultHTML)
+    }
   })
 }
 function updateOnFilterChange () {

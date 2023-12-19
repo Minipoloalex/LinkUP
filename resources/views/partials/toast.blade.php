@@ -3,7 +3,7 @@
                     transition-all duration-300 ease-linear">
     <div class="h-12 min-w-[2rem] flex items-center justify-center ml-2">
         <div>
-            <img id="toast-image" src="images/users/default.png" alt="avatar" class="w-8 h-8 rounded-full">
+            <img id="toast-image" src="{{ asset('images/users/default.png') }}" alt="avatar" class="w-8 h-8 rounded-full">
         </div>
     </div>
     <div class="flex flex-col items-start justify-center h-12 ml-2 text-xs">
