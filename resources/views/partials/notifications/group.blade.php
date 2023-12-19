@@ -4,7 +4,7 @@ $group = $notification->group;
 $who = $notification->otherUser()->first();
 $profile_link = route('profile.show', ['username' => $who->username]);
 $pfp = $who->getProfilePicture();
-$group_link = route('group', ['id' => $group->id]);
+$group_link = route('group.show', ['id' => $group->id]);
 $seen = $notification->seen;
 
 @endphp
@@ -29,12 +29,14 @@ $seen = $notification->seen;
             <h2>wants to join {{ $group->name }}</h2>
         </a>
     </div>
-    <div class="flex items-end justify-center w-1/6">
-        @include('partials.components.button', ['id' => 'ga' . $who->id . 'gid' . $group->id, 'icon' => 'fa-check',
-        'color' => 'green',
-        'text' => null, 'classes' => 'member-accept w-12 mr-4', 'data' => ['group' => $group->id, 'user' => $who->id]])
-        @include('partials.components.button', ['id' => 'gr' . $who->id . 'gid' . $group->id, 'icon' => 'fa-times',
-        'color' => 'red',
-        'text' => null, 'classes' => 'member-reject w-12', 'data' => ['group' => $group->id, 'user' => $who->id]])
+    <div class="flex flex-grow items-center justify-end gap-2">
+        <button id="ga{{ $who->id }}gid{{ $group->id }}" class="member-accept w-6 h-6 rounded-full dark:bg-dark-active"
+            data-user="{{ $who->id }}" data-group="{{ $group->id }}">
+            <i class="fa-solid fa-check"></i>
+        </button>
+        <button id="gr{{ $who->id }}gid{{ $group->id }}" class="member-reject w-6 h-6 rounded-full dark:bg-dark-neutral"
+            data-user="{{ $who->id }}" data-group="{{ $group->id }}">
+            <i class="fa-solid fa-times"></i>
+        </button>
     </div>
 </div>

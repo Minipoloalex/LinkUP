@@ -2,9 +2,8 @@
 $type = $user_is_owner ? 'owner' : ($user_is_member ? 'member' : ($user_is_pending ? 'pending' : 'none'));
 $id = ['owner' => 'settings-group', 'member' => 'leave-group', 'pending' => 'pending-group', 'none' =>
 'join-group'][$type];
-$icon = ['owner' => 'fa-gear', 'member' => 'fa-arrow-right-from-bracket', 'pending' => 'fa-clock-rotate-left',
-'none' => 'fa-users'][$type];
-$color = ['owner' => 'gray', 'member' => 'red', 'pending' => 'yellow', 'none' => 'blue'][$type];
+$color = ['owner' => 'dark-neutral', 'member' => 'dark-active', 'pending' => 'dark-neutral', 'none' =>
+'dark-active'][$type];
 $text = ['owner' => 'Settings', 'member' => 'Leave Group', 'pending' => 'Pending', 'none' => 'Join Group'][$type];
 $width = $user_is_owner ? 'w-1/3' : 'w-1/2';
 $link = $user_is_owner ? url('group/' . $group->id . '/settings') : null;
@@ -26,9 +25,15 @@ $userLinkTo = $isAdmin ? route('admin.user', $owner->username) : route('profile.
                 <a href="{{ $userLinkTo }}" class="text-sm before:content-['Owner:_']">{{ $group->owner->username }}</a>
             </div>
             @if (!$isAdmin)
-            <div class="h-16 flex w-full items-end justify-end mb-4 px-8">
-                @include('partials.components.button', ['id' => $id, 'icon' => $icon, 'color' => $color, 'text' =>
-                $text])
+            <div class="h-10 flex w-full items-center justify-end mb-4 px-8">
+                <button id="{{ $id }}"
+                    class="follow-accept h-8 w-32 rounded-full dark:bg-{{ $color }} flex items-center justify-center px-4 text-sm">
+                    @if ($link)
+                    <a href="{{ $link }}" class="button-text">{{ $text }}</a>
+                    @else
+                    <span class="button-text">{{ $text }}</span>
+                    @endif
+                </button>
             </div>
             @endif
         </section>
@@ -70,7 +75,7 @@ $userLinkTo = $isAdmin ? route('admin.user', $owner->username) : route('profile.
         <section id="requests-section" class="flex flex-col items-center hidden min-h-full">
             @forelse ($group->pendingMembers()->where('type', 'Request')->get() as $member)
             @include('partials.group.member', ['member' => $member, 'owner' => $user_is_owner,
-            'user' => $user, 'request' => true])
+            'user' => $member, 'request' => true])
             @empty
             <p class="text-center mt-12">No pending requests</p>
             @endforelse
