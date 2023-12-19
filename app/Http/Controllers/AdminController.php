@@ -96,6 +96,7 @@ class AdminController extends Controller
             'course' => null,
             'is_private' => true,
             'is_banned' => true,
+            'is_deleted' => true,
         ]);
 
         $userController = new UserController();

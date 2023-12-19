@@ -37,6 +37,7 @@ class User extends Authenticatable implements CanResetPassword
         'bio',
         'is_private',
         'is_banned',
+        'is_deleted',
     ];
 
     /**

@@ -171,6 +171,7 @@ class UserController extends Controller
             'course' => null,
             'is_private' => true,
             'is_banned' => true,
+            'is_deleted' => true,
         ]);
 
         // delete profile picture
