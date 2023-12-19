@@ -15,10 +15,11 @@ class NotificationController extends Controller
     public function getNotifications()
     {
         $user = auth()->user()->id;
+        $follow = FollowRequest::getNotifications($user);
+        \Log::info($follow);
+        $groups = GroupNotification::getNotifications($user);
         $comments = CommentNotification::getNotifications($user);
         $likes = LikeNotification::getNotifications($user);
-        $groups = GroupNotification::getNotifications($user);
-        $follow = FollowRequest::getNotifications($user);
 
         return $comments->merge($likes)->merge($groups)->merge($follow)->sortByDesc('timestamp');
     }
@@ -48,6 +49,9 @@ class NotificationController extends Controller
 
         // mark notifications as seen as they are sent to the user
         foreach ($notifications as $notification) {
+            if ($notification->getType() == 'follow-request') {
+                continue;
+            }
             $notification->seen = true;
             $notification->save();
         }
