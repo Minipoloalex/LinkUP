@@ -8,11 +8,11 @@ $activePage = 'about';
                             lg:w-full">
 
     <header class="mx-12 mt-12 mb-8">
-        <h1 class="text-4xl font-bold">About</h1>
+        <h1 class="text-4xl font-bold text-dark-active">About</h1>
     </header>
 
     <section id="vision" class="flex flex-col mx-12 mb-8 space-y-4">
-        <h2 class="text-2xl font-bold">Our Vision</h2>
+        <h2 class="text-2xl font-bold text-gray-300">Our Vision</h2>
         <p class="text-sm">
             LINK UP is an innovative social network designed exclusively for the students of the University of Porto.
         </p>
@@ -24,7 +24,7 @@ $activePage = 'about';
     </section>
 
     <section id="team" class="flex flex-col mx-12 mb-8 space-y-4">
-        <h2 class="text-2xl font-bold">Our Team</h2>
+        <h2 class="text-2xl font-bold text-gray-300">Our Team</h2>
         <p class="text-sm">
             LINK UP is currently being developed by a small team of students from FEUP.
         </p>
@@ -58,7 +58,7 @@ $activePage = 'about';
     </section>
 
     <section id="contacts" class="flex flex-col mx-12 space-y-4">
-        <h2 class="text-2xl font-bold">Contacts</h2>
+        <h2 class="text-2xl font-bold text-gray-300">Contacts</h2>
         <p class="text-sm">
             For any support related questions, please feel free to contact us at
             <a class="text-blue-500 hover:underline" href="mailto:support@linkup.com">
