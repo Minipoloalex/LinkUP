@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
 @section('content')
-<form method="POST" action="{{ route('admin.create') }}" class="flex flex-col w-full items-center justify-center gap-6">
+<form method="POST" action="{{ route('admin.create') }}" class="flex flex-col w-1/2 self-center items-center justify-center mt-12 ">
     {{ csrf_field() }}
 
-    <h1 class="text-2xl font-bold">Create Admin</h1>
+    <h1 class="text-2xl font-bold  text-dark-active w-1/2">Create Admin</h1>
 
-    <div class="relative">
+    <div class="relative w-1/2 mt-12">
         <input id="email" name="email" type="text" required class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -18,7 +18,7 @@
         </label>
     </div>
 
-    <div class="relative">
+    <div class="relative w-1/2 mt-12">
         <input id="password" name="password" type="password" required class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -30,7 +30,7 @@
         </label>
     </div>
 
-    <div class="relative">
+    <div class="relative w-1/2   mt-12">
         <input id="password_confirmation" name="password_confirmation" type="password" required class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -42,7 +42,7 @@
         </label>
     </div>
 
-    <button type="submit" class="dark:bg-dark-active rounded-xl w-[10vw] h-10">
+    <button type="submit" class="dark:bg-dark-active rounded-xl w-[10vw] h-10 mt-16">
         Create
     </button>
 

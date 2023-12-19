@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div id="container-admin-posts" class="w-full border border-dark-neutral" data-page="0"></div>
+<div id="container-admin-posts" class="w-full border-2 border-dark-active" data-page="0"></div>
 <div id="fetcher-admin-posts"></div>
 
 @endsection

@@ -16,10 +16,10 @@
         </form>
     </div>
 </div>
-    <table class="w-full border border-dark-neutral px-4 py-2">
+    <table class="w-full px-4 py-2">
         <thead class="text-xl text-left">
-            <tr class="border-b">
-                <th class="w-12 px-2 py-1">Id</th>
+            <tr class="border-2 border-dark-active">
+                <th class="w-12 px-2 py-1">ID</th>
                 <th>Username</th>
                 <th>Name</th>
                 <th>Email</th>
