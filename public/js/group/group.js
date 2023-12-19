@@ -195,7 +195,7 @@ function leaveGroup (group) {
   })
     .then(data => {
       if (data.status === 200) {
-        window.location.href = `/group/${group}`
+        window.location.href = `/group/${group}/member/self/leave`
       }
     })
     .catch(error => console.error(error))
@@ -248,7 +248,11 @@ function joinGroup (group, button) {
         text.textContent = 'Pending'
 
         button.parentNode.replaceChild(new_button, button)
-        Swal.fire('Request sent!', 'Your request to join the group was sent.', 'success')
+        Swal.fire(
+          'Request sent!',
+          'Your request to join the group was sent.',
+          'success'
+        )
         addCancelJoinGroupEvent()
       }
     })
@@ -290,7 +294,11 @@ function cancelJoinGroup (group, button) {
         text.textContent = 'Join Group'
 
         button.parentNode.replaceChild(new_button, button)
-        Swal.fire('Request Cancelled!', 'The request to join the group was successfully cancelled.', 'success')
+        Swal.fire(
+          'Request Cancelled!',
+          'The request to join the group was successfully cancelled.',
+          'success'
+        )
         addJoinGroupEvent()
       }
     })

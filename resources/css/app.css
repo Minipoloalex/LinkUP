@@ -72,7 +72,11 @@ i.unliked {
   @apply text-dark-active translate-x-2 transition-all duration-200;
 }
 
-#navbar li#create-post:hover {
+#navbar li#create-post-li:hover {
   @apply text-dark-secondary translate-x-0;
   @apply scale-105 transition-all duration-200;
+}
+
+.feedback-active {
+  @apply -translate-y-16;
 }

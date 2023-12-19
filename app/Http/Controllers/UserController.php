@@ -112,7 +112,7 @@ class UserController extends Controller
             'course' => $request->course,
         ]);
 
-        return redirect()->route('profile.show', ['username' => $user->username])->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile.show', ['username' => $user->username])->with('feedback', 'Profile updated successfully!');
     }
 
     /**

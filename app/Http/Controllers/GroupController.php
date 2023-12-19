@@ -91,7 +91,7 @@ class GroupController extends Controller
         $group->id_owner = $new_owner->id;
         $group->save();
 
-        return redirect()->route('group.show', ['id' => $id])->with('success', 'Owner changed');
+        return redirect()->route('group.show', ['id' => $id])->with('feedback', 'Owner changed');
     }
 
     public function deleteMember(string $id, string $id_member)
@@ -200,7 +200,7 @@ class GroupController extends Controller
             $imageController->store($request->image, $fileName, $request->x, $request->y, $request->width, $request->height);
         }
 
-        return redirect()->route('group.show', ['id' => $id])->with('success', 'Group updated');
+        return redirect()->route('group.show', ['id' => $id])->with('feedback', 'Group updated');
     }
 
     /**
@@ -256,5 +256,10 @@ class GroupController extends Controller
     public function translateGroupToHTML(Group $group, bool $isOwner = false)
     {
         return view('partials.search.group', ['group' => $group, 'isOwner' => $isOwner])->render();
+    }
+
+    public function leaveGroup()
+    {
+        return redirect()->route('home')->with('feedback', 'You left the group.');
     }
 }
