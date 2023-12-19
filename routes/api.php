@@ -69,7 +69,7 @@ Route::middleware('web')->group(function () {
     Route::get(
         '/notifications',
         [NotificationController::class, 'getUserNotifications']
-    )->name('notifications');
+    )->name('api.notifications');
 
     Route::get(
         '/suggestions',

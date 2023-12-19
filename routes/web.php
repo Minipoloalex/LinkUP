@@ -152,7 +152,7 @@ Route::controller(AdminController::class)->group(function () {
     // groups
     Route::get('/admin/groups', 'listGroups')->name('admin.groups');
     Route::get('/admin/group/{id}', 'viewGroup')->name('admin.group');
-    Route::get('/admin/api/groups', 'searchGroups')->name('admin.api.posts');
+    Route::get('/admin/api/groups', 'searchGroups')->name('admin.api.groups');
     Route::post('/admin/group/{id}/delete', 'deleteGroup')->name('admin.groups.delete');
 
     // create admin
