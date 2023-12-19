@@ -39,8 +39,8 @@ function addChangeOwnerEvent () {
   const form = document.getElementById('change-owner-form')
   if (!button) return
 
-  button.addEventListener('click', () => {
-    const groupId = document.getElementById('group-id').value
+  button.addEventListener('click', event => {
+    event.preventDefault()
 
     Swal.fire({
       title: 'Change owner?',
