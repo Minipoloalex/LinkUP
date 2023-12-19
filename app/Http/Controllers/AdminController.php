@@ -41,7 +41,7 @@ class AdminController extends Controller
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        return redirect()->route('admin.create')->with('success', 'Admin created successfully.');
+        return redirect()->route('admin.create')->with('feedback', 'Admin created successfully.');
     }
 
     public function listUsers()
@@ -64,10 +64,10 @@ class AdminController extends Controller
         $view = 'emails.ban';
 
         if (MailController::sendBanEmail($user->name, $user->email, $subject, $view)) {
-            return redirect()->route('admin.users')->with('success', 'User banned successfully.');
+            return redirect()->route('admin.users')->with('feedback', 'User banned successfully.');
         }
 
-        return redirect()->route('admin.users')->with('error', 'User banned successfully, but email failed to send.');
+        return redirect()->route('admin.users')->with('feedback', 'User banned successfully, but email failed to send.');
     }
 
     public function unbanUser($id)
@@ -76,7 +76,7 @@ class AdminController extends Controller
         $user->is_banned = false;
         $user->save();
 
-        return redirect()->route('admin.users')->with('success', 'User unbanned successfully.');
+        return redirect()->route('admin.users')->with('feedback', 'User unbanned successfully.');
     }
 
     public function listGroups()
@@ -104,11 +104,11 @@ class AdminController extends Controller
 
             // send email to owner, notifying them that their group was deleted
             if (MailController::sendGroupDeletedEmail($owner->name, $owner->email, $group->name, $subject, $view)) {
-                return redirect()->route('admin.groups')->with('success', 'Group deleted successfully.');
+                return redirect()->route('admin.groups')->with('feedback', 'Group deleted successfully.');
             }
         }
 
-        return redirect()->route('admin.groups')->with('error', 'Group deleted successfully, but email failed to send.');
+        return redirect()->route('admin.groups')->with('feedback', 'Group deleted successfully, but email failed to send.');
     }
 
     public function deletePost($id)
@@ -122,7 +122,7 @@ class AdminController extends Controller
                 'message' => 'Post deleted successfully.',
             ]);
         }
-        return redirect()->route('admin.posts')->with('success', 'Post deleted successfully.');
+        return redirect()->route('admin.posts')->with('feedback', 'Post deleted successfully.');
     }
     public function viewPost($id)
     {
