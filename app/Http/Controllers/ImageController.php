@@ -36,7 +36,7 @@ class ImageController extends Controller
     }
     public static function checkMaxSize($image)
     {
-        if ($image->getSize() > 10000000) { // 10MB
+        if ($image->getSize() > 2000000) { // 2 MB
             return response()->json(['error' => 'The uploaded image exceeds the maximum size limit of 10MB'], 400);
         }
         return false;
