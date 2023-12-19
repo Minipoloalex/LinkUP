@@ -27,12 +27,12 @@
 </head>
 
 <body class="h-screen w-2/3 flex flex-col mx-auto bg-dark-primary text-dark-secondary">
-    <header class="flex content-center justify-between items-center px-6 py-4 h-24">
-        <a href="{{ url('admin/dashboard') }}" class="flex">
-            <img src="{{ url('images/logo-dark-mode.png') }}" alt="Link up logo" class="h-auto w-32">
-        </a>
+    <header class="flex content-center justify-between items-center px-6 py-4 h-24"> 
+        <img src="{{ url('images/logo-dark-mode.png') }}" alt="Link up logo" class="h-auto w-32">
         <div class="flex items-center justify-center">
-            <h1 class="text-2xl">Admin Dashboard</h1>
+            <a href="{{ url('admin/dashboard') }}" class="flex">
+                <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+            </a>
         </div>
         <div class="w-32 flex items-center justify-center">
             <a href="{{ route('logout') }}" class="text-dark-active">
