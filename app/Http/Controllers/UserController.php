@@ -34,7 +34,11 @@ class UserController extends Controller
     {
         $user = User::firstOrFail()->where('username', $username)->firstOrFail();
 
-        return view('pages.profile', ['user' => $user]);
+        $followRequest = Auth::check() ?
+            Auth::user()->followRequestsReceived()->where('id_user_from', $user->id)->first()
+            : null;
+
+        return view('pages.profile', ['user' => $user, 'followRequest' => $followRequest]);
     }
 
     /**

@@ -1,7 +1,7 @@
 @php
 $activePage = 'profile';
 $userCanSeePosts = $user->is_private === false || (Auth::check() && ($user->id === Auth::user()->id ||
-    Auth::user()->isFollowing($user)));
+Auth::user()->isFollowing($user)));
 @endphp
 
 @extends('layouts.app')
@@ -14,6 +14,7 @@ $userCanSeePosts = $user->is_private === false || (Auth::check() && ($user->id =
 @section('content')
 @include('partials.profile.profile_page', [
 'user' => $user,
-'userCanSeePosts' => $userCanSeePosts
+'userCanSeePosts' => $userCanSeePosts,
+'followRequest' => $followRequest
 ])
 @endsection
