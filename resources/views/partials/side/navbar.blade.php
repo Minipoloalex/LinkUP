@@ -94,7 +94,7 @@ $activeClass = 'dark:text-dark-active';
         </li>
 
         @auth
-        <li class=" w-9 h-9 flex items-center justify-center
+        <li id="create-post" class=" w-9 h-9 flex items-center justify-center
                     lg:w-12 lg:h-12 lg:p-1 xl:w-full xl:p-0">
             <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer
                         xl:justify-center xl:items-center">
