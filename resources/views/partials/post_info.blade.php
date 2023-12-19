@@ -12,11 +12,18 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
                 alt="User photo">
         </a>
         <div class="flex flex-col">
-            <a class="before:content-['@']" href="{{ $userLink }}">{{ $post->createdBy->username }}</a>
+            <div class="flex items-center justify-start">
+                <a class="before:content-['@']" href="{{ $userLink }}">{{ $post->createdBy->username }}</a>
+                @if ($post->is_private)
+                <div class="ml-2 flex h-full items-center justify-center text-xs">
+                    <i class="fas fa-lock fa-xs"></i>
+                </div>
+                @endif
+            </div>
             <span class="text-xs text-gray-300">{{ date('H:i · d M Y', strtotime($post->created_at)) }}</span>
         </div>
         @if ($editable || $showGroupOwnerDelete)
-        <div class="edit-delete-post">
+        <div class="edit-delete-post flex items-center justify-end flex-grow">
             @if ($editable)
             <button class="edit-post"><i class="p-2 fas fa-edit"></i></button>
             @if ($post->id_group === null)
