@@ -9,12 +9,15 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="is-admin" content="">
-    <title>{{ config('app.name', 'Laravel') }} Admin - @yield('title')</title>
+    <title>{{ config('app.name', 'Laravel') }} Admin @yield('title')</title>
 
     <!-- Styles -->
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script type="module" src="{{ url('js/app.js') }}"></script>
+    <script type="module" src="{{ url('js/toast.js') }}"></script>
+    <script type="module" src="{{ url('js/feedback.js') }}"></script>
     <script type="module" src="{{ url('js/posts/delete_post.js')}}"></script>
     <script type="module" src="{{ url('js/admin/users.js')}}"></script>
     <script type="module" src="{{ url('js/admin/posts.js')}}"></script>
@@ -27,12 +30,12 @@
 </head>
 
 <body class="h-screen w-2/3 flex flex-col mx-auto bg-dark-primary text-dark-secondary">
-    <header class="flex content-center justify-between items-center px-6 py-4 h-24">
-        <a href="{{ url('admin/dashboard') }}" class="flex">
-            <img src="{{ url('images/logo-dark-mode.png') }}" alt="Link up logo" class="h-auto w-32">
-        </a>
+    <header class="flex content-center justify-between items-center px-6 py-4 h-24"> 
+        <img src="{{ url('images/logo-dark-mode.png') }}" alt="Link up logo" class="h-auto w-32">
         <div class="flex items-center justify-center">
-            <h1 class="text-2xl">Admin Dashboard</h1>
+            <a href="{{ url('admin/dashboard') }}" class="flex">
+                <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+            </a>
         </div>
         <div class="w-32 flex items-center justify-center">
             <a href="{{ route('logout') }}" class="text-dark-active">
@@ -41,6 +44,8 @@
         </div>
     </header>
     @yield('content')
+
+    @include('partials.feedback')
 </body>
 
 </html>

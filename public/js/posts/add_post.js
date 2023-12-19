@@ -60,7 +60,7 @@ async function submitAddPost (event) {
 
   if (data != null) {
     const postElement = parseHTML(data.postHTML)
-    if (groupId != null) {  
+    if (groupId != null) {
       prependInPostSection(postElement)
     } else {
       prependPostToTimeline(postElement)

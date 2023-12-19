@@ -1,14 +1,29 @@
 @php
 $isAdmin = Auth::guard('admin')->check();
 function getNetworkLink($isAdmin, $username, $section) {
-    if ($isAdmin) {
-        return route('admin.user.network', ['username' => $username, 'section' => $section]);
-    }
-    return route('profile.network', ['username' => $username, 'section' => $section]);
+if ($isAdmin) {
+return route('admin.user.network', ['username' => $username, 'section' => $section]);
+}
+return route('profile.network', ['username' => $username, 'section' => $section]);
 }
 @endphp
 <div class="w-full flex flex-col content-center justify-start border-b dark:border-dark-neutral">
     @auth
+    @if ($followRequest)
+    <div id="follow-request-profile" class="w-full flex items-center justify-center px-4 py-1">
+        <span class="text-sm">{{ Auth::user()->username }} has requested to follow you.</span>
+        <div class="flex flex-grow items-center justify-end gap-2">
+            <button id="fa{{ $user->id }}" class="follow-accept w-6 h-6 rounded-full dark:bg-dark-active"
+                data-user="{{ $user->id }}">
+                <i class="fa-solid fa-check"></i>
+            </button>
+            <button id="fr{{ $user->id }}" class="follow-reject w-6 h-6 rounded-full dark:bg-dark-neutral"
+                data-user="{{ $user->id }}">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+    </div>
+    @endif
     @if (Auth::user()->id == $user->id)
     <div id="edit-profile" class="flex flex-row-reverse m-4">
         <a href="{{ route('profile.edit') }}"

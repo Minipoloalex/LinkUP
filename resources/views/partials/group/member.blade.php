@@ -6,21 +6,24 @@ $linkTo = Auth::guard('admin')->check() ? url("/admin/profile/$member->username"
 <div class="group-member flex w-full items-center justify-between p-8 border border-slate-400">
     <a href="{{ $linkTo }}">
         <div class="flex items-center justify-start">
-            <img src="{{ $member->getProfilePicture() }}" alt="user photo"
-                class="w-16 h-16 rounded-full">
+            <img src="{{ $member->getProfilePicture() }}" alt="user photo" class="w-16 h-16 rounded-full">
             <h1 class="text-xl pl-8">{{ $member->name }}</h1>
         </div>
     </a>
-    <div class="self-end flex items-center h-full">
+    <div class="self-end flex items-center h-full gap-2">
         @if($owner && $member->id !== $user)
 
         @if($request)
         {{-- If request is set we want buttons to accept or reject the request --}}
 
-        @include('partials.components.button', ['id' => 'a' . $member->id, 'icon' => 'fa-check', 'color' => 'green',
-        'text' => null, 'classes' => 'member-accept mr-4 w-12'])
-        @include('partials.components.button', ['id' => 'r' . $member->id, 'icon' => 'fa-times', 'color' => 'red',
-        'text' => null, 'classes' => 'member-reject w-12'])
+        <button id="a{{ $member->id }}" class="member-accept w-8 h-8 rounded-full dark:bg-dark-active"
+            data-user="{{ $member->id }}">
+            <i class="fa-solid fa-check"></i>
+        </button>
+        <button id="r{{ $member->id }}" class="member-reject w-8 h-8 rounded-full dark:bg-dark-neutral"
+            data-user="{{ $member->id }}">
+            <i class="fa-solid fa-times"></i>
+        </button>
 
         @else
         {{-- If user is owner and not himself it loads remove button --}}

@@ -15,7 +15,8 @@ $activePage = 'home';
                             lg:w-full">
 
     <section class="flex overflow-clip overflow-y-auto" id="content">
-        <section id="timeline" class="flex flex-col w-screen max-h-min overflow-clip" data-page="0">
+        <section id="timeline" class="flex flex-col w-screen max-h-min overflow-clip items-center justify-center"
+            data-page="0">
             <!-- Javascript will render posts here -->
             <div id="fetcher" class="h-16 lg:h-0"></div>
         </section>

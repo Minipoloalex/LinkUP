@@ -24,6 +24,7 @@ CREATE TABLE users (
     bio TEXT DEFAULT NULL,
     is_private BOOLEAN DEFAULT false NOT NULL,
     is_banned BOOLEAN DEFAULT false NOT NULL,
+    is_deleted BOOLEAN DEFAULT false NOT NULL,
     remember_token VARCHAR
 );
 

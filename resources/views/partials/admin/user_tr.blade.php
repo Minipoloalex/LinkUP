@@ -25,8 +25,15 @@
         <form action="{{ route('admin.users.ban', $user->id) }}" method="POST">
             @csrf
             <button type="submit"
-                class="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-1 px-4 rounded">Ban</button>
+                class="bg-orange-500 hover:bg-orange-700 text-white font-bold my-2 py-1 px-4 rounded">Ban</button>
         </form>
         @endif
+    </td>
+    <td>
+        <form action="{{ route('admin.users.delete', $user->id) }}" method="POST">
+            @csrf
+            <button type="submit"
+                class="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-1 px-4 rounded">Delete</button>
+        </form>
     </td>
 </tr>

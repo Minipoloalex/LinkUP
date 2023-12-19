@@ -74,7 +74,7 @@ Route::group(['middleware' => 'guest'], function () {
 
 // User
 Route::controller(UserController::class)->group(function () {
-    
+
     // profile page
     Route::get('/profile/edit', 'showEditProfile')->name('profile.edit');
     Route::post('/profile/update', 'updateProfile')->name('profile.update');
@@ -124,6 +124,7 @@ Route::controller(GroupController::class)->group(function () {
     Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
     Route::delete('/group/{id}', 'delete')->name('group.delete');
     Route::delete('/group/{id}/member/{member_id}', 'deleteMember');
+    Route::get('/group/{id}/member/self/leave', 'leaveGroup');
 });
 
 // Notifications
@@ -131,10 +132,10 @@ Route::get('/notifications', [NotificationController::class, 'index'])->name('no
 
 // Admin
 Route::controller(AdminController::class)->group(function () {
-    
+
     // dashboard
     Route::get('/admin/dashboard', 'index')->name('admin.dashboard');
-    
+
     // users
     Route::get('/admin/users', 'listUsers')->name('admin.users');
     Route::get('/admin/api/users', 'searchUsers')->name('admin.api.users');
@@ -142,6 +143,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/network/{username}', 'viewNetwork')->name('admin.user.network');
     Route::post('/admin/users/{id}/ban', 'banUser')->name('admin.users.ban');
     Route::post('/admin/users/{id}/unban', 'unbanUser')->name('admin.users.unban');
+    Route::post('/admin/users/{id}/delete', 'deleteUser')->name('admin.users.delete');
 
     // posts
     Route::get('/admin/posts', 'listPosts')->name('admin.posts');
@@ -158,5 +160,10 @@ Route::controller(AdminController::class)->group(function () {
     // create admin
     Route::get('/admin/create', 'showCreateForm')->name('admin.create');
     Route::post('/admin/create', 'createAdmin');
-    
+
 })->middleware('auth:admin');
+
+// Ban appeal
+Route::get('/ban-appeal', function () {
+    return view('pages.ban-appeal');
+})->name('ban-appeal');

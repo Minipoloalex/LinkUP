@@ -9,6 +9,7 @@
 @section('content')
 @include('partials.profile.profile_page', [
     'user' => $user,
-    'userCanSeePosts' => true   // admin
+    'userCanSeePosts' => true,   // admin
+    'followRequest' => null     // admin
 ])
 @endsection

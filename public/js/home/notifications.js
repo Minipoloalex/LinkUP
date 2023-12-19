@@ -8,7 +8,7 @@ const fetcher = document.querySelector('#notifications-home-fetcher')
 if (container && fetcher) {
   const firstAction = data => {
     if (data.notifications.length == 0) {
-      container.innerHTML = `<p class="no-notifications">No notifications yet</p>`
+      container.innerHTML = `<p class="text-center">No notifications yet</p>`
       return
     }
     appendNotifications(data.notifications)

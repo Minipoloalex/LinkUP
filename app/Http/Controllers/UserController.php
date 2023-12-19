@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    private ImageController $imageController;
+    public ImageController $imageController;
     private static int $amountPerPage = 10;
 
     public function __construct()
@@ -34,7 +34,11 @@ class UserController extends Controller
     {
         $user = User::firstOrFail()->where('username', $username)->firstOrFail();
 
-        return view('pages.profile', ['user' => $user]);
+        $followRequest = Auth::check() ?
+            Auth::user()->followRequestsReceived()->where('id_user_from', $user->id)->first()
+            : null;
+
+        return view('pages.profile', ['user' => $user, 'followRequest' => $followRequest]);
     }
 
     /**
@@ -108,7 +112,7 @@ class UserController extends Controller
             'course' => $request->course,
         ]);
 
-        return redirect()->route('profile.show', ['username' => $user->username])->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile.show', ['username' => $user->username])->with('feedback', 'Profile updated successfully!');
     }
 
     /**
@@ -167,6 +171,7 @@ class UserController extends Controller
             'course' => null,
             'is_private' => true,
             'is_banned' => true,
+            'is_deleted' => true,
         ]);
 
         // delete profile picture
@@ -277,11 +282,15 @@ class UserController extends Controller
         }
         $feedback = '';
         $accepted = true;
+
+        // time must pe in psql timestamp format
+        $time = date('Y-m-d H:i:s', time());
+
         if ($requestTo->is_private) {   // request to follow
             $request = FollowRequest::create([
                 'id_user_from' => $user->id,
                 'id_user_to' => $requestTo->id,
-                'timestamp' => time(),
+                'timestamp' => $time,
             ]);
             $accepted = false;
             $feedback = "Follow request sent to $requestTo->username successfully!";
@@ -433,11 +442,11 @@ class UserController extends Controller
         }
 
         $members = GroupMember::join('users', 'id_user', '=', 'users.id')
-        ->where('id_group', $id)
-        ->orderBy('username')
-        ->skip($page * self::$amountPerPage)
-        ->take(self::$amountPerPage)
-        ->get();
+            ->where('id_group', $id)
+            ->orderBy('username')
+            ->skip($page * self::$amountPerPage)
+            ->take(self::$amountPerPage)
+            ->get();
 
         $users = $members->map(function ($group_member) {
             return $group_member->user;

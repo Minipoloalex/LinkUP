@@ -7,8 +7,8 @@ $activePage = 'profile';
 
 @section('content')
 
-<main id="edit-profile" class="flex flex-col w-screen h-screen
-                                lg:w-full lg:h-[calc(100vh-6rem)] lg:overflow-hidden">
+<main id="edit-profile" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-6rem)] scrollbar-hide
+                                lg:w-full">
     @if (session('success'))
     <div class="w-full border-2 border-green-500 mb-6 rounded shadow-md">
         <div class="flex items-center bg-green-500 text-white text-sm px-4 py-3" role="alert">
@@ -27,7 +27,7 @@ $activePage = 'profile';
 
     <div class="w-full">
         <div class="relative flex flex-col break-words dark:bg-dark-primary dark:text-dark-secondary">
-            <div class="flex justify-between items-center py-3 px-6 mb-0 border-b-2 sticky top-0 left-0
+            <div class="flex justify-between items-center py-3 px-6 mb-0 border-b-2 sticky top-0 left-0 dark:bg-dark-primary z-[2]
                         dark:border-dark-neutral">
                 <h1 class="font-semibold">
                     Edit Profile
@@ -37,7 +37,7 @@ $activePage = 'profile';
                 </a>
             </div>
 
-            <form class="w-full px-8 py-2 space-y-8 overflow-clip overflow-y-scroll" method="POST"
+            <form class="w-full px-8 py-2 space-y-8 overflow-clip overflow-y-scroll scrollbar-hide" method="POST"
                 action="{{ route('profile.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
