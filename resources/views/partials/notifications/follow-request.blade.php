@@ -20,10 +20,12 @@ $pfp = $user->getProfilePicture();
         </a>
         <h2>wants to follow you.</h2>
     </div>
-    <div class="flex flex-grow items-center justify-end">
-        @include('partials.components.button', ['id' => 'fa' . $user->id, 'icon' => 'fa-check', 'color' => 'green',
-        'text' => null, 'classes' => 'follow-accept w-12 mr-4', 'data' => ['user' => $user->id]])
-        @include('partials.components.button', ['id' => 'fr' . $user->id, 'icon' => 'fa-times', 'color' => 'red',
-        'text' => null, 'classes' => 'follow-reject w-12', 'data' => ['user' => $user->id]])
+    <div class="flex flex-grow items-center justify-end gap-2">
+        <button id="fa{{ $user->id }}" class="w-8 h-8 rounded-full dark:bg-dark-active" data-user="{{ $user->id }}">
+            <i class="fa-solid fa-check"></i>
+        </button>
+        <button id="fr{{ $user->id }}" class="w-8 h-8 rounded-full dark:bg-dark-neutral" data-user="{{ $user->id }}">
+            <i class="fa-solid fa-times"></i>
+        </button>
     </div>
 </div>
