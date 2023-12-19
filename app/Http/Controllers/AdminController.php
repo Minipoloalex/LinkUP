@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\MailController;
 
 use App\Models\Admin;
@@ -77,6 +79,42 @@ class AdminController extends Controller
         $user->save();
 
         return redirect()->route('admin.users')->with('success', 'User unbanned successfully.');
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::findOrFail($id);
+
+        // update user to deleted
+        $user->update([
+            'username' => 'deleted' . $user->id,
+            'email' => 'deleted' . $user->id . '@deleted.com',
+            'password' => bcrypt('deleted' . $user->id),
+            'name' => 'deleted',
+            'bio' => null,
+            'faculty' => $user->faculty,
+            'course' => null,
+            'is_private' => true,
+            'is_banned' => true,
+        ]);
+
+        $userController = new UserController();
+        $imageController = $userController->imageController;
+        
+        // delete profile picture
+        $filename = $imageController->getFileNameWithExtension(str($id));
+        if ($imageController->existsFile($filename)) {
+            $imageController->delete($filename);
+        }
+
+        // remove followers and following
+        $user->followers()->detach();
+        $user->following()->detach();
+
+        // remove from groups
+        $user->groups()->delete();
+
+        return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
     }
 
     public function listGroups()

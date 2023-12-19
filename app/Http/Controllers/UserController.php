@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    private ImageController $imageController;
+    public ImageController $imageController;
     private static int $amountPerPage = 10;
 
     public function __construct()

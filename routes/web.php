@@ -142,6 +142,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/network/{username}', 'viewNetwork')->name('admin.user.network');
     Route::post('/admin/users/{id}/ban', 'banUser')->name('admin.users.ban');
     Route::post('/admin/users/{id}/unban', 'unbanUser')->name('admin.users.unban');
+    Route::post('/admin/users/{id}/delete', 'deleteUser')->name('admin.users.delete');
 
     // posts
     Route::get('/admin/posts', 'listPosts')->name('admin.posts');
