@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -26,17 +26,17 @@
     @vite('resources/js/app.js')
 </head>
 
-<body class="h-screen w-2/3 flex flex-col mx-auto">
-    <header class="flex content-center justify-between items-center px-6 py-4">
-        <a href="{{ url('admin/dashboard') }}">
-            <img src="{{ url('images/logo.png') }}" alt="Link up logo" class="w-24">
+<body class="h-screen w-2/3 flex flex-col mx-auto bg-dark-primary text-dark-secondary">
+    <header class="flex content-center justify-between items-center px-6 py-4 h-24">
+        <a href="{{ url('admin/dashboard') }}" class="flex">
+            <img src="{{ url('images/logo-dark-mode.png') }}" alt="Link up logo" class="h-auto w-32">
         </a>
-        <div class="w-42">
+        <div class="flex items-center justify-center">
             <h1 class="text-2xl">Admin Dashboard</h1>
         </div>
-        <div class="w-24">
-            <a href="{{ route('logout') }}" class="text-slate-200 hover:text-white">
-                <img src="{{ url('images/icons/logout.png') }}" alt="Logout" class="w-6">
+        <div class="w-32 flex items-center justify-center">
+            <a href="{{ route('logout') }}" class="text-dark-active">
+                <i class="fas fa-sign-out-alt fa-xl"></i>
             </a>
         </div>
     </header>

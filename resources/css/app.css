@@ -52,3 +52,11 @@ i.liked {
 i.unliked {
   @apply dark:text-dark-neutral;
 }
+
+.spinner-container {
+  @apply flex justify-center items-center h-12;
+}
+
+.spinner {
+  @apply animate-spin;
+}
