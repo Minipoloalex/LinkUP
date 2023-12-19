@@ -1,10 +1,13 @@
-import { destroyFetcher, infiniteScroll } from '../infinite_scrolling.js'
-import { parseHTML } from '../general_helpers.js'
-import { addEventListenersToPost } from '../posts/post_event_listeners.js'
+const notificationsTab = document.getElementById('notifications-tab')
+const container = document.querySelector('section#notifications-home-container')
+if (notificationsTab && container) {
+  notificationsTab.classList.add('hidden')
+}
 
 function resolveMemberRequest (group, member_id, element, accept) {
   const url = `/group/${group}/request/${member_id}`
 
+  addFollowRequestEvents()
   fetch(url, {
     method: 'POST',
     headers: {
@@ -69,9 +72,9 @@ function resolveFollowRequest (user, element, accept) {
     .catch(error => console.error(error))
 }
 
-function addFollowRequestEvents () {
-  const accepts = document.querySelectorAll('.follow-accept')
-  const rejects = document.querySelectorAll('.follow-reject')
+export function addFollowRequestEvents (notification) {
+  const accepts = notification.querySelectorAll('.follow-accept')
+  const rejects = notification.querySelectorAll('.follow-reject')
 
   if (!accepts || !rejects) return
 
@@ -93,9 +96,3 @@ function addFollowRequestEvents () {
 }
 
 addResolveMemberRequestEvents()
-addFollowRequestEvents()
-
-const notificationsTab = document.getElementById('notifications-tab')
-if (notificationsTab) {
-  notificationsTab.classList.add('hidden')
-}

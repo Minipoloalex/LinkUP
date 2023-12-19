@@ -5,8 +5,9 @@ import { addToggleLikeEventListener } from '../posts/like.js'
 const timeline = document.querySelector('#timeline')
 const for_you_tab = document.querySelector('#for-you-tab')
 const following_tab = document.querySelector('#following-tab')
+const following_guest = document.querySelector('#following-tab-guest')
 
-export function prependPostToTimeline(postElement) {
+export function prependPostToTimeline (postElement) {
   if (timeline) {
     timeline.insertBefore(postElement, timeline.firstChild)
   }
@@ -80,5 +81,11 @@ if (following_tab) {
     for_you_tab.classList.remove('tab-active')
     timeline.innerHTML = '<div id="fetcher" class="h-16 lg:h-0"></div>'
     buildFollowingTimeline()
+  })
+}
+
+if (following_guest) {
+  following_guest.addEventListener('click', () => {
+    window.location.href = '/login'
   })
 }

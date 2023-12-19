@@ -59,3 +59,11 @@ i.unliked {
 #group-page .tab-active {
   @apply dark:text-dark-active dark:border-dark-active;
 }
+
+.spinner-container {
+  @apply flex justify-center items-center h-12;
+}
+
+.spinner {
+  @apply animate-spin;
+}

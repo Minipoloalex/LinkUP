@@ -17,10 +17,11 @@
 const mobileSidebar = document.getElementById('mobile-sidebar')
 const mobileToggleSidebar = document.getElementById('mobile-show-sidebar')
 const translate = 'translate-x-[70vw]'
+mobileSidebar.classList.remove(translate)
 
 if (mobileToggleSidebar) {
   mobileToggleSidebar.addEventListener('click', () => {
-    console.log('click')
+    mobileSidebar.classList.remove('invisible')
     mobileSidebar.classList.toggle(translate)
   })
 

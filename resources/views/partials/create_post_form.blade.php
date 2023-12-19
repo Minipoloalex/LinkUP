@@ -25,12 +25,12 @@ $headerText ??= null;
             </div>
         </div>
         <div class="flex justify-between items-center">
-            <button type="submit"   {{-- MUST BE FIRST ON THE HTML --}}
+            <button type="submit" {{-- MUST BE FIRST ON THE HTML --}}
                 class="order-last dark:bg-dark-active dark:text-dark-secondary rounded-full py-2 px-6">
                 {{ $buttonText }}
             </button>
             <div class="flex">
-                <button class="upload-file ml-1 -mt-4 dark:bg-dark-primary dark:text-dark-active">
+                <button class="upload-file ml-1 dark:bg-dark-primary dark:text-dark-active">
                     <i class="fas fa-image text-2xl"></i>
                 </button>
                 <input type="file" accept="image/*" name="media" class="hidden">

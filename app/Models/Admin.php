@@ -12,16 +12,15 @@ class Admin extends Authenticatable
     use Notifiable;
 
     public $timestamps = false;
-    
+
     public $table = 'admin';
 
     public $fillable = [
-        'name', 
         'email',
         'password',
     ];
 
     public $hidden = [
-        'password', 
+        'password',
     ];
 }

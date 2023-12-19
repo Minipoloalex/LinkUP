@@ -58,6 +58,7 @@ class CommentNotification extends Model
             ->joinSub($user_comments, 'p', function ($join) {
                 $join->on('comment_notification.id_comment', '=', 'p.id');
             })->join('post', 'comment_notification.id_comment', '=', 'post.id')
+            ->where('post.id_created_by', '!=', $user_id)
             ->orderBy('timestamp', 'desc')->get();
 
         return $comment_nots;
