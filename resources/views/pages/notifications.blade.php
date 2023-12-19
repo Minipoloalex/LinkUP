@@ -1,3 +1,6 @@
+@php
+$activePage = 'notifications';
+@endphp
 @extends('layouts.app')
 @section('title', 'Home')
 

@@ -1,3 +1,6 @@
+@php
+$activePage = 'profile';
+@endphp
 @extends('layouts.app')
 
 @section('title', 'Edit Profile')

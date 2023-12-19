@@ -1,3 +1,6 @@
+@php
+$activePage = 'search';
+@endphp
 @extends('layouts.app')
 
 @push('scripts')

@@ -1,3 +1,6 @@
+@php
+$activePage = 'settings';
+@endphp
 @extends('layouts.app')
 
 @section('title', 'Settings')

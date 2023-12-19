@@ -1,3 +1,6 @@
+@php
+$activePage = 'network';
+@endphp
 @extends('layouts.app')
 
 @section('title', 'Network')
