@@ -1,4 +1,4 @@
-<a id="toast" type="button" class=" fixed -top-12 left-[40vw] z-50 w-[20vw] rounded-md px-2 flex items-center
+<a id="toast" type="button" class="fixed -top-12 left-[40vw] z-50 w-[20vw] rounded-md px-2 flex items-center
                     dark:bg-dark-active dark:text-dark-secondary
                     transition-all duration-300 ease-linear">
     <div class="h-12 min-w-[2rem] flex items-center justify-center ml-2">

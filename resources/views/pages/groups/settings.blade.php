@@ -20,9 +20,6 @@
                         <label for="group-photo-input" class="cursor-pointer">
                             <img src="{{ $group->getPicture() }}" alt="group photo"
                                 class="image-preview w-16 h-16 rounded-full">
-                            {{-- <div class="rounded-full p-1 absolute -top-1 -right-1 bg-black">
-                                <i class="fas fa-pencil-alt text-white"></i>
-                            </div> --}}
                             <div class="absolute top-0 left-0 w-16 h-16 rounded-full bg-black bg-opacity-50 flex items-center justify-center hidden"
                                 id="group-photo-hover">
                                 <i class="fas fa-camera text-white"></i>

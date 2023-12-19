@@ -242,6 +242,7 @@ function joinGroup (group, button) {
         text.textContent = 'Pending'
 
         button.parentNode.replaceChild(new_button, button)
+        Swal.fire('Request sent!', 'Your request to join the group was sent.', 'success')
         addCancelJoinGroupEvent()
       }
     })
@@ -289,6 +290,7 @@ function cancelJoinGroup (group, button) {
         text.textContent = 'Join group'
 
         button.parentNode.replaceChild(new_button, button)
+        Swal.fire('Request Cancelled!', 'The request to join the group was successfully cancelled.', 'success')
         addJoinGroupEvent()
       }
     })
