@@ -1,45 +1,55 @@
-<form method="POST" action="{{ route('admin.create') }}">
+@extends('layouts.admin')
+
+@section('content')
+<form method="POST" action="{{ route('admin.create') }}" class="flex flex-col w-full items-center justify-center gap-6">
     {{ csrf_field() }}
 
-    <label for="name">Name</label>
-    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
-    @if ($errors->has('name'))
-        <span class="error">
-            {{ $errors->first('name') }}
-        </span>
-    @endif
+    <h1 class="text-2xl font-bold">Create Admin</h1>
 
-    <label for="email">Email</label>
-    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
-    @if ($errors->has('email'))
-        <span class="error">
-            {{ $errors->first('email') }}
-        </span>
-    @endif
+    <div class="relative">
+        <input id="email" name="email" type="text" required class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+            placeholder="Email" />
+        <label for="email" class="absolute left-0 -top-3.5 text-sm transition-all peer-placeholder-shown:text-base 
+            dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5 
+            dark:peer-focus:text-dark-active peer-focus:text-sm">
+            Email
+        </label>
+    </div>
 
-    <label for="password">Password</label>
-    <input id="password" type="password" name="password" required>
-    @if ($errors->has('password'))
-        <span class="error">
-            {{ $errors->first('password') }}
-        </span>
-    @endif
+    <div class="relative">
+        <input id="password" name="password" type="password" required class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+            placeholder="Password" />
+        <label for="password" class="absolute left-0 -top-3.5 text-sm transition-all peer-placeholder-shown:text-base 
+            dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5 
+            dark:peer-focus:text-dark-active peer-focus:text-sm">
+            Password
+        </label>
+    </div>
 
-    <label for="password_confirmation">Confirm Password</label>
-    <input id="password_confirmation" type="password" name="password_confirmation" required>
-    @if ($errors->has('password_confirmation'))
-        <span class="error">
-            {{ $errors->first('password_confirmation') }}
-        </span>
-    @endif
+    <div class="relative">
+        <input id="password_confirmation" name="password_confirmation" type="password" required class="peer h-10 w-full
+            dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
+                text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
+            placeholder="Confirm Password" />
+        <label for="password_confirmation" class="absolute left-0 -top-3.5 text-sm transition-all peer-placeholder-shown:text-base 
+            dark:peer-placeholder-shown:text-dark-secondary peer-placeholder-shown:top-2 peer-focus:-top-3.5 
+            dark:peer-focus:text-dark-active peer-focus:text-sm">
+            Confirm Password
+        </label>
+    </div>
 
-    <button type="submit">
+    <button type="submit" class="dark:bg-dark-active rounded-xl w-[10vw] h-10">
         Create
     </button>
 
-    @if (session('sucess'))
-        <span class="success">
-            {{ session('success') }}
-        </span>
-    @endif
+    <span class="success bg-green-500 rounded-lg text-white w-[20vw] flex items-center justify-center">
+        @if (session('success'))
+        <h2 class="my-1">{{ session('success') }}</h2>
+        @endif
+    </span>
 </form>
+@endsection

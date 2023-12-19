@@ -32,20 +32,18 @@ class AdminController extends Controller
     public function createAdmin(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:admin',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $admin = Admin::create([
-            'name' => $validatedData['name'],
+        Admin::create([
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
         ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Admin created successfully.');
+        return redirect()->route('admin.create')->with('success', 'Admin created successfully.');
     }
-    
+
     public function listUsers()
     {
         return view('admin.users');
@@ -100,10 +98,10 @@ class AdminController extends Controller
 
         $owner = $group->owner;
         if ($owner->name !== 'deleted') {
-            
+
             $subject = 'Group Deleted';
             $view = 'emails.group-deleted';
-            
+
             // send email to owner, notifying them that their group was deleted
             if (MailController::sendGroupDeletedEmail($owner->name, $owner->email, $group->name, $subject, $view)) {
                 return redirect()->route('admin.groups')->with('success', 'Group deleted successfully.');
@@ -141,7 +139,7 @@ class AdminController extends Controller
     public function viewUser($username)
     {
         $user = User::where('username', $username)->firstOrFail();
-        
+
         return view('admin.user', ['user' => $user]);
     }
     public function viewNetwork($username)
@@ -160,12 +158,11 @@ class AdminController extends Controller
         $posts = null;
         if ($query == null || $query == '') {
             $posts = Post::orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
-        }
-        else {
+        } else {
             $posts = Post::search(Post::getModel()->select('*'), $query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
-        $htmlArray = $posts->map(function ($post) {    
-            return view('partials.admin.post', ['post'=> $post])->render();
+        $htmlArray = $posts->map(function ($post) {
+            return view('partials.admin.post', ['post' => $post])->render();
         });
         return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
     }
@@ -178,13 +175,12 @@ class AdminController extends Controller
         $page = $request->get('page');
         $query = $request->get('query');
         $users = null;
-        if ($query == null || $query == '') {  
+        if ($query == null || $query == '') {
             $users = User::orderBy('username', 'asc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
-        }
-        else {
+        } else {
             $users = User::search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
-        $htmlArray = $users->map(function ($user) {    
+        $htmlArray = $users->map(function ($user) {
             return view('admin.return_json.user_tr', ['user' => $user])->render();
         });
         return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
@@ -198,13 +194,12 @@ class AdminController extends Controller
         $page = $request->get('page');
         $query = $request->get('query');
         $groups = null;
-        if ($query == null || $query == '') {  
+        if ($query == null || $query == '') {
             $groups = Group::orderBy('name', 'asc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
-        }
-        else {
+        } else {
             $groups = Group::search($query)->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
         }
-        $htmlArray = $groups->map(function ($group) {    
+        $htmlArray = $groups->map(function ($group) {
             return view('admin.return_json.group_tr', ['group' => $group])->render();
         });
         return response()->json(['resultsHTML' => $htmlArray, 'success' => true, 'message' => 'Search successful.']);
