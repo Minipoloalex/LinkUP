@@ -26,7 +26,7 @@ class NotificationController extends Controller
 
     public function index(request $request)
     {
-        return view('pages.notifications');
+        return view('pages.notifications', ['notifications' => $this->getNotifications()]);
     }
 
     private function translateNotificationsArrayToHtml($notifications)
