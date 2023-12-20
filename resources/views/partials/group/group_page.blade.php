@@ -20,9 +20,11 @@ $userLinkTo = $isAdmin ? route('admin.user', $owner->username) : route('profile.
         <section class="flex flex-col min-h-96 items-center justify-center gap-4 py-4" id="group-content">
             <img src="{{ $group->getPicture() }}" alt="group photo" class="w-32 h-32 rounded-full">
             <h1 class="text-2xl font-bold">{{ $group->name }}</h1>
-            <div class="flex flex-col justify-center items-start w-full px-10">
+            <div class="flex flex-col justify-center items-center w-full px-10">
+                <p class="text-sm text">Owned by <a href="{{ $userLinkTo }}" class="text-dark-active">{{ $owner->username }}</a></p>
+            </div>
+            <div class="flex flex-col justify-center items-center w-full px-10 py-4 mb-4">
                 <p class="text-sm">{{ $group->description }}</p>
-                <a href="{{ $userLinkTo }}" class="text-sm before:content-['Owner:_']">{{ $group->owner->username }}</a>
             </div>
             @if (!$isAdmin)
             <div class="h-10 flex w-full items-center justify-end mb-4 px-8">
