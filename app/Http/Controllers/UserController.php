@@ -38,6 +38,10 @@ class UserController extends Controller
             Auth::user()->followRequestsReceived()->where('id_user_from', $user->id)->first()
             : null;
 
+        if ($followRequest) {
+            $followRequest = User::findOrFail($followRequest->id_user_from);
+        }
+
         return view('pages.profile', ['user' => $user, 'followRequest' => $followRequest]);
     }
 
