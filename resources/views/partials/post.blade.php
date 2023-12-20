@@ -23,7 +23,7 @@ $hasAdminDelete ??= false;
 
     <div class='comments-container'>
         @if ($comments->count() > 0)
-        @foreach ($comments as $comment)
+        @foreach ($comments->sortByDesc('created_at') as $comment)
         @include('partials.comment', ['comment' => $comment, 'displayComments' => false, 'showEdit' => $showEdit,
         'showGroupOwnerDelete' => $showGroupOwnerDelete, 'hasAdminLink' => $hasAdminLink,
         'hasAdminDelete' => $hasAdminDelete])
