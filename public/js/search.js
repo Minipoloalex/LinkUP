@@ -15,23 +15,33 @@ if (searchbarRight) {
 
 async function initSearchResults () {
   // make the search URLs copiable (check them after loading the page)
-  const searchValue = getUrlParameter('query')
+  const searchValue = getUrlParameter('query') ?? ''
   const type = getUrlParameter('type') ?? 'users'
-  if (searchValue != null && type != null) {
-    const searchForm = getSearchForm()
-    getSearchTextElement(searchForm).value = searchValue
+  const filters = getAdvancedFiltersFromURL(type)
+  changeAdvancedFiltersEnabled(convertTypeToIndex(type))
 
-    const searchFilters = getSearchTypeElement()
-    const typeRadio = searchFilters.querySelector(`input[value="${type}"]`)
-    if (typeRadio) {
-      typeRadio.checked = true
-    }
-    getSearchButton(searchForm).click()
+  const anyEnabled = Object.values(filters).some(filter => {
+    return filter.value != null && filter.value != '' && filter.value != 'false'
+  })
+
+  if (anyEnabled) {
+    setAdvancedFilters(type, filters)
   }
+  const searchForm = getSearchForm()
+  getSearchTextElement(searchForm).value = searchValue
+
+  const searchFilters = getSearchTypeElement()
+  const typeRadio = searchFilters.querySelector(`input[value="${type}"]`)
+  if (typeRadio) {
+    typeRadio.checked = true
+  }
+  getSearchButton(searchForm).click()
 }
 
 async function updateSearchResults (event) {
   event.preventDefault()
+  let infiniteScroller = null
+
   const searchForm = getSearchForm()
   const searchValue = getSearchTextElement(searchForm).value
 
@@ -49,24 +59,24 @@ async function updateSearchResults (event) {
   if (type == 'posts' || type == 'comments') {
     attachEventListeners = addEventListenersToPost
   }
-  const firstAction = data => {
+  const firstAction = async data => {
     resultsContainer.innerHTML = ''
     if (data.resultsHTML.length == 0) {
       resultsContainer.appendChild(parseHTML(data.noResultsHTML))
+      await destroyFetcher(infiniteScroller)
     } else {
       appendResults(data.resultsHTML, attachEventListeners)
     }
   }
-  const action = data => {
+  const action = async data => {
     if (data.resultsHTML.length == 0) {
-      destroyFetcher()
+      await destroyFetcher(infiniteScroller)
     } else {
       appendResults(data.resultsHTML, attachEventListeners)
     }
   }
   requestData['query'] = searchValue
-  console.log(requestData)
-  infiniteScroll(
+  infiniteScroller = await infiniteScroll(
     resultsContainer,
     testIntersectionElement,
     `/api/${type}/search`,
@@ -78,10 +88,7 @@ async function updateSearchResults (event) {
   )
 
   // Change the URL so the user can share the search results (or save them)
-  setUrlParameters({
-    query: searchValue,
-    type: type
-  })
+  setUrlSearchParameters(searchValue, type)
 }
 export function getSearchForm () {
   return document.querySelector('#search-form')
@@ -128,7 +135,6 @@ function getAdvancedFiltersData(filtersWrapper) {
   }
   if (date) {
     data[date.getAttribute('name')] = date.value
-    console.log("date: " + date.value)
   }
   return data
 }
@@ -148,25 +154,87 @@ function updateOnFilterChange () {
 
   for (const filter of filters.querySelectorAll('input[name="search-type"]')) {
     filter.addEventListener('change', () => {
-      if (getSearchTextElement(searchForm).value != '') {
-        searchButton.click()
-      }
+      searchButton.click()
     })
   }
 }
 
-const resultsContainer = document.querySelector(
-  '#search-page #results-container'
-)
-if (resultsContainer) {
-  // only if on the search page
-  const searchForm = getSearchForm()
-  const searchButton = getSearchButton(searchForm)
+function changeAdvancedFiltersEnabled(toShow) {
+  for (let j = 0; j < 4; j++) {
+    if (toShow == j) {
+      filters[j].classList.remove('hidden')
+      filters[j].classList.add('filter-selected')
+      continue
+    }
+    filters[j].classList.add('hidden')
+    filters[j].classList.remove('filter-selected')
+  }
+}
 
-  searchForm.addEventListener('submit', updateSearchResults)
-  searchButton.addEventListener('click', updateSearchResults)
-  initSearchResults()
-  updateOnFilterChange()
+function setUrlSearchParameters(searchValue, type) {
+  const searchForm = getSearchForm()
+  const filtersWrapper = getAdvancedFiltersWrapper(searchForm, type)
+  const data = getAdvancedFiltersData(filtersWrapper)
+  data['query'] = searchValue
+  data['type'] = type
+  setUrlParameters(data)
+}
+
+function buildFilter(name) {
+  return {
+    name: name,
+    value: getUrlParameter(name)
+  }
+}
+function getAdvancedFiltersFromURL(type) {
+  switch(type) {
+    case 'users':
+      return [
+        buildFilter('exact-match'),
+        buildFilter('user-filter-followers'),
+        buildFilter('user-filter-following'),
+      ]
+    case 'groups':
+      return [
+        buildFilter('exact-match'),
+        buildFilter('group-filter-owner'),
+        buildFilter('group-filter-not-member'),
+      ]
+    default:
+      return [
+        buildFilter('post-filter-likes'),
+        buildFilter('post-filter-comments'),
+        buildFilter('post-filter-date'),
+      ]
+  }
+}
+function convertTypeToIndex(type) {
+  switch(type) {
+    case 'users':
+      return 0
+    case 'groups':
+      return 1
+    case 'posts':
+      return 2
+    default:
+      return 3
+  }
+}
+
+function setAdvancedFilters(type, filters) {
+  const filtersWrapper = getAdvancedFiltersWrapper(getSearchForm(), type)
+  for (const filter of filters) {
+    const input = filtersWrapper.querySelector(`input[name="${filter.name}"]`)
+    if (input.getAttribute('type') === 'date') {
+      input.value = filter.value
+    }
+    else {
+      input.checked = filter.value === 'true'
+    }
+  }
+  const index = convertTypeToIndex(type)
+  changeAdvancedFiltersEnabled(index)
+  showAdvancedFilters()
 }
 
 const advancedSearchButton = document.querySelector('#advanced-search-button')
@@ -179,6 +247,10 @@ if (advancedSearchButton && advancedFilters) {
   })
 }
 
+function showAdvancedFilters() {
+  advancedFilters.classList.remove('advanced-inactive')
+}
+
 const userFilters = document.querySelector('#user-filters')
 const groupFilters = document.querySelector('#group-filters')
 const postFilters = document.querySelector('#post-filters')
@@ -188,19 +260,28 @@ const filters = [userFilters, groupFilters, postFilters, commentFilters]
 const tabs = getSearchTypeElement().querySelector('ul')
 
 if (userFilters && groupFilters && tabs) {
-  console.log(tabs.children)
   for (let i = 0; i < 4; i++) {
     const tab = tabs.children[i]
-    tab.addEventListener('click', () => {
-      for (let j = 0; j < 4; j++) {
-        if (i == j) {
-          filters[j].classList.remove('hidden')
-          filters[j].classList.add('filter-selected')
-          continue
-        }
-        filters[j].classList.add('hidden')
-        filters[j].classList.remove('filter-selected')
-      }
-    })
+    tab.addEventListener('click', () => changeAdvancedFiltersEnabled(i))
   }
+}
+
+const resultsContainer = document.querySelector(
+  '#search-page #results-container'
+)
+if (resultsContainer) {
+  // only if on the search page
+  const searchForm = getSearchForm()
+  const searchButton = getSearchButton(searchForm)
+  const advancedFiltersInputs = document.getElementById('advanced-filters').querySelectorAll('input')
+
+  searchForm.addEventListener('submit', updateSearchResults)
+  searchButton.addEventListener('click', updateSearchResults)
+  initSearchResults()
+  updateOnFilterChange()
+  advancedFiltersInputs.forEach(filter => {
+    filter.addEventListener('change', () => {
+      searchButton.click()
+    })
+  })
 }

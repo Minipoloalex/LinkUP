@@ -26,7 +26,7 @@ $activePage = 'search';
                             </div>
                             <div id="advanced-search-button"
                                 class="h-full w-8 flex items-center justify-center ml-2 cursor-pointer">
-                                <i class="fa-solid fa-sliders"></i>
+                                <i class="p-4 fa-solid fa-sliders"></i>
                             </div>
                         </div>
                         <div id="advanced-filters" class="  advanced-inactive w-full gap-2 flex flex-col items-center justify-center h-[10vh]

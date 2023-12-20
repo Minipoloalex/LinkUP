@@ -13,7 +13,7 @@ async function fetchAndLoad (container, url, data, action) {
   })
   const result = await response.json()
   console.log(result)
-  action(result)
+  await action(result)
 
   container.dataset.page = parseInt(page) + 1
 }
@@ -68,7 +68,13 @@ export async function infiniteScroll (
 }
 
 export async function destroyFetcher (observer) {
-  if (observer) {
-    await observer.disconnect()
+  const toDestroy = await observer
+  if (toDestroy) {
+    
+    const index = observers.indexOf(toDestroy)
+    if (index > -1) {
+      observers.splice(index, 1)
+    }
+    await toDestroy.disconnect()
   }
 }
