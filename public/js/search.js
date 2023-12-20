@@ -120,14 +120,15 @@ function getAdvancedFiltersWrapper(form, type) {
 }
 function getAdvancedFiltersData(filtersWrapper) {
   const checkboxes = filtersWrapper.querySelectorAll('input[type="checkbox"]')
-  console.log(filtersWrapper)
-  console.log(checkboxes)
+  const date = filtersWrapper.querySelector('input[type="date"]')
 
   const data = {}
   for (const checkbox of checkboxes) {
-    console.log(checkbox)
-    console.log(checkbox.getAttribute('name'))
     data[checkbox.getAttribute('name')] = checkbox.checked
+  }
+  if (date) {
+    data[date.getAttribute('name')] = date.value
+    console.log("date: " + date.value)
   }
   return data
 }

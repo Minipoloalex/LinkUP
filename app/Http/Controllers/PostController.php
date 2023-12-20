@@ -162,10 +162,10 @@ class PostController extends Controller
      * Returns a query builder with the posts from the given list that are the result of the search query (FTS).
      * Checks if the user can view them.
      */
-    public function getSearchResults($posts, string $search, string $type)
+    public function getSearchResults($posts, string $search, string $type, bool $orderByRelevance = true)
     {
         $posts = $this->filterCanView($posts);
-        return Post::search($posts, $search);
+        return Post::search($posts, $search, $orderByRelevance);
     }
     public function searchPosts(Request $request)
     {
@@ -180,14 +180,49 @@ class PostController extends Controller
      */
     public function search(Request $request, string $type)
     {
+        Log::debug($request->all());
         $request->validate([
-            'query' => 'required|string|max:255',
-            'page' => 'required|int'
+            'query' => 'nullable|string|max:255',
+            'page' => 'required|int',
+            'post-filter-likes' => 'nullable|string|in:false,true',
+            'post-filter-comments' => 'nullable|string|in:false,true',
+            'post-filter-date' => 'nullable|date'
         ]);
+        Log::debug('valid date: ' . $request->input('post-filter-date'));
         $page = $request->input('page');
+        $query = $request->input('query') ?? '';
+        $liked = $request->input('post-filter-likes') === 'true';
+        $commented = $request->input('post-filter-comments') === 'true';
+        $beforeDate = $request->input('post-filter-date');
 
         $posts = $this->filterByType($type);
-        $posts = $this->getSearchResults($posts, $request->input('query'), $type);
+        if ($liked && Auth::check()) {
+            // $posts = $posts->whereIn('id', function ($q) {
+            //     $q->select('id_post')->from('liked')->where('id_user', Auth::user()->id);
+            // });
+            $posts = $posts->whereHas('likes', function ($q) {
+                $q->where('id_user', Auth::user()->id);
+            });
+        }
+        if ($commented && Auth::check()) {
+            $posts = $posts->whereHas('comments', function ($q) {
+                $q->where('id_created_by', Auth::user()->id);
+            });
+        }
+        if ($beforeDate != null) {
+            $posts = $posts->where('created_at', '<', $beforeDate);
+        }
+
+        if ($query !== '') {
+            $orderByRelevance = $beforeDate === null;
+            $posts = $this->getSearchResults($posts, $query, $type, $orderByRelevance);
+        }
+
+        $orderByDate = $query === '' || $beforeDate !== null;
+        if ($orderByDate) {
+            $posts = $posts->orderBy('created_at', 'desc');
+        }
+        
         $posts = $posts->skip($page * self::$amountPerPage)->limit(self::$amountPerPage);
         $posts = $posts->get();
 

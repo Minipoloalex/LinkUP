@@ -85,10 +85,8 @@
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
             <label for="post-filter-date" class="min-w-[25vw] lg:min-w-[10vw]">Before date</label>
-            <input id="post-filter-date" type="checkbox" name="post-filter-date"
-                class="appearance-none w-4 h-4 rounded dark:bg-dark-secondary 
-                                    flex items-center justify-center peer ml-2 dark:checked:bg-dark-active cursor-pointer" />
-            <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
+            <input id="post-filter-date" type="date" name="post-filter-date"
+                class="text-black">
         </div>
     </div>
 </div>
@@ -97,8 +95,8 @@
 <div id="comment-filters" class="w-full flex flex-col gap-2 hidden">
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
-            <label for="comments-filter-likes" class="min-w-[25vw] lg:min-w-[10vw]">I liked</label>
-            <input id="comments-filter-likes" type="checkbox" name="comments-filter-likes"
+            <label for="comment-filter-likes" class="min-w-[25vw] lg:min-w-[10vw]">I liked</label>
+            <input id="comment-filter-likes" type="checkbox" name="post-filter-likes"
                 class="appearance-none w-4 h-4 rounded dark:bg-dark-secondary 
                                     flex items-center justify-center peer ml-2 dark:checked:bg-dark-active cursor-pointer" />
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
@@ -106,8 +104,8 @@
     </div>
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
-            <label for="comments-filter-comments" class="min-w-[25vw] lg:min-w-[10vw]">I commented</label>
-            <input id="comments-filter-comments" type="checkbox" name="comments-filter-comments"
+            <label for="comment-filter-comments" class="min-w-[25vw] lg:min-w-[10vw]">I commented</label>
+            <input id="comment-filter-comments" type="checkbox" name="post-filter-comments"
                 class="appearance-none w-4 h-4 rounded dark:bg-dark-secondary 
                                     flex items-center justify-center peer ml-2 dark:checked:bg-dark-active cursor-pointer" />
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
@@ -115,11 +113,9 @@
     </div>
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
-            <label for="post-filter-comments" class="min-w-[25vw] lg:min-w-[10vw]">Before date?</label>
-            <input id="post-filter-comments" type="checkbox" name="post-filter-comments"
-                class="appearance-none w-4 h-4 rounded dark:bg-dark-secondary 
-                                    flex items-center justify-center peer ml-2 dark:checked:bg-dark-active cursor-pointer" />
-            <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
+            <label for="comment-filter-date" class="min-w-[25vw] lg:min-w-[10vw]">Before date</label>
+            <input id="comment-filter-date" type="date" name="post-filter-date"
+                class="text-black"/>
         </div>
     </div>
 </div>
