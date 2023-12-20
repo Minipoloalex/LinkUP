@@ -142,3 +142,13 @@ if (resultsContainer) {
   initSearchResults()
   updateOnFilterChange()
 }
+
+const advancedSearchButton = document.querySelector('#advanced-search-button')
+const advancedFilters = document.querySelector('#advanced-filters')
+
+if (advancedSearchButton && advancedFilters) {
+  advancedSearchButton.addEventListener('click', () => {
+    advancedSearchButton.classList.toggle('text-dark-active')
+    advancedFilters.classList.toggle('advanced-inactive')
+  })
+}
