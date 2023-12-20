@@ -133,6 +133,9 @@ Route::controller(GroupController::class)->group(function () {
     Route::get('/group/{id}/member/self/leave', 'leaveGroup');
     Route::post('/group/{id}/invite/{new_member}', 'inviteUser')->name('group.inviteUser');
 
+    Route::patch('/group/accept/{groupId}', 'acceptInvitation');
+    Route::delete('/group/deny/{groupId}','denyInvitation');
+
 });
 
 // Notifications

@@ -17,9 +17,14 @@ function getGroupsButton () {
   return network.querySelector('#groups-button')
 }
 
+function getGroupInvitationsButton() {
+  return network.querySelector('#group-invitations-button')
+}
+
 if (network) {
   getFollowersButton().addEventListener('click', showFollowers)
   getFollowingButton().addEventListener('click', showFollowing)
+  getGroupInvitationsButton().addEventListener('click', showGroupInvitations)
   const followRequestsButton = getFollowRequestsButton()
   if (followRequestsButton)
     followRequestsButton.addEventListener('click', showFollowRequests)
@@ -48,6 +53,19 @@ if (network) {
   acceptFollowRequestButtons.forEach(but =>
     but.addEventListener('click', acceptFollowRequest)
   )
+
+  const acceptInvitationButtons = network.querySelectorAll(
+    '.accept-invitation'
+  )
+  acceptInvitationButtons.forEach(but =>
+    but.addEventListener('click', acceptInvitation)
+  )
+
+  const denyInvitationButtons = network.querySelectorAll('.deny-invitation')
+  denyInvitationButtons.forEach(but =>
+    but.addEventListener('click', denyInvitation)
+  )
+  
   initNetworkPage()
 }
 
@@ -63,6 +81,10 @@ function getFollowRequestsList (container) {
 function getGroupsList () {
   return network.querySelector('#groups-list')
 }
+
+function getGroupInvitationsList() {
+  return network.querySelector('#group-invitations-list')
+}
 function addActiveClass (element) {
   if (element) element.classList.add('active')
 }
@@ -75,27 +97,32 @@ function showFollowers (event) {
   removeActiveClass(getFollowingButton())
   removeActiveClass(getFollowRequestsButton())
   removeActiveClass(getGroupsButton())
+  removeActiveClass(getGroupInvitationsButton())
   show(getFollowersList(network))
   hide(getFollowingList(network))
   hide(getFollowRequestsList(network))
+  hide(getGroupInvitationsList(network))
   hide(getGroupsList())
   setNetworkSectionURL('followers')
 }
 function showFollowing (event) {
   event.preventDefault()
   removeActiveClass(getFollowersButton())
+  removeActiveClass(getGroupInvitationsButton())
   addActiveClass(getFollowingButton())
   removeActiveClass(getFollowRequestsButton())
   removeActiveClass(getGroupsButton())
   hide(getFollowersList(network))
   show(getFollowingList(network))
   hide(getFollowRequestsList(network))
+  hide(getGroupInvitationsList(network))
   hide(getGroupsList())
   setNetworkSectionURL('following')
 }
 function showFollowRequests (event) {
   event.preventDefault()
   removeActiveClass(getFollowersButton())
+  removeActiveClass(getGroupInvitationsButton())
   removeActiveClass(getFollowingButton())
   addActiveClass(getFollowRequestsButton())
   removeActiveClass(getGroupsButton())
@@ -103,19 +130,37 @@ function showFollowRequests (event) {
   hide(getFollowingList(network))
   show(getFollowRequestsList(network))
   hide(getGroupsList())
+  hide(getGroupInvitationsList(network))
   setNetworkSectionURL('follow-requests')
 }
 function showGroups (event) {
   event.preventDefault()
   removeActiveClass(getFollowersButton())
   removeActiveClass(getFollowingButton())
+  removeActiveClass(getGroupInvitationsButton())
   removeActiveClass(getFollowRequestsButton())
   addActiveClass(getGroupsButton())
   hide(getFollowersList(network))
   hide(getFollowingList(network))
   hide(getFollowRequestsList(network))
+  hide(getGroupInvitationsList(network))
   show(getGroupsList())
   setNetworkSectionURL('groups')
+}
+
+function showGroupInvitations (event) {
+  event.preventDefault()
+  removeActiveClass(getFollowersButton())
+  removeActiveClass(getFollowingButton())
+  removeActiveClass(getFollowRequestsButton())
+  removeActiveClass(getGroupsButton())
+  addActiveClass(getGroupInvitationsButton())
+  hide(getFollowersList(network))
+  hide(getFollowingList(network))
+  hide(getFollowRequestsList(network))
+  hide(getGroupsList())
+  show(getGroupInvitationsList(network))
+  setNetworkSectionURL('group-invitations')
 }
 
 // 'remove-follower' or 'remove-following' or 'deny-follow-request' or 'accept-follow-request'
@@ -279,9 +324,46 @@ function initNetworkPage () {
     case 'groups':
       showGroups(new Event('click'))
       break
+    case 'group-invitations':
+      showGroupInvitations(new Event('click'))
   }
 }
 function setNetworkSectionURL(sectionName) {
   const param = getUrlParameterName()
   setUrlParameters({[param]: sectionName})
+}
+
+async function acceptInvitation(event) {
+  event.preventDefault()
+  const button = event.currentTarget
+  const groupId = button.dataset.groupId
+  const groupName = button.dataset.groupName
+  const data = await sendAjaxRequest('PATCH', `/group/accept/${groupId}`, null)
+  if (data != null) {
+    const groupArticle = button.closest('article')
+    groupArticle.remove()
+    Swal.fire(
+      'Accepted!',
+      `You accepted the invitation to join ${groupName}.`,
+      'success'
+    )
+  }
+}
+
+async function denyInvitation(event) {
+  
+  event.preventDefault()
+  const button = event.currentTarget
+  const groupId = button.dataset.groupId
+  const groupName = button.dataset.groupName
+  const data = await sendAjaxRequest('DELETE', `/group/deny/${groupId}`, null)
+  if (data != null) {
+    const groupArticle = button.closest('article')
+    groupArticle.remove()
+    Swal.fire(
+      'Denied!',
+      `You denied the invitation to join ${groupName}.`,
+      'success'
+    )
+  }
 }

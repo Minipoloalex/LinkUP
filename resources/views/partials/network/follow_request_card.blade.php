@@ -6,3 +6,4 @@
         ['class' => 'accept-follow-request', 'text' => 'Accept']
     ],
 ])
+

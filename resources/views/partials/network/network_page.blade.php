@@ -33,6 +33,9 @@ $groupLinkTo = $isAdmin ? 'admin.group'
                 <button id="follow-requests-button"
                     class="w-full p-2 border-b-2 dark:border-dark-neutral after:content-['_Requests']">{{
                     $user->followRequestsReceived->count() }}</button>
+                <button id="group-invitations-button"
+                    class="w-full p-2 border-b-2 dark:border-dark-neutral after:content-['_Invitations']">
+                    5 hardcoded </button>
                 @endif
                 <button id="groups-button"
                     class="w-full p-2 border-b-2 dark:border-dark-neutral after:content-['_Groups']">{{
@@ -80,6 +83,9 @@ $groupLinkTo = $isAdmin ? 'admin.group'
                 @empty
                 <p class="empty-list">You have received no follow requests</p>
                 @endforelse
+            </div>
+            <div id="group-invitations-list" class="flex flex-col hidden">
+                    TO DO HERE
             </div>
             @endif
             <div id="groups-list" class="flex flex-col gap-2 hidden">
