@@ -36,15 +36,15 @@ async function updateSearchResults (event) {
   const searchValue = getSearchTextElement(searchForm).value
 
   const testIntersectionElement = document.querySelector('#fetcher')
-  if (searchValue == '') {
-    showFeedback('Please enter text to search')
-    return
-  }
 
   const type = getSearchType()
   if (type == null) {
     return
   }
+  const filtersWrapper = getAdvancedFiltersWrapper(searchForm, type)
+  const requestData = getAdvancedFiltersData(filtersWrapper)
+
+
   let attachEventListeners = null
   if (type == 'posts' || type == 'comments') {
     attachEventListeners = addEventListenersToPost
@@ -64,6 +64,8 @@ async function updateSearchResults (event) {
       appendResults(data.resultsHTML, attachEventListeners)
     }
   }
+  requestData['query'] = searchValue
+  console.log(requestData)
   infiniteScroll(
     resultsContainer,
     testIntersectionElement,
@@ -72,9 +74,7 @@ async function updateSearchResults (event) {
     action,
     true,
     true,
-    {
-      query: searchValue
-    }
+    requestData
   )
 
   // Change the URL so the user can share the search results (or save them)
@@ -105,6 +105,31 @@ function getSearchType () {
     showFeedback('Please select something to search for')
   }
   return null
+}
+function getAdvancedFiltersWrapper(form, type) {
+  switch (type) {
+    case 'users':
+      return form.querySelector('#user-filters')
+    case 'groups':
+      return form.querySelector('#group-filters')
+    case 'posts':
+      return form.querySelector('#post-filters')
+    default:  // 'comments'
+      return form.querySelector('#comment-filters')
+  }
+}
+function getAdvancedFiltersData(filtersWrapper) {
+  const checkboxes = filtersWrapper.querySelectorAll('input[type="checkbox"]')
+  console.log(filtersWrapper)
+  console.log(checkboxes)
+
+  const data = {}
+  for (const checkbox of checkboxes) {
+    console.log(checkbox)
+    console.log(checkbox.getAttribute('name'))
+    data[checkbox.getAttribute('name')] = checkbox.checked
+  }
+  return data
 }
 function appendResults (results, attachEventListeners = null) {
   results.forEach(result => {

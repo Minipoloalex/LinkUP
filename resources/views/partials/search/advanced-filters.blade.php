@@ -2,9 +2,9 @@
 <div id="user-filters" class="w-full flex flex-col gap-2 filter-selected">
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
-            <label for="exact-match" class="min-w-[25vw] lg:min-w-[10vw]">Exact
+            <label for="user-exact-match" class="min-w-[25vw] lg:min-w-[10vw]">Exact
                 match</label>
-            <input id="exact-match" type="checkbox" name="exact-match"
+            <input id="user-exact-match" type="checkbox" name="exact-match"
                 class="appearance-none w-4 h-4 rounded dark:bg-dark-secondary 
                                     flex items-center justify-center peer ml-2 dark:checked:bg-dark-active cursor-pointer" />
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
@@ -34,9 +34,9 @@
 <div id="group-filters" class="w-full flex flex-col gap-2 hidden">
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
-            <label for="exact-match" class="min-w-[25vw] lg:min-w-[10vw]">Exact
+            <label for="group-exact-match" class="min-w-[25vw] lg:min-w-[10vw]">Exact
                 match</label>
-            <input id="exact-match" type="checkbox" name="exact-match"
+            <input id="group-exact-match" type="checkbox" name="exact-match"
                 class="appearance-none w-4 h-4 rounded dark:bg-dark-secondary 
                                     flex items-center justify-center peer ml-2 dark:checked:bg-dark-active cursor-pointer" />
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
@@ -54,7 +54,7 @@
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
             <label for="group-filter-not-owner" class="min-w-[25vw] lg:min-w-[10vw]">Not member</label>
-            <input id="group-filter-not-owner" type="checkbox" name="group-filter-not-owner"
+            <input id="group-filter-not-owner" type="checkbox" name="group-filter-not-member"
                 class="appearance-none w-4 h-4 rounded dark:bg-dark-secondary 
                                     flex items-center justify-center peer ml-2 dark:checked:bg-dark-active cursor-pointer" />
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
@@ -84,8 +84,8 @@
     </div>
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
-            <label for="post-filter-comments" class="min-w-[25vw] lg:min-w-[10vw]">Before date?</label>
-            <input id="post-filter-comments" type="checkbox" name="post-filter-comments"
+            <label for="post-filter-date" class="min-w-[25vw] lg:min-w-[10vw]">Before date</label>
+            <input id="post-filter-date" type="checkbox" name="post-filter-date"
                 class="appearance-none w-4 h-4 rounded dark:bg-dark-secondary 
                                     flex items-center justify-center peer ml-2 dark:checked:bg-dark-active cursor-pointer" />
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
