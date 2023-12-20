@@ -389,12 +389,60 @@ class UserController extends Controller
     }
     public function search(Request $request)
     {
+        Log::debug($request->all());
         $request->validate([
-            'query' => 'required|string|max:255',
-            'page' => 'required|int'
+            'query' => 'nullable|string|max:255',
+            'page' => 'required|int',
+            'exact-match' => 'nullable|string|in:false,true',
+            'user-filter-followers' => 'nullable|string|in:false,true',
+            'user-filter-following' => 'nullable|string|in:false,true'
         ]);
         $page = $request->input('page');
-        $users = User::search($request->input('query'))->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
+        $query = $request->input('query') ?? '';
+        $exactMatch = $request->input('exact-match') === 'true';
+        $followers = $request->input('user-filter-followers') === 'true';
+        $following = $request->input('user-filter-following') === 'true';
+
+        $users = null;
+        $orderByUsername = $query === '' || $exactMatch;
+        if ($query === '') {
+            $users = User::query();
+        }
+        else {
+            if ($exactMatch) {
+                Log::debug("exact match");
+                $users = User::where(function($q) use($query) {
+                    $q->whereRaw('LOWER(username) = ?', [strtolower($query)])
+                        ->orWhereRaw('LOWER(name) = ?', [strtolower($query)]);
+                });
+            }
+            else {
+                $users = User::search($query);
+            }
+        }
+        if ($followers && Auth::check()) {
+            Log::debug("filtering to only followers");
+            $users = $users->whereIn('id', function ($q) {
+                $q->select('id_user')
+                    ->from('follows')
+                    ->where('id_followed', Auth::user()->id);   // users that follow current user
+            });
+        }
+        if ($following && Auth::check()) {
+            Log::debug("filtering to only following");
+            $users = $users->whereIn('id', function ($q) {
+                $q->select('id_followed')
+                    ->from('follows')
+                    ->where('id_user', Auth::user()->id);   // users that are followed by current user
+            });
+        }
+        Log::debug("before ordering by usernamae");
+        if ($orderByUsername) {
+            $users = $users->orderBy('username', 'asc');
+        }
+
+        Log::debug($users->toSql());
+        $users = $users->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         if ($users->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
