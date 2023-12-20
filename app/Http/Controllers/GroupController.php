@@ -134,6 +134,53 @@ class GroupController extends Controller
         return response('Invitation sent', 200);
     }
 
+    public function acceptInvitation($groupId)
+{
+    // Get the current authenticated user
+    $userId = Auth::user()->id;
+
+    // Find the group notification for this user and group
+    $notification = GroupNotification::where('id_group', $groupId)
+                                     ->where('id_user', $userId)
+                                     ->where('type', 'Invitation')
+                                     ->first();
+
+    if ($notification) {
+        // Add the user to the group members
+        $group = Group::findOrFail($groupId);
+        $group->members()->attach($userId);
+
+        // Delete the notification
+        $notification->delete();
+
+        return response()->json(['message' => 'Invitation accepted.'], 200);
+    } else {
+        return response()->json(['message' => 'No invitation found.'], 404);
+    }
+}
+
+public function denyInvitation($groupId)
+{
+    // Get the current authenticated user
+    $userId = Auth::user()->id;
+
+    // Find the group notification for this user and group
+    $notification = GroupNotification::where('id_group', $groupId)
+                                     ->where('id_user', $userId)
+                                     ->where('type', 'Invitation')
+                                     ->first();
+
+    if ($notification) {
+        // Delete the notification
+        $notification->delete();
+
+        return response()->json(['message' => 'Invitation denied.'], 200);
+    } else {
+        return response()->json(['message' => 'No invitation found.'], 404);
+    }
+}
+
+
 
 
     public function deleteMember(string $id, string $id_member)
