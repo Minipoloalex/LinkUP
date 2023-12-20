@@ -71,7 +71,7 @@ class GroupController extends Controller
 
         // Fetch users who are not members of the group
         $users = User::whereNotIn('users.id', $group->members()->pluck('users.id'))->get();
-        
+
 
         return view('pages.groups.settings', [
             'group' => $group,
@@ -102,46 +102,40 @@ class GroupController extends Controller
         return redirect()->route('group.show', ['id' => $id])->with('feedback', 'Owner changed');
     }
 
-    public function inviteUser(Request $request, string $id)
-{
-    $group = Group::findOrFail($id);
-    Log::info('group found');
-    $user = Auth::user();
-    Log::info('user found');
-    Log::info($id);
-    Log::info($group->id_owner);
+    public function inviteUser(Request $request, int $id, int $new_member)
+    {
+        $group = Group::findOrFail($id);
+        Log::info('group found');
+        $user = Auth::user();
+        Log::info('user found');
+        Log::info($id);
+        Log::info($group->id_owner);
+        Log::info($new_member);
 
-    //log new_member
-    Log::info($request->input('new_member'));
+        // get invited user
+        $userToInvite = User::findOrFail($new_member);
+        Log::info('user to invite found');
+        Log::info($userToInvite);
 
-    $request->validate([
-        'new_member' => 'required|int'
-    ]);
+        // Check if the user is already a member or has a pending request
+        if (
+            $group->members()->where('id_user', $userToInvite->id)->exists() ||
+            $group->pendingMembers()->where('id_user', $userToInvite->id)->exists()
+        ) {
+            Log::info('user is already a member or has a pending request');
+            return response('User is already a member or has a pending request', 403);
+        }
 
-    Log::info('request validated');
+        Log::info('user is not a member or has a pending request');
 
-    // get invited user
-    $userToInvite = User::findOrFail($request->input('new_member'));
-    Log::info('user to invite found');
-    Log::info($userToInvite);
-
-    // Check if the user is already a member or has a pending request
-    if ($group->members()->where('id_user', $userToInvite->id)->exists() || 
-        $group->pendingMembers()->where('id_user', $userToInvite->id)->exists()) {
-        Log::info('user is already a member or has a pending request');
-        return response('User is already a member or has a pending request', 403);
+        // Create a pending invitation for the user
+        $group->pendingMembers()->attach($userToInvite->id, ['type' => 'Invitation']);
+        Log::info('everything is fine');
+        return response('Invitation sent', 200);
     }
 
-    Log::info('user is not a member or has a pending request');
-
-    // Create a pending invitation for the user
-    $group->pendingMembers()->attach($userToInvite->id, ['type' => 'Invitation']);
-    Log::info('everything is fine');
-    return response('Invitation sent', 200);
-}
 
 
-    
     public function deleteMember(string $id, string $id_member)
     {
         if ($id_member == 'self') {
