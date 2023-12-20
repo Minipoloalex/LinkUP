@@ -152,3 +152,29 @@ if (advancedSearchButton && advancedFilters) {
     advancedFilters.classList.toggle('advanced-inactive')
   })
 }
+
+const userFilters = document.querySelector('#user-filters')
+const groupFilters = document.querySelector('#group-filters')
+const postFilters = document.querySelector('#post-filters')
+const commentFilters = document.querySelector('#comment-filters')
+
+const filters = [userFilters, groupFilters, postFilters, commentFilters]
+const tabs = getSearchTypeElement().querySelector('ul')
+
+if (userFilters && groupFilters && tabs) {
+  console.log(tabs.children)
+  for (let i = 0; i < 4; i++) {
+    const tab = tabs.children[i]
+    tab.addEventListener('click', () => {
+      for (let j = 0; j < 4; j++) {
+        if (i == j) {
+          filters[j].classList.remove('hidden')
+          filters[j].classList.add('filter-selected')
+          continue
+        }
+        filters[j].classList.add('hidden')
+        filters[j].classList.remove('filter-selected')
+      }
+    })
+  }
+}

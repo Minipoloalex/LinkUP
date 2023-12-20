@@ -14,8 +14,8 @@ $activePage = 'search';
     <div class="dark:bg-dark-primary mt-4">
         <section id="search-content" class="flex gap-2">
             <div class="w-full flex p-2">
-                <div class="w-full flex flex-col justify-center">
-                    <form id="search-form" class="flex flex-col justify-center py-1 rounded-full group"
+                <div class="w-full flex flex-col justify-center items-center">
+                    <form id="search-form" class="flex flex-col justify-center items-center py-1 rounded-full w-2/3"
                         action="{{ url('/search') }}" method="GET">
                         <div class="w-full flex items-center justify-center">
                             <div
@@ -29,9 +29,11 @@ $activePage = 'search';
                                 <i class="fa-solid fa-sliders"></i>
                             </div>
                         </div>
-                        <div id="advanced-filters" class="advanced-inactive w-full flex items-center justify-center h-[15vh]
-                                    transition-all duration-300 ease-in-out">
-                            some filters here
+                        <div id="advanced-filters" class="  advanced-inactive w-full gap-2 flex flex-col items-center justify-center h-[10vh]
+                                                            transition-all duration-300 ease-in-out mt-6">
+                            <div class="w-full flex flex-col items-center justify-center gap-2">
+                                @include('partials.search.advanced-filters')
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -39,7 +41,7 @@ $activePage = 'search';
         </section>
         @include('partials.search.search_filters')
     </div>
-    <div class="overflow-y-auto">
+    <div class=" overflow-y-auto">
         <div id="results-container" data-page="0"></div>
         <div id="fetcher"></div>
     </div>
