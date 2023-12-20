@@ -21,7 +21,7 @@ $hasAdminDelete ??= false;
     @endif
     @endauth
 
-    <div class='comments-container py-4'>
+    <div class='comments-container'>
         @if ($comments->count() > 0)
         @foreach ($comments as $comment)
         @include('partials.comment', ['comment' => $comment, 'displayComments' => false, 'showEdit' => $showEdit,

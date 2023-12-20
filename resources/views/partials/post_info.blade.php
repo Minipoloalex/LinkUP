@@ -19,6 +19,13 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
                     <i class="fas fa-lock fa-xs"></i>
                 </div>
                 @endif
+                @if ($post->group)
+                @php
+                $group = $post->group;
+                $groupLink = $hasAdminLink ? route('admin.group', $group->id) : route('group.show', $group->id);
+                @endphp
+                <a href="{{ $groupLink }}" class="grow text-sm ml-1 text-dark-active">to {{ $group->name }}</a>
+                @endif  
             </div>
             <span class="text-xs text-gray-300">{{ date('H:i · d M Y', strtotime($post->created_at)) }}</span>
         </div>
@@ -39,13 +46,6 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
         <div class="admin-delete-post">
             <button class="text-2xl delete-post"><i class="p-2 fas fa-trash-alt"></i></button>
         </div>
-        @endif
-        @if ($post->group !== null)
-        @php
-        $group = $post->group;
-        $groupLink = $hasAdminLink ? route('admin.group', $group->id) : route('group.show', $group->id);
-        @endphp
-        <a href="{{ $groupLink }}" class="grow text-right before:content-['From_']">{{ $group->name }}</a>
         @endif
     </header>
     <div class='post-body text-sm'>
