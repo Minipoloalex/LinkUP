@@ -26,7 +26,7 @@ class NotificationController extends Controller
 
     public function index(request $request)
     {
-        return view('pages.notifications');
+        return view('pages.notifications', ['notifications' => $this->getNotifications()]);
     }
 
     private function translateNotificationsArrayToHtml($notifications)
@@ -44,16 +44,14 @@ class NotificationController extends Controller
         $notifications = $this->getNotifications();
         $notifications = $notifications->forPage($page + 1, 10)->values();
 
-
         $notificationsHTML = $this->translateNotificationsArrayToHtml($notifications);
 
         // mark notifications as seen as they are sent to the user
         foreach ($notifications as $notification) {
-            if ($notification->getType() == 'follow-request') {
+            if ($notification->getType() === 'follow-request') {
                 continue;
             }
-            $notification->seen = true;
-            $notification->save();
+            $notification->update(['seen' => true]);
         }
 
         return response()->json(['notifications' => $notificationsHTML]);

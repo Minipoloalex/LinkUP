@@ -11,7 +11,7 @@ return route('profile.network', ['username' => $username, 'section' => $section]
     @auth
     @if ($followRequest)
     <div id="follow-request-profile" class="w-full flex items-center justify-center px-4 py-1">
-        <span class="text-sm">{{ Auth::user()->username }} has requested to follow you.</span>
+        <span class="text-sm">{{ $followRequest->username }} has requested to follow you.</span>
         <div class="flex flex-grow items-center justify-end gap-2">
             <button id="fa{{ $user->id }}" class="follow-accept w-6 h-6 rounded-full dark:bg-dark-active"
                 data-user="{{ $user->id }}">

@@ -28,10 +28,12 @@ $linkTo = Auth::guard('admin')->check() ? url("/admin/profile/$member->username"
         @else
         {{-- If user is owner and not himself it loads remove button --}}
 
-        @include('partials.components.button', ['id' => $member->id, 'icon' => 'fa-times', 'color' => 'red',
-        'text'
-        => 'Remove', 'classes' => 'member-remove'])
-
+        <div class="flex flex-grow items-center justify-end gap-2">
+            <button id="{{ $member->id }}" class="member-remove w-8 h-8 rounded-full dark:bg-dark-active"
+                data-user="{{ $member->id }}">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
         @endif
 
         @endif

@@ -17,6 +17,7 @@ class LikeNotification extends Model
         'id_post',
         'id_user',
         'timestamp',
+        'seen',
     ];
     public function post()
     {
