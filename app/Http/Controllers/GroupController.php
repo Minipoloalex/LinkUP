@@ -241,10 +241,6 @@ class GroupController extends Controller
         $exactMatch = $request->input('exact-match') === 'true';
         $owner = $request->input('group-filter-owner') === 'true';
         $notMember = $request->input('group-filter-not-member') === 'true';
-
-        if ($owner && $notMember) {
-            return response()->json(['error' => 'It is impossible to be the owner and not a member of a group!'], 400);
-        }
         
         $groups = null;
         if ($query === '') {
