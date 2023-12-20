@@ -363,7 +363,7 @@ CREATE TRIGGER comment_notification_trigger
 AFTER INSERT ON post
 FOR EACH ROW
 WHEN (NEW.id_parent IS NOT NULL)
-EXECUTE FUNCTION comment_trigger_function();
+EXECUTE FUNCTION comment_notification_trigger_function();
 
 -- Trigger for tag events
 CREATE OR REPLACE FUNCTION tag_trigger_function() RETURNS TRIGGER AS $$
