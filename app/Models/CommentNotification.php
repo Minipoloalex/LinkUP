@@ -14,6 +14,7 @@ class CommentNotification extends Model
     protected $fillable = [
         'id_comment',
         'timestamp',
+        'seen',
     ];
     protected $dates = [
         'timestamp',
