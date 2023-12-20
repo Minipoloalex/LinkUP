@@ -88,10 +88,6 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/follow/request/cancel/{id}', 'cancelRequestToFollow')->where('id', '[0-9]+');
     Route::delete('/follow/request/deny/{id}', 'denyFollowRequest')->where('id', '[0-9]+');
     Route::patch('/follow/request/accept/{id}', 'acceptFollowRequest')->where('id', '[0-9]+');
-
-    // accept or deny group invitation
-    Route::post('/group/{id}/accept', 'acceptGroupInvitation')->name('group.accept');
-    Route::post('/group/{id}/deny', 'denyGroupInvitation')->name('group.deny');
     
     Route::post('/follow', 'requestFollow');
 
@@ -133,8 +129,8 @@ Route::controller(GroupController::class)->group(function () {
     Route::get('/group/{id}/member/self/leave', 'leaveGroup');
     Route::post('/group/{id}/invite/{new_member}', 'inviteUser')->name('group.inviteUser');
 
-    Route::patch('/group/accept/{groupId}', 'acceptInvitation');
-    Route::delete('/group/deny/{groupId}','denyInvitation');
+    Route::patch('/group/acceptInvitation/{groupId}', 'acceptInvitation');
+    Route::delete('/group/denyInvitation/{groupId}','denyInvitation');
 
 });
 

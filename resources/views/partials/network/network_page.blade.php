@@ -85,7 +85,17 @@ $groupLinkTo = $isAdmin ? 'admin.group'
                 @endforelse
             </div>
             <div id="group-invitations-list" class="flex flex-col hidden">
-                    TO DO HERE
+                @forelse ($user->groupInvitationsReceived as $groupInvitation)
+                @php
+                $group = $groupInvitation->group;
+                @endphp
+                @include('partials.network.group_invitation_card', [
+                'group' => $group,
+                'linkTo' => route($groupLinkTo, ['id' => $group->id]),
+                ])
+                @empty
+                <p class="empty-list">You have received no group invitations</p>
+                @endforelse
             </div>
             @endif
             <div id="groups-list" class="flex flex-col gap-2 hidden">

@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\GroupMember;
 use App\Models\User;
+use App\Models\GroupNotification;
 use Auth;
 use \App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+
 
 class GroupController extends Controller
 {
@@ -136,6 +138,8 @@ class GroupController extends Controller
 
     public function acceptInvitation($groupId)
 {
+    Log::info('accepting invitation');
+
     // Get the current authenticated user
     $userId = Auth::user()->id;
 

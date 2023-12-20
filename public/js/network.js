@@ -1,4 +1,4 @@
-import { sendAjaxRequest } from './ajax.js'
+import { sendAjaxRequest, getCsrfToken } from './ajax.js'
 import { hide, show } from './general_helpers.js'
 import { swalConfirmDelete, parseHTML } from './general_helpers.js'
 import { getUrlParameter, setUrlParameters } from './general_helpers.js'
@@ -69,7 +69,7 @@ if (network) {
   initNetworkPage()
 }
 
-function getFollowersList (container) {
+function getFollowersList (container) { // from groupController
   return container.querySelector('#followers-list')
 }
 function getFollowingList (container) {
@@ -334,13 +334,24 @@ function setNetworkSectionURL(sectionName) {
 }
 
 async function acceptInvitation(event) {
+  console.log('acceptInvitation')
   event.preventDefault()
   const button = event.currentTarget
+  console.log(button)
   const groupId = button.dataset.groupId
+  console.log(groupId)
   const groupName = button.dataset.groupName
-  const data = await sendAjaxRequest('PATCH', `/group/accept/${groupId}`, null)
-  if (data != null) {
-    const groupArticle = button.closest('article')
+
+  const response = await fetch(`/group/acceptInvitation/${groupId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': getCsrfToken()
+    }
+  })
+  console.log(response)
+  if (response != null) {
+    const groupArticle = button.closest('.group-card')
     groupArticle.remove()
     Swal.fire(
       'Accepted!',
@@ -356,7 +367,7 @@ async function denyInvitation(event) {
   const button = event.currentTarget
   const groupId = button.dataset.groupId
   const groupName = button.dataset.groupName
-  const data = await sendAjaxRequest('DELETE', `/group/deny/${groupId}`, null)
+  const data = await sendAjaxRequest('DELETE', `/group/denyInvitation/${groupId}`, null)
   if (data != null) {
     const groupArticle = button.closest('article')
     groupArticle.remove()

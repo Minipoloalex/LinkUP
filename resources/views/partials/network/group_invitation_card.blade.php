@@ -6,3 +6,4 @@
         ['class' => 'accept-invitation', 'text' => 'Accept']
     ],
 ])
+
