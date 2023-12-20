@@ -230,11 +230,45 @@ class GroupController extends Controller
     public function search(Request $request)
     {
         $request->validate([
-            'query' => 'required|string|max:255',
-            'page' => 'required|int'
+            'query' => 'nullable|string|max:255',
+            'page' => 'required|int',
+            'exact-match' => 'nullable|string|in:false,true',
+            'group-filter-owner' => 'nullable|string|in:false,true',
+            'group-filter-not-member' => 'nullable|string|in:false,true'
         ]);
         $page = $request->input('page');
-        $groups = Group::search($request->input('query'))->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
+        $query = $request->input('query') ?? '';
+        $exactMatch = $request->input('exact-match') === 'true';
+        $owner = $request->input('group-filter-owner') === 'true';
+        $notMember = $request->input('group-filter-not-member') === 'true';
+
+        if ($owner && $notMember) {
+            return response()->json(['error' => 'It is impossible to be the owner and not a member of a group!'], 400);
+        }
+        
+        $groups = null;
+        if ($query === '') {
+            $groups = Group::query();
+        }
+        else {
+            if ($exactMatch) {
+                $groups = Group::whereRaw('LOWER(name) = ?', strtolower($query))->orderBy('name', 'asc');
+            }
+            else {
+                $groups = Group::search($query);
+            }
+        }
+        if ($owner && Auth::check()) {
+            $groups = $groups->where('id_owner', Auth::user()->id);
+        }
+        if ($notMember && Auth::check()) {
+            $groups = $groups->whereNotIn('id', function ($q) {
+                        $q->select('id_group')
+                            ->from('group_member')
+                            ->where('id_user', Auth::user()->id);
+                    });
+        }
+        $groups = $groups->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         if ($groups->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();
             return response()->json([
