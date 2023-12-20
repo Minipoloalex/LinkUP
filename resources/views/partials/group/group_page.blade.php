@@ -28,11 +28,8 @@ $userLinkTo = $isAdmin ? route('admin.user', $owner->username) : route('profile.
             <div class="h-10 flex w-full items-center justify-end mb-4 px-8">
                 <button id="{{ $id }}"
                     class="follow-accept h-8 w-32 rounded-full dark:bg-{{ $color }} flex items-center justify-center px-4 text-sm">
-                    @if ($link)
                     <a href="{{ $link }}" class="button-text">{{ $text }}</a>
-                    @else
                     <span class="button-text">{{ $text }}</span>
-                    @endif
                 </button>
             </div>
             @endif

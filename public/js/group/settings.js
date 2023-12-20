@@ -157,6 +157,39 @@ function addDeleteGroupEvent () {
   })
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  const inviteForm = document.getElementById('invite-user');
+  console.log('inviteForm:', inviteForm);
+  inviteForm.addEventListener('submit', async (event) => {
+      console.log('inviteForm submitted');
+      event.preventDefault();
+      const groupId = document.getElementById('group-id').value;
+      console.log('groupId:', groupId);
+      const selectedUserId = document.getElementById('new-member').value;
+      console.log('selectedUserId:', selectedUserId);
+      const url = `/group/${groupId}/invite/${selectedUserId}`;
+   
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector(
+              'meta[name="csrf-token"]'
+            ).content
+          },
+          body: JSON.stringify({ new_member: selectedUserId })
+        })
+      } catch (error) {
+          console.error('Error sending invitation:', error.message);
+      }
+  });
+});
+
+
+
+
 groupPhotoHover()
 addDeleteGroupEvent()
 addChangeOwnerEvent()

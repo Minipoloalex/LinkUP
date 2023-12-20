@@ -477,4 +477,51 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         return response()->json($user);
     }
+
+    public function acceptGroupInvitation($id)
+    {
+        $group = Group::findOrFail($id);
+        $user = Auth::user();
+
+        // Check if the user has an invitation for this group
+        $invitation = $user->pendingGroupInvitations()->where('id_group', $id)->first();
+
+        if ($invitation) {
+            // Add the user as a member of the group
+            $group->members()->attach($user->id, ['type' => 'Member']);
+
+            // Remove the invitation
+            $invitation->delete();
+
+            // You can redirect or return a response here
+            return redirect()->route('profile.show', ['username' => $user->username])
+                ->with('success', 'You have joined the group successfully!');
+        } else {
+            // Handle the case where there's no pending invitation for the user
+            return redirect()->route('profile.show', ['username' => $user->username])
+                ->with('error', 'You do not have a pending invitation for this group.');
+        }
+    }
+
+    public function denyGroupInvitation($id)
+    {
+        $group = Group::findOrFail($id);
+        $user = Auth::user();
+
+        // Check if the user has an invitation for this group
+        $invitation = $user->pendingGroupInvitations()->where('id_group', $id)->first();
+
+        if ($invitation) {
+            // Remove the invitation
+            $invitation->delete();
+
+            // You can redirect or return a response here
+            return redirect()->route('profile.show', ['username' => $user->username])
+                ->with('success', 'You have denied the group invitation.');
+        } else {
+            // Handle the case where there's no pending invitation for the user
+            return redirect()->route('profile.show', ['username' => $user->username])
+                ->with('error', 'You do not have a pending invitation for this group.');
+        }
+    }
 }

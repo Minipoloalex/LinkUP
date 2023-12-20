@@ -73,6 +73,31 @@
         </div>
     </section>
 
+    <section class="flex flex-col mt-4 pr-4 py-2 border-b border-dark-neutral">
+    <div class="w-full">
+        <h1 class="text-2xl text-bold ml-12 mt-4"> Invite to Group </h1>
+        <form id="invite-user"
+            class="flex items-center justify-center w-full pt-4 px-12">
+            @csrf
+            @method('POST')
+            <div class="flex flex-col justify-start items-center flex-grow">
+                <select name="new_member" id="new-member"
+                    class="text-lg border-b border-slate-400 w-full my-2 px-2 bg-dark-primary">
+                    @foreach ($users as $user)
+                    <option value="{{ $user->id }}">{{ $user->username }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="flex justify-end items-center ml-2">
+                <button id="invite-member-btn"
+                    class="h-8 w-32 rounded-full dark:bg-dark-active flex items-center justify-center px-4 text-sm">
+                    <span class="button-text">Invite</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
     <section class="flex flex-col mt-4" id="group-content">
         <h1 class="text-2xl text-bold ml-12 mt-4">Delete Group</h1>
         <div class="flex justify-start items-center w-full py-2 pl-12">
