@@ -210,8 +210,6 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-        Log::info($request->password);
-
         if (!password_verify($request->password, $user->password)) {
             return response()->json(['error' => 'The provided password does not match our records.'], 403);
         }

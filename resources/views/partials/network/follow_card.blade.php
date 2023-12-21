@@ -4,7 +4,7 @@ buttons = [['class' => ..., 'text' => ...], ...]
 --}}
 <article class="border-t dark:border-dark-neutral p-5 flex justify-between first:border-0">
     <a href="{{ $linkTo }}" class="user-follow flex gap-4 items-center">
-        <img class="w-8 h-8 rounded-full" src="{{ $user->getProfilePicture() }}" alt="Profile Picture">
+        <img class="w-8 h-8 rounded-full" src="{{ $user->getProfilePicture() }}?v={{ time() }}" alt="Profile Picture">
         <div class="flex flex-col">
             <p class="font-bold">{{ $user->name }}</p>
             <p>{{ $user->username }}</p>

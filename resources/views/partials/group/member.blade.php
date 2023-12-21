@@ -6,7 +6,7 @@ $linkTo = Auth::guard('admin')->check() ? url("/admin/profile/$member->username"
 <div class="group-member flex w-full items-center justify-between p-8 border border-slate-400">
     <a href="{{ $linkTo }}">
         <div class="flex items-center justify-start">
-            <img src="{{ $member->getProfilePicture() }}" alt="user photo" class="w-16 h-16 rounded-full">
+            <img src="{{ $member->getProfilePicture()}}?v={{time()}}" alt="user photo" class="w-16 h-16 rounded-full">
             <h1 class="text-xl pl-8">{{ $member->name }}</h1>
         </div>
     </a>

@@ -17,7 +17,7 @@
                 <div class="flex justify-start items-start h-full">
                     <div class="file-input-wrapper relative top-0 left-0" id="change-group-photo">
                         <label for="group-photo-input" class="cursor-pointer">
-                            <img src="{{ $group->getPicture() }}" alt="group photo"
+                            <img src="{{ $group->getPicture() }}?v={{ time() }}" alt="group photo"
                                 class="image-preview w-16 h-16 rounded-full">
                             <div class="absolute top-0 left-0 w-16 h-16 rounded-full bg-black bg-opacity-50 flex items-center justify-center hidden"
                                 id="group-photo-hover">

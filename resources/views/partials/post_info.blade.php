@@ -8,7 +8,7 @@ $icon = $post->is_private ? 'fa-lock' : 'fa-unlock';
 <div class="flex flex-col gap-4 m-1 post-info">
     <header class="flex items-center justify-start space-x-2">
         <a href="{{ $userLink }}">
-            <img class="w-8 h-8 rounded-full ring-1 ring-dark-neutral" src="{{ $post->createdBy->getProfilePicture() }}"
+            <img class="w-8 h-8 rounded-full ring-1 ring-dark-neutral" src="{{ $post->createdBy->getProfilePicture() }}?v={{ time() }}"
                 alt="User photo">
         </a>
         <div class="flex flex-col">

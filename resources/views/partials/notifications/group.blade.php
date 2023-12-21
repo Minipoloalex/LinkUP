@@ -17,7 +17,7 @@ $seen = $notification->seen;
     </div>
     <div class="h-12 min-w-[2rem] flex items-center justify-center ml-2">
         <a href="{{ $profile_link }}">
-            <img src="{{ $pfp }}" alt="avatar" class="w-8 h-8 rounded-full">
+            <img src="{{ $pfp }}?v={{ time() }}" alt="avatar" class="w-8 h-8 rounded-full">
         </a>
     </div>
     @if ($type === 'Request')
