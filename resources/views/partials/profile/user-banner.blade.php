@@ -54,7 +54,7 @@ return route('profile.network', ['username' => $username, 'section' => $section]
     @endif
     @endauth
     <div class="profile-image flex flex-row justify-center">
-        <img class="w-32 h-32 rounded-full" src="{{ $user->getProfilePicture() }}" alt="Profile Picture">
+        <img class="w-32 h-32 rounded-full" src="{{ $user->getProfilePicture() }}?v={{ time() }}" alt="Profile Picture">
     </div>
     <div class="profile-info text-center mt-4">
         <p class="profile-name text-2xl font-bold">{{ $user->name }}</p>
