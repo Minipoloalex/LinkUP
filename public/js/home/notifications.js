@@ -40,6 +40,7 @@ async function appendNotifications (notifications) {
       addFollowRequestEvents(notificationElement)
     }
     else if (notificationElement.dataset.type === 'Request') {
+      console.log(notificationElement)      
       addMemberRequestEvents(notificationElement)
     }
     else if (notificationElement.dataset.type === 'Invitation') {

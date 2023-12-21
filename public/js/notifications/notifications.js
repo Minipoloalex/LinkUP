@@ -9,7 +9,6 @@ if (notificationsTab && container) {
 function resolveMemberRequest (group, member_id, element, accept) {
   const url = `/group/${group}/request/${member_id}`
 
-  addFollowRequestEvents()
   fetch(url, {
     method: 'POST',
     headers: {
