@@ -1,5 +1,3 @@
-import { show, hide } from './general_helpers.js'
-
 const feedbackMessage = document.querySelector('#feedback-message')
 const active = 'feedback-active'
 

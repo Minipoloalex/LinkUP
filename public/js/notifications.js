@@ -9,9 +9,6 @@ function getUserId () {
 }
 
 async function getImageUrl (id) {
-  const scheme = window.location.protocol + '//'
-  const host = window.location.host + '/'
-
   const url = `/api/users/picture/${id}`
 
   const path = fetch(url, {
@@ -37,8 +34,6 @@ async function getImageUrl (id) {
 }
 
 async function getUser (id) {
-  const scheme = window.location.protocol + '//'
-  const host = window.location.host + '/'
   const url = `/api/users/${id}`
 
   const user = fetch(url, {
