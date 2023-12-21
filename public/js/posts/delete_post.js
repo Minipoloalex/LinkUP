@@ -35,7 +35,14 @@ export async function deletePostOrComment(event, deleteURL, redirectTo) {
             if (postsContainer.querySelector('.post') == null) {
                 show(getNoneElement(postsContainer));
             }
-            await Swal.fire('Deleted!', isDeletedText, 'success');
+            await Swal.fire({
+                html: '<p class="text-dark-active">' + isDeletedText + '</p>',
+                icon: 'success',
+                iconColor: '#A58AD6',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#A58AD6',
+                background: '#333333',
+            });
         }
 
         if (isDeleted && window.location.href.includes(`/post/${postId}`)) {    // post page must redirect

@@ -98,7 +98,7 @@ export function handlerFileInput (fileInputWrapper) {
 async function showCropSwal (imageSrc, type) {
   let cropper = null
   return await Swal.fire({
-    title: 'Crop your image',
+    title: '<h1 class="text-dark-active">Crop Image</h1>',
     html:
       type == 'post'
         ? `<div>
@@ -140,11 +140,11 @@ async function showCropSwal (imageSrc, type) {
         preview: cropper.getCroppedCanvas().toDataURL()
       }
     },
+    background: '#333333',
     showCancelButton: true,
     showConfirmButton: true,
     confirmButtonText: 'Crop',
-    // confirmButtonColor: '#ff0000',   // TODO: change color
+    confirmButtonColor: '#A58AD6',
     cancelButtonText: 'Cancel'
-    // cancelButtonColor: '#aaa',
   })
 }
