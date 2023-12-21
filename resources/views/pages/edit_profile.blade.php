@@ -131,7 +131,7 @@ $activePage = 'profile';
                             <input type="file" id="media" name="media" accept="image/*" class="hidden">
                             @include('partials.images_crop_input')
                             <button id="media-button" type="button"
-                                class="border border-gray-400 hover:border-gray-500 dark:bg-dark-active dark:text-dark-secondary font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                class="border bg-transparent font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 onclick="document.getElementById('media').click()">
                                 Edit
                             </button>
