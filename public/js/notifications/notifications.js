@@ -96,7 +96,29 @@ export function addFollowRequestEvents (notification) {
     }
   }
 }
+export function addMemberRequestEvents (notification) {
+  const accepts = notification.querySelectorAll('.member-accept')
+  const rejects = notification.querySelectorAll('.member-reject')
 
+  if (!accepts || !rejects) return
+
+  const requests = [...accepts, ...rejects]
+
+  for (const request of requests) {
+    const user = request.dataset.user
+    const group = request.dataset.group
+
+    if (request.classList.contains('member-accept')) {
+      request.addEventListener('click', () => {
+        resolveMemberRequest(group, user, request, 'accept')
+      })
+    } else {
+      request.addEventListener('click', () => {
+        resolveMemberRequest(group, user, request, 'reject')
+      })
+    }
+  }
+}
 export function addGroupInvitationEvents (notification) {
   const accepts = notification.querySelectorAll('.invitation-accept')
   const rejects = notification.querySelectorAll('.invitation-reject')

@@ -230,6 +230,11 @@ public function denyInvitation($groupId)
         }
 
         $group->pendingMembers()->attach($user->id, ['type' => 'Request']);
+        $groupNotification = GroupNotification::where('id_group', $id)
+                                    ->where('id_user', $user->id)
+                                    ->where('type', 'Request')
+                                    ->first();
+        event(new GroupNotificationEvent($groupNotification));
         return response('Request sent', 200);
     }
 

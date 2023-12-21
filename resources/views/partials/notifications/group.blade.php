@@ -6,11 +6,6 @@ $profile_link = route('profile.show', ['username' => $who->username]);
 $pfp = $who->getProfilePicture();
 $group_link = route('group.show', ['id' => $group->id]);
 $seen = $notification->seen;
-
-Log::debug("type below:");
-Log::debug($type);
-Log::debug($group->toJson());
-Log::debug($who->toJson());
 @endphp
 
 <div class="flex items-center w-full h-14 p-1 border-t dark:border-dark-neutral first:border-0"

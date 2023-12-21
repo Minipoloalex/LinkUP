@@ -3,7 +3,6 @@ import { parseHTML } from '../general_helpers.js'
 import { infiniteScroll, destroyFetcher } from '../infinite_scrolling.js'
 import { hide, show } from '../general_helpers.js'
 import { addEventListenersToPost } from '../posts/post_event_listeners.js'
-import { showFeedback } from '../feedback.js'
 
 let membersFetcher = null
 let postsFetcher = null

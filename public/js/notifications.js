@@ -116,10 +116,13 @@ if (userId) {
     const user = notification.userThatSent
     const groupName = notification.groupName
 
-
-    const groupNotificationType = groupNotification.type    
-
-    const link = `/group/${groupNotification.id_group}`
+    const groupNotificationType = groupNotification.type
+    
+    let link = `/group/${groupNotification.id_group}` // 'Invitation'
+    if (groupNotificationType === 'Request') {
+      link = `/profile/${user.username}`              // 'Request'
+    }
+    
     const image = await getImageUrl(user.id)
     const username = user.username
     let message = ''
