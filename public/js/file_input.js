@@ -11,7 +11,7 @@ export function clearFileInputWrapper (fileInputWrapper) {
   if (removeFileBtn) removeFileBtn.click()
 }
 function getRemoveFileBtn (fileInputWrapper) {
-  return fileInputWrapper.querySelector('#remove-file')
+  return fileInputWrapper.querySelector('.remove-file')
 }
 function getUploadFileBtn (fileInputWrapper) {
   return fileInputWrapper.querySelector('.upload-file')
