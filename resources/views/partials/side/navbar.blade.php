@@ -104,46 +104,47 @@ $activeClass = 'dark:text-dark-active';
         </li>
         @endauth
 
-        <div class="hidden lg:flex lg:flex-col lg:flex-grow lg:items-center lg:justify-end pb-8">
-            <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full @if ($activePage == 'about') {{$activeClass}} @endif">
-                <div class="flex items-center w-full justify-center">
-                    <a href="{{ route('about') }}"
-                        class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
-                        <div class="lg:w-8">
-                            <i class="fa-regular fa-circle-question fa-xl"></i>
-                        </div>
-                        <p class="hidden xl:block ml-4">About</p>
-                    </a>
-                </div>
-            </li>
+        <li class="filler">
+            <div class="lg:h-12"></div>
+            <div class="lg:h-12"></div>
+        </li>
 
-            <li
-                class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full @if ($activePage == 'features') {{$activeClass}} @endif">
-                <div class="lg:flex lg:items-center lg:w-full lg:justify-center">
-                    <a href="{{ route('features') }}"
-                        class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
-                        <div class="lg:w-8">
-                            <i class="fa-regular fa-star fa-xl"></i>
-                        </div>
-                        <p class="hidden xl:block ml-4">Features</p>
-                    </a>
-                </div>
-            </li>
+        <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full @if ($activePage == 'about') {{$activeClass}} @endif">
+            <div class="flex items-center w-full justify-center">
+                <a href="{{ route('about') }}"
+                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                    <div class="lg:w-8">
+                        <i class="fa-regular fa-circle-question fa-xl"></i>
+                    </div>
+                    <p class="hidden xl:block ml-4">About</p>
+                </a>
+            </div>
+        </li>
 
-            <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
-                <div class="flex items-center w-full justify-center">
-                    <a href="{{ $authenticated ? route('logout') : route('login') }}"
-                        class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
-                        <div class="lg:w-8">
-                            <i
-                                class="fa-solid {{ $authenticated ? 'fa-arrow-right-from-bracket' : 'fa-sign-in-alt' }} fa-xl"></i>
-                        </div>
-                        <p class="hidden xl:block ml-4">{{ $authenticated ? 'Logout' : 'Login' }}</p>
-                    </a>
-                </div>
-            </li>
+        <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full @if ($activePage == 'features') {{$activeClass}} @endif">
+            <div class="lg:flex lg:items-center lg:w-full lg:justify-center">
+                <a href="{{ route('features') }}"
+                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                    <div class="lg:w-8">
+                        <i class="fa-regular fa-star fa-xl"></i>
+                    </div>
+                    <p class="hidden xl:block ml-4">Features</p>
+                </a>
+            </div>
+        </li>
 
-        </div>
+        <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full">
+            <div class="flex items-center w-full justify-center">
+                <a href="{{ $authenticated ? route('logout') : route('login') }}"
+                    class="lg:h-full lg:w-full lg:flex lg:items-center lg:justify-center xl:justify-start">
+                    <div class="lg:w-8">
+                        <i
+                            class="fa-solid {{ $authenticated ? 'fa-arrow-right-from-bracket' : 'fa-sign-in-alt' }} fa-xl"></i>
+                    </div>
+                    <p class="hidden xl:block ml-4">{{ $authenticated ? 'Logout' : 'Login' }}</p>
+                </a>
+            </div>
+        </li>
     </ul>
 </nav>
 
@@ -226,41 +227,39 @@ $activeClass = 'dark:text-dark-active';
             </div>
         </li>
 
-        <div class="flex flex-col w-full flex-grow items-center justify-end pb-8">
-            <li class="block h-12 w-2/3 @if ($activePage == 'about') {{$activeClass}} @endif">
-                <div class="flex w-full h-full items-center justify-center">
-                    <a href="{{ route('about') }}" class="h-full w-full flex items-center justify-start">
-                        <div class="w-8">
-                            <i class="fa-regular fa-circle-question fa-xl"></i>
-                        </div>
-                        <p class="block ml-4">About</p>
-                    </a>
-                </div>
-            </li>
+        <li class="block h-12 w-2/3 @if ($activePage == 'about') {{$activeClass}} @endif">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{ route('about') }}" class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i class="fa-regular fa-circle-question fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">About</p>
+                </a>
+            </div>
+        </li>
 
-            <li class="block h-12 w-2/3 @if ($activePage == 'features') {{$activeClass}} @endif">
-                <div class="flex w-full h-full items-center justify-center">
-                    <a href="{{ route('features') }}" class="h-full w-full flex items-center justify-start">
-                        <div class="w-8">
-                            <i class="fa-regular fa-star fa-xl"></i>
-                        </div>
-                        <p class="block ml-4">Features</p>
-                    </a>
-                </div>
-            </li>
+        <li class="block h-12 w-2/3 @if ($activePage == 'features') {{$activeClass}} @endif">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{ route('features') }}" class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i class="fa-regular fa-star fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">Features</p>
+                </a>
+            </div>
+        </li>
 
-            <li class="block h-12 w-2/3">
-                <div class="flex w-full h-full items-center justify-center">
-                    <a href="{{ $authenticated ? route('logout') : route('login') }}"
-                        class="h-full w-full flex items-center justify-start">
-                        <div class="w-8">
-                            <i
-                                class="fa-solid {{ $authenticated ? 'right-from-bracket fa-sign-out-alt' : 'fa-sign-in-alt' }} fa-xl"></i>
-                        </div>
-                        <p class="block ml-4">{{ $authenticated ? 'Logout' : 'Login' }}</p>
-                    </a>
-                </div>
-            </li>
-        </div>
+        <li class="block h-12 w-2/3">
+            <div class="flex w-full h-full items-center justify-center">
+                <a href="{{ $authenticated ? route('logout') : route('login') }}"
+                    class="h-full w-full flex items-center justify-start">
+                    <div class="w-8">
+                        <i
+                            class="fa-solid {{ $authenticated ? 'right-from-bracket fa-sign-out-alt' : 'fa-sign-in-alt' }} fa-xl"></i>
+                    </div>
+                    <p class="block ml-4">{{ $authenticated ? 'Logout' : 'Login' }}</p>
+                </a>
+            </div>
+        </li>
     </ul>
 </div>

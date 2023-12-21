@@ -26,7 +26,7 @@
 
     <script src="https://kit.fontawesome.com/3c619ea7f7.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <script type="text/javascript" src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
 
     <script type="module" src="{{ url('js/app.js') }}"></script>
     <script type="module" src="{{ url('js/toast.js') }}"></script>
