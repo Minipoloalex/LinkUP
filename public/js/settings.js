@@ -10,12 +10,13 @@ if (accountUpdateButton) {
         e.preventDefault(); 
 
         Swal.fire({
-            title: 'Enter your password',
-            text: 'This is required to update your account settings',
+            title: '<h1 class="text-dark-active">Enter your password</h1>',
+            html: '<p class="text-white">This is required to update your account settings</p>',
             input: 'password',
             inputAttributes: {
                 autocapitalize: 'off'
             },
+            background: '#333333',
             showCancelButton: true,
             confirmButtonText: 'Update',
             confirmButtonColor: '#A58AD6',
@@ -56,12 +57,13 @@ if (accountUpdateButton) {
         e.preventDefault(); 
 
         Swal.fire({
-            title: 'Enter your password',
-            text: 'This is required to delete your account',
+            title: '<h1 class="text-dark-active">Enter your password</h1>',
+            html: '<p class="text-white">This is required to delete your account</p>',
             input: 'password',
             inputAttributes: {
                 autocapitalize: 'off'
             },
+            background: '#333333',
             showCancelButton: true,
             confirmButtonText: 'Delete',
             confirmButtonColor: '#EF4444',

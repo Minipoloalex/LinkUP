@@ -87,7 +87,16 @@ async function togglePostPrivacy(privacyIcon, postId) {
             privacyIcon.classList.add('fa-unlock');
         }
         const description = isPrivate ? 'Post set to private' : 'Post set to public';
-        await Swal.fire('Post privacy updated', description, 'success');
+        await Swal.fire({
+            title: '<h1 class="text-dark-active">Privacy updated</h1>',
+            html: `<p class="text-white">${description}</p>`,
+            background: '#333333',
+            showConfirmButton: true,
+            confirmButtonText: 'Ok',
+            confirmButtonColor: '#A58AD6',
+            icon: 'success',
+            iconColor: '#A58AD6',
+        });
     }
 }
 

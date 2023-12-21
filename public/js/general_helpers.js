@@ -19,11 +19,13 @@ export function parseHTML(htmlText) {
 
 export async function swalConfirmDelete(prompt, descriptionText, action, cancelAction, confirmButtonText = 'Yes, delete.') {
   const result = await Swal.fire({
-    title: prompt,
-    text: descriptionText,
+    title: '<h1 class="text-dark-active">' + prompt + '</h1>',
+    html: '<p class="text-white">' + descriptionText + '</p>',
     icon: 'warning',
+    iconColor: '#A58AD6',
+    background: '#333333',
     showCancelButton: true,
-    confirmButtonColor: '#ff0000',
+    confirmButtonColor: '#EF4444',
     cancelButtonColor: '#aaa',
     confirmButtonText: confirmButtonText
   });

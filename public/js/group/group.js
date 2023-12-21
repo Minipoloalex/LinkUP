@@ -167,22 +167,33 @@ function addRemoveMemberEvents (member, group_id) {
 
   button.addEventListener('click', () => {
     Swal.fire({
-      title: `Remove ${name}?`,
-      text: "You won't be able to revert this!",
+      title: '<h1 class="text-dark-active">Remove member?</h1>',
+      html: '<p class="text-white">You are about to remove ' + name + ' from this group.</p>',
       icon: 'warning',
+      iconColor: '#A58AD6',
       showCancelButton: true,
-      confirmButtonColor: '#ff0000',
-      cancelButtonColor: '#aaa',
-      confirmButtonText: 'Yes, remove.'
+      confirmButtonColor: '#EF4444',
+      confirmButtonText: 'Yes, remove.',
+      background: '#333333',
     }).then(result => {
       if (result.isConfirmed) {
-        Swal.fire('Removed!', `${name} has been removed.`, 'success')
+        Swal.fire({
+          title: '<h1 class="text-dark-active">Member removed</h1>',
+          showConfirmButton: true,
+          confirmButtonColor: '#A58AD6',
+          icon: 'success',
+          iconColor: '#A58AD6',
+          background: '#333333',
+        }).then(result => {
+          if (result.isConfirmed) {
         removeMember(group_id, member_id, member)
+          }
+        })
       }
     })
   })
 }
-
+    
 function leaveGroup (group) {
   const url = `/group/${group}/member/self`
 
