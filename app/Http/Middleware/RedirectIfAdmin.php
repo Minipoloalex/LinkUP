@@ -9,7 +9,7 @@ class RedirectIfAdmin
     public function handle($request, Closure $next)
     {
         if (auth()->guard('admin')->check()) {
-            return redirect()->route('admin.home');
+            return redirect()->route('admin.dashboard');
         }
 
         return $next($request);

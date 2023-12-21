@@ -23,16 +23,19 @@ class AdminController extends Controller
     private static int $amountPerPage = 10;
     public function index()
     {
+        $this->authorize('admin', Admin::class);
         return view('admin.dashboard');
     }
 
     public function showCreateForm()
     {
+        $this->authorize('admin', Admin::class);
         return view('admin.create');
     }
 
     public function createAdmin(Request $request)
     {
+        $this->authorize('admin', Admin::class);
         $validatedData = $request->validate([
             'email' => 'required|string|email|max:255|unique:admin',
             'password' => 'required|string|min:8|confirmed',
@@ -48,16 +51,19 @@ class AdminController extends Controller
 
     public function listUsers()
     {
+        $this->authorize('admin', Admin::class);
         return view('admin.users');
     }
 
     public function listPosts()
     {
+        $this->authorize('admin', Admin::class);
         return view('admin.posts');
     }
 
     public function banUser($id)
     {
+        $this->authorize('admin', Admin::class);
         $user = User::findOrFail($id);
         $user->is_banned = true;
         $user->save();
@@ -71,6 +77,7 @@ class AdminController extends Controller
 
     public function unbanUser($id)
     {
+        $this->authorize('admin', Admin::class);
         $user = User::findOrFail($id);
         $user->is_banned = false;
         $user->save();
@@ -80,6 +87,7 @@ class AdminController extends Controller
 
     public function deleteUser($id)
     {
+        $this->authorize('admin', Admin::class);
         $user = User::findOrFail($id);
 
         $name = $user->name;
@@ -125,13 +133,13 @@ class AdminController extends Controller
 
     public function listGroups()
     {
-        $groups = Group::paginate(10);
-
-        return view('admin.groups', ['groups' => $groups]);
+        $this->authorize('admin', Admin::class);
+        return view('admin.groups');
     }
 
     public function deleteGroup($id)
     {
+        $this->authorize('admin', Admin::class);
         $group = Group::findOrFail($id);
 
         // delete all group posts and remove all members
@@ -154,6 +162,7 @@ class AdminController extends Controller
 
     public function deletePost($id)
     {
+        $this->authorize('admin', Admin::class);
         $post = Post::findOrFail($id);
         $post->delete();
 
@@ -167,6 +176,7 @@ class AdminController extends Controller
 
     public function viewPost($id)
     {
+        $this->authorize('admin', Admin::class);
         $post = Post::findOrFail($id);
 
         return view('admin.post', ['post' => $post]);
@@ -174,6 +184,7 @@ class AdminController extends Controller
 
     public function viewGroup($id)
     {
+        $this->authorize('admin', Admin::class);
         $group = Group::findOrFail($id);
 
         return view('admin.group', ['group' => $group]);
@@ -181,6 +192,7 @@ class AdminController extends Controller
 
     public function viewUser($username)
     {
+        $this->authorize('admin', Admin::class);
         $user = User::where('username', $username)->firstOrFail();
 
         return view('admin.user', ['user' => $user]);
@@ -188,6 +200,7 @@ class AdminController extends Controller
 
     public function viewNetwork($username)
     {
+        $this->authorize('admin', Admin::class);
         $user = User::where('username', $username)->firstOrFail();
         
         return view('admin.network', ['user' => $user]);
@@ -195,6 +208,7 @@ class AdminController extends Controller
 
     public function searchPosts(Request $request)
     {
+        $this->authorize('admin', Admin::class);
         $request->validate([
             'page' => 'required|integer|min:0',
             'query' => 'nullable|string|max:255',
@@ -219,6 +233,7 @@ class AdminController extends Controller
 
     public function searchUsers(Request $request)
     {
+        $this->authorize('admin', Admin::class);
         $request->validate([
             'page' => 'required|integer|min:0',
             'query' => 'nullable|string|max:255',
@@ -243,6 +258,7 @@ class AdminController extends Controller
 
     public function searchGroups(Request $request)
     {
+        $this->authorize('admin', Admin::class);
         $request->validate([
             'page' => 'required|integer|min:0',
             'query' => 'nullable|string|max:255',

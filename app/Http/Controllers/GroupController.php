@@ -50,7 +50,7 @@ class GroupController extends Controller
     public function createGroup(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:50|unique:groups',
             'description' => 'nullable|string|max:150',
         ]);
 

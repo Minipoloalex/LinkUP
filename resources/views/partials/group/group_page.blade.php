@@ -31,7 +31,7 @@ $userLinkTo = $isAdmin ? route('admin.user', $owner->username) : route('profile.
                 <button id="{{ $id }}"
                     class="h-8 w-32 rounded-full dark:bg-{{ $color }} flex items-center justify-center px-4 text-sm">
                     @if ($link !== null)
-                    <a href="{{ $link }}" class="button-text">{{ $text }}</a>
+                    <a href="{{ $link }}" class="button-text w-full">{{ $text }}</a>
                     @else
                     <span class="button-text">{{ $text }}</span>
                     @endif

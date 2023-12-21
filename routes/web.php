@@ -129,8 +129,8 @@ Route::controller(GroupController::class)->group(function () {
 
     Route::post('/group/{id}/invite/{new_member}', 'inviteUser')->where('id', '[0-9]+')->name('group.inviteUser');
 
-    Route::patch('/group/acceptInvitation/{groupId}', 'acceptInvitation')->where('id', '[0-9]+');
-    Route::delete('/group/denyInvitation/{groupId}','denyInvitation')->where('id', '[0-9]+');
+    Route::patch('/group/acceptInvitation/{groupId}', 'acceptInvitation')->where('groupId', '[0-9]+');
+    Route::delete('/group/denyInvitation/{groupId}','denyInvitation')->where('groupId', '[0-9]+');
 
 });
 
@@ -139,7 +139,6 @@ Route::get('/notifications', [NotificationController::class, 'index'])->name('no
 
 // Admin
 Route::controller(AdminController::class)->group(function () {
-
     // dashboard
     Route::redirect('/admin', '/admin/dashboard');
     Route::get('/admin/dashboard', 'index')->name('admin.dashboard');
