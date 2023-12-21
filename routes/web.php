@@ -126,7 +126,7 @@ Route::controller(GroupController::class)->group(function () {
     Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
     Route::delete('/group/{id}', 'delete')->name('group.delete');
     Route::delete('/group/{id}/member/{member_id}', 'deleteMember');
-    Route::get('/group/{id}/member/self/leave', 'leaveGroup');
+
     Route::post('/group/{id}/invite/{new_member}', 'inviteUser')->name('group.inviteUser');
 
     Route::patch('/group/acceptInvitation/{groupId}', 'acceptInvitation');

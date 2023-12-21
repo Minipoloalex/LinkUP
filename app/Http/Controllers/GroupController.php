@@ -387,9 +387,4 @@ public function denyInvitation($groupId)
     {
         return view('partials.search.group', ['group' => $group, 'isOwner' => $isOwner])->render();
     }
-
-    public function leaveGroup()
-    {
-        return redirect()->route('home')->with('feedback', 'You left the group.');
-    }
 }

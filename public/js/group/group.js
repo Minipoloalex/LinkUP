@@ -3,6 +3,7 @@ import { parseHTML } from '../general_helpers.js'
 import { infiniteScroll, destroyFetcher } from '../infinite_scrolling.js'
 import { hide, show } from '../general_helpers.js'
 import { addEventListenersToPost } from '../posts/post_event_listeners.js'
+import { showFeedback } from '../feedback.js'
 
 let membersFetcher = null
 let postsFetcher = null
@@ -195,7 +196,7 @@ function leaveGroup (group) {
   })
     .then(data => {
       if (data.status === 200) {
-        window.location.href = `/group/${group}/member/self/leave`
+        window.location.href = `/group/${group}`
       }
     })
     .catch(error => console.error(error))

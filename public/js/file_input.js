@@ -17,7 +17,7 @@ function getUploadFileBtn (fileInputWrapper) {
   return fileInputWrapper.querySelector('.upload-file')
 }
 function getImagePreview (fileInputWrapper) {
-  return fileInputWrapper.querySelector('#image-preview')
+  return fileInputWrapper.querySelector('.image-preview')
 }
 function getDataType (fileInputWrapper) {
   return fileInputWrapper.dataset.type
