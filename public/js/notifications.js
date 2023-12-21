@@ -11,7 +11,7 @@ function getUserId () {
 async function getImageUrl (id) {
   const scheme = window.location.protocol + '//'
   const host = window.location.host + '/'
-  
+
   const url = `/api/users/picture/${id}`
 
   const path = fetch(url, {
@@ -21,7 +21,6 @@ async function getImageUrl (id) {
     }
   })
     .then(response => {
-      console.log(response)
       if (response.ok) {
         return response.json()
       }
@@ -117,19 +116,18 @@ if (userId) {
     const groupName = notification.groupName
 
     const groupNotificationType = groupNotification.type
-    
+
     let link = `/group/${groupNotification.id_group}` // 'Invitation'
     if (groupNotificationType === 'Request') {
-      link = `/profile/${user.username}`              // 'Request'
+      link = `/profile/${user.username}` // 'Request'
     }
-    
+
     const image = await getImageUrl(user.id)
     const username = user.username
     let message = ''
     if (groupNotificationType === 'Invitation') {
       message = 'invited you to join the group ' + groupName
-    }
-    else {
+    } else {
       message = 'wants to join the group ' + groupName
     }
     pushNotification({ link, image, username, message })

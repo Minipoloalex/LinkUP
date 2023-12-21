@@ -3,7 +3,6 @@ import { encodeForAjax } from './ajax.js'
 async function fetchAndLoad (container, url, data, action) {
   const page = container.dataset.page
   data.page = page
-  console.log(data)
   const query = (url.includes('?') ? '&' : '?') + encodeForAjax(data)
   const response = await fetch(url + query, {
     method: 'GET',
@@ -12,7 +11,6 @@ async function fetchAndLoad (container, url, data, action) {
     }
   })
   const result = await response.json()
-  console.log(result)
   await action(result)
 
   container.dataset.page = parseInt(page) + 1

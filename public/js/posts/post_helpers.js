@@ -15,7 +15,6 @@ export async function submitAddPostOrComment (form, data, type) {
 export async function submitDataPostOrComment (form, data, url, method) {
   // includes the file
   const file = form.querySelector('input[type=file]').files
-  console.log(file)
 
   if (file.length > 0) {
     const formData = new FormData()
@@ -38,7 +37,6 @@ export async function submitDataPostOrComment (form, data, url, method) {
       },
       body: formData
     })
-    console.log(response)
     return handleFeedbackToResponse(response)
   }
   return await sendAjaxRequest(method, url, data)
