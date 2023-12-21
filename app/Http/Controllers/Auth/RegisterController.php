@@ -20,7 +20,8 @@ class RegisterController extends Controller
     public function showRegistrationForm(): View
     {
         if (Auth::check()) {
-            return redirect('home')->withSuccess('You are already logged in!');;
+            return redirect('home')->with('feedback', 'You are already logged in!');
+            ;
         } else {
             return view('auth.register');
         }
@@ -32,7 +33,7 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         if (Auth::check()) {
-            return redirect('home')->withSuccess('You are already logged in!');
+            return redirect('home')->with('feedback', 'You are already logged in!');
         }
         $request->validate([
             'username' => ['required', 'string', 'max:15', 'unique:users'],
@@ -52,6 +53,6 @@ class RegisterController extends Controller
         Auth::login($user);
 
         return redirect()->route('home')
-            ->withSuccess('You have successfully registered!');
+            ->with('feedback', 'You have successfully registered!');
     }
 }

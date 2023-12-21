@@ -303,6 +303,21 @@ CREATE INDEX post_search_idx ON post USING GIST (tsvectors);
 ------------------ Triggers --------------------
 ------------------------------------------------
 
+-- Trigger for comment events (inserts into the comment the parent's id_group)
+CREATE OR REPLACE FUNCTION comment_trigger_function() RETURNS TRIGGER AS $$
+BEGIN
+    IF (NEW.id_parent IS NOT NULL) THEN
+        SELECT id_group INTO NEW.id_group FROM post WHERE id = NEW.id_parent;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER comment_trigger
+BEFORE INSERT ON post
+FOR EACH ROW
+EXECUTE FUNCTION comment_trigger_function();
+
 -- Trigger for like events (user likes a post)
 CREATE OR REPLACE FUNCTION like_trigger_function() RETURNS TRIGGER AS $$
 BEGIN
@@ -335,9 +350,8 @@ AFTER DELETE ON liked
 FOR EACH ROW
 EXECUTE FUNCTION unlike_trigger_function();
 
-
 -- Trigger for comment events
-CREATE OR REPLACE FUNCTION comment_trigger_function() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION comment_notification_trigger_function() RETURNS TRIGGER AS $$
 BEGIN
     INSERT INTO comment_notification (timestamp, id_comment) 
     VALUES (CURRENT_TIMESTAMP, NEW.id);
@@ -345,11 +359,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER comment_trigger
+CREATE TRIGGER comment_notification_trigger
 AFTER INSERT ON post
 FOR EACH ROW
 WHEN (NEW.id_parent IS NOT NULL)
-EXECUTE FUNCTION comment_trigger_function();
+EXECUTE FUNCTION comment_notification_trigger_function();
 
 -- Trigger for tag events
 CREATE OR REPLACE FUNCTION tag_trigger_function() RETURNS TRIGGER AS $$

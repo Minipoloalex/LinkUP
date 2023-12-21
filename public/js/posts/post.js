@@ -14,6 +14,8 @@ function restoreAndSkipToParentPost() {
 content.addEventListener('scroll', () => {
     const arrowUp = document.getElementById('arrow-up');
     
+    if (!arrowUp) return;
+
     if (content.scrollTop > 0) {
         arrowUp.classList.remove('hidden');
     } else {

@@ -80,3 +80,7 @@ i.unliked {
 .feedback-active {
   @apply -translate-y-16;
 }
+
+div.advanced-inactive {
+  @apply h-0 overflow-hidden;
+}

@@ -18,7 +18,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect('home')->withSuccess('You are already logged in!');;
+            return redirect('home')->with('feedback', 'You are already logged in!');
         } else {
             return view('auth.login');
         }
@@ -52,10 +52,8 @@ class LoginController extends Controller
                 return redirect()->intended('/admin/dashboard');
             }
         }
-            
-        return back()->withErrors([
-            'login' => 'The provided credentials do not match our records.',
-        ])->onlyInput('login');
+
+        return back()->with('feedback', 'The provided credentials do not match our records.')->onlyInput('login');
     }
 
     /**
@@ -67,6 +65,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('login')
-            ->withSuccess('You have logged out successfully!');
+            ->with('feedback', 'You have logged out successfully!');
     }
 }

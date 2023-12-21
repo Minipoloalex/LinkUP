@@ -28,7 +28,7 @@ async function submitAddComment(event) {
         const commentHTML = parseHTML(data.commentHTML);
 
         addEventListenersToComment(commentHTML);
-        commentsContainer.appendChild(commentHTML);
+        commentsContainer.prepend(commentHTML);
         incrementCommentCount(post);
     }
 }
