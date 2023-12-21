@@ -9,7 +9,7 @@
                 </div>
             </div>
             @else
-            <p class="text-center">This user has a private profile.</p>
+            <p class="text-center pt-12">This user has a private profile.</p>
             @endif
         </section>
     </section>
