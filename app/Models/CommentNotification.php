@@ -50,8 +50,7 @@ class CommentNotification extends Model
             ->whereIn('id_parent', function ($query) use ($user_id) {
                 $query->select('id')
                     ->from('post')
-                    ->where('id_created_by', $user_id)
-                    ->whereNull('id_parent');
+                    ->where('id_created_by', $user_id);
             });
 
         // Get comment notifications from user's comments
