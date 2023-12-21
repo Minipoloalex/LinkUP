@@ -55,7 +55,6 @@ $activeClass = 'dark:text-dark-active';
                 </a>
             </div>
         </li>
-        @endauth
 
         <li class="lg:w-12 lg:h-12 xl:w-full @if ($activePage == 'profile') {{$activeClass}} @endif">
             <div class="w-full h-full flex items-center justify-center">
@@ -93,7 +92,6 @@ $activeClass = 'dark:text-dark-active';
             </div>
         </li>
 
-        @auth
         <li id="create-post-li" class=" w-9 h-9 flex items-center justify-center
                     lg:w-12 lg:h-12 lg:p-1 xl:w-full xl:p-0">
             <button class="add-post-on flex w-full h-full rounded-full dark:bg-dark-active items-center justify-center cursor-pointer
@@ -102,12 +100,12 @@ $activeClass = 'dark:text-dark-active';
                 <i class="fa-solid fa-plus fa-xl xl:hidden"></i> {{--This is hidden on desktop devices --}}
             </button>
         </li>
-        @endauth
 
         <li class="filler hidden lg:block">
             <div class="lg:h-12"></div>
             <div class="lg:h-12"></div>
         </li>
+        @endauth
 
         <li class="hidden lg:flex lg:w-12 lg:h-12 xl:w-full @if ($activePage == 'about') {{$activeClass}} @endif">
             <div class="flex items-center w-full justify-center">
