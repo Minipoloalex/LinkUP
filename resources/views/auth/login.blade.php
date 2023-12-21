@@ -1,12 +1,16 @@
-@extends('layouts.auth')
+@extends('layouts.app')
 
+@section('title', 'Login')
 @section('content')
 
-<main id="login-page" class="py-12 px-4 flex flex-col items-center">
-    <form method="POST" action="{{ route('login') }}" class="flex flex-col justify-center w-64 space-y-8">
+<main id="login-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
+                                lg:w-full">
+
+    <form method="POST" action="{{ route('login') }}"
+        class="flex flex-col items-center justify-center w-1/3 mx-auto h-full gap-8 min-w-max">
         {{ csrf_field() }}
 
-        <div class="relative">
+        <div class="relative w-full">
             <input id="login" name="login" type="text" required value="{{ old('login') }}" class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -18,7 +22,7 @@
             </label>
         </div>
 
-        <div class="relative">
+        <div class="relative w-full">
             <input id="password" name="password" type="password" required value="{{ old('login') }}" class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -30,7 +34,7 @@
             </label>
         </div>
 
-        <div class="text-sm flex items-center justify-end relative">
+        <div class="text-sm flex w-full items-center justify-end relative">
             <label for="remember"> Remember Me </label>
             <input id="remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }} class="
                     appearance-none w-4 h-4 rounded dark:bg-dark-secondary flex items-center justify-center peer
@@ -42,7 +46,7 @@
             Login
         </button>
 
-        <div class="flex flex-col items-end justify-center space-y-2">
+        <div class="flex flex-col items-end justify-center gap-2 w-full">
             <a class="text-sm dark:hover:text-dark-active" href="{{ route('register') }}">no account?
                 register
                 here</a>

@@ -1,11 +1,14 @@
-@extends('layouts.auth')
+@extends('layouts.app')
 
+@section('title', 'Register')
 @section('content')
-<main id="register-page" class="py-12 px-4 flex flex-col items-center">
-    <form method="POST" action="{{ route('register') }}" class="flex flex-col justify-center w-64 space-y-8">
+<main id="register-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
+                                lg:w-full">
+    <form method="POST" action="{{ route('register') }}"
+        class="flex flex-col items-center justify-center w-1/3 mx-auto h-full gap-8 min-w-max">
         {{ csrf_field() }}
 
-        <div class="relative">
+        <div class="relative w-full">
             <input id="username" name="username" type="text" required class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -20,8 +23,8 @@
             @endif
         </div>
 
-        <div class="relative">
-            <select id="faculty" name="faculty" required class="appearance-none peer h-10 w-full
+        <div class="relative w-full">
+            <select id="faculty" name="faculty" required class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active">
                 <option value="" disabled selected hidden></option>
@@ -48,7 +51,7 @@
             @endif
         </div>
 
-        <div class="relative">
+        <div class="relative w-full">
             <input id="email" name="email" type="text" required class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -65,7 +68,7 @@
             @endif
         </div>
 
-        <div class="relative">
+        <div class="relative w-full">
             <input id="password" name="password" type="password" required value="{{ old('login') }}" class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -81,7 +84,7 @@
             @endif
         </div>
 
-        <div class="relative">
+        <div class="relative w-full">
             <input id="password-confirm" name="password_confirmation" type="password" required class="peer h-10 w-full
             dark:bg-dark-primary border-b-2 dark:border-dark-secondary dark:text-dark-secondary 
                 text-sm placeholder-transparent focus:outline-none dark:focus:border-dark-active"
@@ -97,7 +100,7 @@
             Create Account
         </button>
 
-        <div class="flex flex-col items-end justify-center">
+        <div class="flex flex-col items-end justify-center w-full">
             <a class="text-sm text-right dark:hover:text-dark-active" href="{{ route('login') }}">
                 already have an account? <br> login here
             </a>
