@@ -23,9 +23,9 @@ if (usersContainer && fetcherUsers) {
 }
 
 function eventListeners (element) {
-  const form = element.querySelector('form')
+  const forms = element.querySelectorAll('form')
 
-  form.addEventListener('submit', () => {
+  forms.forEach(form => form.addEventListener('submit', () => {
     form.classList.add('invisible')
 
     const div = document.createElement('div')
@@ -33,5 +33,5 @@ function eventListeners (element) {
     div.innerHTML = `<i class="fa-solid fa-spinner spinner"></i>`
 
     element.appendChild(div)
-  })
+  }))
 }

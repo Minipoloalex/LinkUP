@@ -141,6 +141,7 @@ Route::get('/notifications', [NotificationController::class, 'index'])->name('no
 Route::controller(AdminController::class)->group(function () {
 
     // dashboard
+    Route::redirect('/admin', '/admin/dashboard');
     Route::get('/admin/dashboard', 'index')->name('admin.dashboard');
 
     // users
