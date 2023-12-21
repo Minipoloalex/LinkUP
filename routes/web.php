@@ -79,7 +79,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/profile/edit', 'showEditProfile')->name('profile.edit');
     Route::post('/profile/update', 'updateProfile')->name('profile.update');
     Route::get('/profile/{username}', 'showProfile')->name('profile.show');
-    Route::get('/profile/photo/{id}', 'viewProfilePicture')->name('profile.photo');
+    Route::get('/profile/photo/{id}', 'viewProfilePicture')->where('id', '[0-9]+')->name('profile.photo');
 
     // network
     Route::get('/network/{username}', 'showNetwork')->name('profile.network');
@@ -103,34 +103,34 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(PostController::class)->group(function () {
     Route::get('/post/{id}', 'show')->name('post')->where('id', '[0-9]+');
     Route::get('/post/{id}/image', 'viewImage')->name('post.image')->where('id', '[0-9]+');
-    Route::patch('/post/{postId}/privacy', 'updatePrivacy');
+    Route::patch('/post/{postId}/privacy', 'updatePrivacy')->where('postId', '[0-9]+');;
     Route::post('/post', 'storePost');
     Route::post('/comment', 'storeComment');
     Route::delete('/post/{id}', 'delete')->where('id', '[0-9]+');
     Route::delete('/post/{id}/image', 'deleteImage')->where('id', '[0-9]+');
     Route::put('/post/{id}', 'update')->where('id', '[0-9]+');
-    Route::post('/post/{id}/like', 'toggleLike'); // like or unlike
+    Route::post('/post/{id}/like', 'toggleLike')->where('id', '[0-9]+'); // like or unlike
 });
 
 // Group
 Route::controller(GroupController::class)->group(function () {
     Route::get('/group/create', 'showCreateForm')->name('group.create');
     Route::post('/group/create', 'createGroup');
-    Route::get('/group/{id}', 'show')->name('group.show');
-    Route::get('/group/{id}/settings', 'settings')->name('group.settings');
-    Route::post('/group/{id}/join', 'joinRequest')->name('group.join');
-    Route::post('/group/{id}/request/{member_id}', 'resolveRequest')->name('group.resolveRequest');
+    Route::get('/group/{id}', 'show')->where('id', '[0-9]+')->name('group.show');
+    Route::get('/group/{id}/settings', 'settings')->where('id', '[0-9]+')->name('group.settings');
+    Route::post('/group/{id}/join', 'joinRequest')->where('id', '[0-9]+')->name('group.join');
+    Route::post('/group/{id}/request/{member_id}', 'resolveRequest')->where('id', '[0-9]+')->name('group.resolveRequest');
     Route::post('/group/verify-password', 'verifyPassword')->name('group.verifyPassword');
-    Route::put('/group/{id}/update', 'update')->name('group.update');
-    Route::post('/group/{id}/change-owner', 'changeOwner')->name('group.changeOwner');
-    Route::delete('/group/{id}/join', 'cancelJoinRequest')->name('group.cancelJoin');
-    Route::delete('/group/{id}', 'delete')->name('group.delete');
-    Route::delete('/group/{id}/member/{member_id}', 'deleteMember');
+    Route::put('/group/{id}/update', 'update')->where('id', '[0-9]+')->name('group.update');
+    Route::post('/group/{id}/change-owner', 'changeOwner')->where('id', '[0-9]+')->name('group.changeOwner');
+    Route::delete('/group/{id}/join', 'cancelJoinRequest')->where('id', '[0-9]+')->name('group.cancelJoin');
+    Route::delete('/group/{id}', 'delete')->where('id', '[0-9]+')->name('group.delete');
+    Route::delete('/group/{id}/member/{member_id}', 'deleteMember')->where('id', '[0-9]+');
 
-    Route::post('/group/{id}/invite/{new_member}', 'inviteUser')->name('group.inviteUser');
+    Route::post('/group/{id}/invite/{new_member}', 'inviteUser')->where('id', '[0-9]+')->name('group.inviteUser');
 
-    Route::patch('/group/acceptInvitation/{groupId}', 'acceptInvitation');
-    Route::delete('/group/denyInvitation/{groupId}','denyInvitation');
+    Route::patch('/group/acceptInvitation/{groupId}', 'acceptInvitation')->where('id', '[0-9]+');
+    Route::delete('/group/denyInvitation/{groupId}','denyInvitation')->where('id', '[0-9]+');
 
 });
 
@@ -148,21 +148,21 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/api/users', 'searchUsers')->name('admin.api.users');
     Route::get('/admin/profile/{username}', 'viewUser')->name('admin.user');
     Route::get('/admin/network/{username}', 'viewNetwork')->name('admin.user.network');
-    Route::post('/admin/users/{id}/ban', 'banUser')->name('admin.users.ban');
-    Route::post('/admin/users/{id}/unban', 'unbanUser')->name('admin.users.unban');
-    Route::post('/admin/users/{id}/delete', 'deleteUser')->name('admin.users.delete');
+    Route::post('/admin/users/{id}/ban', 'banUser')->where('id', '[0-9]+')->name('admin.users.ban');
+    Route::post('/admin/users/{id}/unban', 'unbanUser')->where('id', '[0-9]+')->name('admin.users.unban');
+    Route::post('/admin/users/{id}/delete', 'deleteUser')->where('id', '[0-9]+')->name('admin.users.delete');
 
     // posts
     Route::get('/admin/posts', 'listPosts')->name('admin.posts');
-    Route::get('/admin/post/{id}', 'viewPost')->name('admin.post');
+    Route::get('/admin/post/{id}', 'viewPost')->where('id', '[0-9]+')->name('admin.post');
     Route::get('/admin/api/posts', 'searchPosts')->name('admin.api.posts');
-    Route::delete('/admin/post/{id}', 'deletePost')->name('admin.posts.delete');
+    Route::delete('/admin/post/{id}', 'deletePost')->where('id', '[0-9]+')->name('admin.posts.delete');
 
     // groups
     Route::get('/admin/groups', 'listGroups')->name('admin.groups');
-    Route::get('/admin/group/{id}', 'viewGroup')->name('admin.group');
+    Route::get('/admin/group/{id}', 'viewGroup')->where('id', '[0-9]+')->name('admin.group');
     Route::get('/admin/api/groups', 'searchGroups')->name('admin.api.groups');
-    Route::post('/admin/group/{id}/delete', 'deleteGroup')->name('admin.groups.delete');
+    Route::post('/admin/group/{id}/delete', 'deleteGroup')->where('id', '[0-9]+')->name('admin.groups.delete');
 
     // create admin
     Route::get('/admin/create', 'showCreateForm')->name('admin.create');

@@ -7,7 +7,9 @@ const toastUsername = document.getElementById('toast-username')
 const toastMessage = document.getElementById('toast-message')
 
 const translate = 'translate-y-16'
-toast.classList.remove(translate)
+if (toast) {
+  toast.classList.remove(translate)
+}
 
 const openToast = () => {
   if (window.open) return

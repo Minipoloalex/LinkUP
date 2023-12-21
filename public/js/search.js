@@ -257,7 +257,10 @@ const postFilters = document.querySelector('#post-filters')
 const commentFilters = document.querySelector('#comment-filters')
 
 const filters = [userFilters, groupFilters, postFilters, commentFilters]
-const tabs = getSearchTypeElement().querySelector('ul')
+let tabs = null
+if (filters && filters[0]) {
+  tabs = getSearchTypeElement().querySelector('ul')
+}
 
 if (userFilters && groupFilters && tabs) {
   for (let i = 0; i < 4; i++) {

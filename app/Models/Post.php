@@ -65,7 +65,7 @@ class Post extends Model
     /**
      * Returns a query builder with the posts that were searched by the given string (Full-text search).
      */
-    public static function search($postsToSearch, string $search, bool $orderByRelevance)
+    public static function search($postsToSearch, string $search, bool $orderByRelevance = true)
     {
         $posts = $postsToSearch->whereRaw("tsvectors @@ plainto_tsquery('portuguese', ?)", [$search]);
         if ($orderByRelevance) {

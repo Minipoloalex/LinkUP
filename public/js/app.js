@@ -19,7 +19,9 @@ import { addFollowRequestEvents } from './notifications/notifications.js'
 const mobileSidebar = document.getElementById('mobile-sidebar')
 const mobileToggleSidebar = document.getElementById('mobile-show-sidebar')
 const translate = 'translate-x-[70vw]'
-mobileSidebar.classList.remove(translate)
+if (mobileSidebar) {
+  mobileSidebar.classList.remove(translate)
+}
 
 if (mobileToggleSidebar) {
   mobileToggleSidebar.addEventListener('click', () => {

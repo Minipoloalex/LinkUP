@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 
+@section('title', 'Dashboard')
 @section('content')
 <div class="flex flex-col px-6 py-4 justify-center items-center w-full">
     <div class="self-center my-10 grid grid-cols-2 grid-rows-2 gap-16">
