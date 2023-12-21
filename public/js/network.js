@@ -334,47 +334,92 @@ function setNetworkSectionURL(sectionName) {
 }
 
 async function acceptInvitation(event) {
-  console.log('acceptInvitation')
   event.preventDefault()
   const button = event.currentTarget
-  console.log(button)
   const groupId = button.dataset.groupId
-  console.log(groupId)
   const groupName = button.dataset.groupName
 
-  const response = await fetch(`/group/acceptInvitation/${groupId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': getCsrfToken()
+
+  Swal.fire({
+    title: 'Accept invitation?',
+    text: `Are you sure you want to accept the invitation to join ${groupName}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, accept!',
+    cancelButtonText: 'No, cancel'
+  }).then(async (result) => {
+    if (!result.value) return
+
+    const response = await fetch(`/group/acceptInvitation/${groupId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': getCsrfToken()
+      }
+    })
+    if (response.ok) {
+      const data = await response.json()
+      if (data.success) {
+
+        const groupArticle = button.closest('.group-card')
+
+        groupArticle.remove()
+        decrementCount(getGroupInvitationsButton())
+        handleEmpty(getGroupInvitationsList(), 'You have received no group invitations')
+        
+        incrementCount(getGroupsButton())
+        const groupElement = parseHTML(data.groupHTML)
+        const groupsListContainer = getGroupsList()
+
+        groupsListContainer.appendChild(groupElement)
+        handleRemoveEmpty(groupsListContainer)
+
+        Swal.fire(
+          'Accepted!',
+          `You accepted the invitation to join ${groupName}.`,
+          'success'
+        )
+      }
+      
     }
-  })
-  console.log(response)
-  if (response != null) {
-    const groupArticle = button.closest('.group-card')
-    groupArticle.remove()
-    Swal.fire(
-      'Accepted!',
-      `You accepted the invitation to join ${groupName}.`,
-      'success'
-    )
   }
+  )
 }
 
 async function denyInvitation(event) {
-  
   event.preventDefault()
   const button = event.currentTarget
   const groupId = button.dataset.groupId
   const groupName = button.dataset.groupName
-  const data = await sendAjaxRequest('DELETE', `/group/denyInvitation/${groupId}`, null)
-  if (data != null) {
-    const groupArticle = button.closest('article')
-    groupArticle.remove()
-    Swal.fire(
-      'Denied!',
-      `You denied the invitation to join ${groupName}.`,
-      'success'
-    )
-  }
+
+  Swal.fire({
+    title: 'Deny invitation?',
+    text: `Are you sure you want to deny the invitation to join ${groupName}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, deny!',
+    cancelButtonText: 'No, cancel'
+  }).then(async (result) => {
+    if (!result.value) return
+
+    const response = await fetch(`/group/denyInvitation/${groupId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': getCsrfToken()
+      }
+    })
+    if (response.ok) {
+      const groupArticle = button.closest('.group-card')
+      groupArticle.remove()
+      decrementCount(getGroupInvitationsButton())
+      console.log("adding empty");
+      handleEmpty(getGroupInvitationsList())
+      Swal.fire(
+        'Denied!',
+        `You denied the invitation to join ${groupName}.`,
+        'success'
+      )
+    }
+  })
 }

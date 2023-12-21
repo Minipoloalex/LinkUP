@@ -1,3 +1,5 @@
+import { getCsrfToken } from "../ajax.js"
+
 const notificationsTab = document.getElementById('notifications-tab')
 const container = document.querySelector('section#notifications-home-container')
 if (notificationsTab && container) {
@@ -95,4 +97,61 @@ export function addFollowRequestEvents (notification) {
   }
 }
 
+export function addGroupInvitationEvents (notification) {
+  const accepts = notification.querySelectorAll('.invitation-accept')
+  const rejects = notification.querySelectorAll('.invitation-reject')
+
+  if (!accepts || !rejects) return
+
+  const requests = [...accepts, ...rejects]
+
+  for (const request of requests) {
+    if (request.classList.contains('invitation-accept')) {
+      request.addEventListener('click', (event) => resolveInvitation(event, 'accept'))
+    } else {
+      request.addEventListener('click', (event) => resolveInvitation(event, 'reject'))
+    } 
+  }
+}
+
+
+function addResolveGroupInvitationEvents () {
+  const accepts = document.querySelectorAll('.invitation-accept')
+  const rejects = document.querySelectorAll('.invitation-reject')
+
+  if (!accepts || !rejects) return
+
+  const requests = [...accepts, ...rejects]
+
+  for (const request of requests) {
+    if (request.classList.contains('invitation-accept')) {
+      request.addEventListener('click', (event) => resolveInvitation(event, 'accept'))
+    } else {
+      request.addEventListener('click', (event) => resolveInvitation(event, 'reject'))
+    }
+  }
+}
+async function resolveInvitation(event, accept) {
+  event.preventDefault()
+  const button = event.currentTarget
+  const groupId = button.dataset.groupId
+
+  const type = accept === 'accept' ? 'acceptInvitation' : 'denyInvitation'
+  const response = await fetch(`/group/${type}/${groupId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': getCsrfToken()
+    }
+  })
+  if (response.ok) {
+    const data = await response.json()
+    if (data.success) {
+      parent = button.parentElement
+      parent.innerHTML = accept === 'accept' ? 'Accepted' : 'Rejected'
+    }
+  }
+}
+
 addResolveMemberRequestEvents()
+addResolveGroupInvitationEvents()

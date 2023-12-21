@@ -169,9 +169,9 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log('selectedUserId:', selectedUserId);
       const url = `/group/${groupId}/invite/${selectedUserId}`;
    
-
+      let response
       try {
-        const response = await fetch(url, {
+        response = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -182,12 +182,21 @@ document.addEventListener('DOMContentLoaded', function () {
           body: JSON.stringify({ new_member: selectedUserId })
         })
       } catch (error) {
-          console.error('Error sending invitation:', error.message);
+        console.error('Error sending invitation:', error.message)
       }
+      try {
+        if (response.status >= 400 && response.status < 500) {
+          const data = await response.json()
+          if (data.error) {
+            await Swal.fire('Error', data.error, 'error')
+          }
+        }
+      } catch (error) {
+        console.error('Error displaying error message:', error.message)
+      }
+      
   });
 });
-
-
 
 
 groupPhotoHover()

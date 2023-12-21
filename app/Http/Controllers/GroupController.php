@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
 
+use App\Events\GroupNotificationEvent;
 
 class GroupController extends Controller
 {
@@ -84,7 +85,6 @@ class GroupController extends Controller
     public function changeOwner(Request $request, string $id)
     {
         $group = Group::findOrFail($id);
-        Log::info($id);
 
         $this->authorize('settings', $group);
 
@@ -107,61 +107,68 @@ class GroupController extends Controller
     public function inviteUser(Request $request, int $id, int $new_member)
     {
         $group = Group::findOrFail($id);
-        Log::info('group found');
         $user = Auth::user();
-        Log::info('user found');
-        Log::info($id);
-        Log::info($group->id_owner);
-        Log::info($new_member);
 
         // get invited user
         $userToInvite = User::findOrFail($new_member);
-        Log::info('user to invite found');
-        Log::info($userToInvite);
 
         // Check if the user is already a member or has a pending request
-        if (
-            $group->members()->where('id_user', $userToInvite->id)->exists() ||
-            $group->pendingMembers()->where('id_user', $userToInvite->id)->exists()
-        ) {
-            Log::info('user is already a member or has a pending request');
-            return response('User is already a member or has a pending request', 403);
+        if ($group->members()->where('id_user', $userToInvite->id)->exists()) {
+            return response()->json([
+                'error' => 'User is already a member'
+            ], 400);
+        }
+        if ($group->pendingMembers()->where('id_user', $userToInvite->id)->exists()) {
+            return response()->json([
+                'error' => 'User already has a pending request'
+            ], 400);
         }
 
-        Log::info('user is not a member or has a pending request');
 
         // Create a pending invitation for the user
+        
         $group->pendingMembers()->attach($userToInvite->id, ['type' => 'Invitation']);
-        Log::info('everything is fine');
+        
+        // select group invitation
+        $groupNotification = GroupNotification::where('id_group', $id)
+                                    ->where('id_user', $userToInvite->id)
+                                    ->where('type', 'Invitation')
+                                    ->first();
+
+        event(new GroupNotificationEvent($groupNotification));
         return response('Invitation sent', 200);
     }
 
     public function acceptInvitation($groupId)
-{
-    Log::info('accepting invitation');
+    {
 
-    // Get the current authenticated user
-    $userId = Auth::user()->id;
+        // Get the current authenticated user
+        $userId = Auth::user()->id;
 
-    // Find the group notification for this user and group
-    $notification = GroupNotification::where('id_group', $groupId)
-                                     ->where('id_user', $userId)
-                                     ->where('type', 'Invitation')
-                                     ->first();
+        // Find the group notification for this user and group
+        $notification = GroupNotification::where('id_group', $groupId)
+                                        ->where('id_user', $userId)
+                                        ->where('type', 'Invitation')
+                                        ->first();
 
-    if ($notification) {
-        // Add the user to the group members
-        $group = Group::findOrFail($groupId);
-        $group->members()->attach($userId);
+        if ($notification) {
+            // Add the user to the group members
+            $group = Group::findOrFail($groupId);
+            $group->members()->attach($userId);
 
-        // Delete the notification
-        $notification->delete();
+            // Delete the notification
+            $notification->delete();
 
-        return response()->json(['message' => 'Invitation accepted.'], 200);
-    } else {
-        return response()->json(['message' => 'No invitation found.'], 404);
+            return response()->json([
+                'success' => 'Invitation accepted.',
+                'groupHTML' => $this->translateGroupToHTML($group, false),
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => 'No invitation found.'
+            ], 404);
+        }
     }
-}
 
 public function denyInvitation($groupId)
 {

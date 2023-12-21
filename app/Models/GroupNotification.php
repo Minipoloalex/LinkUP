@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Psy\Readline\Hoa\ProtocolException;
 
-enum GroupNotificationType: string
+use Illuminate\Support\Facades\Log;
+
+enum GroupNotificationType : string
 {
     case REQUEST = 'Request';
     case INVITATION = 'Invitation';
@@ -35,7 +37,7 @@ class GroupNotification extends Model
     public function userNotified()
     {
         if ($this->type == GroupNotificationType::REQUEST) {
-            return $this->group()->owner();
+            return $this->group->owner();
         } else if ($this->type == GroupNotificationType::INVITATION) {
             return $this->belongsTo(User::class, 'id_user');
         }
@@ -44,16 +46,22 @@ class GroupNotification extends Model
     {
         if ($this->type == GroupNotificationType::REQUEST) {
             return $this->belongsTo(User::class, 'id_user');
-        } else if ($this->type == GroupNotificationType::INVITATION) {
-            return $this->group()->owner();
         }
+        return $this->group->owner();
     }
 
     public function getType()
     {
         return 'group';
     }
+    public function getGroupNotificationType()
+    {
+        if ($this->type == GroupNotificationType::REQUEST) {
+            return 'Request';
+        }
+        return 'Invitation';
 
+    }
     public static function getNotifications(int $user_id)
     {
         $group_requests = GroupNotification::select('*')

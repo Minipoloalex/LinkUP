@@ -35,7 +35,7 @@ $groupLinkTo = $isAdmin ? 'admin.group'
                     $user->followRequestsReceived->count() }}</button>
                 <button id="group-invitations-button"
                     class="w-full p-2 border-b-2 dark:border-dark-neutral after:content-['_Invitations']">
-                    5 hardcoded </button>
+                    {{ $user->groupInvitationsReceived->count() }}</button>
                 @endif
                 <button id="groups-button"
                     class="w-full p-2 border-b-2 dark:border-dark-neutral after:content-['_Groups']">{{
