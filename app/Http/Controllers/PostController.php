@@ -635,53 +635,6 @@ class PostController extends Controller
         $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, false, false, $isAdmin, $isAdmin);
         return response()->json(['postsHTML' => $postsHTML]);
     }
-    /**
-     * Get posts for the For You page
-     */
-    /*public function forYouPosts()
-    {
-        $user = Auth::user();
-        $usersFollowing = $user->following;
-        $userFollowedByUsersFollowing = [];
-
-        foreach($usersFollowing as $x) {
-            if(!$x->is_private){
-                $userFollowedByUsersFollowing[] = $x->following;
-            }
-        }
-
-        // remove duplicates from userFollowedByUsersFollowing
-        $userFollowedByUsersFollowing = array_unique($userFollowedByUsersFollowing);
- 
-        $postsForYou = [];
-
-        foreach($userFollowedByUsersFollowing as $user) {
-            $postsForYou[] = $x->posts;
-        }
-
-        $filteredPosts = $postsForYou->filter(function ($post) use ($user) {
-            return policy(Post::class)->view($user, $post);
-        })->values();
-        Log::info('hey2');
-        // Translate posts to the desired HTML format
-        $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
-        Log::info('postsHTML: ' . $postsHTML->toJson());
-        return response()->json($postsHTML);
-
-        // remove posts that are comments
-        /*$postsForYou = array_filter($postsForYou, function($post) {
-            return $post->id_parent !== null;
-        });*/
-
-    /* SORTING POSTS NOT WORKING
-    // sort postsForYou by created_at
-    usort($postsForYou, function($a, $b) {
-        return $a->created_at <=> $b->created_at;
-    });
-    
-}*/
-
-
 
     public function forYouPosts()
     {
@@ -711,7 +664,6 @@ class PostController extends Controller
             ->limit(10)
             ->get();
 
-        Log::info('postsForYou: ' . $postsForYou->toJson());
         $filteredPosts = $postsForYou->filter(function ($post) use ($user) {
             return policy(Post::class)->view($user, $post);
         })->values();
@@ -721,52 +673,6 @@ class PostController extends Controller
 
         return response()->json($postsHTML);
     }
-
-    /*public function followingPosts()
-    {
-        $user = Auth::user();
-        $usersFollowing = $user->following->pluck('id');
-        Log::info('usersFollowing: ' . $usersFollowing->toJson());
-        
-
-    
-        $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
-            ->with('createdBy:id,username')
-            ->withCount('likes')
-            ->orderByDesc('created_at')
-            ->limit(10)
-            ->get();
-
-       
-    
-        Log::info('postsFollowing: ' . $postsFollowing->toJson());
-        
-        // Translate posts to the desired HTML format
-        $postsHTML = $this->translatePostsArrayToHTML($postsFollowing);
-        Log::info('postsHTML: ' . $postsHTML->toJson());
-        return response()->json(['postsHTML' => $postsHTML]);
-    }*/
-
-    // public function followingPosts()
-    // {
-    //     $user = Auth::user();
-    //     $usersFollowing = $user->following->pluck('id');
-    //     Log::info('usersFollowing: ' . $usersFollowing->toJson());
-
-    //     //get posts from users that are followed by the user
-    //     $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
-    //         ->with('createdBy:id,username')
-    //         ->withCount('likes')
-    //         ->orderByDesc('created_at')
-    //         ->limit(10)
-    //         ->get();
-
-    //     //Translate posts to the desired HTML format
-    //     $postsHTML = $this->translatePostsArrayToHTML($postsFollowing);
-    //     Log::info('postsHTML: ' . $postsHTML->toJson());
-    //     return response()->json($postsHTML);
-    // }
-
 
     public function groupPosts(int $id, Request $request)
     {
