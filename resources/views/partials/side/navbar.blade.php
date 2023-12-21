@@ -104,7 +104,7 @@ $activeClass = 'dark:text-dark-active';
         </li>
         @endauth
 
-        <li class="filler">
+        <li class="filler hidden lg:block">
             <div class="lg:h-12"></div>
             <div class="lg:h-12"></div>
         </li>
