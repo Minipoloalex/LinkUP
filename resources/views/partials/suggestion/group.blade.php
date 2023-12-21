@@ -9,7 +9,7 @@ if (isset($group->description) && strlen($group->description) > 30) $group->desc
 <div class="flex items-center w-full h-14 p-1 border-t dark:border-dark-neutral first:border-0">
     <div class="h-12 min-w-[2rem] flex items-center justify-center ml-2">
         <a href="{{ $group_link }}">
-            <img src="{{ $gp }}" alt="avatar" class="w-8 h-8 rounded-full">
+            <img src="{{ $gp }}?v={{ time() }}" alt="avatar" class="w-8 h-8 rounded-full">
         </a>
     </div>
     <a href="{{ $group_link }}" class="flex flex-col items-start justify-center h-12 ml-2 text-xs">

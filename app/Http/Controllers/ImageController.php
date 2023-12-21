@@ -94,7 +94,6 @@ class ImageController extends Controller
             }
         }
         $filePath = Storage::url($this->getFilePath($fileName));
-
         return asset($filePath);
     }
     public function getFileResponse(string $fileName)

@@ -2,16 +2,16 @@
 
 @section('content')
 
-<main id="forgot-password" class="flex flex-col items-center justify-center w-full mt-24">
+<main id="forgot-password" class="flex flex-col items-center justify-center w-full mt-16">
     <div class="w-full max-w-md">
-        <div class="flex flex-col break-words bg-white border-2 rounded shadow-md">
+        <div class="flex flex-col break-words bg-transparent border-2 border-dark-active rounded-lg shadow-md p-8">
                 
-            <div class="font-bold bg-gray-200 text-gray-700 py-3 px-6">
+            <div class="font-bold  py-3 px-6">
                 Recover Your Password 
             </div>
 
             <div class="w-full p-6">
-                <p class="text-gray-700 text-sm">
+                <p class="text-sm">
                     Please enter your email address. You will receive a link to reset your password. 
                 </p>
             </div>
@@ -20,25 +20,25 @@
                 {{ csrf_field() }}
 
                 <div class="flex flex-wrap mb-6">
-                    <label for="email" class="block text-gray-700 text-sm mb-2 font-semibold">
+                    <label for="email" class="block text-sm mb-2 font-semibold">
                         Email Address
                         <span class="text-red-500 text-xs italic">*</span>
                     </label>
 
-                    <input id="email" type="email" class="form-input w-full{{ $errors->has('email') ? ' border-red-500' : '' }}" name="email" value="{{ old('email') }}" required>
+                    <input id="email" type="email" class="form-input py-1 w-full bg-transparent outline-none border-b-2 border-dark-active {{ $errors->has('email') ? ' border-red-500' : '' }}" name="email" value="{{ old('email') }}" required>
 
                     
                 </div>
 
                 <div class="flex flex-wrap mt-16 mb-8">
-                    <button type="submit" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded text-sm">
+                    <button type="submit" class="bg-dark-active font-bold py-2 px-4 rounded text-sm">
                         Send 
                         <i class="fas fa-paper-plane fa-fw ml-1"></i>
                     </button>
                 </div>
 
                 <div class="flex flex-wrap">
-                    <a class="text-blue-500 hover:text-blue-700 text-sm" href="{{ route('login') }}">
+                    <a class="text-blue-400 hover:text-blue-500 text-sm" href="{{ route('login') }}">
                         <i class="fas fa-arrow-left fa-fw"></i>
                         Back to login
                     </a>
