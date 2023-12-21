@@ -413,7 +413,6 @@ async function denyInvitation(event) {
       const groupArticle = button.closest('.group-card')
       groupArticle.remove()
       decrementCount(getGroupInvitationsButton())
-      console.log("adding empty");
       handleEmpty(getGroupInvitationsList())
       Swal.fire(
         'Denied!',

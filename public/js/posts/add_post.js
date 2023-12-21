@@ -56,7 +56,6 @@ async function submitAddPost (event) {
 
   hideAddPostForm()
   const data = await submitAddPostOrComment(addPostForm, requestBody, 'post')
-  console.log(data)
 
   if (data != null) {
     const postElement = parseHTML(data.postHTML)

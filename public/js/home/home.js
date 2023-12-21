@@ -52,7 +52,6 @@ function buildFollowingTimeline () {
   const testIntersectionElement = timeline.querySelector('#fetcher')
 
   const firstAction = data => {
-    console.log(data)
     if (!data.resultsHTML) {
       timeline.innerHTML = `<p class="no-notifications mt-4 text-xl">You are not following anyone yet!</p>`
       return

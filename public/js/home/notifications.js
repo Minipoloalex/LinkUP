@@ -1,6 +1,10 @@
 import { destroyFetcher, infiniteScroll } from '../infinite_scrolling.js'
 import { parseHTML } from '../general_helpers.js'
-import { addFollowRequestEvents, addGroupInvitationEvents, addMemberRequestEvents } from '../notifications/notifications.js'
+import {
+  addFollowRequestEvents,
+  addGroupInvitationEvents,
+  addMemberRequestEvents
+} from '../notifications/notifications.js'
 
 const container = document.querySelector('#notifications-home-container')
 const fetcher = document.querySelector('#notifications-home-fetcher')
@@ -38,13 +42,10 @@ async function appendNotifications (notifications) {
 
     if (notificationElement.dataset.type === 'follow-request') {
       addFollowRequestEvents(notificationElement)
-    }
-    else if (notificationElement.dataset.type === 'Request') {
-      console.log(notificationElement)      
+    } else if (notificationElement.dataset.type === 'Request') {
       addMemberRequestEvents(notificationElement)
-    }
-    else if (notificationElement.dataset.type === 'Invitation') {
-      addGroupInvitationEvents(notificationElement);
+    } else if (notificationElement.dataset.type === 'Invitation') {
+      addGroupInvitationEvents(notificationElement)
     }
   }
 }
