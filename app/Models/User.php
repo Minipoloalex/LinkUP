@@ -101,6 +101,11 @@ class User extends Authenticatable implements CanResetPassword
         return $this->hasMany(FollowRequest::class, 'id_user_to');
     }
 
+    public function groupInvitationsReceived(): HasMany // from group notification
+    {
+        return $this->hasMany(GroupNotification::class, 'id_user');
+    }
+
     public function followRequestsSent(): HasMany
     {
         return $this->hasMany(FollowRequest::class, 'id_user_from');

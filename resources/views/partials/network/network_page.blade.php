@@ -33,6 +33,9 @@ $groupLinkTo = $isAdmin ? 'admin.group'
                 <button id="follow-requests-button"
                     class="w-full p-2 border-b-2 dark:border-dark-neutral after:content-['_Requests']">{{
                     $user->followRequestsReceived->count() }}</button>
+                <button id="group-invitations-button"
+                    class="w-full p-2 border-b-2 dark:border-dark-neutral after:content-['_Invitations']">
+                    {{ $user->groupInvitationsReceived->count() }}</button>
                 @endif
                 <button id="groups-button"
                     class="w-full p-2 border-b-2 dark:border-dark-neutral after:content-['_Groups']">{{
@@ -79,6 +82,19 @@ $groupLinkTo = $isAdmin ? 'admin.group'
                 ])
                 @empty
                 <p class="empty-list">You have received no follow requests</p>
+                @endforelse
+            </div>
+            <div id="group-invitations-list" class="flex flex-col hidden">
+                @forelse ($user->groupInvitationsReceived as $groupInvitation)
+                @php
+                $group = $groupInvitation->group;
+                @endphp
+                @include('partials.network.group_invitation_card', [
+                'group' => $group,
+                'linkTo' => route($groupLinkTo, ['id' => $group->id]),
+                ])
+                @empty
+                <p class="empty-list">You have received no group invitations</p>
                 @endforelse
             </div>
             @endif

@@ -88,6 +88,7 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/follow/request/cancel/{id}', 'cancelRequestToFollow')->where('id', '[0-9]+');
     Route::delete('/follow/request/deny/{id}', 'denyFollowRequest')->where('id', '[0-9]+');
     Route::patch('/follow/request/accept/{id}', 'acceptFollowRequest')->where('id', '[0-9]+');
+    
     Route::post('/follow', 'requestFollow');
 
     // settings
@@ -95,6 +96,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/settings/update', 'updateSettings')->name('settings.update');
     Route::post('/settings/delete', 'deleteAccount')->name('settings.delete');
     Route::post('/settings/confirm-password', 'confirmPassword')->name('settings.confirmPassword');
+
 });
 
 // Post
@@ -125,6 +127,11 @@ Route::controller(GroupController::class)->group(function () {
     Route::delete('/group/{id}', 'delete')->name('group.delete');
     Route::delete('/group/{id}/member/{member_id}', 'deleteMember');
     Route::get('/group/{id}/member/self/leave', 'leaveGroup');
+    Route::post('/group/{id}/invite/{new_member}', 'inviteUser')->name('group.inviteUser');
+
+    Route::patch('/group/acceptInvitation/{groupId}', 'acceptInvitation');
+    Route::delete('/group/denyInvitation/{groupId}','denyInvitation');
+
 });
 
 // Notifications
@@ -160,6 +167,7 @@ Route::controller(AdminController::class)->group(function () {
     // create admin
     Route::get('/admin/create', 'showCreateForm')->name('admin.create');
     Route::post('/admin/create', 'createAdmin');
+
 
 })->middleware('auth:admin');
 

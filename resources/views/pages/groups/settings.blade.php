@@ -5,7 +5,7 @@
 @section('content')
 
 <main id="group-page" class="   flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
-                                lg:w-full">
+                                lg:w-full lg:h-[calc(100vh-6rem)]">
 
     <section class="flex flex-col w-full border-b dark:border-dark-neutral">
         <div class="w-full">
@@ -67,6 +67,30 @@
                     <button id="change-owner-btn"
                         class="follow-accept h-8 w-32 rounded-full dark:bg-dark-active flex items-center justify-center px-4 text-sm">
                         <span class="button-text">Change</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="flex flex-col mt-4 pr-4 py-2 border-b border-dark-neutral">
+        <div class="w-full">
+            <h1 class="text-2xl text-bold ml-12 mt-4"> Invite to Group </h1>
+            <form id="invite-user" class="flex items-center justify-center w-full pt-4 px-12">
+                @csrf
+                @method('POST')
+                <div class="flex flex-col justify-start items-center flex-grow">
+                    <select name="new_member" id="new-member"
+                        class="text-lg border-b border-slate-400 w-full my-2 px-2 bg-dark-primary">
+                        @foreach ($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->username }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex justify-end items-center ml-2">
+                    <button id="invite-member-btn"
+                        class="h-8 w-32 rounded-full dark:bg-dark-active flex items-center justify-center px-4 text-sm">
+                        <span class="button-text">Invite</span>
                     </button>
                 </div>
             </form>

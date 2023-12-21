@@ -11,7 +11,8 @@ function getUserId () {
 async function getImageUrl (id) {
   const scheme = window.location.protocol + '//'
   const host = window.location.host + '/'
-  const url = scheme + host + `api/users/picture/${id}`
+  
+  const url = `/api/users/picture/${id}`
 
   const path = fetch(url, {
     method: 'GET',
@@ -20,6 +21,7 @@ async function getImageUrl (id) {
     }
   })
     .then(response => {
+      console.log(response)
       if (response.ok) {
         return response.json()
       }
@@ -38,7 +40,7 @@ async function getImageUrl (id) {
 async function getUser (id) {
   const scheme = window.location.protocol + '//'
   const host = window.location.host + '/'
-  const url = scheme + host + `api/users/${id}`
+  const url = `/api/users/${id}`
 
   const user = fetch(url, {
     method: 'GET',
@@ -82,8 +84,6 @@ if (userId) {
     const username = user.username
     const message = 'commented on your post.'
 
-    console.log({ link, image, username, message })
-
     pushNotification({ link, image, username, message })
   })
 
@@ -112,12 +112,23 @@ if (userId) {
   })
 
   channel.bind('notification-group', async notification => {
-    // TODO
-    const data = notification.groupNotification
-    console.log(data)
-  })
+    const groupNotification = notification.groupNotification
+    const user = notification.userThatSent
+    const groupName = notification.groupName
 
-  // channel.bind('notification-tag', function(data) {
-  //     console.log(data);
-  // });
+
+    const groupNotificationType = groupNotification.type    
+
+    const link = `/group/${groupNotification.id_group}`
+    const image = await getImageUrl(user.id)
+    const username = user.username
+    let message = ''
+    if (groupNotificationType === 'Invitation') {
+      message = 'invited you to join the group ' + groupName
+    }
+    else {
+      message = 'wants to join the group ' + groupName
+    }
+    pushNotification({ link, image, username, message })
+  })
 }

@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\GroupMember;
 use App\Models\User;
+use App\Models\GroupNotification;
 use Auth;
 use \App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+
+use App\Events\GroupNotificationEvent;
 
 class GroupController extends Controller
 {
@@ -69,7 +72,14 @@ class GroupController extends Controller
 
         $this->authorize('settings', $group);
 
-        return view('pages.groups.settings', ['group' => $group]);
+        // Fetch users who are not members of the group
+        $users = User::whereNotIn('users.id', $group->members()->pluck('users.id'))->get();
+
+
+        return view('pages.groups.settings', [
+            'group' => $group,
+            'users' => $users, // Pass the $users variable to the view
+        ]);
     }
 
     public function changeOwner(Request $request, string $id)
@@ -93,6 +103,96 @@ class GroupController extends Controller
 
         return redirect()->route('group.show', ['id' => $id])->with('feedback', 'Owner changed');
     }
+
+    public function inviteUser(Request $request, int $id, int $new_member)
+    {
+        $group = Group::findOrFail($id);
+        $user = Auth::user();
+
+        // get invited user
+        $userToInvite = User::findOrFail($new_member);
+
+        // Check if the user is already a member or has a pending request
+        if ($group->members()->where('id_user', $userToInvite->id)->exists()) {
+            return response()->json([
+                'error' => 'User is already a member'
+            ], 400);
+        }
+        if ($group->pendingMembers()->where('id_user', $userToInvite->id)->exists()) {
+            return response()->json([
+                'error' => 'User already has a pending request'
+            ], 400);
+        }
+
+
+        // Create a pending invitation for the user
+        
+        $group->pendingMembers()->attach($userToInvite->id, ['type' => 'Invitation']);
+        
+        // select group invitation
+        $groupNotification = GroupNotification::where('id_group', $id)
+                                    ->where('id_user', $userToInvite->id)
+                                    ->where('type', 'Invitation')
+                                    ->first();
+
+        event(new GroupNotificationEvent($groupNotification));
+        return response('Invitation sent', 200);
+    }
+
+    public function acceptInvitation($groupId)
+    {
+
+        // Get the current authenticated user
+        $userId = Auth::user()->id;
+
+        // Find the group notification for this user and group
+        $notification = GroupNotification::where('id_group', $groupId)
+                                        ->where('id_user', $userId)
+                                        ->where('type', 'Invitation')
+                                        ->first();
+
+        if ($notification) {
+            // Add the user to the group members
+            $group = Group::findOrFail($groupId);
+            $group->members()->attach($userId);
+
+            // Delete the notification
+            $notification->delete();
+
+            return response()->json([
+                'success' => 'Invitation accepted.',
+                'groupHTML' => $this->translateGroupToHTML($group, false),
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => 'No invitation found.'
+            ], 404);
+        }
+    }
+
+public function denyInvitation($groupId)
+{
+    // Get the current authenticated user
+    $userId = Auth::user()->id;
+
+    // Find the group notification for this user and group
+    $notification = GroupNotification::where('id_group', $groupId)
+                                     ->where('id_user', $userId)
+                                     ->where('type', 'Invitation')
+                                     ->first();
+
+    if ($notification) {
+        // Delete the notification
+        $notification->delete();
+
+        return response()->json(['message' => 'Invitation denied.'], 200);
+    } else {
+        return response()->json(['message' => 'No invitation found.'], 404);
+    }
+}
+
+
+
 
     public function deleteMember(string $id, string $id_member)
     {

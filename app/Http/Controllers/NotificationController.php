@@ -8,6 +8,8 @@ use App\Models\LikeNotification;
 use App\Models\GroupNotification;
 use App\Models\FollowRequest;
 
+use Illuminate\Support\Facades\Log;
+
 class NotificationController extends Controller
 {
     public static int $pagination = 10;
