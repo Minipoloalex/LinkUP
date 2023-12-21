@@ -102,14 +102,6 @@ CREATE TABLE group_notification (
     UNIQUE (id_user, id_group, type)
 );
 
-CREATE TABLE tag_notification (
-    id SERIAL PRIMARY KEY,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    seen BOOLEAN default false NOT NULL,
-    id_user INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL,
-    id_post INTEGER REFERENCES post(id) ON DELETE CASCADE NOT NULL,
-    UNIQUE (id_user, id_post)
-);
 
 CREATE TABLE password_reset_tokens (
     id SERIAL PRIMARY KEY,
@@ -364,49 +356,6 @@ AFTER INSERT ON post
 FOR EACH ROW
 WHEN (NEW.id_parent IS NOT NULL)
 EXECUTE FUNCTION comment_notification_trigger_function();
-
--- Trigger for tag events
-CREATE OR REPLACE FUNCTION tag_trigger_function() RETURNS TRIGGER AS $$
-DECLARE
-    mention_pattern TEXT := '@(\w+)'; -- Regular expression to match usernames (e.g., '@cooluser123')
-    mentions TEXT[];
-    mentioned_user_id INTEGER;
-    mentioned_user TEXT;
-BEGIN
-    -- Extract mentions from the content using regular expressions
-    SELECT ARRAY(SELECT regexp_matches(NEW.content, mention_pattern, 'g')) INTO mentions;
-
-    -- Loop through the mentions and insert notifications for each mentioned user
-    FOREACH mentioned_user IN ARRAY mentions
-    LOOP
-        -- Remove the '@' symbol from the username
-        -- mentioned_user = substring(mentioned_user from 2);
-        -- Find the user ID based on the mentioned username
-        SELECT id INTO mentioned_user_id
-        FROM users
-        WHERE username = mentioned_user
-        AND (is_private = false OR
-                (EXISTS (SELECT 1 FROM follows  -- user that created the post follows the mentioned user (private account)
-                        WHERE NEW.id_created_by = id_user AND id = id_followed
-                    )
-                )
-            );
-
-        -- Insert a tag notification for the mentioned user
-        IF mentioned_user_id IS NOT NULL THEN
-            INSERT INTO tag_notification (timestamp, id_user, id_post)
-            VALUES (CURRENT_TIMESTAMP, mentioned_user_id, NEW.id);
-        END IF;
-    END LOOP;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER tag_trigger
-AFTER INSERT ON post
-FOR EACH ROW
-EXECUTE FUNCTION tag_trigger_function();
 
 -- BR05 Group Privacy: ensure users that do not belong to group cannot post on it
 CREATE OR REPLACE FUNCTION check_user_can_insert_post_on_group()
