@@ -13,23 +13,7 @@ $activePage = 'settings';
 @section('content')
 <main id="settings-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-6rem)] scrollbar-hide
                             lg:w-full">
-
-    @if (session('success'))
-    <div class="w-full border-2 border-green-500 mb-6 rounded">
-        <div class="flex items-center bg-green-500 text-white text-sm px-4 py-3" role="alert">
-            <i class="fas fa-check-circle fa-fw mr-3"></i>
-            <p>{{ session('success') }}</p>
-        </div>
-    </div>
-    @elseif ($errors->any())
-    <div class="w-full border-2 border-red-500 mb-6 rounded">
-        <div class="flex items-center bg-red-500 text-white text-sm px-4 py-3" role="alert">
-            <i class="fas fa-exclamation-circle fa-fw mr-3"></i>
-            <p>{{ $errors->first() }}</p>
-        </div>
-    </div>
-    @endif
-
+                            
     <div class="w-full">
         <div class="flex flex-col break-words rounded">
             <div class="flex justify-between items-center py-3 px-6 mb-0">
@@ -49,8 +33,11 @@ $activePage = 'settings';
 
                     <input id="username" type="text"
                         class="form-input w-full focus:outline-none dark:bg-dark-primary border-b" name="username"
-                        value="{{ $user->username }}" required autocomplete="username" autofocus>
+                        value="{{ $user->username }}" required autocomplete="username">
 
+                    @if ($errors->has('username'))
+                    <p class="error text-red-500 text-xs py-2"> {{ $errors->first('username') }} </p>
+                    @endif
                 </div>
 
                 <div class="flex flex-wrap mb-6 group">
@@ -61,6 +48,10 @@ $activePage = 'settings';
                     <input id="email" type="email"
                         class="form-input w-full focus:outline-none dark:bg-dark-primary border-b" name="email"
                         value="{{ $user->email }}" required autocomplete="email">
+
+                    @if ($errors->has('email'))
+                    <p class="error text-red-500 text-xs py-2"> {{ $errors->first('email') }} </p>
+                    @endif
                 </div>
 
                 <div class="flex flex-wrap mb-6 group">
@@ -76,6 +67,10 @@ $activePage = 'settings';
                     <p class="text-xs italic mt-4">
                         Leave blank to keep your current password.
                     </p>
+
+                    @if ($errors->has('password'))
+                    <p class="error text-red-500 text-xs py-2"> {{ $errors->first('password') }} </p>
+                    @endif
                 </div>
 
                 <div class="flex flex-wrap mb-6 group">

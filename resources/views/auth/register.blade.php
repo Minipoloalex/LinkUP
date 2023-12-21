@@ -15,6 +15,9 @@
             dark:peer-focus:text-dark-active peer-focus:text-sm">
                 Username
             </label>
+            @if ($errors->has('username'))
+            <p class="error text-red-500 text-xs py-2"> {{ $errors->first('username') }} </p>
+            @endif
         </div>
 
         <div class="relative">
@@ -39,6 +42,10 @@
             </select>
             <label for="faculty" class="absolute left-0 top-2.5 duration-200 origin-0
             dark:peer-focus:text-dark-active peer-focus:text-sm">Faculty</label>
+
+            @if ($errors->has('faculty'))
+            <p class="error text-red-500 text-xs py-2"> {{ $errors->first('faculty') }} </p>
+            @endif
         </div>
 
         <div class="relative">
@@ -52,6 +59,10 @@
             dark:peer-focus:text-dark-active peer-focus:text-sm">
                 Email
             </label>
+
+            @if ($errors->has('email'))
+            <p class="error text-red-500 text-xs py-2"> {{ $errors->first('email') }} </p>
+            @endif
         </div>
 
         <div class="relative">
@@ -64,6 +75,10 @@
                 dark:peer-focus:text-dark-active peer-focus:text-sm">
                 Password
             </label>
+
+            @if ($errors->has('password'))
+            <p class="error text-red-500 text-xs py-2"> {{ $errors->first('password') }} </p>
+            @endif
         </div>
 
         <div class="relative">
@@ -88,17 +103,5 @@
             </a>
         </div>
     </form>
-
-    <div class="w-screen h-12 text-sm text-center absolute top-[90%] left-0">
-        @if (session('success'))
-        <p class="success text-green-500"> {{ session('success') }} </p>
-        @endif
-        @if ($errors->has('login'))
-        <p class="error text-red-500"> {{ $errors->first('login') }} </p>
-        @endif
-        @if ($errors->has('password'))
-        <p class="error text-red-500"> {{ $errors->first('password') }} </p>
-        @endif
-    </div>
 </main>
 @endsection

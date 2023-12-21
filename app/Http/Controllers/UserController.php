@@ -150,7 +150,7 @@ class UserController extends Controller
             ]);
         }
 
-        return redirect()->route('settings.show')->with('success', 'Settings updated successfully!');
+        return redirect()->route('settings.show')->with('feedback', 'Settings updated successfully!');
     }
 
     /**

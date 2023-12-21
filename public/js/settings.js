@@ -18,7 +18,7 @@ if (accountUpdateButton) {
             },
             showCancelButton: true,
             confirmButtonText: 'Update',
-            confirmButtonColor: '#60A5FA',
+            confirmButtonColor: '#A58AD6',
             showLoaderOnConfirm: true,
             
             preConfirm: (password) => {
