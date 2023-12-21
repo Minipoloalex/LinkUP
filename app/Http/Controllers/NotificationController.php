@@ -18,7 +18,6 @@ class NotificationController extends Controller
     {
         $user = auth()->user()->id;
         $follow = FollowRequest::getNotifications($user);
-        \Log::info($follow);
         $groups = GroupNotification::getNotifications($user);
         $comments = CommentNotification::getNotifications($user);
         $likes = LikeNotification::getNotifications($user);
@@ -53,7 +52,16 @@ class NotificationController extends Controller
             if ($notification->getType() === 'follow-request') {
                 continue;
             }
+
             $notification->update(['seen' => true]);
+
+            /**
+             * For some reason, comment notifications specifically were not being marked as seen
+             * So we make a DB Query to mark them as seen
+             */
+            if (class_basename($notification) === 'CommentNotification') {
+                \DB::table('comment_notification')->where('id_comment', $notification->id_comment)->update(['seen' => true]);
+            }
         }
 
         return response()->json(['notifications' => $notificationsHTML]);
