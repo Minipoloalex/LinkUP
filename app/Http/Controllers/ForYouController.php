@@ -16,7 +16,6 @@ class ForYouController extends Controller
 
         // Get IDs of users that the authenticated user is following
         $followingIds = $user->followings()->pluck('id');
-        Log::debug('followingIds: ' . $followingIds);
 
         // Get posts from users followed by the authenticated user's followings
         $posts = Post::whereIn('user_id', $followingIds)

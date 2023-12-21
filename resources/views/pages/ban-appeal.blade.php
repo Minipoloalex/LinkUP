@@ -1,5 +1,6 @@
 @extends('layouts.auth')
 
+@section('title', 'Ban Appeal')
 @section('content')
 
 <section id="ban-appeal" class="flex flex-col items-center justify-center w-full mt-16">

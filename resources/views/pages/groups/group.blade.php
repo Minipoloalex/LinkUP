@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $group->name)
+@section('title', "Group $group->name")
 
 @section('content')
 

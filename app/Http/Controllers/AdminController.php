@@ -159,8 +159,7 @@ class AdminController extends Controller
 
         if (request()->expectsJson()) {
             return response()->json([
-                'success' => true,
-                'message' => 'Post deleted successfully.',
+                'success' => 'Post deleted successfully.',
             ]);
         }
         return redirect()->route('admin.posts')->with('feedback', 'Post deleted successfully.');

@@ -2,7 +2,7 @@
 $activePage = 'features';
 @endphp
 @extends('layouts.app')
-@section('title', 'About')
+@section('title', 'Features')
 @section('content')
 <main id="about" class="  flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-6rem)] scrollbar-hide
                             lg:w-full">

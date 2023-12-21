@@ -182,7 +182,6 @@ class PostController extends Controller
      */
     public function search(Request $request, string $type)
     {
-        Log::debug($request->all());
         $request->validate([
             'query' => 'nullable|string|max:255',
             'page' => 'required|int',
@@ -190,7 +189,6 @@ class PostController extends Controller
             'post-filter-comments' => 'nullable|string|in:false,true',
             'post-filter-date' => 'nullable|date'
         ]);
-        Log::debug('valid date: ' . $request->input('post-filter-date'));
         $page = $request->input('page');
         $query = $request->input('query') ?? '';
         $liked = $request->input('post-filter-likes') === 'true';
@@ -199,9 +197,6 @@ class PostController extends Controller
 
         $posts = $this->filterByType($type);
         if ($liked && Auth::check()) {
-            // $posts = $posts->whereIn('id', function ($q) {
-            //     $q->select('id_post')->from('liked')->where('id_user', Auth::user()->id);
-            // });
             $posts = $posts->whereHas('likes', function ($q) {
                 $q->where('id_user', Auth::user()->id);
             });
@@ -257,7 +252,6 @@ class PostController extends Controller
         }
         $validatedSize = $this->validateSizeImage($request);
         if ($validatedSize !== false) {
-            Log::debug($validatedSize);
             return $validatedSize;
         }
         $post = Post::findOrFail($id);
@@ -638,7 +632,7 @@ class PostController extends Controller
 
         $posts = $posts->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
 
-        $postsHTML = $this->translatePostsArrayToHTML($posts);
+        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, false, false, $isAdmin, $isAdmin);
         return response()->json(['postsHTML' => $postsHTML]);
     }
     /**
@@ -693,7 +687,6 @@ class PostController extends Controller
     {
         $user = Auth::user();
         $usersFollowing = $user->following->where('is_private', false)->pluck('id');
-        Log::info('usersFollowing: ' . $usersFollowing->toJson());
 
         $usersFollowedByUserFollowing = User::whereIn('id', $usersFollowing)
             ->with('following')
@@ -702,9 +695,6 @@ class PostController extends Controller
             ->flatten()
             ->pluck('id');
 
-
-
-        Log::info('usersFollowedByUserFollowing: ' . $usersFollowedByUserFollowing->toJson());
 
         $postsForYou = Post::whereIn('id_created_by', $usersFollowedByUserFollowing)
             ->with('createdBy:id,username')

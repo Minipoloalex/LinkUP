@@ -18,7 +18,6 @@ class NotificationController extends Controller
     {
         $user = auth()->user()->id;
         $follow = FollowRequest::getNotifications($user);
-        \Log::info($follow);
         $groups = GroupNotification::getNotifications($user);
         $comments = CommentNotification::getNotifications($user);
         $likes = LikeNotification::getNotifications($user);
