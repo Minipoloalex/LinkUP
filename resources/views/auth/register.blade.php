@@ -82,6 +82,9 @@
             @if ($errors->has('password'))
             <p class="error text-red-500 text-xs py-2"> {{ $errors->first('password') }} </p>
             @endif
+            <div class="w-full text-right text-xs mt-2">
+                <p class="text-dark-secondary">Password must be at least 8 characters long</p>
+            </div>
         </div>
 
         <div class="relative w-full">

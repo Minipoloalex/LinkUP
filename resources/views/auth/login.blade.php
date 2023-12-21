@@ -3,6 +3,10 @@
 @section('title', 'Login')
 @section('content')
 
+@push('scripts')
+<script type="module" src="{{ url('js/auth.js') }}"></script>
+@endpush
+
 <main id="login-page" class="flex flex-col w-screen overflow-clip overflow-y-scroll h-[calc(100vh-10rem)] scrollbar-hide
                                 lg:w-full">
 
@@ -32,6 +36,11 @@
                 dark:peer-focus:text-dark-active peer-focus:text-sm">
                 Password
             </label>
+            <div class="w-full text-center text-xs mt-2">
+                <p id="pwd-feedback" class="text-dark-active invisible transition-all duration-300">Password
+                    must be at
+                    least 8 characters long</p>
+            </div>
         </div>
 
         <div class="text-sm flex w-full items-center justify-end relative">
@@ -42,7 +51,7 @@
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
         </div>
 
-        <button type=" submit" class="w-full dark:bg-dark-active rounded-xl h-10">
+        <button id="login-button" type="submit" class="w-full dark:bg-dark-active rounded-xl h-10">
             Login
         </button>
 
