@@ -74,6 +74,8 @@ class PostController extends Controller
         $post->content = $request->input('content');
         if ($request->has('is_private')) {
             $post->is_private = $request->input('is_private');
+        } else {
+            $post->is_private = Auth::user()->is_private;
         }
         $post->id_created_by = Auth::user()->id;
         $post->id_group = $group_id;
