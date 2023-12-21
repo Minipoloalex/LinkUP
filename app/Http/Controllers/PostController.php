@@ -214,12 +214,14 @@ class PostController extends Controller
             $orderByRelevance = $beforeDate === null;
             $posts = $this->getSearchResults($posts, $query, $type, $orderByRelevance);
         }
+        else {
+            $posts = $this->filterCanView($posts);
+        }
 
         $orderByDate = $query === '' || $beforeDate !== null;
         if ($orderByDate) {
             $posts = $posts->orderBy('created_at', 'desc');
         }
-        
         $posts = $posts->skip($page * self::$amountPerPage)->limit(self::$amountPerPage);
         $posts = $posts->get();
 

@@ -10,6 +10,7 @@
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
         </div>
     </div>
+    @auth
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
             <label for="user-filter-followers" class="min-w-[25vw] lg:min-w-[10vw]">My followers</label>
@@ -28,6 +29,7 @@
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
         </div>
     </div>
+    @endauth
 </div>
 
 <!-- For Groups -->
@@ -42,6 +44,7 @@
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
         </div>
     </div>
+    @auth
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
             <label for="group-filter-owner" class="min-w-[25vw] lg:min-w-[10vw]">Owned by me</label>
@@ -60,10 +63,12 @@
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
         </div>
     </div>
+    @endauth
 </div>
 
 <!-- For Posts -->
 <div id="post-filters" class="w-full flex flex-col gap-2 hidden">
+    @auth
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
             <label for="post-filter-likes" class="min-w-[25vw] lg:min-w-[10vw]">I liked</label>
@@ -82,6 +87,7 @@
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
         </div>
     </div>
+    @endauth
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
             <label for="post-filter-date" class="min-w-[25vw] lg:min-w-[10vw]">Before date</label>
@@ -93,6 +99,7 @@
 
 <!-- For Comments -->
 <div id="comment-filters" class="w-full flex flex-col gap-2 hidden">
+    @auth
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
             <label for="comment-filter-likes" class="min-w-[25vw] lg:min-w-[10vw]">I liked</label>
@@ -111,6 +118,7 @@
             <i class="fas fa-check absolute right-[2px] top-1 pointer-events-none"></i>
         </div>
     </div>
+    @endauth
     <div class="w-full flex items-start justify-start">
         <div class="text-sm flex items-center justify-end relative">
             <label for="comment-filter-date" class="min-w-[25vw] lg:min-w-[10vw]">Before date</label>

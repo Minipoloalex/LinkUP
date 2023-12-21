@@ -24,7 +24,10 @@ function getGroupInvitationsButton() {
 if (network) {
   getFollowersButton().addEventListener('click', showFollowers)
   getFollowingButton().addEventListener('click', showFollowing)
-  getGroupInvitationsButton().addEventListener('click', showGroupInvitations)
+  const groupInvitationsButton = getGroupInvitationsButton()
+  if (groupInvitationsButton) {
+    groupInvitationsButton.addEventListener('click', showGroupInvitations)
+  }
   const followRequestsButton = getFollowRequestsButton()
   if (followRequestsButton)
     followRequestsButton.addEventListener('click', showFollowRequests)
