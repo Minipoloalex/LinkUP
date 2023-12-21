@@ -391,7 +391,6 @@ class UserController extends Controller
     }
     public function search(Request $request)
     {
-        Log::debug($request->all());
         $request->validate([
             'query' => 'nullable|string|max:255',
             'page' => 'required|int',
@@ -412,7 +411,6 @@ class UserController extends Controller
         }
         else {
             if ($exactMatch) {
-                Log::debug("exact match");
                 $users = User::where(function($q) use($query) {
                     $q->whereRaw('LOWER(username) = ?', [strtolower($query)])
                         ->orWhereRaw('LOWER(name) = ?', [strtolower($query)]);
@@ -423,7 +421,6 @@ class UserController extends Controller
             }
         }
         if ($followers && Auth::check()) {
-            Log::debug("filtering to only followers");
             $users = $users->whereIn('id', function ($q) {
                 $q->select('id_user')
                     ->from('follows')
@@ -431,19 +428,16 @@ class UserController extends Controller
             });
         }
         if ($following && Auth::check()) {
-            Log::debug("filtering to only following");
             $users = $users->whereIn('id', function ($q) {
                 $q->select('id_followed')
                     ->from('follows')
                     ->where('id_user', Auth::user()->id);   // users that are followed by current user
             });
         }
-        Log::debug("before ordering by usernamae");
         if ($orderByUsername) {
             $users = $users->orderBy('username', 'asc');
         }
 
-        Log::debug($users->toSql());
         $users = $users->skip($page * self::$amountPerPage)->take(self::$amountPerPage)->get();
         if ($users->isEmpty()) {
             $noResultsHTML = view('partials.search.no_results')->render();

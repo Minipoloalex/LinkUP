@@ -71,12 +71,7 @@ class ImageController extends Controller
     {
         $filePath = $this->getFilePath($fileName);
         if ($this->existsFile($fileName)) {
-            $deleted = Storage::delete($filePath);
-            if ($deleted) {
-                Log::info("File deleted: $filePath");
-            } else {
-                Log::info("File not found: $filePath");
-            }
+            Storage::delete($filePath);
         }
     }
     public function existsFile(string $fileName): bool

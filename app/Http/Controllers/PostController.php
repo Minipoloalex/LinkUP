@@ -182,7 +182,6 @@ class PostController extends Controller
      */
     public function search(Request $request, string $type)
     {
-        Log::debug($request->all());
         $request->validate([
             'query' => 'nullable|string|max:255',
             'page' => 'required|int',
@@ -190,7 +189,6 @@ class PostController extends Controller
             'post-filter-comments' => 'nullable|string|in:false,true',
             'post-filter-date' => 'nullable|date'
         ]);
-        Log::debug('valid date: ' . $request->input('post-filter-date'));
         $page = $request->input('page');
         $query = $request->input('query') ?? '';
         $liked = $request->input('post-filter-likes') === 'true';
@@ -199,9 +197,6 @@ class PostController extends Controller
 
         $posts = $this->filterByType($type);
         if ($liked && Auth::check()) {
-            // $posts = $posts->whereIn('id', function ($q) {
-            //     $q->select('id_post')->from('liked')->where('id_user', Auth::user()->id);
-            // });
             $posts = $posts->whereHas('likes', function ($q) {
                 $q->where('id_user', Auth::user()->id);
             });
@@ -257,7 +252,6 @@ class PostController extends Controller
         }
         $validatedSize = $this->validateSizeImage($request);
         if ($validatedSize !== false) {
-            Log::debug($validatedSize);
             return $validatedSize;
         }
         $post = Post::findOrFail($id);
@@ -638,62 +632,14 @@ class PostController extends Controller
 
         $posts = $posts->orderBy('created_at', 'desc')->skip($page * self::$amountPerPage)->limit(self::$amountPerPage)->get();
 
-        $postsHTML = $this->translatePostsArrayToHTML($posts);
+        $postsHTML = $this->translatePostsArrayToHTML($posts, false, false, false, false, false, $isAdmin, $isAdmin);
         return response()->json(['postsHTML' => $postsHTML]);
     }
-    /**
-     * Get posts for the For You page
-     */
-    /*public function forYouPosts()
-    {
-        $user = Auth::user();
-        $usersFollowing = $user->following;
-        $userFollowedByUsersFollowing = [];
-
-        foreach($usersFollowing as $x) {
-            if(!$x->is_private){
-                $userFollowedByUsersFollowing[] = $x->following;
-            }
-        }
-
-        // remove duplicates from userFollowedByUsersFollowing
-        $userFollowedByUsersFollowing = array_unique($userFollowedByUsersFollowing);
- 
-        $postsForYou = [];
-
-        foreach($userFollowedByUsersFollowing as $user) {
-            $postsForYou[] = $x->posts;
-        }
-
-        $filteredPosts = $postsForYou->filter(function ($post) use ($user) {
-            return policy(Post::class)->view($user, $post);
-        })->values();
-        Log::info('hey2');
-        // Translate posts to the desired HTML format
-        $postsHTML = $this->translatePostsArrayToHTML($filteredPosts);
-        Log::info('postsHTML: ' . $postsHTML->toJson());
-        return response()->json($postsHTML);
-
-        // remove posts that are comments
-        /*$postsForYou = array_filter($postsForYou, function($post) {
-            return $post->id_parent !== null;
-        });*/
-
-    /* SORTING POSTS NOT WORKING
-    // sort postsForYou by created_at
-    usort($postsForYou, function($a, $b) {
-        return $a->created_at <=> $b->created_at;
-    });
-    
-}*/
-
-
 
     public function forYouPosts()
     {
         $user = Auth::user();
         $usersFollowing = $user->following->where('is_private', false)->pluck('id');
-        Log::info('usersFollowing: ' . $usersFollowing->toJson());
 
         $usersFollowedByUserFollowing = User::whereIn('id', $usersFollowing)
             ->with('following')
@@ -702,9 +648,6 @@ class PostController extends Controller
             ->flatten()
             ->pluck('id');
 
-
-
-        Log::info('usersFollowedByUserFollowing: ' . $usersFollowedByUserFollowing->toJson());
 
         $postsForYou = Post::whereIn('id_created_by', $usersFollowedByUserFollowing)
             ->with('createdBy:id,username')
@@ -721,7 +664,6 @@ class PostController extends Controller
             ->limit(10)
             ->get();
 
-        Log::info('postsForYou: ' . $postsForYou->toJson());
         $filteredPosts = $postsForYou->filter(function ($post) use ($user) {
             return policy(Post::class)->view($user, $post);
         })->values();
@@ -731,52 +673,6 @@ class PostController extends Controller
 
         return response()->json($postsHTML);
     }
-
-    /*public function followingPosts()
-    {
-        $user = Auth::user();
-        $usersFollowing = $user->following->pluck('id');
-        Log::info('usersFollowing: ' . $usersFollowing->toJson());
-        
-
-    
-        $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
-            ->with('createdBy:id,username')
-            ->withCount('likes')
-            ->orderByDesc('created_at')
-            ->limit(10)
-            ->get();
-
-       
-    
-        Log::info('postsFollowing: ' . $postsFollowing->toJson());
-        
-        // Translate posts to the desired HTML format
-        $postsHTML = $this->translatePostsArrayToHTML($postsFollowing);
-        Log::info('postsHTML: ' . $postsHTML->toJson());
-        return response()->json(['postsHTML' => $postsHTML]);
-    }*/
-
-    // public function followingPosts()
-    // {
-    //     $user = Auth::user();
-    //     $usersFollowing = $user->following->pluck('id');
-    //     Log::info('usersFollowing: ' . $usersFollowing->toJson());
-
-    //     //get posts from users that are followed by the user
-    //     $postsFollowing = Post::whereIn('id_created_by', $usersFollowing)
-    //         ->with('createdBy:id,username')
-    //         ->withCount('likes')
-    //         ->orderByDesc('created_at')
-    //         ->limit(10)
-    //         ->get();
-
-    //     //Translate posts to the desired HTML format
-    //     $postsHTML = $this->translatePostsArrayToHTML($postsFollowing);
-    //     Log::info('postsHTML: ' . $postsHTML->toJson());
-    //     return response()->json($postsHTML);
-    // }
-
 
     public function groupPosts(int $id, Request $request)
     {
