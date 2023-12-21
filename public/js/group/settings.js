@@ -159,14 +159,10 @@ function addDeleteGroupEvent () {
 
 document.addEventListener('DOMContentLoaded', function () {
   const inviteForm = document.getElementById('invite-user');
-  console.log('inviteForm:', inviteForm);
   inviteForm.addEventListener('submit', async (event) => {
-      console.log('inviteForm submitted');
       event.preventDefault();
       const groupId = document.getElementById('group-id').value;
-      console.log('groupId:', groupId);
       const selectedUserId = document.getElementById('new-member').value;
-      console.log('selectedUserId:', selectedUserId);
       const url = `/group/${groupId}/invite/${selectedUserId}`;
    
       let response
@@ -190,6 +186,9 @@ document.addEventListener('DOMContentLoaded', function () {
           if (data.error) {
             await Swal.fire('Error', data.error, 'error')
           }
+        }
+        else if (response.ok) {
+          await Swal.fire('Invitation sent!', 'The invitation was successfully sent.', 'success')
         }
       } catch (error) {
         console.error('Error displaying error message:', error.message)

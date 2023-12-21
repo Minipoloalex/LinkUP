@@ -159,8 +159,9 @@ async function resolveInvitation(event, accept) {
   const groupId = button.dataset.groupId
 
   const type = accept === 'accept' ? 'acceptInvitation' : 'denyInvitation'
+  const method = accept === 'accept' ? 'PATCH' : 'DELETE'
   const response = await fetch(`/group/${type}/${groupId}`, {
-    method: 'PATCH',
+    method: method,
     headers: {
       'Content-Type': 'application/json',
       'X-CSRF-TOKEN': getCsrfToken()

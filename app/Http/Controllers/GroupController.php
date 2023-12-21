@@ -185,9 +185,9 @@ public function denyInvitation($groupId)
         // Delete the notification
         $notification->delete();
 
-        return response()->json(['message' => 'Invitation denied.'], 200);
+        return response()->json(['success' => 'Invitation denied.'], 200);
     } else {
-        return response()->json(['message' => 'No invitation found.'], 404);
+        return response()->json(['error' => 'No invitation found.'], 404);
     }
 }
 
