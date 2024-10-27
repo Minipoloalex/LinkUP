@@ -1,6 +1,7 @@
 # lbaw2351
 
-Group 51  
+Group 51
+
 Theme 2: Social Network
 
 ## Group Members
@@ -15,7 +16,7 @@ To launch the Docker image available in GitLab, use the following command:
 docker run -it -p 8000:80 -e DB_DATABASE="lbaw2351" -e DB_USERNAME="lbaw2351" -e DB_PASSWORD="RuUkOYNh"
 ```
 ## Product URL
-The product is available at https://lbaw2351.lbaw.fe.up.pt.
+The product was available at https://lbaw2351.lbaw.fe.up.pt.
 
 ## Credentials
 ### Administrator credentials
@@ -30,3 +31,6 @@ The product is available at https://lbaw2351.lbaw.fe.up.pt.
 |inespinto | 12345678 |
 |josemartins | 12345678 |
 
+
+## More information
+Further information is available on the repository's [wiki](https://github.com/Minipoloalex/LinkUP/wiki).
